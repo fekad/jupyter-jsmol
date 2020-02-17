@@ -33,3 +33,11 @@ To see a change, save your javascript, watch the terminal for an update.
 
 Note on first `jupyter lab --watch`, you may need to touch a file to get Jupyter Lab to open.
 
+More
+----
+- https://ipywidgets.readthedocs.io/en/stable/examples/Widget%20Custom.html
+- https://ipywidgets.readthedocs.io/en/latest/examples/Widget%20Low%20Level.html
+- http://kazuar.github.io/jupyter-widget-tutorial/
+- https://github.com/jupyter-widgets/widget-cookiecutter
+- http://wiki.jmol.org/index.php/Jmol_JavaScript_Object/Functions
+- https://github.com/cosmo-epfl/jsmol-widget

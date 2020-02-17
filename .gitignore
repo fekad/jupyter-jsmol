@@ -1,3 +1,5 @@
+.idea
+
 *.egg-info/
 .ipynb_checkpoints/
 dist/
@@ -6,7 +8,7 @@ build/
 node_modules/
 
 # Compiled javascript
-jupyter_jsmol/static/
+# jupyter_jsmol/static/
 
 # OS X
 .DS_Store
