@@ -1,0 +1,73 @@
+load "./surf8.xyz" {1 2 2} unitcell {20 9.629966 8.340890 90 90 90}
+nat=76
+for(ii=0;ii<=3;ii=ii+1)
+ iat=17+ii*nat
+ jat=5+ii*nat
+ select atomno=iat, atomno=jat
+ connect none
+
+ iat=5+ii*nat
+ jat=19+ii*nat
+ select atomno=iat, atomno=jat
+ connect none
+
+ iat=19+ii*nat
+ jat=7+ii*nat
+ select atomno=19, atomno=7
+ select atomno=iat, atomno=jat
+ connect none
+
+ iat=7+ii*nat
+ jat=17+(ii+2)*nat
+ select atomno=iat, atomno=jat
+ connect none
+
+end for
+
+for(ii=0;ii<=2;ii=ii+2)
+ iat=1+(ii+1)*nat
+ jat=21+ii*nat
+ select atomno=iat, atomno=jat
+ connect none
+
+ iat=21+ii*nat
+ jat=3+(ii+1)*nat
+ select atomno=iat, atomno=jat
+ connect none
+
+ iat=3+(ii+1)*nat
+ jat=23+ii*nat
+ select atomno=iat, atomno=jat
+ connect none
+
+ iat=23+ii*nat
+ jat=1+(ii+3)*nat
+ select atomno=iat, atomno=jat
+ connect none
+
+end for
+
+for(ii=0;ii<=3;ii=ii+1)
+ for(jj=0;jj<=3;jj=jj+1)
+  iat=(2*jj+1)+ii*nat
+  select atomno=iat
+  polyhedra radius 1.8 translucent color turquoise
+
+  iat=16+(2*jj+1)+ii*nat
+  select atomno=iat
+  polyhedra radius 1.8 translucent color yellow
+
+  iat=8+(2*jj+1)+ii*nat
+  select atomno=iat
+  polyhedra radius 1.8 translucent color pink
+
+  iat=(2*(jj+1))+ii*nat
+  select atomno=iat
+  polyhedra radius 1.8 translucent color green 
+
+  iat=16+(2*(jj+1))+ii*nat
+  select atomno=iat
+  polyhedra radius 1.8 translucent color orange
+
+ end for
+end for
