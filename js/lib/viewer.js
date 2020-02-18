@@ -35,7 +35,6 @@ var JsmolModel = widgets.DOMWidgetModel.extend({
 var JsmolView = widgets.DOMWidgetView.extend({
     // Defines how the widget gets rendered into the DOM
     render: function () {
-        //JsmolView.__super__.render.apply(this, arguments);
 
         // every view should have its own unique id
         this.el.setAttribute("id", widgets.uuid());
@@ -47,8 +46,8 @@ var JsmolView = widgets.DOMWidgetView.extend({
         // Python -> JavaScript update
         // equivalent: this.listenTo(this.model, 'change:count', this._count_changed, this);
         this.model.on('change:info', this.create_app, this);
-        this.model.on('change:cmd', this.send_cmd, this);
-
+        this.model.on('change:_script', this.script, this);
+        this.model.on('change:_command', this.evaluate, this);
 
     },
 
@@ -56,28 +55,32 @@ var JsmolView = widgets.DOMWidgetView.extend({
         console.log('Creating new object using the updated infos');
         console.log(this);
 
-        // Note: jmol object needs to be created otherwise
-        // the callback function doesn't have access to info dict
-        // jsmol_id should be a valid variable name for a js variable
+        // jsmol_id should be a valid js variable name because it will be used to generate the actual object
         let jsmol_id = "jsmol_" + this.model.model_id;
+        let info = this.model.get('info');
 
         Jmol.setDocument(false);
-        this.jsmol = Jmol.getApplet(jsmol_id, this.model.get('info'));
+        this.jsmol = Jmol.getApplet(jsmol_id, info);
         console.log(this.jsmol);
 
         // Finally the the content of the div should be generated
-        // this.$el.html(Jmol.getAppletHtml(this.jsmol));
         this.el.innerHTML = Jmol.getAppletHtml(this.jsmol);
 
         // Magic: https://github.com/phetsims/molecule-polarity/issues/6#issuecomment-55830690
-        // like a reset
-        // this.jsmol._cover(false);
         Jmol.coverApplet(this.jsmol)
     },
 
-    send_cmd: function () {
-        console.log('command: ' + this.model.get('cmd'));
-        Jmol.script(this.jsmol, this.model.get('cmd'));
+    script: function () {
+        let command = this.model.get('_script');
+        console.log('script: ' + command);
+        Jmol.script(this.jsmol, command);
+    },
+
+    evaluate: function () {
+        let command = this.model.get('_command');
+        console.log('evaluate: ' + command);
+        let value = Jmol.evaluateVar(this.jsmol, command);
+        console.log('value: ' + value);
     }
 });
 

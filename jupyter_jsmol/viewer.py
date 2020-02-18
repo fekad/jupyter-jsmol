@@ -31,7 +31,8 @@ class JsmolView(widgets.DOMWidget):
     # It is synced back to Python from the frontend *any* time the model is touched.
 
     info = Dict(help="The values for initialising the jmol applet").tag(sync=True)
-    cmd = Unicode(help="The commands for jmol applet").tag(sync=True)
+    _script = Unicode(help="Evaluate script for jmol applet").tag(sync=True)
+    _command = Unicode(help="Evaluate command with return value(s) for jmol applet").tag(sync=True)
 
     def __init__(self, width="100%", height=400, color="gray", script='', **kwargs):
         super().__init__(**kwargs)
@@ -41,13 +42,17 @@ class JsmolView(widgets.DOMWidget):
             'color': color,
             'script': script,
             'use': "HTML5",
-            'j2sPath': "/nbextensions/jupyter-jsmol/j2s",
+            'j2sPath': "/nbextensions/jupyter-jsmol/jsmol/j2s",
             'antialiasDisplay': True,
             'disableInitialConsole': True,
             'disableJ2SLoadMonitor': True,
             'debug': False,
         }
 
-    def script(self, cmd):
-        # TODO: it should be only one directional
-        self.cmd = cmd
+    def script(self, command):
+        # TODO: it should be only one directional (only works when the command changes)
+        self._script = command
+
+    def evaluate(self, command):
+        # TODO: it should be only one directional (only works when the command changes)
+        self._command = command
