@@ -1,5 +1,5 @@
 import ipywidgets as widgets
-from traitlets import Unicode, Dict
+from traitlets import Unicode, Dict, default
 
 
 # See js/lib/viewer.js for the frontend counterpart to this file.
@@ -34,13 +34,12 @@ class JsmolView(widgets.DOMWidget):
     _script = Unicode(help="Evaluate script for jmol applet").tag(sync=True)
     _command = Unicode(help="Evaluate command with return value(s) for jmol applet").tag(sync=True)
 
-    def __init__(self, width="100%", height=400, color="gray", script='', **kwargs):
+    def __init__(self, color="gray", **kwargs):
         super().__init__(**kwargs)
         self.info = {
-            'width': width,
-            'height': height,
+            'width': "100%",
+            'height': "100%",
             'color': color,
-            'script': script,
             'use': "HTML5",
             'j2sPath': "/nbextensions/jupyter-jsmol/jsmol/j2s",
             'antialiasDisplay': True,
@@ -48,6 +47,10 @@ class JsmolView(widgets.DOMWidget):
             'disableJ2SLoadMonitor': True,
             'debug': False,
         }
+
+    @default('layout')
+    def _default_layout(self):
+        return widgets.Layout(height='400px', align_self='stretch')
 
     def script(self, command):
         # TODO: it should be only one directional (only works when the command changes)
