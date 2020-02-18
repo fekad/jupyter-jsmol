@@ -48,7 +48,6 @@ var JsmolView = widgets.DOMWidgetView.extend({
         this.model.on('change:info', this.create_app, this);
         this.model.on('change:_script', this.script, this);
         this.model.on('change:_command', this.evaluate, this);
-
     },
 
     create_app: function () {
@@ -66,8 +65,10 @@ var JsmolView = widgets.DOMWidgetView.extend({
         // Finally the the content of the div should be generated
         this.el.innerHTML = Jmol.getAppletHtml(this.jsmol);
 
-        // Magic: https://github.com/phetsims/molecule-polarity/issues/6#issuecomment-55830690
-        Jmol.coverApplet(this.jsmol)
+        // Jmol rely on this script being implicitly executed, but this is not
+        // the case when using innerHTML (compared to jquery .html()). So let's
+        // manually execute it
+        Jmol.coverApplet(this.jsmol);
     },
 
     script: function () {
@@ -81,7 +82,14 @@ var JsmolView = widgets.DOMWidgetView.extend({
         console.log('evaluate: ' + command);
         let value = Jmol.evaluateVar(this.jsmol, command);
         console.log('value: ' + value);
-    }
+    },
+
+    // remove: function () {
+    //     JsmolView.__super__.remove.apply(this, arguments);
+    //     console.log("removing: " + this.jsmol._id);
+    //     delete window[this.jsmol._id];
+    // }
+
 });
 
 
