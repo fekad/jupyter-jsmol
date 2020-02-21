@@ -51,9 +51,6 @@ var JsmolView = widgets.DOMWidgetView.extend({
     },
 
     create_app: function () {
-        console.log('Creating new object using the updated infos');
-        console.log(this);
-
         // jsmol_id should be a valid js variable name because it will be used to generate the actual object
         let jsmol_id = "jsmol_" + this.model.model_id;
         let info = this.model.get('info');
@@ -73,7 +70,6 @@ var JsmolView = widgets.DOMWidgetView.extend({
 
     script: function () {
         let command = this.model.get('_script');
-        console.log('script: ' + command);
         Jmol.script(this.jsmol, command);
     },
 
