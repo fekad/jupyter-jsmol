@@ -52,3 +52,4 @@ QUICK TODO LIST
 - prevent to create jsmol_... object when the getApplet function has been called
 - info should be moved to js only
 - the file that you want to load has to be in the same folder as the notebook
+- Jupyterlab issue: Plugin 'jupyter-jsmol' failed to activate.
