@@ -64,8 +64,8 @@ instance/
 
 # Sphinx documentation
 docs/_build/
-docs/source/_static/embed-bundle.js
-docs/source/_static/embed-bundle.js.map
+docs/_static/embed-bundle.js
+docs/_static/embed-bundle.js.map
 
 # PyBuilder
 target/
@@ -148,6 +148,7 @@ $RECYCLE.BIN/
 # ----
 
 **/node_modules/
+js/package-lock.json
 jupyter_jsmol/nbextension/static/index.*
 jupyter_jsmol/labextension/*.tgz
 
