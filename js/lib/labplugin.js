@@ -5,6 +5,7 @@ module.exports = {
   id: 'jupyter-jsmol',
   requires: [base.IJupyterWidgetRegistry],
   activate: function(app, widgets) {
+      console.log('HELLOOOOOOO!!!!')
       widgets.registerWidget({
           name: 'jupyter-jsmol',
           version: plugin.version,
