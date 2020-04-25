@@ -1,0 +1,2 @@
+recursive-include jupyter_jsmol/static *.*
+include jupyter-jsmol.json
