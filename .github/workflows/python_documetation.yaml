@@ -38,7 +38,9 @@ jobs:
         cd ..
         
     - name: Publish GitHub Pages
-      uses: crazy-max/ghaction-github-pages@v1.4.0
+      uses: peaceiris/actions-gh-pages@v3.5.7
       with:
-        # Build directory to deploy
-        build_dir: docs/build/html
+        # Set an input directory for deployment.
+        publish_dir: docs/build/html
+        # Set a generated GITHUB_TOKEN for pushing to the remote branch
+        github_token: ${{ secrets.GITHUB_TOKEN }} # optional
