@@ -122,3 +122,9 @@ Jupyter notebook package for Jmol.
 npm install --save jupyter-jsmol
 ```
 
+
+## Old MANIFEST.in
+```
+recursive-include jupyter_jsmol/static *.*
+include jupyter-jsmol.json
+```
