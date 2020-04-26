@@ -12,7 +12,8 @@ The widgets have been embedded into the page for demonstrative pruposes.
     are suited for inclusion are used.
 
 
-.. toctree::
-    :glob:
+..
+    .. toctree::
+        :glob:
 
-    *
+        *
