@@ -1,8 +1,16 @@
-import ipywidgets as widgets
+#!/usr/bin/env python
+# coding: utf-8
+
+# Copyright (c) Adam Fekete.
+# Distributed under the terms of the Modified BSD License.
+
+"""
+TODO: Add module docstring
+"""
+
+from ipywidgets import DOMWidget, Layout
 from traitlets import Unicode, Dict, default
-
-# See js/lib/viewer.js for the frontend counterpart to this file.
-
+from ._frontend import module_name, module_version
 
 default_info = {
     'width': "100%",
@@ -26,21 +34,16 @@ script_template = ';'.join([
 ])
 
 
-@widgets.register
-class JsmolView(widgets.DOMWidget):
-    """An example widget."""
+class JsmolView(DOMWidget):
+    """An JSMOL widget
+    """
 
-    # Name of the widget view/model class in front-end
-    _view_name = Unicode('JsmolView').tag(sync=True)
     _model_name = Unicode('JsmolModel').tag(sync=True)
-
-    # Name of the front-end module containing widget view/model
-    _view_module = Unicode('jupyter-jsmol').tag(sync=True)
-    _model_module = Unicode('jupyter-jsmol').tag(sync=True)
-
-    # Version of the front-end module containing widget view/model
-    _view_module_version = Unicode('^0.1.0').tag(sync=True)
-    _model_module_version = Unicode('^0.1.0').tag(sync=True)
+    _model_module = Unicode(module_name).tag(sync=True)
+    _model_module_version = Unicode(module_version).tag(sync=True)
+    _view_name = Unicode('JsmolView').tag(sync=True)
+    _view_module = Unicode(module_name).tag(sync=True)
+    _view_module_version = Unicode(module_version).tag(sync=True)
 
     # Widget specific property.
     # Widget properties are defined as traitlets. Any property tagged with `sync=True`
@@ -59,7 +62,7 @@ class JsmolView(widgets.DOMWidget):
 
     @default('layout')
     def _default_layout(self):
-        return widgets.Layout(height='400px', align_self='stretch')
+        return Layout(height='400px', align_self='stretch')
 
     def script(self, command):
         # TODO: it should be only one directional (only works when the command changes)

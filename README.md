@@ -28,17 +28,7 @@ the nbextension:
 jupyter nbextension enable --py [--sys-prefix|--user|--system] jupyter_jsmol
 ```
 
-
-## Old installation instructions
-
-To install use pip:
-
-    $ pip install jupyter_jsmol
-    $ jupyter nbextension enable --py --sys-prefix jupyter_jsmol
-
-To install for jupyterlab
-
-    $ jupyter labextension install jupyter_jsmol
+## Development
 
 For a development installation (requires npm),
 
@@ -57,6 +47,43 @@ This take a minute or so to get started, but then allows you to hot-reload your 
 To see a change, save your javascript, watch the terminal for an update.
 
 Note on first `jupyter lab --watch`, you may need to touch a file to get Jupyter Lab to open.
+
+
+
+
+## QUICK TODO LIST
+
+- using github actions instead of travis
+- send or massaging instead of state synchronisation
+- adding evaluate return value
+- prevent to create jsmol_... object when the getApplet function has been called
+- info should be moved to js only
+- the file that you want to load has to be in the same folder as the notebook
+- Jupyterlab issue: Plugin 'jupyter-jsmol' failed to activate.
+
+
+
+## More
+
+- https://ipywidgets.readthedocs.io/en/stable/examples/Widget%20Custom.html
+- https://ipywidgets.readthedocs.io/en/latest/examples/Widget%20Low%20Level.html
+- http://kazuar.github.io/jupyter-widget-tutorial/
+- https://github.com/jupyter-widgets/widget-cookiecutter
+- http://wiki.jmol.org/index.php/Jmol_JavaScript_Object/Functions
+- https://github.com/cosmo-epfl/jsmol-widget
+
+
+
+
+
+
+## Old installation instructions
+
+
+To install for jupyterlab
+
+    $ jupyter labextension install jupyter_jsmol
+
 
 ## Old release instructions
 
@@ -95,24 +122,3 @@ Jupyter notebook package for Jmol.
 npm install --save jupyter-jsmol
 ```
 
-
-## More
-
-
-- https://ipywidgets.readthedocs.io/en/stable/examples/Widget%20Custom.html
-- https://ipywidgets.readthedocs.io/en/latest/examples/Widget%20Low%20Level.html
-- http://kazuar.github.io/jupyter-widget-tutorial/
-- https://github.com/jupyter-widgets/widget-cookiecutter
-- http://wiki.jmol.org/index.php/Jmol_JavaScript_Object/Functions
-- https://github.com/cosmo-epfl/jsmol-widget
-
-
-## QUICK TODO LIST
-
-- using github actions instead of travis
-- send or massaging instead of state synchronisation
-- adding evaluate return value
-- prevent to create jsmol_... object when the getApplet function has been called
-- info should be moved to js only
-- the file that you want to load has to be in the same folder as the notebook
-- Jupyterlab issue: Plugin 'jupyter-jsmol' failed to activate.
