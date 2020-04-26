@@ -70,8 +70,8 @@ Note on first `jupyter lab --watch`, you may need to touch a file to get Jupyter
 - http://kazuar.github.io/jupyter-widget-tutorial/
 - https://github.com/jupyter-widgets/widget-cookiecutter
 - http://wiki.jmol.org/index.php/Jmol_JavaScript_Object/Functions
-- https://github.com/cosmo-epfl/jsmol-widget
-
+- https://github.com/cosmo-epfl/chemiscope
+- https://www.npmjs.com/package/jsmol-widget
 
 
 
