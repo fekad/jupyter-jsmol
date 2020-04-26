@@ -6,7 +6,7 @@
 
 import pytest
 
-from ..example import ExampleWidget
+from jupyter_jsmol import ExampleWidget
 
 
 def test_example_creation_blank():
