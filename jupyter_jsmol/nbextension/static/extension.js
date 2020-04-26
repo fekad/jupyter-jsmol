@@ -12,6 +12,15 @@ define(function() {
     });
     // Export the required load_ipython_extension function
     return {
-        load_ipython_extension : function() {}
+        load_ipython_extension : function() {
+
+            // Workaround for importing the JSmol
+            const script = document.createElement('script');
+            // script.src = '/nbextensions/jupyter-jsmol/jsmol/JSmol.min.nojq.js';
+            script.src = 'https://chemapps.stolaf.edu/jmol/jsmol/JSmol.min.nojq.js';
+            script.async = false;
+            document.querySelector('head').appendChild(script);
+
+        }
     };
 });
