@@ -1,8 +1,7 @@
 
 # jupyter-jsmol
-
-[![Build Status](https://travis-ci.org/fekad/jupyter-jsmol.svg?branch=master)](https://travis-ci.org/fekad/jupyter_jsmol)
-[![codecov](https://codecov.io/gh/fekad/jupyter-jsmol/branch/master/graph/badge.svg)](https://codecov.io/gh/fekad/jupyter-jsmol)
+[![Python package](https://github.com/fekad/jupyter-jsmol/workflows/Python%20package/badge.svg)](https://github.com/fekad/jupyter-jsmol/actions)
+[![Docs](https://github.com/fekad/jupyter-jsmol/workflows/Python%20documetation/badge.svg)](https://fekad.github.io/jupyter-jsmol/)
 
 
 Jupyter notebook package for Jmol
