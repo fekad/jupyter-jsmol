@@ -4,7 +4,7 @@ jupyter_jsmol
 
 Version: |release|
 
-JSmol widget 
+JSmol viewer widget for Jupyter
 
 
 Quickstart

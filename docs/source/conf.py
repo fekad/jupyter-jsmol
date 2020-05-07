@@ -28,9 +28,9 @@ extensions = [
     'sphinx.ext.intersphinx',
     'sphinx.ext.napoleon',
     'sphinx.ext.todo',
-    # 'nbsphinx',
-    # 'jupyter_sphinx.embed_widgets',
-    # 'nbsphinx_link',
+    'nbsphinx',
+    'jupyter_sphinx.embed_widgets',
+    'nbsphinx_link',
 ]
 
 # Ensure our extension is available:
@@ -68,7 +68,7 @@ author = 'Adam Fekete'
 # get version from python package:
 import os
 here = os.path.dirname(__file__)
-repo = os.path.join(here, '..')
+repo = os.path.join(here, '..', '..')
 _version_py = os.path.join(repo, 'jupyter_jsmol', '_version.py')
 version_ns = {}
 with open(_version_py) as f:
@@ -171,7 +171,7 @@ texinfo_documents = [
      'jupyter_jsmol Documentation',
      author,
      'jupyter_jsmol',
-     'JSmol widget ',
+     'JSmol viewer widget for Jupyter',
      'Miscellaneous'),
 ]
 
@@ -198,11 +198,11 @@ if not on_rtd:  # only import and set the theme if we're building docs locally
 nbsphinx_allow_errors = True # exception ipstruct.py ipython_genutils
 
 
-# def setup(app):
-#     app.setup_extension('jupyter_sphinx.embed_widgets')
-#     def add_scripts(app):
-#         for fname in ['helper.js', 'embed-bundle.js']:
-#             if not os.path.exists(os.path.join(here, '_static', fname)):
-#                 app.warn('missing javascript file: %s' % fname)
-#             app.add_javascript(fname)
-#     app.connect('builder-inited', add_scripts)
+def setup(app):
+    app.setup_extension('jupyter_sphinx.embed_widgets')
+    def add_scripts(app):
+        for fname in ['helper.js', 'embed-bundle.js']:
+            if not os.path.exists(os.path.join(here, '_static', fname)):
+                app.warn('missing javascript file: %s' % fname)
+            app.add_javascript(fname)
+    app.connect('builder-inited', add_scripts)

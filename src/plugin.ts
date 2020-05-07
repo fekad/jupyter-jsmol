@@ -24,7 +24,7 @@ const EXTENSION_ID = 'jupyter-jsmol:plugin';
 /**
  * The example plugin.
  */
-const JsmolPlugin: IPlugin<Application<Widget>, void> = {
+const jsmolPlugin: IPlugin<Application<Widget>, void> = {
   id: EXTENSION_ID,
   requires: [IJupyterWidgetRegistry],
   activate: activateWidgetExtension,
@@ -33,7 +33,7 @@ const JsmolPlugin: IPlugin<Application<Widget>, void> = {
 // the "as unknown as ..." typecast above is solely to support JupyterLab 1
 // and 2 in the same codebase and should be removed when we migrate to Lumino.
 
-export default JsmolPlugin;
+export default jsmolPlugin;
 
 
 /**
