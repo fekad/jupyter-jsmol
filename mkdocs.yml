@@ -1,0 +1,14 @@
+site_name: JSmol viewer widget for Jupyter
+nav:
+  - Home: index.md
+  - introduction.md
+  - installation.md
+  - Examples:
+      - Index: examples/index.md
+  - Development:
+      - Installation: installation-dev.md
+      - Issues on GitHub: https://github.com/fekad/jupyter-jsmol/issues
+
+
+theme:
+  name: material
