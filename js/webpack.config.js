@@ -19,12 +19,15 @@ const resolve = {
 module.exports = [
   /**
    * Notebook extension
-   *
-   * This bundle only contains the part of the JavaScript that is run on load of
-   * the notebook.
+   */
+
+  /**
+   * Bundle for the notebook containing the custom widget views and models
+   * This bundle contains the implementation for the custom widget views and
+   * custom widget. It must be an amd module.
    */
   {
-    entry: './src/extension.ts',
+    entry: './src/index.ts',
     output: {
       filename: 'index.js',
       path: path.resolve(__dirname, '..', 'jupyter_jsmol', 'nbextension', 'static'),
@@ -35,6 +38,27 @@ module.exports = [
     },
     devtool: 'source-map',
     externals,
+    resolve,
+  },
+
+  /**
+   * This bundle only contains the part of the JavaScript that is run on load of
+   * the notebook. This section generally only perform some configuration for
+   * requirejs, and provides the legacy "load_ipython_extension" function which
+   * is required for any notebook extension.
+   */
+  {
+    entry: './src/extension.ts',
+    output: {
+      filename: 'extension_new.js',
+      path: path.resolve(__dirname, '..', 'jupyter_jsmol', 'nbextension', 'static'),
+      libraryTarget: 'amd'
+    },
+    module: {
+      rules: [
+          { test: /\.ts$/, loader: 'ts-loader' },
+      ]
+    },
     resolve,
   },
 

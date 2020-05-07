@@ -36,7 +36,7 @@
     "build:all": "npm run build:labextension && npm run build:nbextension",
     "clean": "npm run clean:lib && npm run clean:nbextension",
     "clean:lib": "rimraf lib",
-    "clean:nbextension": "rimraf ../jupyter_jsmol/nbextension/static/index.js",
+    "clean:nbextension": "rimraf ../jupyter_jsmol/nbextension/static/index.js && rimraf ../jupyter_jsmol/nbextension/static/extension.js",
     "clean:labextension": "rimraf ../jupyter_jsmol/labextension",
     "clean:all": "npm run clean:labextension && npm run clean:nbextension && npm run clean:lib",
     "prepack": "npm run build:lib",

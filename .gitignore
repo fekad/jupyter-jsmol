@@ -1,13 +1,14 @@
+# Pycharm
 .idea
-backup
 
+
+# JS and NPM
 js/lib/
 js/dist/
 js/package-lock.json
-
-# NPM
 **/node_modules/
 jupyter_jsmol/nbextension/static/index.*
+jupyter_jsmol/nbextension/static/extension_new.*
 jupyter_jsmol/labextension/*.tgz
 
 # Packed lab extensions
