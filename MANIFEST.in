@@ -1,9 +1,6 @@
-include LICENSE.txt
 include README.md
 
 include setupbase.py
-include pytest.ini
-include .coverage.rc
 
 include tsconfig.json
 include package.json
@@ -13,9 +10,7 @@ include jupyter_jsmol/labextension/*.tgz
 # Documentation
 graft docs
 exclude docs/\#*
-prune docs/build
-prune docs/gh-pages
-prune docs/dist
+prune site
 
 # Examples
 graft examples
