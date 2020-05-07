@@ -27,7 +27,7 @@ module.exports = [
     entry: './src/extension.ts',
     output: {
       filename: 'index.js',
-      path: path.resolve(__dirname, '..', 'jupyter_jsmol', 'nbextension', 'static'),
+      path: path.resolve(__dirname, 'jupyter_jsmol', 'nbextension', 'static'),
       libraryTarget: 'amd'
     },
     module: {
@@ -75,7 +75,7 @@ module.exports = [
     entry: './src/index.ts',
     output: {
       filename: 'embed-bundle.js',
-      path: path.resolve(__dirname, '..', 'docs', '_static'),
+      path: path.resolve(__dirname, 'docs', 'source', '_static'),
       library: "jupyter-jsmol",
       libraryTarget: 'amd'
     },

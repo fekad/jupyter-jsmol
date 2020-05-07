@@ -1,46 +1,30 @@
-# This is a basic workflow to help you get started with Actions
-
+# This is a basic workflow to generate and deploy documentation for GitHub Pages
 name: Python documetation
 
-# Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the master branch
-on:
+# Triggers the workflow on push events but only for the master branch
+on: push
   push:
     branches: [ master ]
-  pull_request:
-    branches: [ master ]
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-
-  # This workflow contains a single job called "build"
   build:
+    name: Deploy docs
     runs-on: ubuntu-latest
-
     steps:
-    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-    - uses: actions/checkout@v2
+      - name: Checkout master
+        uses: actions/checkout@v2
 
-    - name: Set up Python
-      uses: actions/setup-python@v1
-      with:
-        python-version: '3.x'
+      - name: Set up Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: '3.x'
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install --upgrade -e ".[docs]" -v
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install --upgrade -e ".[docs]" -v
 
-    - name: Build and publish
-      run: |
-        cd docs
-        make html
-        cd ..
-        
-    - name: Publish GitHub Pages
-      uses: peaceiris/actions-gh-pages@v3.5.7
-      with:
-        # Set an input directory for deployment.
-        publish_dir: docs/build/html
-        # Set a generated GITHUB_TOKEN for pushing to the remote branch
-        github_token: ${{ secrets.GITHUB_TOKEN }} # optional
+      - name: Deploy docs
+        uses: mhausenblas/mkdocs-deploy-gh-pages@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

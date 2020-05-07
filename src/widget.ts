@@ -1,8 +1,6 @@
 // Copyright (c) Adam Fekete
 // Distributed under the terms of the Modified BSD License.
 
-// See viewer.py for the kernel counterpart to this file.
-
 import {
   DOMWidgetModel, DOMWidgetView, ISerializers, uuid
 } from '@jupyter-widgets/base';
@@ -34,7 +32,7 @@ class ExampleModel extends DOMWidgetModel {
   static serializers: ISerializers = {
       ...DOMWidgetModel.serializers,
       // Add any extra serializers here
-    }
+    };
 
   static model_name = 'ExampleModel';
   static model_module = MODULE_NAME;
@@ -58,6 +56,8 @@ class ExampleView extends DOMWidgetView {
     this.el.textContent = this.model.get('value');
   }
 }
+
+
 
 // Custom Model. Custom widgets models must at least provide default values
 // for model attributes, including
@@ -92,7 +92,7 @@ class JsmolModel extends DOMWidgetModel {
   static serializers: ISerializers = {
       ...DOMWidgetModel.serializers,
       // Add any extra serializers here
-    }
+    };
 
   static model_name = 'JsmolModel';
   static model_module = MODULE_NAME;

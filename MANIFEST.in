@@ -1,9 +1,6 @@
-include LICENSE.txt
 include README.md
 
 include setupbase.py
-include pytest.ini
-include .coverage.rc
 
 include tsconfig.json
 include package.json
@@ -13,23 +10,22 @@ include jupyter_jsmol/labextension/*.tgz
 # Documentation
 graft docs
 exclude docs/\#*
-prune docs/build
-prune docs/gh-pages
-prune docs/dist
+prune site
 
 # Examples
 graft examples
 
 # Tests
-graft js/tests
-prune js/tests/build
+graft tests
+prune tests/build
 
 # Javascript files
 graft jupyter_jsmol/nbextension
-graft js/src
-prune js/lib
+graft src
+graft css
 prune **/node_modules
 prune coverage
+prune lib
 
 # Patterns to exclude from any directory
 global-exclude *~

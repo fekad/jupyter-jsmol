@@ -33,7 +33,7 @@ lab_path = pjoin(HERE, name, 'labextension')
 # Representative files that should exist after a successful build
 jstargets = [
     pjoin(nb_path, 'index.js'),
-    pjoin(HERE, 'js', 'lib', 'plugin.js'),
+    pjoin(HERE, 'lib', 'plugin.js'),
 ]
 
 package_data_spec = {
@@ -47,27 +47,27 @@ data_files_spec = [
     ('share/jupyter/nbextensions/jupyter_jsmol',
         nb_path, '*.js*'),
     ('share/jupyter/lab/extensions', lab_path, '*.tgz'),
-    ('etc/jupyter/nbconfig/notebook.d', HERE, 'jupyter_jsmol.json')
+    ('etc/jupyter/nbconfig/notebook.d' , HERE, 'jupyter_jsmol.json')
 ]
 
 
 cmdclass = create_cmdclass('jsdeps', package_data_spec=package_data_spec,
     data_files_spec=data_files_spec)
 cmdclass['jsdeps'] = combine_commands(
-    install_npm(pjoin(HERE, 'js'), build_cmd='build:all'),
+    install_npm(HERE, build_cmd='build:all'),
     ensure_targets(jstargets),
 )
 
 
 setup_args = dict(
     name            = name,
-    description     = 'JSmol widget ',
+    description     = 'JSmol viewer widget for Jupyter',
     version         = version,
     scripts         = glob(pjoin('scripts', '*')),
     cmdclass        = cmdclass,
     packages        = find_packages(),
     author          = 'Adam Fekete',
-    author_email    = 'adam.fekete@uclouvain.be',
+    author_email    = 'adam@fekete.co.uk',
     url             = 'https://github.com/fekad/jupyter-jsmol',
     license         = 'BSD',
     platforms       = "Linux, Mac OS X, Windows",
@@ -75,7 +75,6 @@ setup_args = dict(
     classifiers     = [
         'Intended Audience :: Developers',
         'Intended Audience :: Science/Research',
-        'Topic :: Multimedia :: Graphics',
         'License :: OSI Approved :: BSD License',
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
@@ -92,14 +91,15 @@ setup_args = dict(
     extras_require = {
         'test': [
             'pytest>=3.6',
+            'pytest-cov',
+            'nbval',
         ],
         'examples': [
             # Any requirements for the examples to run
         ],
         'docs': [
-            'sphinx>=1.5',
-            'recommonmark',
-            'sphinx_rtd_theme',
+            'mkdocs',
+            'mkdocs-material'
         ],
     },
     entry_points = {
