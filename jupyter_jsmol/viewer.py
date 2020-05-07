@@ -20,7 +20,7 @@ default_info = {
     'j2sPath': "/nbextensions/jupyter_jsmol/jsmol/j2s",
     # 'j2sPath': "https://chemapps.stolaf.edu/jmol/jsmol/j2s",
     # 'serverURL': "https://chemapps.stolaf.edu/jmol/jsmol/php/jsmol.php",
-    'antialiasDisplay': True,:
+    'antialiasDisplay': True,
     'disableInitialConsole': True,
     'disableJ2SLoadMonitor': True,
     'debug': False,
