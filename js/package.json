@@ -1,7 +1,20 @@
 {
   "name": "jupyter-jsmol",
   "version": "0.1.0",
+  "author": {
+    "name": "Adam Fekete",
+    "email": "adam@fekete.co.uk"
+  },
   "description": "JSmol viewer widget for Jupyter",
+  "homepage": "https://github.com/fekad/jupyter-jsmol",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fekad/jupyter-jsmol"
+  },
+  "bugs": {
+    "url": "https://github.com/fekad/jupyter-jsmol/issues"
+  },
+  "license": "BSD-3-Clause",
   "keywords": [
     "jupyter",
     "jupyterlab",
@@ -13,21 +26,8 @@
     "dist/*.js",
     "css/*.css"
   ],
-  "homepage": "https://github.com/fekad/jupyter-jsmol",
-  "bugs": {
-    "url": "https://github.com/fekad/jupyter-jsmol/issues"
-  },
-  "license": "BSD-3-Clause",
-  "author": {
-    "name": "Adam Fekete",
-    "email": "adam@fekete.co.uk"
-  },
   "main": "lib/index.js",
   "types": "./lib/index.d.ts",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/fekad/jupyter-jsmol"
-  },
   "scripts": {
     "build": "npm run build:lib && npm run build:nbextension",
     "build:labextension": "npm run clean:labextension && mkdirp ../jupyter_jsmol/labextension && cd ../jupyter_jsmol/labextension && npm pack ../../js",
