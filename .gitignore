@@ -19,6 +19,7 @@ site/
 docs/static/embed-bundle.js
 docs/static/embed-bundle.js.map
 
+MANIFEST
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

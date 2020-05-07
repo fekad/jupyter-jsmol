@@ -13,7 +13,8 @@ exclude docs/\#*
 prune site
 
 # Examples
-graft examples
+# graft examples
+prune examples
 
 # Javascript files
 graft jupyter_jsmol/nbextension
