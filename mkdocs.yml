@@ -12,6 +12,7 @@ nav:
   - installation.md
   - Examples:
       - Index: examples/index.md
+      - Scripting: https://chemapps.stolaf.edu/jmol/docs/
   - Development:
       - Installation: installation-dev.md
       - Issues on GitHub: https://github.com/fekad/jupyter-jsmol/issues
