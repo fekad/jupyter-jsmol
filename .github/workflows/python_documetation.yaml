@@ -1,8 +1,8 @@
 # This is a basic workflow to generate and deploy documentation for GitHub Pages
-name: Python documetation
+name: Documetation
 
 # Triggers the workflow on push events but only for the master branch
-on: push
+on: 
   push:
     branches: [ master ]
 
