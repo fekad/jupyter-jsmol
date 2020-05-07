@@ -1,11 +1,10 @@
 
 # jupyter-jsmol
 
-[![Build Status](https://travis-ci.org/fekad/jupyter-jsmol.svg?branch=master)](https://travis-ci.org/fekad/jupyter_jsmol)
-[![codecov](https://codecov.io/gh/fekad/jupyter-jsmol/branch/master/graph/badge.svg)](https://codecov.io/gh/fekad/jupyter-jsmol)
+[![Documetation](https://github.com/fekad/jupyter-jsmol/workflows/Documetation/badge.svg?branch=master)](https://fekad.github.io/jupyter-jsmol/)
+![Python package](https://github.com/fekad/jupyter-jsmol/workflows/Python%20package/badge.svg?branch=master)
 
-
-JSmol viewer widget for Jupyter
+This is JSmol viewer widget which can be used in Jupyter Nobeooks or/and Lab
 
 ## Installation
 
