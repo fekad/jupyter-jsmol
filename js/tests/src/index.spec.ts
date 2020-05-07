@@ -13,7 +13,7 @@ import {
 
 import {
   ExampleModel, ExampleView
-} from '../../src/'
+} from '../../src'
 
 
 describe('Example', () => {

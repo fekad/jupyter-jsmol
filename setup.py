@@ -7,6 +7,7 @@ from setupbase import create_cmdclass, install_npm
 
 root = os.path.abspath(os.path.dirname(__file__))
 
+js_path = os.path.join(root, 'js')
 nb_path = os.path.join(root, 'jupyter_jsmol', 'nbextension', 'static')
 lab_path = os.path.join(root, 'jupyter_jsmol', 'labextension')
 
@@ -26,7 +27,7 @@ data_files_spec = [
 cmdclass = create_cmdclass('jsdeps',
                            package_data_spec=package_data_spec,
                            data_files_spec=data_files_spec)
-cmdclass['jsdeps'] = install_npm(root, build_cmd='build:all')
+cmdclass['jsdeps'] = install_npm(js_path, build_cmd='build:all')
 
 setup_args = dict(
     name                 = 'jupyter_jsmol',

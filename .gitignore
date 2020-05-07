@@ -1,7 +1,23 @@
 .idea
 backup
 
-package-lock.json
+js/lib/
+js/dist/
+js/package-lock.json
+
+# NPM
+**/node_modules/
+jupyter_jsmol/nbextension/static/index.*
+jupyter_jsmol/labextension/*.tgz
+
+# Packed lab extensions
+jupyter_jsmol/labextension
+
+# Mkdocs documentation
+site/
+docs/static/embed-bundle.js
+docs/static/embed-bundle.js.map
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -64,10 +80,6 @@ instance/
 # Scrapy stuff:
 .scrapy
 
-# Mkdocs documentation
-site/
-docs/source/_static/embed-bundle.js
-docs/source/_static/embed-bundle.js.map
 
 # PyBuilder
 target/
@@ -144,18 +156,3 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
-
-
-# NPM
-# ----
-
-**/node_modules/
-jupyter_jsmol/nbextension/static/index.*
-jupyter_jsmol/labextension/*.tgz
-
-# Coverage data
-# -------------
-**/coverage/
-
-# Packed lab extensions
-jupyter_jsmol/labextension
