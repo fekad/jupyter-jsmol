@@ -2,7 +2,7 @@
 # jupyter-jsmol
 
 [![Documetation](https://github.com/fekad/jupyter-jsmol/workflows/Documetation/badge.svg?branch=master)](https://fekad.github.io/jupyter-jsmol/)
-![Python package](https://github.com/fekad/jupyter-jsmol/workflows/Python%20package/badge.svg?branch=master)
+[![Python package](https://github.com/fekad/jupyter-jsmol/workflows/Python%20package/badge.svg?branch=master)](https://github.com/fekad/jupyter-jsmol/actions)
 
 This is JSmol viewer widget which can be used in Jupyter Nobeooks or/and Lab
 
