@@ -24,3 +24,6 @@ with the [appropriate flag](https://jupyter-notebook.readthedocs.io/en/stable/ex
     jupyter labextension install .
 
 
+## Other resources
+
+- Starting point: https://github.com/jupyter-widgets/widget-ts-cookiecutter

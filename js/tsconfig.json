@@ -1,8 +1,11 @@
 {
   "compilerOptions": {
     "declaration": true,
-    "esModuleInterop":true,
-    "lib": ["es2015", "dom"],
+    "esModuleInterop": true,
+    "lib": [
+      "es2015",
+      "dom"
+    ],
     "module": "commonjs",
     "moduleResolution": "node",
     "noEmitOnError": true,
@@ -17,6 +20,6 @@
   },
   "include": [
     "src/**/*.ts",
-    "src/**/*.tsx",
+    "src/**/*.tsx"
   ]
 }

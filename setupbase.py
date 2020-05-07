@@ -20,11 +20,9 @@ import shlex
 import subprocess
 import sys
 
-
 # BEFORE importing distutils, remove MANIFEST. distutils doesn't properly
 # update it when the contents of directories change.
 if os.path.exists('MANIFEST'): os.remove('MANIFEST')
-
 
 from distutils.cmd import Command
 from distutils.command.build_py import build_py
@@ -44,7 +42,6 @@ if sys.platform == 'win32':
 else:
     def list2cmdline(cmd_list):
         return ' '.join(map(pipes.quote, cmd_list))
-
 
 __version__ = '0.2.0'
 
@@ -130,13 +127,14 @@ class bdist_egg_disabled(bdist_egg):
     Prevents setup.py install performing setuptools' default easy_install,
     which it should never ever do.
     """
+
     def run(self):
         sys.exit("Aborting implicit building of eggs. Use `pip install .` "
                  " to install from source.")
 
 
 def create_cmdclass(prerelease_cmd=None, package_data_spec=None,
-        data_files_spec=None):
+                    data_files_spec=None):
     """Create a command class with the given optional prerelease class.
 
     Parameters
@@ -268,6 +266,7 @@ def combine_commands(*commands):
         def run(self):
             for c in self.commands:
                 c.run()
+
     return CombinedCommand
 
 
@@ -466,6 +465,7 @@ def _wrap_command(cmds, cls, strict=True):
     strict: boolean, optional
         Wether to raise errors when a pre-command fails.
     """
+
     class WrappedCommand(cls):
 
         def run(self):
@@ -482,12 +482,14 @@ def _wrap_command(cmds, cls, strict=True):
 
             result = cls.run(self)
             return result
+
     return WrappedCommand
 
 
 def _get_file_handler(package_data_spec, data_files_spec):
     """Get a package_data and data_files handler command.
     """
+
     class FileHandler(BaseCommand):
 
         def run(self):
