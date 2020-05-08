@@ -3,6 +3,7 @@
 
 [![Documetation](https://github.com/fekad/jupyter-jsmol/workflows/Documetation/badge.svg?branch=master)](https://fekad.github.io/jupyter-jsmol/)
 [![Python package](https://github.com/fekad/jupyter-jsmol/workflows/Python%20package/badge.svg?branch=master)](https://github.com/fekad/jupyter-jsmol/actions)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/fekad/jupyter-jsmol/master?filepath=examples)
 
 This is JSmol viewer widget which can be used in Jupyter Notebooks and JupyterLab
 
