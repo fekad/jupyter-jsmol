@@ -23,6 +23,9 @@ with the [appropriate flag](https://jupyter-notebook.readthedocs.io/en/stable/ex
 
     jupyter labextension install .
 
+## Release
+
+    python setup.py sdist bdist_wheel
 
 ## Other resources
 

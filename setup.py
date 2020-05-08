@@ -11,22 +11,13 @@ js_path = os.path.join(root, 'js')
 nb_path = os.path.join(root, 'jupyter_jsmol', 'nbextension', 'static')
 lab_path = os.path.join(root, 'jupyter_jsmol', 'labextension')
 
-package_data_spec = {
-    'jupyter_jsmol': [
-        'nbextension/static/*.*js*',
-        'labextension/*.tgz'
-    ]
-}
-
 data_files_spec = [
-    ('share/jupyter/nbextensions/jupyter_jsmol', nb_path, '*.js*'),
+    ('share/jupyter/nbextensions/jupyter_jsmol', nb_path, '**'),
     ('share/jupyter/lab/extensions', lab_path, '*.tgz'),
     ('etc/jupyter/nbconfig/notebook.d', root, 'jupyter_jsmol.json')
 ]
 
-cmdclass = create_cmdclass('jsdeps',
-                           package_data_spec=package_data_spec,
-                           data_files_spec=data_files_spec)
+cmdclass = create_cmdclass('jsdeps', data_files_spec=data_files_spec)
 cmdclass['jsdeps'] = install_npm(js_path, build_cmd='build:all')
 
 with open("README.md", "r") as fh:
@@ -51,8 +42,8 @@ setup_args = dict(
         'Programming Language :: Python :: 3',
         'Framework :: Jupyter',
     ],
-    packages=find_packages(),
     cmdclass=cmdclass,
+    packages=find_packages(),
     include_package_data=True,
     python_requires='>=3.4',
     install_requires=[
