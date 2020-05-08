@@ -57,6 +57,11 @@ setup_args = dict(
             'mkdocs',
             'mkdocs-material'
         ],
+        'examples': [
+            'ase',
+            'matplotlib',
+            'plotly'
+        ],
     },
 )
 
