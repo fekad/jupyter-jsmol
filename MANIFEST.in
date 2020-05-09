@@ -12,7 +12,7 @@ prune js/lib
 prune **/node_modules
 prune jupyter_jsmol/labextension
 exclude jupyter_jsmol/nbextension/static/index.*
-exclude jupyter_jsmol/nbextension/static/extension_new.*
+exclude jupyter_jsmol/nbextension/static/extension.*
 exclude docs/static/embed-bundle.*
 
 # Tests

@@ -11,50 +11,26 @@
 
 (window as any).__webpack_public_path__ = document.querySelector('body')!.getAttribute('data-base-url') + 'nbextensions/jupyter_jsmol';
 
-// OLD JS VERSION:
-// __webpack_public_path__ = document.querySelector('body').getAttribute('data-base-url') + 'nbextensions/jupyter_jsmol';
-//
-//
-// // Configure requirejs
-// if (window.require) {
-//     window.require.config({
-//         map: {
-//             "*" : {
-//                 "jupyter-jsmol": "nbextensions/jupyter-jsmol/index",
-//             }
-//         }
-//     });
-// }
-//
-// // Export the required load_ipython_extension
-// module.exports = {
-//     load_ipython_extension: function() {}
-// };
+// Configure requirejs
+if ((window as any).require) {
+    (window as any).require.config({
+        map: {
+            "*": {
+                "jupyter-jsmol": "nbextensions/jupyter_jsmol/index",
+            },
+        },
+    });
+}
 
-// EXPECTED RESULT:
-// define(function() {
-//     "use strict";
-//
-//     window['requirejs'].config({
-//         map: {
-//             '*': {
-//                 'jupyter-jsmol': 'nbextensions/jupyter_jsmol/index',
-//             },
-//         }
-//     });
-//     // Export the required load_ipython_extension function
-//     return {
-//         load_ipython_extension : function() {
-//
-//             // Workaround for importing the JSmol
-//             const script = document.createElement('script');
-//             script.src = '/nbextensions/jupyter_jsmol/jsmol/JSmol.min.nojq.js';
-//             // script.src = 'https://chemapps.stolaf.edu/jmol/jsmol/JSmol.min.nojq.js';
-//             script.async = false;
-//             document.querySelector('head').appendChild(script);
-//
-//         }
-//     };
-// });
+// Export the required load_ipython_extention
+export function load_ipython_extension() {
+    // Workaround for importing the JSmol
+    const script = document.createElement('script');
+    script.src = (window as any).__webpack_public_path__ + '/jsmol/JSmol.min.nojq.js';
+    script.async = false;
+    (document as any).querySelector('head').appendChild(script);
 
+}
+
+// export * from './index';
 
