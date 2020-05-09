@@ -9,7 +9,7 @@
 // url for the notebook is not known at build time and is therefore computed
 // dynamically.
 
-(window as any).__webpack_public_path__ = document.querySelector('body')!.getAttribute('data-base-url') + 'nbextensions/jupyter_jsmol';
+const base_url = document.querySelector('body')!.getAttribute('data-base-url');
 
 // Configure requirejs
 if ((window as any).require) {
@@ -26,7 +26,7 @@ if ((window as any).require) {
 export function load_ipython_extension() {
     // Workaround for importing the JSmol
     const script = document.createElement('script');
-    script.src = (window as any).__webpack_public_path__ + '/jsmol/JSmol.min.nojq.js';
+    script.src = base_url + 'nbextensions/jupyter_jsmol/jsmol/JSmol.min.nojq.js';
     script.async = false;
     (document as any).querySelector('head').appendChild(script);
 
