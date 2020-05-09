@@ -1,7 +1,3 @@
-# Pycharm
-.idea
-
-
 # JS and NPM
 js/lib/
 js/dist/
@@ -68,21 +64,6 @@ coverage.xml
 *,cover
 .hypothesis/
 
-# Translations
-*.mo
-*.pot
-
-# Django stuff:
-*.log
-local_settings.py
-
-# Flask instance folder
-instance/
-
-# Scrapy stuff:
-.scrapy
-
-
 # PyBuilder
 target/
 
@@ -107,6 +88,9 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+# Pycharm
+.idea
 
 # =========================
 # Operating System Files
