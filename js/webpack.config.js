@@ -50,14 +50,13 @@ module.exports = [
     {
         entry: './src/extension.ts',
         output: {
-            filename: 'extension_new.js',
+            filename: 'extension.js',
             path: path.resolve(__dirname, '..', 'jupyter_jsmol', 'nbextension', 'static'),
             libraryTarget: 'amd'
         },
+        devtool: 'source-map',
         module: {
-            rules: [
-                {test: /\.ts$/, loader: 'ts-loader'},
-            ]
+            rules: rules
         },
         resolve,
     },

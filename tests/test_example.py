@@ -6,9 +6,8 @@
 
 import pytest
 
-from jupyter_jsmol.example import ExampleWidget
+from jupyter_jsmol.viewer import JsmolView
 
 
 def test_example_creation_blank():
-    w = ExampleWidget()
-    assert w.value == 'Hello World'
+    w = JsmolView()

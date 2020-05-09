@@ -12,20 +12,6 @@ from ipywidgets import DOMWidget, Layout
 from traitlets import Unicode, Dict, default
 from ._frontend import module_name, module_version
 
-default_info = {
-    'width': "100%",
-    'height': "100%",
-    'color': 'black',
-    'use': "HTML5",
-    'j2sPath': "/nbextensions/jupyter_jsmol/jsmol/j2s",
-    # 'j2sPath': "https://chemapps.stolaf.edu/jmol/jsmol/j2s",
-    # 'serverURL': "https://chemapps.stolaf.edu/jmol/jsmol/php/jsmol.php",
-    'antialiasDisplay': True,
-    'disableInitialConsole': True,
-    'disableJ2SLoadMonitor': True,
-    'debug': False,
-}
-
 script_template = ';'.join([
     'load {}',
     'set antialiasdisplay',  # use anti-aliasing
@@ -52,15 +38,14 @@ class JsmolView(DOMWidget):
     # is automatically synced to the frontend *any* time it changes in Python.
     # It is synced back to Python from the frontend *any* time the model is touched.
 
-    info = Dict(help="The values for initialising the Jmol applet").tag(sync=True)
+    _initialisation = Dict(help="The values for initialising the Jmol applet").tag(sync=True)
     _script = Unicode(help="Evaluate script for Jmol applet").tag(sync=True)
     _command = Unicode(help="Evaluate command with return value(s) for Jmol applet").tag(sync=True)
 
-    def __init__(self, **kwargs):
+    def __init__(self, script=None, **kwargs):
         super().__init__(**kwargs)
 
-        additional_info = kwargs.pop('info', {})
-        self.info = {**default_info, **additional_info}
+        self._initialisation = {'script': script}
 
     @default('layout')
     def _default_layout(self):
@@ -75,7 +60,7 @@ class JsmolView(DOMWidget):
         self._command = command
 
     @classmethod
-    def from_file(cls, filename, inline=False, **kwargs):
+    def from_file(cls, filename, inline=False):
 
         if inline:
             with open(filename) as file:
@@ -83,10 +68,4 @@ class JsmolView(DOMWidget):
         else:
             data = filename
 
-        additional_info = kwargs.pop('info', {})
-        info = {
-            **additional_info,
-            'script': script_template.format(data)
-        }
-
-        return cls(info=info, **kwargs)
+        return cls(script=script_template.format(data))
