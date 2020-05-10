@@ -19,12 +19,12 @@ import '../css/widget.css'
 
 declare var Jmol: any;
 
-// Some static assets may be required by the custom widget javascript. The base
-// url for the notebook is not known at build time and is therefore computed
-// dynamically.
+// Workaround to set up the base url for the notebook and lab environment
+let base_url = document.querySelector('body')!.getAttribute('data-base-url');
 
-// const base_url = document.querySelector('body')!.getAttribute('data-base-url') + 'nbextensions/jupyter_jsmol';
-const base_url = PageConfig.getBaseUrl();
+if (base_url == null) {
+    base_url = PageConfig.getBaseUrl();
+}
 
 
 // Custom Model. Custom widgets models must at least provide default values
