@@ -45,7 +45,7 @@
     "watch:nbextension": "webpack --watch"
   },
   "dependencies": {
-    "@jupyter-widgets/base": "^3.0.0"
+    "@jupyter-widgets/base": "^2 || ^3"
   },
   "devDependencies": {
     "@jupyterlab/application": "^2.1.2",

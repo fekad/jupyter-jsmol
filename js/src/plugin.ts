@@ -29,7 +29,9 @@ import {
 
 
 const EXTENSION_ID = 'jupyter-jsmol:plugin';
+
 const base_url = PageConfig.getBaseUrl();
+(window as any).j2sPath = base_url + "nbextensions/jupyter_jsmol/jsmol/j2s";
 
 /**
  * The JSmol plugin.

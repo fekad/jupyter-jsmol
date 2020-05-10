@@ -9,23 +9,12 @@ import {
     MODULE_NAME, MODULE_VERSION
 } from './version';
 
-import {
-    PageConfig
-} from '@jupyterlab/coreutils';
-
 
 // Import the CSS
 import '../css/widget.css'
 
 declare var Jmol: any;
-
-// Workaround to set up the base url for the notebook and lab environment
-let base_url = document.querySelector('body')!.getAttribute('data-base-url');
-
-if (base_url == null) {
-    base_url = PageConfig.getBaseUrl();
-}
-
+declare var j2sPath: any;
 
 // Custom Model. Custom widgets models must at least provide default values
 // for model attributes, including
@@ -105,7 +94,7 @@ export class JsmolView extends DOMWidgetView {
             height: "100%",
             color: 'black',
             use: "HTML5",
-            j2sPath: base_url + "nbextensions/jupyter_jsmol/jsmol/j2s",
+            j2sPath: j2sPath,
             antialiasDisplay: true,
             disableInitialConsole: true,
             disableJ2SLoadMonitor: true,
