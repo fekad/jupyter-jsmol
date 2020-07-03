@@ -69,3 +69,16 @@ class JsmolView(DOMWidget):
             data = filename
 
         return cls(script=script_template.format(data))
+
+    @classmethod
+    def from_ase(cls, atoms):
+        """Loading ASE Atoms object by using extXYZ as an intermediate data format."""
+
+        import ase.io
+        from io import StringIO
+
+        with StringIO() as f:
+            ase.io.extxyz.write_xyz(f, atoms)
+            xyz_str = f.getvalue()
+
+        return cls(script=script_template.format('inline "{}"'.format(xyz_str.replace('"', "'"))))
