@@ -60,15 +60,18 @@ class JsmolView(DOMWidget):
         self._command = command
 
     @classmethod
+    def from_string(cls, data):
+        data = data.replace('"', "'")
+        return cls(script=script_template.format(f'inline "{data}"'))
+
+    @classmethod
     def from_file(cls, filename, inline=False):
-
         if inline:
-            with open(filename) as file:
-                data = file.readlines()
-        else:
-            data = filename
+            with open(filename, mode='r') as file:
+                data = file.read()
+                return cls.from_string(data)
 
-        return cls(script=script_template.format(data))
+        return cls(script=script_template.format(filename))
 
     @classmethod
     def from_ase(cls, atoms):
@@ -81,4 +84,4 @@ class JsmolView(DOMWidget):
             ase.io.extxyz.write_xyz(f, atoms)
             xyz_str = f.getvalue()
 
-        return cls(script=script_template.format('inline "{}"'.format(xyz_str.replace('"', "'"))))
+        return cls.from_string(xyz_str)
