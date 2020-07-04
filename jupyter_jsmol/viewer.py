@@ -34,6 +34,16 @@ class JsmolView(DOMWidget):
     _script = Unicode(help="Evaluate script for Jmol applet").tag(sync=True)
     _command = Unicode(help="Evaluate command with return value(s) for Jmol applet").tag(sync=True)
 
+    default_info = {
+        'width': '100%',
+        'height': '100%',
+        'color': 'black',
+        'antialiasDisplay': True,
+        'disableInitialConsole': True,
+        'disableJ2SLoadMonitor': True,
+        'debug': False,
+    }
+
     load_script_template = ';'.join([
         'load {}',
         'set antialiasdisplay',  # use anti-aliasing
@@ -43,10 +53,11 @@ class JsmolView(DOMWidget):
         'hide off'
     ])
 
-    def __init__(self, script=None, **kwargs):
+    def __init__(self, script=None, info=None, **kwargs):
         super().__init__(**kwargs)
 
-        self._initialisation = {'script': script}
+        info = info or {}
+        self._info = {**self.default_info, **info, 'script': script}
 
     @default('layout')
     def _default_layout(self):

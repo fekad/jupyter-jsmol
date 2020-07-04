@@ -3,7 +3,6 @@
 
 // TODO:
 // - evaluate with return values
-// - static info
 
 import {
     DOMWidgetModel, DOMWidgetView, ISerializers, WidgetView
@@ -90,7 +89,6 @@ export class JsmolView extends DOMWidgetView {
         // Observe changes in the value traitlet in Python, and define a custom callback.
         // Python -> JavaScript update
         // equivalent: this.listenTo(this.model, 'change:count', this._count_changed, this);
-        this.model.on('change:_initialisation', this.render, this);
         this.model.on('change:_script', this.script, this);
         this.model.on('change:_command', this.evaluate, this);
 
@@ -120,33 +118,23 @@ export class JsmolView extends DOMWidgetView {
      */
     // Defines how the widget gets rendered into the DOM
     render(): any {
-        // super.render();
-
         // jsmol_id should be a valid js variable name because it will be used to generate the actual object
         let jsmol_id = "jsmol_" + this.cid;
 
         // http://wiki.jmol.org/index.php/Jmol_JavaScript_Object/Info
-        let info = this.model.get('info');
-        console.log(info);
-
-        let info_old = {
+        let info = {
             width: "100%",
             height: "100%",
-            color: 'black',
             use: "HTML5",
             j2sPath: j2sPath,
-            antialiasDisplay: true,
-            disableInitialConsole: true,
-            disableJ2SLoadMonitor: true,
-            debug: false,
-            ...this.model.get('_initialisation')
+            ...this.model.get('_info')
         };
 
         // Do not insert new applets automatically
         Jmol.setDocument(false);
 
-       // Create the main Jsmol applet
-        this._applet = Jmol.getApplet(jsmol_id, info_old);
+        // Create the main Jsmol applet
+        this._applet = Jmol.getApplet(jsmol_id, info);
 
         // Finally the the content of the div should be generated
         this.el.innerHTML = Jmol.getAppletHtml(this._applet);
@@ -154,7 +142,6 @@ export class JsmolView extends DOMWidgetView {
         // Jmol rely on this script being implicitly executed, but this is not
         // the case when using innerHTML (compared to jquery .html()). So let's
         // manually execute it
-        // this._applet._cover(false);
         Jmol.coverApplet(this._applet);
 
         console.log("DEBUG: render");
@@ -214,7 +201,7 @@ export class JsmolView extends DOMWidgetView {
     fullscreen(): void {
         // this.el.requestFullscreen();
         if (screenfull.isEnabled) {
-		    screenfull.request(this.el);
-	    }
+            screenfull.request(this.el);
+        }
     }
 }
