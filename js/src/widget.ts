@@ -3,9 +3,6 @@
 
 // TODO:
 // - evaluate with return values
-// - cleanup
-// - documentation
-// - this._applet VS this.jsmol
 // - static info
 
 import {
@@ -77,17 +74,7 @@ export class JsmolModel extends DOMWidgetModel {
  * - remove(): any; ??
  */
 export class JsmolView extends DOMWidgetView {
-    private jsmol: any;
-
-
-    /**
-     * Public constructor.
-     */
-    constructor(options?: any) {
-        console.log("DEBUG: constructor");
-        console.log(options);
-        super(options);
-    }
+    private _applet: any;
 
     /**
      * Initializer, called at the end of the constructor.
@@ -97,6 +84,20 @@ export class JsmolView extends DOMWidgetView {
         console.log(parameters);
 
         super.initialize(parameters);
+
+
+        // Observe changes in the value traitlet in Python, and define a custom callback.
+        // Python -> JavaScript update
+        // equivalent: this.listenTo(this.model, 'change:count', this._count_changed, this);
+        this.model.on('change:_initialisation', this.render, this);
+        this.model.on('change:_script', this.script, this);
+        this.model.on('change:_command', this.evaluate, this);
+        this.model.on('change:_toggle_fullscreen', this.fullscreen, this);
+
+        this.model.on('msg:custom', this.on_custom_message, this);
+        this.model.on('destroy', this.on_destroy, this);
+
+
     }
 
     /**
@@ -112,60 +113,16 @@ export class JsmolView extends DOMWidgetView {
         super.update(options);
     }
 
-
     /**
      * Render a view
      *
+     * Construct a Jsmol applet for this view. Each view should have an unique jsmol applet to work.
      * @returns the view or a promise to the view.
      */
     // Defines how the widget gets rendered into the DOM
     render(): any {
-        super.render();
+        // super.render();
 
-        // if (window.Jmol === undefined) {
-        //     throw Error('Jmol is required, load it from your favorite source');
-        // }
-
-
-        // every view should have its own unique id
-        // this.el.setAttribute("id", uuid());
-
-        // Observe changes in the value traitlet in Python, and define a custom callback.
-        // Python -> JavaScript update
-        // equivalent: this.listenTo(this.model, 'change:count', this._count_changed, this);
-        this.model.on('change:_initialisation', this.create, this);
-        this.model.on('change:_script', this.script, this);
-        this.model.on('change:_command', this.evaluate, this);
-        this.model.on('change:_toggle_fullscreen', this.fullscreen, this);
-
-        this.model.on('msg:custom', this.on_custom_message, this);
-        this.model.on('destroy', this.on_destroy, this);
-
-        // Create an Jmol applet
-        this.create();
-
-        console.log("DEBUG: render");
-        console.log(this);
-    }
-
-    /**
-     * Using custom massage help to implement simple one-way communication
-     */
-    on_custom_message(content: any): void {
-
-        console.log("DEBUG: on_custom_message");
-        console.log(content);
-
-        if (content.command == "fullscreen") {
-            this.fullscreen()
-        }
-    }
-
-
-    /**
-     * Construct a JsMol applet for this view. Each view should have an unique jsmol applet to work.
-     */
-    create(): void {
         // jsmol_id should be a valid js variable name because it will be used to generate the actual object
         let jsmol_id = "jsmol_" + this.cid;
 
@@ -190,33 +147,43 @@ export class JsmolView extends DOMWidgetView {
         // Do not insert new applets automatically
         Jmol.setDocument(false);
 
-        this.jsmol = Jmol.getApplet(jsmol_id, info);
+        this._applet = Jmol.getApplet(jsmol_id, info);
 
         // Finally the the content of the div should be generated
-        this.el.innerHTML = Jmol.getAppletHtml(this.jsmol);
+        this.el.innerHTML = Jmol.getAppletHtml(this._applet);
 
         // Jmol rely on this script being implicitly executed, but this is not
         // the case when using innerHTML (compared to jquery .html()). So let's
         // manually execute it
-        // Jmol.coverApplet(this.jsmol);
-        this.jsmol._cover(false);
+        // this._applet._cover(false);
+        Jmol.coverApplet(this._applet);
 
-        console.log("DEBUG: create");
+        console.log("DEBUG: render");
         console.log(this);
     }
+
+    /**
+     * Using custom massage help to implement simple one-way communication
+     */
+    on_custom_message(content: any): void {
+
+        console.log("DEBUG: on_custom_message");
+        console.log(content);
+
+        if (content.command == "fullscreen") {
+            this.fullscreen()
+        }
+    }
+
 
     /**
      * The main purpose of this callback to remove jsmol applet object from memory when it has been closed.
      * Important: this callback will be only called by the close() or close_all() python functions.
      */
     on_destroy(): void {
-
         // Remove jsmol applet
-        delete window[this.jsmol._id];
-        delete this.jsmol;
-
-        // Destroying the view itself
-        // this.remove();
+        delete window[this._applet._id];
+        delete this._applet;
 
         console.log("DEBUG: on_destroy");
         console.log(this);
@@ -225,10 +192,9 @@ export class JsmolView extends DOMWidgetView {
     /**
      * Run the given `command` for this viewer.
      */
-
     script(): void {
         let command = this.model.get('_script');
-        Jmol.script(this.jsmol, command);
+        Jmol.script(this._applet, command);
     }
 
     /**
@@ -238,7 +204,7 @@ export class JsmolView extends DOMWidgetView {
     evaluate(): any {
         let command = this.model.get('_command');
         console.log('evaluate: ' + command);
-        let value = Jmol.evaluateVar(this.jsmol, command);
+        let value = Jmol.evaluateVar(this._applet, command);
         console.log('value: ' + value);
         return value;
     }
