@@ -12,15 +12,6 @@ from ipywidgets import DOMWidget, Layout
 from traitlets import Unicode, Dict, default, Bool
 from ._frontend import module_name, module_version
 
-script_template = ';'.join([
-    'load {}',
-    'set antialiasdisplay',  # use anti-aliasing
-    'set frank off',  # remove jmol logo
-    'set zoomlarge false',  # use the smaller of height/width when setting zoom level
-    'set waitformoveto off'  # Allow sending script commands while moveto is executing
-    'hide off'
-])
-
 
 class JsmolView(DOMWidget):
     """An JSMOL widget
@@ -39,10 +30,18 @@ class JsmolView(DOMWidget):
     # It is synced back to Python from the frontend *any* time the model is touched.
 
     _initialisation = Dict(help="The values for initialising the Jmol applet").tag(sync=True)
+    _info = Dict(help="The info dictionary  for initialising the Jsmol applet").tag(sync=True)
     _script = Unicode(help="Evaluate script for Jmol applet").tag(sync=True)
     _command = Unicode(help="Evaluate command with return value(s) for Jmol applet").tag(sync=True)
 
-    _toggle_fullscreen = Bool(help="Toggle fullscreen").tag(sync=True)
+    load_script_template = ';'.join([
+        'load {}',
+        'set antialiasdisplay',  # use anti-aliasing
+        'set frank off',  # remove jmol logo
+        'set zoomlarge false',  # use the smaller of height/width when setting zoom level
+        'set waitformoveto off'  # Allow sending script commands while moveto is executing
+        'hide off'
+    ])
 
     def __init__(self, script=None, **kwargs):
         super().__init__(**kwargs)
@@ -62,9 +61,6 @@ class JsmolView(DOMWidget):
         self._command = command
 
     def fullscreen(self):
-        self._toggle_fullscreen = True
-
-    def fullscreen_new(self):
         content = {
             'command': 'fullscreen'
         }
@@ -87,9 +83,9 @@ class JsmolView(DOMWidget):
                 data = file.read()
 
             data = data.replace('"', "'")
-            return cls(script=script_template.format(f'inline "{data}"'))
+            return cls(script=cls.load_script_template.format(f'inline "{data}"'))
 
-        return cls(script=script_template.format(filename))
+        return cls(script=cls.load_script_template.format(filename))
 
     @classmethod
     def from_ase(cls, atoms):
@@ -103,4 +99,4 @@ class JsmolView(DOMWidget):
             xyz_str = f.getvalue()
 
         data = xyz_str.replace('"', "'")
-        return cls(script=script_template.format(f'inline "{data}"'))
+        return cls(script=cls.load_script_template.format(f'inline "{data}"'))

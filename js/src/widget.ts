@@ -13,10 +13,11 @@ import {
     MODULE_NAME, MODULE_VERSION
 } from './version';
 
-import screenfull = require('screenfull');
 
 // Import the CSS
 import '../css/widget.css'
+
+import * as screenfull from 'screenfull';
 
 declare var Jmol: any;
 declare var j2sPath: any;
@@ -92,7 +93,6 @@ export class JsmolView extends DOMWidgetView {
         this.model.on('change:_initialisation', this.render, this);
         this.model.on('change:_script', this.script, this);
         this.model.on('change:_command', this.evaluate, this);
-        this.model.on('change:_toggle_fullscreen', this.fullscreen, this);
 
         this.model.on('msg:custom', this.on_custom_message, this);
         this.model.on('destroy', this.on_destroy, this);
@@ -126,8 +126,10 @@ export class JsmolView extends DOMWidgetView {
         let jsmol_id = "jsmol_" + this.cid;
 
         // http://wiki.jmol.org/index.php/Jmol_JavaScript_Object/Info
-        // let info = this.model.get('info');
-        let info = {
+        let info = this.model.get('info');
+        console.log(info);
+
+        let info_old = {
             width: "100%",
             height: "100%",
             color: 'black',
@@ -140,13 +142,11 @@ export class JsmolView extends DOMWidgetView {
             ...this.model.get('_initialisation')
         };
 
-        // store a reference to the global Jmol and the HTML root
-        // this._Jmol = window.Jmol;
-
         // Do not insert new applets automatically
         Jmol.setDocument(false);
 
-        this._applet = Jmol.getApplet(jsmol_id, info);
+       // Create the main Jsmol applet
+        this._applet = Jmol.getApplet(jsmol_id, info_old);
 
         // Finally the the content of the div should be generated
         this.el.innerHTML = Jmol.getAppletHtml(this._applet);
@@ -210,13 +210,8 @@ export class JsmolView extends DOMWidgetView {
 
     /**
      * Show this viewer in fullscreen.
-     * TODO: https://github.com/sindresorhus/screenfull.js/
      */
     fullscreen(): void {
-        // reset the state of the traitlet
-        this.model.set('_toggle_fullscreen', false);
-        this.model.save();
-
         // this.el.requestFullscreen();
         if (screenfull.isEnabled) {
 		    screenfull.request(this.el);
