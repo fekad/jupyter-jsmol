@@ -9,7 +9,7 @@ TODO: Add module docstring
 """
 
 from ipywidgets import DOMWidget, Layout
-from traitlets import Unicode, Dict, default
+from traitlets import Unicode, Dict, default, Bool
 from ._frontend import module_name, module_version
 
 script_template = ';'.join([
@@ -42,6 +42,8 @@ class JsmolView(DOMWidget):
     _script = Unicode(help="Evaluate script for Jmol applet").tag(sync=True)
     _command = Unicode(help="Evaluate command with return value(s) for Jmol applet").tag(sync=True)
 
+    _toggle_fullscreen = Bool(help="Toggle fullscreen").tag(sync=True)
+
     def __init__(self, script=None, **kwargs):
         super().__init__(**kwargs)
 
@@ -58,6 +60,15 @@ class JsmolView(DOMWidget):
     def evaluate(self, command):
         # TODO: it should be only one directional (only works when the command changes)
         self._command = command
+
+    def fullscreen(self):
+        self._toggle_fullscreen = True
+
+    def fullscreen_new(self):
+        content = {
+            'command': 'fullscreen'
+        }
+        self.send(content=content, buffers=None)
 
     def load(self, filename, inline=False):
         if inline:
