@@ -59,17 +59,24 @@ class JsmolView(DOMWidget):
         # TODO: it should be only one directional (only works when the command changes)
         self._command = command
 
-    @classmethod
-    def from_string(cls, data):
-        data = data.replace('"', "'")
-        return cls(script=script_template.format(f'inline "{data}"'))
+    def load(self, filename, inline=False):
+        if inline:
+            with open(filename, mode='r') as file:
+                data = file.read()
+
+            data = data.replace('"', "'")
+            return self.script(f'load inline "{data}"')
+
+        return self.script(f'load {filename}')
 
     @classmethod
     def from_file(cls, filename, inline=False):
         if inline:
             with open(filename, mode='r') as file:
                 data = file.read()
-                return cls.from_string(data)
+
+            data = data.replace('"', "'")
+            return cls(script=script_template.format(f'inline "{data}"'))
 
         return cls(script=script_template.format(filename))
 
@@ -84,4 +91,5 @@ class JsmolView(DOMWidget):
             ase.io.extxyz.write_xyz(f, atoms)
             xyz_str = f.getvalue()
 
-        return cls.from_string(xyz_str)
+        data = xyz_str.replace('"', "'")
+        return cls(script=script_template.format(f'inline "{data}"'))
