@@ -13,6 +13,7 @@ import {
     MODULE_NAME, MODULE_VERSION
 } from './version';
 
+import screenfull = require('screenfull');
 
 // Import the CSS
 import '../css/widget.css'
@@ -85,7 +86,6 @@ export class JsmolView extends DOMWidgetView {
 
         super.initialize(parameters);
 
-
         // Observe changes in the value traitlet in Python, and define a custom callback.
         // Python -> JavaScript update
         // equivalent: this.listenTo(this.model, 'change:count', this._count_changed, this);
@@ -96,7 +96,6 @@ export class JsmolView extends DOMWidgetView {
 
         this.model.on('msg:custom', this.on_custom_message, this);
         this.model.on('destroy', this.on_destroy, this);
-
 
     }
 
@@ -218,6 +217,9 @@ export class JsmolView extends DOMWidgetView {
         this.model.set('_toggle_fullscreen', false);
         this.model.save();
 
-        this.el.requestFullscreen();
+        // this.el.requestFullscreen();
+        if (screenfull.isEnabled) {
+		    screenfull.request(this.el);
+	    }
     }
 }
