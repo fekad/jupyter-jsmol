@@ -47,7 +47,7 @@ export class JsmolModel extends DOMWidgetModel {
             _view_name: JsmolModel.view_name,
             _view_module: JsmolModel.view_module,
             _view_module_version: JsmolModel.view_module_version,
-            // value: 'Hello World'
+            _info: {}
         };
     }
 
@@ -88,10 +88,7 @@ export class JsmolView extends DOMWidgetView {
 
         // Observe changes in the value traitlet in Python, and define a custom callback.
         // Python -> JavaScript update
-        // equivalent: this.listenTo(this.model, 'change:count', this._count_changed, this);
-        this.model.on('change:_script', this.script, this);
-        this.model.on('change:_command', this.evaluate, this);
-
+        // this.model.on('change:_info', this.update, this);
         this.model.on('msg:custom', this.on_custom_message, this);
         this.model.on('destroy', this.on_destroy, this);
 
@@ -132,32 +129,43 @@ export class JsmolView extends DOMWidgetView {
 
         // Do not insert new applets automatically
         Jmol.setDocument(false);
-
         // Create the main Jsmol applet
         this._applet = Jmol.getApplet(jsmol_id, info);
-
         // Finally the the content of the div should be generated
         this.el.innerHTML = Jmol.getAppletHtml(this._applet);
-
         // Jmol rely on this script being implicitly executed, but this is not
         // the case when using innerHTML (compared to jquery .html()). So let's
         // manually execute it
         Jmol.coverApplet(this._applet);
-
-        console.log("DEBUG: render");
-        console.log(this);
     }
 
     /**
      * Using custom massage help to implement simple one-way communication
      */
-    on_custom_message(content: any): void {
+    on_custom_message(msg: any): void {
 
         console.log("DEBUG: on_custom_message");
-        console.log(content);
+        console.log(msg);
 
-        if (content.command == "fullscreen") {
-            this.fullscreen()
+        if (msg.type == 'call') {
+            switch (msg.func) {
+                case "fullscreen":
+                    this.fullscreen();
+                    break;
+                case 'script':
+                    this.script(msg.data);
+                    break;
+                case 'evaluate':
+                    this.send({
+                        'type': 'response',
+                        'func': 'evaluate',
+                        'data': this.evaluate(msg.data)
+                    });
+                    break;
+                default:
+                    console.log('there is no method for ' + msg.func);
+                    break;
+            }
         }
     }
 
@@ -178,8 +186,7 @@ export class JsmolView extends DOMWidgetView {
     /**
      * Run the given `command` for this viewer.
      */
-    script(): void {
-        let command = this.model.get('_script');
+    script(command:string): void {
         Jmol.script(this._applet, command);
     }
 
@@ -187,12 +194,8 @@ export class JsmolView extends DOMWidgetView {
      * Evaluate the given commands using JSmol and return the corresponding
      * value. This calls `Jmol.evaluateVar` behind the scenes.
      */
-    evaluate(): any {
-        let command = this.model.get('_command');
-        console.log('evaluate: ' + command);
-        let value = Jmol.evaluateVar(this._applet, command);
-        console.log('value: ' + value);
-        return value;
+    evaluate(command: string): any {
+        return Jmol.evaluateVar(this._applet, command);
     }
 
     /**

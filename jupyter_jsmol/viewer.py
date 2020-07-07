@@ -4,12 +4,9 @@
 # Copyright (c) Adam Fekete.
 # Distributed under the terms of the Modified BSD License.
 
-"""
-TODO: Add module docstring
-"""
 
 from ipywidgets import DOMWidget, Layout
-from traitlets import Unicode, Dict, default, Bool
+from traitlets import Unicode, Dict, default, Any
 from ._frontend import module_name, module_version
 
 
@@ -29,10 +26,7 @@ class JsmolView(DOMWidget):
     # is automatically synced to the frontend *any* time it changes in Python.
     # It is synced back to Python from the frontend *any* time the model is touched.
 
-    _initialisation = Dict(help="The values for initialising the Jmol applet").tag(sync=True)
-    _info = Dict(help="The info dictionary  for initialising the Jsmol applet").tag(sync=True)
-    _script = Unicode(help="Evaluate script for Jmol applet").tag(sync=True)
-    _command = Unicode(help="Evaluate command with return value(s) for Jmol applet").tag(sync=True)
+    _info = Dict(help="The info dictionary for initialising the Jsmol applet").tag(sync=True)
 
     default_info = {
         'width': '100%',
@@ -55,6 +49,7 @@ class JsmolView(DOMWidget):
 
     def __init__(self, script=None, info=None, **kwargs):
         super().__init__(**kwargs)
+        self.on_msg(self._handle_msg)
 
         info = info or {}
         self._info = {**self.default_info, **info, 'script': script}
@@ -64,18 +59,38 @@ class JsmolView(DOMWidget):
         return Layout(height='400px', align_self='stretch')
 
     def script(self, command):
-        # TODO: it should be only one directional (only works when the command changes)
-        self._script = command
+        content = {
+            'type': 'call',
+            'func': 'script',
+            'data': command
+        }
+        self.send(content=content, buffers=None)
 
     def evaluate(self, command):
-        # TODO: it should be only one directional (only works when the command changes)
-        self._command = command
+        content = {
+            'type': 'call',
+            'func': 'evaluate',
+            'data': command
+        }
+        self.send(content=content, buffers=None)
 
     def fullscreen(self):
         content = {
-            'command': 'fullscreen'
+            'type': 'call',
+            'func': 'fullscreen'
         }
         self.send(content=content, buffers=None)
+
+    def _handle_msg(self, widget, content, buffers):
+        """Handle a msg from the front-end.
+        Parameters
+        ----------
+        content: dict
+            Content of the msg.
+        """
+        print(content)
+        if content.get('type', '') == 'response':
+            print(content)
 
     def load(self, filename, inline=False):
         if inline:
