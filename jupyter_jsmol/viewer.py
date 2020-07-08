@@ -113,9 +113,9 @@ class JsmolView(DOMWidget):
                 data = file.read()
 
             data = data.replace('"', "'")
-            return self.script(f'load inline "{data}"')
+            return self.script('load inline "{}"'.format(data))
 
-        return self.script(f'load {filename}')
+        return self.script('load {}'.format(filename))
 
     @classmethod
     def from_file(cls, filename, inline=False):
@@ -124,7 +124,7 @@ class JsmolView(DOMWidget):
                 data = file.read()
 
             data = data.replace('"', "'")
-            return cls(script=cls.load_script_template.format(f'inline "{data}"'))
+            return cls(script=cls.load_script_template.format('inline "{}"'.format(data)))
 
         return cls(script=cls.load_script_template.format(filename))
 
@@ -140,4 +140,4 @@ class JsmolView(DOMWidget):
             xyz_str = f.getvalue()
 
         data = xyz_str.replace('"', "'")
-        return cls(script=cls.load_script_template.format(f'inline "{data}"'))
+        return cls(script=cls.load_script_template.format('inline "{}"'.format(data)))
