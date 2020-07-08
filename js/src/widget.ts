@@ -1,9 +1,6 @@
 // Copyright (c) Adam Fekete
 // Distributed under the terms of the Modified BSD License.
 
-// TODO:
-// - evaluate with return values
-
 import {
     DOMWidgetModel, DOMWidgetView, ISerializers, WidgetView
 } from '@jupyter-widgets/base';
@@ -11,7 +8,6 @@ import {
 import {
     MODULE_NAME, MODULE_VERSION
 } from './version';
-
 
 // Import the CSS
 import '../css/widget.css'
@@ -47,7 +43,8 @@ export class JsmolModel extends DOMWidgetModel {
             _view_name: JsmolModel.view_name,
             _view_module: JsmolModel.view_module,
             _view_module_version: JsmolModel.view_module_version,
-            _info: {}
+            _info: {},
+            _loaded: false
         };
     }
 
@@ -64,8 +61,6 @@ export class JsmolModel extends DOMWidgetModel {
     static view_module_version = MODULE_VERSION;
 }
 
-//
-
 /**
  * Renders the widget view.
  *
@@ -81,17 +76,12 @@ export class JsmolView extends DOMWidgetView {
      * Initializer, called at the end of the constructor.
      */
     initialize(parameters: WidgetView.InitializeParameters): void {
-        console.log("DEBUG: initialize");
-        console.log(parameters);
-
         super.initialize(parameters);
 
         // Observe changes in the value traitlet in Python, and define a custom callback.
-        // Python -> JavaScript update
         // this.model.on('change:_info', this.update, this);
         this.model.on('msg:custom', this.on_custom_message, this);
         this.model.on('destroy', this.on_destroy, this);
-
     }
 
     /**
@@ -101,9 +91,8 @@ export class JsmolView extends DOMWidgetView {
      * changed by another view or by a state update from the back-end.
      */
     update(options?: any): void {
-        console.log("DEBUG: update");
-        console.log(options);
-
+        // console.log("DEBUG: update");
+        // console.log(options);
         super.update(options);
     }
 
@@ -137,15 +126,17 @@ export class JsmolView extends DOMWidgetView {
         // the case when using innerHTML (compared to jquery .html()). So let's
         // manually execute it
         Jmol.coverApplet(this._applet);
+
+        this.model.set('_loaded', true);
+        this.touch();
     }
 
     /**
      * Using custom massage help to implement simple one-way communication
      */
     on_custom_message(msg: any): void {
-
-        console.log("DEBUG: on_custom_message");
-        console.log(msg);
+        // console.log("DEBUG: on_custom_message");
+        // console.log(msg);
 
         if (msg.type == 'call') {
             switch (msg.func) {
@@ -162,6 +153,13 @@ export class JsmolView extends DOMWidgetView {
                         'data': this.evaluate(msg.data)
                     });
                     break;
+                case 'property':
+                    this.send({
+                        'type': 'response',
+                        'func': 'property',
+                        'data': this.property(msg.data)
+                    });
+                    break;
                 default:
                     console.log('there is no method for ' + msg.func);
                     break;
@@ -169,24 +167,10 @@ export class JsmolView extends DOMWidgetView {
         }
     }
 
-
-    /**
-     * The main purpose of this callback to remove jsmol applet object from memory when it has been closed.
-     * Important: this callback will be only called by the close() or close_all() python functions.
-     */
-    on_destroy(): void {
-        // Remove jsmol applet
-        delete window[this._applet._id];
-        delete this._applet;
-
-        console.log("DEBUG: on_destroy");
-        console.log(this);
-    }
-
     /**
      * Run the given `command` for this viewer.
      */
-    script(command:string): void {
+    script(command: string): void {
         Jmol.script(this._applet, command);
     }
 
@@ -199,12 +183,32 @@ export class JsmolView extends DOMWidgetView {
     }
 
     /**
+     * Returning with th result of `getPropertyAsArray` for a given expression
+     */
+    property(command: string): any {
+        return Jmol.getPropertyAsArray(this._applet, command);
+    }
+
+    /**
      * Show this viewer in fullscreen.
      */
     fullscreen(): void {
-        // this.el.requestFullscreen();
         if (screenfull.isEnabled) {
             screenfull.request(this.el);
         }
     }
+
+    /**
+     * The main purpose of this callback to remove jsmol applet object from memory when it has been closed.
+     * Important: this callback will be only called by the close() or close_all() python functions.
+     */
+    on_destroy(): void {
+        // console.log("DEBUG: on_destroy");
+        // console.log(this);
+
+        // Removing jsmol applet
+        delete window[this._applet._id];
+        delete this._applet;
+    }
+
 }

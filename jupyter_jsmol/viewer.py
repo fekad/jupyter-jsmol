@@ -3,10 +3,9 @@
 
 # Copyright (c) Adam Fekete.
 # Distributed under the terms of the Modified BSD License.
-
-
+import time
 from ipywidgets import DOMWidget, Layout
-from traitlets import Unicode, Dict, default, Any
+from traitlets import Unicode, Dict, Bool, default
 from ._frontend import module_name, module_version
 
 
@@ -27,6 +26,7 @@ class JsmolView(DOMWidget):
     # It is synced back to Python from the frontend *any* time the model is touched.
 
     _info = Dict(help="The info dictionary for initialising the Jsmol applet").tag(sync=True)
+    _loaded = Bool().tag(sync=True)
 
     default_info = {
         'width': '100%',
@@ -49,16 +49,21 @@ class JsmolView(DOMWidget):
 
     def __init__(self, script=None, info=None, **kwargs):
         super().__init__(**kwargs)
-        self.on_msg(self._handle_msg)
+        self.on_msg(self.handle_response)
 
         info = info or {}
         self._info = {**self.default_info, **info, 'script': script}
+        self.response = None
 
     @default('layout')
     def _default_layout(self):
         return Layout(height='400px', align_self='stretch')
 
     def script(self, command):
+        # Wait for loading the applet at the beginning
+        if not self._loaded:
+            time.sleep(.1)
+
         content = {
             'type': 'call',
             'func': 'script',
@@ -66,11 +71,20 @@ class JsmolView(DOMWidget):
         }
         self.send(content=content, buffers=None)
 
-    def evaluate(self, command):
+    def evaluate(self, expr):
         content = {
             'type': 'call',
             'func': 'evaluate',
-            'data': command
+            'data': expr
+        }
+        self.send(content=content, buffers=None)
+
+    def property(self, expr):
+        # https://chemapps.stolaf.edu/jmol/docs/#getproperty
+        content = {
+            'type': 'call',
+            'func': 'property',
+            'data': expr
         }
         self.send(content=content, buffers=None)
 
@@ -81,16 +95,17 @@ class JsmolView(DOMWidget):
         }
         self.send(content=content, buffers=None)
 
-    def _handle_msg(self, widget, content, buffers):
+    def handle_response(self, widget, content, buffers):
         """Handle a msg from the front-end.
         Parameters
         ----------
         content: dict
             Content of the msg.
         """
-        print(content)
-        if content.get('type', '') == 'response':
-            print(content)
+        method = content.get('type', '')
+
+        if method == 'response':
+            self.response = content.get('data', '')
 
     def load(self, filename, inline=False):
         if inline:
