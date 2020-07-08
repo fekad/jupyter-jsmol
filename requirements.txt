@@ -1,5 +1,0 @@
-ipywidgets
-ase
-pymatgen
-matplotlib
-plotly
