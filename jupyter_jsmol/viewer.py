@@ -38,15 +38,6 @@ class JsmolView(DOMWidget):
         'debug': False,
     }
 
-    load_script_template = ';'.join([
-        'load {}',
-        'set antialiasdisplay',  # use anti-aliasing
-        'set frank off',  # remove jmol logo
-        'set zoomlarge false',  # use the smaller of height/width when setting zoom level
-        'set waitformoveto off'  # Allow sending script commands while moveto is executing
-        'hide off'
-    ])
-
     def __init__(self, script=None, info=None, **kwargs):
         super().__init__(**kwargs)
         self.on_msg(self.handle_response)
@@ -107,40 +98,68 @@ class JsmolView(DOMWidget):
         if method == 'response':
             self.response = content.get('data', '')
 
-    def load(self, filename, inline=False):
+    def load(self, filename: str, *args: str, inline: bool = True):
+        # Keeping it only for backwards compatibility.
+        return self.load_file(filename, *args, inline=inline)
+
+    def load_file(self, filename: str, *args: str, inline: bool = True):
+
         if inline:
             with open(filename, mode='r') as file:
                 data = file.read()
+        else:
+            data = filename
 
-            data = data.replace('"', "'")
-            return self.script('load inline "{}"'.format(data))
+        script = self._get_load_command(data, *args, inline=inline)
+        return self.script(script)
 
-        return self.script('load {}'.format(filename))
+    def load_str(self, data: str, *args: str):
+        script = self._get_load_command(data, *args, inline=True)
+        return self.script(script)
 
     @classmethod
-    def from_str(cls, data):
-        data = data.replace('"', "'")
-        return cls(script=cls.load_script_template.format('inline "{}"'.format(data)))
+    def from_file(cls, filename: str, *args: str, inline: bool = True):
 
-    @classmethod
-    def from_file(cls, filename, inline=False):
         if inline:
             with open(filename, mode='r') as file:
                 data = file.read()
+        else:
+            data = filename
 
-            return cls.from_str(data)
-
-        return cls(script=cls.load_script_template.format(filename))
+        script = cls._get_load_command(data, *args, inline=inline)
+        return cls(script=script)
 
     @classmethod
-    def from_ase(cls, atoms):
+    def from_str(cls, data: str, *args: str):
+        script = cls._get_load_command(data, *args, inline=True)
+        return cls(script=script)
+
+    @classmethod
+    def from_ase(cls, atoms, *args: str):
         """Loading ASE Atoms object by using extXYZ as an intermediate data format."""
 
-        import ase.io
         from io import StringIO
+        from ase.io.extxyz import write_xyz
 
         with StringIO() as f:
-            ase.io.extxyz.write_xyz(f, atoms)
+            write_xyz(f, atoms)
             xyz_str = f.getvalue()
 
-        return cls.from_str(xyz_str)
+        return cls.from_str(xyz_str, *args)
+
+    @staticmethod
+    def _get_load_command(data: str, *args: str, inline: bool = True):
+
+        if inline:
+            data = 'inline "' + data.replace('"', "'") + '"'
+
+        extra_args = ' '.join(args)
+
+        return ';'.join((
+            'load {} {}'.format(data, extra_args),
+            'set frank off',  # remove jsmol logo
+            'set zoomlarge false',  # use the smaller of height/width when setting zoom level
+            'set waitformoveto off'  # Allow sending script commands while moveto is executing
+            # 'set antialiasdisplay',  # use anti-aliasing
+            # 'hide off'
+        ))
