@@ -41,7 +41,7 @@ notebook / lab frontend. For lab, this is done by the command:
 
 ```
 jupyter labextension install @jupyter-widgets/jupyterlab-manager --no-build
-jupyter labextension install .
+jupyter labextension install js
 ```
 
 For classic notebook, you can run:
