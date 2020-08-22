@@ -1,6 +1,6 @@
 {
   "name": "jupyter-jsmol",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "author": {
     "name": "Adam Fekete",
     "email": "adam@fekete.co.uk"
@@ -49,23 +49,23 @@
     "screenfull": "^5.0.2"
   },
   "devDependencies": {
-    "@jupyterlab/application": "^2.1.2",
-    "@jupyterlab/coreutils": "^4.1.0",
-    "@lumino/application": "^1.9.1",
-    "@lumino/widgets": "^1.12.1",
-    "@types/node": "^13.13.5",
+    "@jupyterlab/application": "^2.2.3",
+    "@jupyterlab/coreutils": "^4.2.2",
+    "@lumino/application": "^1.11.0",
+    "@lumino/widgets": "^1.14.0",
+    "@types/node": "^14.6.0",
     "@types/webpack-env": "^1.15.2",
-    "css-loader": "^3.5.3",
-    "fs-extra": "^9.0.0",
+    "css-loader": "^4.2.1",
+    "fs-extra": "^9.0.1",
     "mkdirp": "^1.0.4",
     "npm-run-all": "^4.1.5",
     "rimraf": "^3.0.2",
-    "source-map-loader": "^0.2.4",
+    "source-map-loader": "^1.0.2",
     "style-loader": "^1.2.1",
-    "ts-loader": "^7.0.3",
-    "typescript": "~3.8",
-    "webpack": "^4.43.0",
-    "webpack-cli": "^3.3.11"
+    "ts-loader": "^8.0.2",
+    "typescript": "^4.0.2",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12"
   },
   "jupyterlab": {
     "extension": "lib/plugin"
