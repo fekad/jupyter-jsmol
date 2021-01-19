@@ -9,4 +9,4 @@ Information about the frontend package of the widgets.
 """
 
 module_name = "jupyter-jsmol"
-module_version = "^0.2.4"
+module_version = "^0.2.5"
