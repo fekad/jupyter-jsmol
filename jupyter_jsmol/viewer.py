@@ -102,7 +102,7 @@ class JsmolView(DOMWidget):
         # Keeping it only for backwards compatibility.
         return self.load_file(filename, *args, inline=inline)
 
-    def load_file(self, filename: str, *args: str, inline: bool = True):
+    def load_file(self, filename: str, *args: str, inline: bool = False):
 
         if inline:
             with open(filename, mode='r') as file:
@@ -118,7 +118,7 @@ class JsmolView(DOMWidget):
         return self.script(script)
 
     @classmethod
-    def from_file(cls, filename: str, *args: str, inline: bool = True):
+    def from_file(cls, filename: str, *args: str, inline: bool = False):
 
         if inline:
             with open(filename, mode='r') as file:
