@@ -4,19 +4,36 @@
 try:
     from pymatgen import Structure
     from pymatgen.symmetry.analyzer import SpacegroupAnalyzer
+    from pymatgen.io.cif import CifWriter
+
     pymatgen_loaded = True
 except ImportError:
-    raise RuntimeError('To use quick_view, you need to have pymatgen installed.')
+    raise RuntimeError("To use quick_view, you need to have pymatgen installed.")
 
 from jupyter_jsmol import JsmolView
 
-def quick_view(structure: Structure, conventional: bool = False, supercell: list = None) -> JsmolView:
+
+def quick_view(
+    structure: Structure,
+    *args,
+    conventional: bool = False,
+    supercell: list = [1, 1, 1],
+    symprec: float = 0.01,
+    angle_tolerance: float = 5.0
+) -> JsmolView:
     """A function to visualize pymatgen Structure objects in jupyter notebook using jupyter_jsmol package.
 
     Args:
         structure: pymatgen Structure object.
+        *args: Extra arguments for JSmol's load command. Eg. "{2 2 2}", "packed"
         conventional: use conventional cell. Defaults to False.
-        transform: can be used to make supercells with pymatgen.Structure.make_supercell method.
+        supercell: can be used to make supercells with pymatgen.Structure.make_supercell method.
+        symprec: If not none, finds the symmetry of the structure
+            and writes the cif with symmetry information. Passes symprec
+            to the SpacegroupAnalyzer.
+        angle_tolerance: Angle tolerance for symmetry finding. Passes
+            angle_tolerance to the SpacegroupAnalyzer. Used only if symprec
+            is not None.
 
     Returns:
         A jupyter widget object.
@@ -24,9 +41,13 @@ def quick_view(structure: Structure, conventional: bool = False, supercell: list
 
     s = structure.copy()
     if conventional:
-        s = SpacegroupAnalyzer(s).get_conventional_standard_structure()
+        spga = SpacegroupAnalyzer(s, symprec=symprec, angle_tolerance=angle_tolerance)
+        s = spga.get_conventional_standard_structure()
 
-    if supercell:
-        s.make_supercell(supercell)
+    cif = CifWriter(
+        s, symprec=symprec, angle_tolerance=angle_tolerance, refine_struct=False
+    )
 
-    return JsmolView.from_str(s.to('cif'))
+    supercell_str = "{" + " ".join(map(str, supercell)) + "}"
+
+    return JsmolView.from_str(str(cif), supercell_str, *args)
