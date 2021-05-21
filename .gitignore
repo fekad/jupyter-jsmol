@@ -1,21 +1,25 @@
 .vscode
 
-# JS and NPM
+# NPM
+# ----
+
 js/lib/
 js/dist/
-**/node_modules/
-jupyter_jsmol/nbextension/static/index.*
-jupyter_jsmol/nbextension/static/extension.*
-jupyter_jsmol/labextension/*.tgz
 
-# Packed lab extensions
+**/node_modules/
+jupyter_jsmol/nbextension/index.*
 jupyter_jsmol/labextension
+
+# Coverage data
+# -------------
+**/coverage/
+
 
 # Mkdocs documentation
 site/
 docs/static/embed-bundle.js
 docs/static/embed-bundle.js.map
-
+docs/static/embed-bundle.js.LICENSE.txt
 MANIFEST
 
 # Byte-compiled / optimized / DLL files

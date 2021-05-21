@@ -2,7 +2,10 @@
 // Distributed under the terms of the Modified BSD License.
 
 import {
-    DOMWidgetModel, DOMWidgetView, ISerializers, WidgetView
+    DOMWidgetModel,
+    DOMWidgetView,
+    ISerializers,
+    WidgetView,
 } from '@jupyter-widgets/base';
 
 import {

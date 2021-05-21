@@ -1,29 +1,30 @@
 include README.md
-include setupbase.py
 
 # Javascript files
 include js/tsconfig.json
 include js/package.json
 include js/webpack.config.js
-graft js/src
-graft js/css
-
-prune js/lib
-prune **/node_modules
-prune jupyter_jsmol/labextension
-exclude jupyter_jsmol/nbextension/static/index.*
-exclude jupyter_jsmol/nbextension/static/extension.*
-exclude docs/static/embed-bundle.*
-
-# Tests
-graft tests
+include jupyter_jsmol/labextension/*.tgz
 
 # Documentation
 graft docs
+exclude docs/\#*
 prune site
 
 # Examples
 prune examples
+
+# Tests
+graft tests
+prune tests/build
+
+# Javascript files
+graft jupyter_jsmol/nbextension
+graft js/src
+graft js/css
+prune **/node_modules
+prune js/coverage
+prune js/lib
 
 # Patterns to exclude from any directory
 global-exclude *~

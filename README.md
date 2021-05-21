@@ -31,17 +31,33 @@ jupyter nbextension enable --py [--sys-prefix|--user|--system] jupyter_jsmol
 
 ## Development Installation
 
-First install the python package. This will also build the JS packages.
+Create a dev environment:
 ```bash
+conda create -n jupyter_jsmol-dev -c conda-forge nodejs yarn python jupyterlab jupyter-packaging black
+conda activate jupyter_jsmol-dev
+```
+
+Install the python. This will also build the TS package.
+
+```bash
+# First install the python package. This will also build the JS packages.
 pip install -e ".[test, examples]"
+
+# Run the python tests. This should not give you a few sucessful example tests
+py.test
+
+# Run the JS tests. This should again, only give TODO errors (Expected 'Value' to equal 'Expected value'):
+cd js
+yarn test
 ```
 
 When developing your extensions, you need to manually enable your extensions with the
 notebook / lab frontend. For lab, this is done by the command:
 
 ```
-jupyter labextension install @jupyter-widgets/jupyterlab-manager --no-build
-jupyter labextension install js
+cd js
+jupyter labextension develop --overwrite .
+yarn run build
 ```
 
 For classic notebook, you can run:
@@ -56,18 +72,21 @@ the `install` command every time that you rebuild your extension. For certain in
 you might also need another flag instead of `--sys-prefix`, but we won't cover the meaning
 of those flags here.
 
+
 ### How to see your changes
 #### Typescript:
-To continuously monitor the project for changes and automatically trigger a rebuild, start Jupyter in watch mode:
+If you use JupyterLab to develop then you can watch the source directory and run JupyterLab at the same time in different
+terminals to watch for changes in the extension's source and automatically rebuild the widget.
+
 ```bash
-jupyter lab --watch
-```
-And in a separate session, begin watching the source directory for changes:
-```bash
-npm run watch
+# Watch the source directory in one terminal, automatically rebuilding when needed
+yarn run watch
+# Run JupyterLab in another terminal
+jupyter lab
 ```
 
 After a change wait for the build to finish and then refresh your browser and the changes should take effect.
 
 #### Python:
 If you make a change to the python code then you will need to restart the notebook kernel to have it take effect.
+

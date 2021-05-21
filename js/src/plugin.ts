@@ -1,13 +1,10 @@
 // Copyright (c) Adam Fekete
 // Distributed under the terms of the Modified BSD License.
 
-// import {
-//     Application, IPlugin,
-// } from '@phosphor/application';
 
 import {
-    Application, IPlugin,
-} from '@lumino/application'
+    Application, IPlugin
+} from '@lumino/application';
 
 import {
     Widget
@@ -32,6 +29,7 @@ const EXTENSION_ID = 'jupyter-jsmol:plugin';
 
 const base_url = PageConfig.getBaseUrl();
 (window as any).j2sPath = base_url + "nbextensions/jupyter_jsmol/jsmol/j2s";
+
 
 /**
  * The JSmol plugin.
