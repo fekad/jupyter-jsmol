@@ -8,6 +8,7 @@ js/dist/
 
 **/node_modules/
 jupyter_jsmol/nbextension/index.*
+jupyter_jsmol/nbextension/extension.*
 jupyter_jsmol/labextension
 
 # Coverage data

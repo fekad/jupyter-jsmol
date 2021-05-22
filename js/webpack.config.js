@@ -24,7 +24,7 @@ module.exports = [
      * the notebook.
      */
     {
-        entry: './src/extension.ts',
+        entry: './src/index.ts',
         output: {
             filename: 'index.js',
             path: path.resolve(__dirname, '..', 'jupyter_jsmol', 'nbextension'),
@@ -34,8 +34,30 @@ module.exports = [
         module: {
             rules: rules
         },
+        mode: 'production',
         devtool: 'source-map',
         externals,
+        resolve,
+    },
+
+    /**
+     * This bundle only contains the part of the JavaScript that is run on load of
+     * the notebook. This section generally only perform some configuration for
+     * requirejs, and provides the legacy "load_ipython_extension" function which
+     * is required for any notebook extension.
+     */
+    {
+        entry: './src/extension.ts',
+        output: {
+            filename: 'extension.js',
+            path: path.resolve(__dirname, '..', 'jupyter_jsmol', 'nbextension'),
+            libraryTarget: 'amd'
+        },
+        mode: 'production',
+        devtool: 'source-map',
+        module: {
+            rules: rules
+        },
         resolve,
     },
 
@@ -58,6 +80,7 @@ module.exports = [
             library: "jupyter-jsmol",
             publicPath: 'https://unpkg.com/jupyter-jsmol@' + version + '/dist/'
         },
+        mode: 'production',
         devtool: 'source-map',
         module: {
             rules: rules
@@ -83,6 +106,7 @@ module.exports = [
         module: {
             rules: rules
         },
+        mode: 'production',
         devtool: 'source-map',
         externals,
         resolve,

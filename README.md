@@ -33,7 +33,7 @@ jupyter nbextension enable --py [--sys-prefix|--user|--system] jupyter_jsmol
 
 Create a dev environment:
 ```bash
-conda create -n jupyter_jsmol-dev -c conda-forge nodejs yarn python jupyterlab jupyter-packaging black
+conda create -n jupyter_jsmol-dev -c conda-forge nodejs yarn python jupyterlab jupyter-packaging black mkdocs mkdocs-material
 conda activate jupyter_jsmol-dev
 ```
 

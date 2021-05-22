@@ -6,14 +6,12 @@ from os.path import join as pjoin
 from setuptools import setup, find_packages
 
 from jupyter_packaging import (
-    create_cmdclass,
-    install_npm,
-    ensure_targets,
-    combine_commands,
+    wrap_installers,
+    npm_builder,
     get_version,
+    get_data_files,
 )
 
-HERE = os.path.abspath(os.path.dirname(__file__))
 
 # The name of the project
 name = "jupyter_jsmol"
@@ -21,28 +19,28 @@ name = "jupyter_jsmol"
 # Get the version
 version = get_version(pjoin(name, "_version.py"))
 
+HERE = os.path.abspath(os.path.dirname(__file__))
+
+builder = npm_builder(path="js")
+
 # Representative files that should exist after a successful build
 jstargets = [
     pjoin(HERE, name, "nbextension", "index.js"),
     pjoin(HERE, "js", "lib", "plugin.js"),
 ]
 
-package_data_spec = {name: ["nbextension/**js*", "labextension/**"]}
-
-data_files_spec = [
-    ("share/jupyter/nbextensions/jupyter_jsmol", "jupyter_jsmol/nbextension", "**"),
-    ("share/jupyter/labextensions/jupyter_jsmol", "jupyter_jsmol/labextension", "**"),
-    # ("share/jupyter/labextensions/jupyter_jsmol", ".", "install.json"),
-    ("etc/jupyter/nbconfig/notebook.d", ".", "jupyter_jsmol.json"),
-]
-
-cmdclass = create_cmdclass(
-    "jsdeps", package_data_spec=package_data_spec, data_files_spec=data_files_spec
+cmdclass = wrap_installers(
+    pre_develop=builder, pre_dist=builder, ensured_targets=jstargets
 )
-cmdclass["jsdeps"] = combine_commands(
-    install_npm(HERE, build_cmd="build:prod"),
-    ensure_targets(jstargets),
-)
+
+# package_data_spec = {name: ["nbextension/**js*", "labextension/**"]}
+# data_files_spec = [
+#     ("share/jupyter/nbextensions/jupyter_jsmol", "jupyter_jsmol/nbextension", "**"),
+#     ("share/jupyter/labextensions/jupyter_jsmol", "jupyter_jsmol/labextension", "**"),
+#     ("etc/jupyter/nbconfig/notebook.d", ".", "jupyter_jsmol.json"),
+# ]
+# get_data_files(data_files_spec)
+
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
