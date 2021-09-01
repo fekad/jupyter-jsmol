@@ -1,6 +1,6 @@
 {
   "name": "jupyter-jsmol",
-  "version": "2021.5.0",
+  "version": "2021.9.0",
   "description": "JSmol viewer widget for Jupyter",
   "homepage": "https://github.com/fekad/jupyter-jsmol",
   "author": {
