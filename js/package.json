@@ -50,8 +50,7 @@
   },
   "dependencies": {
     "@jupyter-widgets/base": "^4.0.0",
-    "screenfull": "^5.1.0",
-    "yarn": "^1.22.11"
+    "screenfull": "^5.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.15.0",

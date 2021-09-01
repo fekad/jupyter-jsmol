@@ -1,0 +1,15 @@
+name: jupyter_jsmol-dev
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python
+  - nodejs
+  - yarn
+  - jupyter
+  - jupyterlab
+  - ipywidgets
+  - jupyter-packaging
+  - black
+  - mkdocs
+  - mkdocs-material
