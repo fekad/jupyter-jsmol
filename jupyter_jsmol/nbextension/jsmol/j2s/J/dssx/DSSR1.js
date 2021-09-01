@@ -1,11 +1,11 @@
 Clazz.declarePackage ("J.dssx");
 Clazz.load (["J.dssx.AnnotationParser"], "J.dssx.DSSR1", ["JU.BS", "$.Lst", "$.P3", "$.PT", "JM.HBond", "JM.BasePair", "JU.Escape", "$.Logger"], function () {
 c$ = Clazz.declareType (J.dssx, "DSSR1", J.dssx.AnnotationParser);
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function () {
 Clazz.superConstructor (this, J.dssx.DSSR1, []);
 });
-Clazz.overrideMethod (c$, "calculateDSSRStructure", 
+Clazz.overrideMethod (c$, "calculateDSSRStructure",
 function (vwr, bsAtoms) {
 var bs = vwr.ms.getModelBS (bsAtoms == null ? vwr.bsA () : bsAtoms, true);
 var s = "";
@@ -13,7 +13,7 @@ for (var i = bs.nextSetBit (0); i >= 0; i = bs.nextSetBit (i + 1)) s += this.get
 
 return s;
 }, "JV.Viewer,JU.BS");
-Clazz.defineMethod (c$, "getDSSRForModel", 
+Clazz.defineMethod (c$, "getDSSRForModel",
  function (vwr, modelIndex) {
 var info = null;
 var out = null;
@@ -49,7 +49,7 @@ break;
 }
 return (info != null ? JU.PT.rep (JU.Escape.escapeMap ((info.get ("dssr")).get ("counts")), ",", ",\n") : out == null ? "model has no nucleotides" : out);
 }, "JV.Viewer,~N");
-Clazz.overrideMethod (c$, "fixDSSRJSONMap", 
+Clazz.overrideMethod (c$, "fixDSSRJSONMap",
 function (map) {
 var s = "";
 try {
@@ -61,7 +61,7 @@ if (map.containsKey ("dbn")) s += "_M.dssr.dbn = " + map.get ("dbn").toString ()
 }
 return s;
 }, "java.util.Map");
-Clazz.defineMethod (c$, "fixIndices", 
+Clazz.defineMethod (c$, "fixIndices",
  function (map, key, root) {
 var indices = root + "_indices";
 var original = root + "s";
@@ -79,7 +79,7 @@ for (var j = n; --j >= 0; ) khpins.addLast (hpins.get ((khlist.get (j)).intValue
 
 }}
 }}, "java.util.Map,~S,~S");
-Clazz.overrideMethod (c$, "getBasePairs", 
+Clazz.overrideMethod (c$, "getBasePairs",
 function (vwr, modelIndex) {
 var ms = vwr.ms;
 var info = ms.getInfo (modelIndex, "dssr");
@@ -113,7 +113,7 @@ for (var j = bs.nextSetBit (0); j >= 0; j = bs.nextSetBit (j + 1)) this.setRes (
 JU.Logger.error ("Exception " + e + " in DSSRParser.getBasePairs");
 }
 }, "JV.Viewer,~N");
-Clazz.defineMethod (c$, "setBioPolymers", 
+Clazz.defineMethod (c$, "setBioPolymers",
  function (m, b) {
 var n = m.getBioPolymerCount ();
 for (var i = n; --i >= 0; ) {
@@ -121,14 +121,14 @@ var bp = m.bioPolymers[i];
 if (bp.isNucleic ()) (bp).isDssrSet = b;
 }
 }, "JM.BioModel,~B");
-Clazz.defineMethod (c$, "setRes", 
+Clazz.defineMethod (c$, "setRes",
  function (atom) {
 if (atom.group.getBioPolymerLength () == 0) return null;
 var m = atom.group;
 (m.bioPolymer).isDssrSet = true;
 return m;
 }, "JM.Atom");
-Clazz.overrideMethod (c$, "getAtomBits", 
+Clazz.overrideMethod (c$, "getAtomBits",
 function (vwr, key, dbObj, annotationCache, type, modelIndex, bsModel) {
 if (dbObj == null) return  new JU.BS ();
 var doCache = !key.contains ("NOCACHE");
@@ -179,12 +179,12 @@ dbObj = (dbObj).get (n - 1);
 }bs.or (vwr.ms.getAtoms (1086324744, dbObj.toString ()));
 bs.and (bsModel);
 } catch (e) {
-System.out.println (e.toString () + " in AnnotationParser");
+Zystem.out.println (e.toString () + " in AnnotationParser");
 bs.clearAll ();
 }
 return bs;
 }, "JV.Viewer,~S,~O,java.util.Map,~N,~N,JU.BS");
-Clazz.overrideMethod (c$, "getHBonds", 
+Clazz.overrideMethod (c$, "getHBonds",
 function (ms, modelIndex, vHBonds, doReport) {
 var info = ms.getInfo (modelIndex, "dssr");
 var list;
@@ -217,7 +217,7 @@ vHBonds.addLast ( new JM.HBond (ms.at[a1], ms.at[a2], 2048, 1, 0, energy));
 }
 return "DSSR reports " + list.size () + " hydrogen bonds";
 }, "JM.ModelSet,~N,JU.Lst,~B");
-Clazz.overrideMethod (c$, "setGroup1", 
+Clazz.overrideMethod (c$, "setGroup1",
 function (ms, modelIndex) {
 var info = ms.getInfo (modelIndex, "dssr");
 var list;
@@ -238,7 +238,7 @@ atoms[pt].group.dssrNT = map;
 bs.clearAll ();
 }
 }, "JM.ModelSet,~N");
-Clazz.overrideMethod (c$, "getAtomicDSSRData", 
+Clazz.overrideMethod (c$, "getAtomicDSSRData",
 function (ms, modelIndex, dssrData, dataType) {
 var info = ms.getInfo (modelIndex, "dssr");
 var list;
@@ -256,7 +256,7 @@ for (var j = bs.nextSetBit (0); j >= 0; j = bs.nextSetBit (j + 1)) dssrData[j] =
 } catch (e) {
 }
 }, "JM.ModelSet,~N,~A,~S");
-Clazz.overrideMethod (c$, "getDSSRFrame", 
+Clazz.overrideMethod (c$, "getDSSRFrame",
 function (nt) {
 var frame = nt.get ("frame");
 if (frame == null) return null;
@@ -269,7 +269,7 @@ this.getPoint (frame, "y_axis", oxyz[2]);
 this.getPoint (frame, "z_axis", oxyz[3]);
 return oxyz;
 }, "java.util.Map");
-Clazz.defineMethod (c$, "getPoint", 
+Clazz.defineMethod (c$, "getPoint",
  function (frame, item, pt) {
 var xyz = frame.get (item);
 pt.x = xyz.get (0).floatValue ();

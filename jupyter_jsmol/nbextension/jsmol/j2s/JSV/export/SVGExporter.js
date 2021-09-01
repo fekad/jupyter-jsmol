@@ -1,11 +1,11 @@
 Clazz.declarePackage ("JSV.export");
 Clazz.load (["JSV.export.FormExporter"], "JSV.export.SVGExporter", ["java.lang.Boolean", "$.Double", "java.util.Hashtable", "JU.CU", "$.DF", "$.Lst", "JSV.common.ColorParameters", "$.ExportType", "$.ScaleData", "$.ScriptToken", "JU.Logger"], function () {
 c$ = Clazz.declareType (JSV["export"], "SVGExporter", JSV["export"].FormExporter);
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function () {
 Clazz.superConstructor (this, JSV["export"].SVGExporter, []);
 });
-Clazz.overrideMethod (c$, "exportTheSpectrum", 
+Clazz.overrideMethod (c$, "exportTheSpectrum",
 function (viewer, mode, out, spec, startIndex, endIndex, pd, asBase64) {
 this.initForm (viewer, out);
 if (pd == null) pd = viewer.pd ();
@@ -174,7 +174,7 @@ var lastX;
 firstX = xyCoords[startIndex].getXVal ();
 firstY = xyCoords[startIndex].getYVal ();
 lastX = xyCoords[endIndex].getXVal ();
-System.out.println ("SVG " + spec.isXIncreasing () + " " + spec.shouldDisplayXAxisIncreasing () + " " + firstX + " " + lastX + " " + startIndex + " " + endIndex + " " + newXYCoords.get (0).toString () + " " + increasing);
+Zystem.out.println ("SVG " + spec.isXIncreasing () + " " + spec.shouldDisplayXAxisIncreasing () + " " + firstX + " " + lastX + " " + startIndex + " " + endIndex + " " + newXYCoords.get (0).toString () + " " + increasing);
 this.context.put ("title", spec.getTitle ());
 this.context.put ("xyCoords", newXYCoords);
 this.context.put ("continuous",  new Boolean (spec.isContinuous ()));
@@ -214,16 +214,16 @@ var vm = (mode === JSV.common.ExportType.SVGI ? "plot_ink.vm" : "plot.vm");
 JU.Logger.info ("SVGExporter using " + vm);
 return this.writeForm (vm);
 }, "JSV.common.JSViewer,JSV.common.ExportType,JU.OC,JSV.common.Spectrum,~N,~N,JSV.common.PanelData,~B");
-Clazz.defineMethod (c$, "getPlotStrokeWidth", 
+Clazz.defineMethod (c$, "getPlotStrokeWidth",
  function (scaleX, scaleY) {
 var s = JSV["export"].SVGExporter.formatDecimalTrimmed (Math.abs (scaleY / 1e12 * 2), 10);
 return s;
 }, "~N,~N");
-c$.toRGBHexString = Clazz.defineMethod (c$, "toRGBHexString", 
+c$.toRGBHexString = Clazz.defineMethod (c$, "toRGBHexString",
  function (c) {
 return "#" + JU.CU.toRGBHexString (c);
 }, "javajs.api.GenericColor");
-c$.formatDecimalTrimmed = Clazz.defineMethod (c$, "formatDecimalTrimmed", 
+c$.formatDecimalTrimmed = Clazz.defineMethod (c$, "formatDecimalTrimmed",
  function (x, precision) {
 return JU.DF.formatDecimalTrimmed0 (x, precision);
 }, "~N,~N");

@@ -10,7 +10,7 @@
 		} catch( e ) {}
 	}
 
- $.ajaxSettings.xhr = (window.ActiveXObject === undefined ? createXHR :  
+ $.ajaxSettings.xhr = (window.ActiveXObject === undefined ? createXHR :
 	function() {
 		return (this.url == document.location || this.url.indexOf("http") == 0 || !this.isLocal) &&  // BH MSIE fix
 			/^(get|post|head|put|delete|options)$/i.test( this.type ) &&
@@ -75,22 +75,22 @@
 		};
 	}
 });
- 
+
 	// incorporates jquery.iecors MSIE asynchronous cross-domain request for MSIE < 10
 
 	$.extend( $.support, { iecors: !!window.XDomainRequest });
 
 	if ($.support.iecors) {
 		// source: https://github.com/dkastner/jquery.iecors
-		// author: Derek Kastner dkastner@gmail.com http://dkastner.github.com    
+		// author: Derek Kastner dkastner@gmail.com http://dkastner.github.com
 		$.ajaxTransport(function(s) {
-		
+
 			return {
-				send: function( headers, complete ) {				
+				send: function( headers, complete ) {
 					// Note that xdr is not synchronous.
 					// This is only being used in JSmol for transport of java code packages.
 					var xdr = new window.XDomainRequest();
-					xdr.onload = function() {          
+					xdr.onload = function() {
 						var headers = { 'Content-Type': xdr.contentType };
 						complete(200, 'OK', { text: xdr.responseText }, headers);
 					};
@@ -101,7 +101,7 @@
 					xdr.open( s.type, s.url );
 					xdr.send( ( s.hasContent && s.data ) || null );
 				},
-				abort: function() {        
+				abort: function() {
 					xdr.abort();
 				}
 			};
@@ -118,20 +118,20 @@
 
 
 		$.ajaxTransport('binary', function(s) {
-		
+
 			var callback;
 			return {
 				// synchronous or asynchronous binary transfer only
-				send: function( headers, complete ) {        
+				send: function( headers, complete ) {
 					var xhr = s.xhr();
 					console.log("xhr.open binary async=" + s.async + " url=" + s.url);
-					xhr.open( s.type, s.url, s.async );					
+					xhr.open( s.type, s.url, s.async );
 					var isOK = false;
 					try {
 						if (xhr.hasOwnProperty("responseType")) {
 								xhr.responseType = "arraybuffer";
 								isOK = true;
-						} 
+						}
 					} catch(e) {
 					  //
 					}
@@ -155,7 +155,7 @@
  					// Listener
 					callback = function( _, isAbort ) {
 
-					var 
+					var
 						status = xhr.status,
 						statusText = "",
 						responseHeaders = xhr.getAllResponseHeaders(),
@@ -210,7 +210,7 @@
 						complete( -1, e );
 					}
 					};
-					
+
 					if ( !s.async ) {
 						// if we're in sync mode we fire the callback
 						callback();
@@ -222,28 +222,28 @@
 						// Add to the list of active xhr callbacks
 						xhr.onreadystatechange = callback;
 					}
-					
+
 				},
 				abort: function() {}
 			};
 		});
 	}
 })( jQuery );
-	 
+
 /*
  * jQuery outside events - v1.1 - 3/16/2010
  * http://benalman.com/projects/jquery-outside-events-plugin/
- * 
+ *
  * Copyright (c) 2010 "Cowboy" Ben Alman
  * Dual licensed under the MIT and GPL licenses.
  * http://benalman.com/about/license/
- * 
+ *
  * Modified by Bob Hanson for JSmol-specific events and to add parameter reference to actual jQuery event.
  * Used for closing the pop-up menu.
- *   
+ *
  */
 
-;(function($,doc,eventList,id){  
+;(function($,doc,eventList,id){
 	// was 'click dblclick mousemove mousedown mouseup mouseover mouseout change select submit keydown keypress keyup'
 	$.map(
 		eventList.split(' '),
@@ -255,7 +255,7 @@
 		outside_event_name = outside_event_name || event_name + id;
 		var elems = $(),
 			event_namespaced = event_name + '.' + outside_event_name + '-special-event';
-		$.event.special[ outside_event_name ] = {    
+		$.event.special[ outside_event_name ] = {
 			setup: function(){
 				elems = elems.add( this );
 				if ( elems.length === 1 ) {
@@ -289,7 +289,7 @@
 		};
 	};
 })(jQuery,document,"click mousemove mouseup touchmove touchend", "outjsmol");
-// JSmolCore.js -- Jmol core capability 
+// JSmolCore.js -- Jmol core capability
 
 // allows Jmol applets to be created on a page with more flexibility and extendability
 // provides an object-oriented interface for JSpecView and syncing of Jmol/JSpecView
@@ -304,7 +304,7 @@
 // BH 10/20/2016 10:00:43 AM JmolTracker.php
 // BH 9/19/2016 8:22:48 AM drag-drop broken for https (imageDrop.htm)
 // BH 9/18/2016 btoa() does not work with UTF-8 data (set language es;write menu t.mnu)
-// BH 8/26/2016 11:29:48 AM RCSB ligand 
+// BH 8/26/2016 11:29:48 AM RCSB ligand
 // BH 8/26/2016 11:29:48 AM generic fixProtocol for .gov/ to https
 // BH 8/26/2016 6:56:31 AM chemapps.stolaf.edu exclusively https
 // BH 8/25/2016 9:47:26 PM bug fix: NCI/CADD now requires "get3d=true" not "get3d=True"
@@ -314,7 +314,7 @@
 // BH 4/21/2016 9:25:39 AM adds [URL] button to file load option
 // BH 4/20/2016 2:44:50 PM fixes async load problem with Safari
 // BH 4/18/2016 10:25:08 PM adds preliminary =xxxx.mmtf reader
-// BH 4/13/2016 9:12:31 PM  url.indexOf("http://www.rcsb.org/pdb/files/") == 0 && url.indexOf("/ligand/") < 0 ? 
+// BH 4/13/2016 9:12:31 PM  url.indexOf("http://www.rcsb.org/pdb/files/") == 0 && url.indexOf("/ligand/") < 0 ?
 // BH 4/11/2016 5:34:16 PM adds direct conversion to http://files.rcsb.org/view from http://www.rcsb.org/pdb/files/1xpb.pdb
 // BH 4/3/2016 9:10:31 PM adding materialsproject.org for AJAX.
 // BH 3/23/2016 1:21:39 PM adding http://files.rcsb.org/view/%FILE.pdb as default RCSB site for "="
@@ -322,10 +322,10 @@
 // BH 2/29/2016 3:59:55 PM broken cursor_wait image path when Info.j2sPath is not "j2s"
 // BH 2/19/2016 10:32:18 AM typo fixed for makeLiveImage
 // BH 2/14/2016 12:31:02 PM fixed local reader not disappearing after script call
-// BH 2/14/2016 12:30:41 PM Info.appletLoadingImage: "j2s/img/JSmol_spinner.gif", 
+// BH 2/14/2016 12:30:41 PM Info.appletLoadingImage: "j2s/img/JSmol_spinner.gif",
    // can be set to "none" or some other image; see Jmol._hideLoadingSpinner(applet)
    // implemented only for JSmolApplet, not others
-// BH 2/14/2016 12:27:09 PM Jmol.setCursor 
+// BH 2/14/2016 12:27:09 PM Jmol.setCursor
 // BH 2/14/2016 6:48:33 AM _setCursor() and cursor_wait   http://ajaxload.info/
 // BH 1/15/2016 4:23:14 PM adding Info.makeLiveImage
 // BH 12/30/2015 8:18:42 PM adding AMS call to database list; allowing for ?ALLOWSORIGIN? to override settings here
@@ -333,24 +333,24 @@
 // BH 12/16/2015 3:01:06 PM adding $.ajaxSetup({ mimeType: "text/plain" });
 // BH 12/14/2015 6:42:03 PM adding check for MS Edge browser, which does not support dataURI
 // BH 12/2/2015 1:18:15 PM adding .dcd as binary file type
-// BH 12/1/2015 10:05:55 AM loading identical HTML5 page after Java page causes bad NPObject error 
+// BH 12/1/2015 10:05:55 AM loading identical HTML5 page after Java page causes bad NPObject error
 // BH 10/26/2015 12:47:16 PM adding two rcsb sites for direct access
 // BH 10/23/2015 9:20:39 PM minor coding adjustment
-// BH 10/13/2015 9:32:08 PM adding Jmol.__$ as jquery object used 
-// BH 15/09/2015 18:06:39 fixing mouse check for swingjs-ui since SVG element className is not a string 
+// BH 10/13/2015 9:32:08 PM adding Jmol.__$ as jquery object used
+// BH 15/09/2015 18:06:39 fixing mouse check for swingjs-ui since SVG element className is not a string
 // BH 8/12/2015 11:43:52 PM adding isHttps2Http forcing call to server proxy
 // BH 8/9/2015 6:33:33 PM correcting bug in load ASYNC for x-domain access
 // BH 7/7/2015 1:42:31 PM Jmol._persistentMenu
 // BH 6/29/2015 10:14:47 AM adds Jmol.$getSize(obj)
-// BH 5/30/2015 9:33:12 AM adds class swingjs-ui to ignore 
+// BH 5/30/2015 9:33:12 AM adds class swingjs-ui to ignore
 // BH 5/9/2015 3:38:52 PM adds data-ignoreMouse attribute for JTextField
 // BH 3/30/2015 9:46:53 PM adds JSAppletPanel for ready callback
 // BH 12/6/2014 3:32:54 PM Jmol.setAppletCss() broken
-// BH 9/13/2014 2:15:51 PM embedded JSME loads from SEARCH when Jmol should 
+// BH 9/13/2014 2:15:51 PM embedded JSME loads from SEARCH when Jmol should
 // BH 8/14/2014 2:52:38 PM drag-drop cache should not be cleared if SPT file is dropped
 // BH 8/5/2014 6:39:54 AM unnecessary messages about binary for PDB finally removed
 // BH 8/4/2014 5:30:00 AM automatically switch to no document after page loading
-// BH 8/2/2014 5:22:40 PM drag-drop broken in JSmol/HTML5 
+// BH 8/2/2014 5:22:40 PM drag-drop broken in JSmol/HTML5
 // BH 7/23/2014 5:34:08 PM setting a parameter such as readyFunction to null stops file loading
 // BH 7/3/2014 12:30:28 AM lost drag-drop of models
 // BH 7/2/2014 4:47:55 AM adding pdbe.org to direct database calls
@@ -361,7 +361,7 @@
 // BH 3/4/2014 8:40:15 PM adds Jmol.Cache for JSV/Jmol sharing files
 // BH 2/10/2014 10:07:14 AM added Info.z and Info.zIndexBase
 // BH 2/9/2014 9:56:06 PM updated JSmolCore.js with option to extend Viewer with code PRIOR to loading Viewer classes
-// BH 2/6/2014 8:46:25 AM disabled Jmol._tracker for localhost and 127.x.x.x 
+// BH 2/6/2014 8:46:25 AM disabled Jmol._tracker for localhost and 127.x.x.x
 // BH 1/29/2014 8:02:23 AM Jmol.View and Info.viewSet
 // BH 1/21/2014 12:06:59 PM adding Jmol.Info.cacheFiles (applet, true/false) and applet._cacheFiles and Jmol._fileCache
 // BH 1/13/2014 2:12:38 PM adding "http://www.nmrdb.org/tools/jmol/predict.php":"%URL", to _DirectDatabaseCalls
@@ -393,8 +393,8 @@
 // 11/20/2012 BH: MSIE9 cannot do a synchronous file load cross-domain. See Jmol._getFileData
 // 11/4/2012 BH: RCSB REST format change "<structureId>" to "<dimStructure.structureId>"
 // 9/13/2012 BH: JmolCore.js changes for JSmol doAjax() method -- _3ata()
-// 6/12/2012 BH: JmolApi.js: adds Jmol.setInfo(applet, info, isShown) -- third parameter optional 
-// 6/12/2012 BH: JmolApi.js: adds Jmol.getInfo(applet) 
+// 6/12/2012 BH: JmolApi.js: adds Jmol.setInfo(applet, info, isShown) -- third parameter optional
+// 6/12/2012 BH: JmolApi.js: adds Jmol.getInfo(applet)
 // 6/12/2012 BH: JmolApplet.js: Fixes for MSIE 8
 // 6/5/2012  BH: fixes problem with Jmol "javascript" command not working and getPropertyAsArray not working
 // 6/4/2012  BH: corrects problem with MSIE requiring mouse-hover to activate applet
@@ -402,11 +402,11 @@
 //               also changed "jmolJarPath" to just "jarPath"
 //               jmolJarFile->jarFile, jmolIsSigned->isSigned, jmolReadyFunction->readyFunction
 //               also corrects a double-loading issue
-// 5/14/2012 BH: added AJAX queue for ChemDoodle option with multiple canvases 
+// 5/14/2012 BH: added AJAX queue for ChemDoodle option with multiple canvases
 // 8/12/2012 BH: adds support for MSIE xdr cross-domain request (jQuery.iecors.js)
 
 	// BH 4/25 -- added text option. setAppletCss(null, "style=\"xxxx\"")
-	// note that since you must add the style keyword, this can be used to add any attribute to these tags, not just css. 
+	// note that since you must add the style keyword, this can be used to add any attribute to these tags, not just css.
 
 // required/optional libraries (preferably in the following order):
 
@@ -422,19 +422,19 @@
 //    js/JSmolTHREE.js     -- optional; WebGL library required for JSmolGLmol.js
 //    js/JSmolGLmol.js     -- optional; WebGL version of JSmol.
 //    js/JSmolJME.js       -- optional; JSME (2D editor)
-//    jsme/jsme/jsme.nocache.js   --  required for JSME 
+//    jsme/jsme/jsme.nocache.js   --  required for JSME
 //    js/JSmolMenu.js      -- optional; required for menuing in JSV
-//    js/JSmolJSV.js       -- optional; for creating and interacting with a JSpecView applet 
+//    js/JSmolJSV.js       -- optional; for creating and interacting with a JSpecView applet
 
 // most of these will be loaded automatically, and for most installations, all you need is JSmol.min.js
 
 
 // Allows Jmol-like objects to be displayed on Java-challenged (iPad/iPhone)
-// or applet-challenged (Android/iPhone) platforms, with automatic switching to 
+// or applet-challenged (Android/iPhone) platforms, with automatic switching to
 
-// For your installation, you should consider putting JmolData.jar and jsmol.php 
-// on your own server. Nothing more than these two files is needed on the server, and this 
-// allows more options for MSIE and Chrome when working with cross-domain files (such as RCSB or pubChem) 
+// For your installation, you should consider putting JmolData.jar and jsmol.php
+// on your own server. Nothing more than these two files is needed on the server, and this
+// allows more options for MSIE and Chrome when working with cross-domain files (such as RCSB or pubChem)
 
 // The NCI and RCSB databases are accessed via direct AJAX if available (xhr2/xdr).
 
@@ -443,7 +443,7 @@ if(typeof(jQuery)=="undefined") alert ("Note -- JSmoljQuery is required for JSmo
 
 // An example of how to extend Jmol with code PRIOR to JSmolCore.js or JSmol.min.js follows:
 //
-// 
+//
 //	Jmol = {
 //  	z:3000,
 //		extend: function(what, obj) {if (what == "viewer") { obj._testing = true } }
@@ -473,7 +473,7 @@ Jmol = (function(document) {
 	var j = {
 		_version: "$Date: 2021-05-26 21:16:02 -0500 (Wed, 26 May 2021) $", // svn.keywords:lastUpdated
 		_alertNoBinary: true,
-		// this url is used to Google Analytics tracking of Jmol use. You may remove it or modify it if you wish. 
+		// this url is used to Google Analytics tracking of Jmol use. You may remove it or modify it if you wish.
 		_allowedJmolSize: [25, 2048, 300],   // min, max, default (pixels)
 		/*  By setting the Jmol.allowedJmolSize[] variable in the webpage
 				before calling Jmol.getApplet(), limits for applet size can be overriden.
@@ -501,15 +501,15 @@ Jmol = (function(document) {
 			_pubChemLoadScript: "",
 			_DirectDatabaseCalls:{
 				// these sites are known to implement access-control-allow-origin *
-        // null here means no conversion necessary 
+        // null here means no conversion necessary
 				"cactus.nci.nih.gov": null,
         ".x3dna.org": null,
-        "rruff.geo.arizona.edu": null, 
-        ".rcsb.org": null, 
+        "rruff.geo.arizona.edu": null,
+        ".rcsb.org": null,
 				"ftp.wwpdb.org": null,
-				"pdbe.org": null, 
-				"materialsproject.org": null, 
-				".ebi.ac.uk": null, 
+				"pdbe.org": null,
+				"materialsproject.org": null,
+				".ebi.ac.uk": null,
 				"pubchem.ncbi.nlm.nih.gov":null,
 				"www.nmrdb.org/tools/jmol/predict.php":null,
 				"$": "https://cactus.nci.nih.gov/chemical/structure/%FILENCI/file?format=sdf&get3d=True",
@@ -535,17 +535,17 @@ Jmol = (function(document) {
 		_XhtmlElement: null,
 		_XhtmlAppendChild: false
 	}
-	
+
 	var ref = document.location.href.toLowerCase();
   j._debugCore = (ref.indexOf("j2sdebugcore") >= 0);
-	j._httpProto = (ref.indexOf("https") == 0 ? "https://" : "http://"); 
+	j._httpProto = (ref.indexOf("https") == 0 ? "https://" : "http://");
 	j._isFile = (ref.indexOf("file:") == 0);
 	if (j._isFile) // ensure no attempt to read XML in local request:
 	  $.ajaxSetup({ mimeType: "text/plain" });
 	j._ajaxTestSite = j._httpProto + "google.com";
 	var isLocal = (j._isFile || ref.indexOf("http://localhost") == 0 || ref.indexOf("http://127.") == 0);
 	j._tracker = (!isLocal && 'https://chemapps.stolaf.edu/jmol/JmolTracker.php?id=UA-45940799-1');
-	
+
 	j._isChrome = (navigator.userAgent.toLowerCase().indexOf("chrome") >= 0);
 	j._isSafari = (!j._isChrome && navigator.userAgent.toLowerCase().indexOf("safari") >= 0);
 	j._isMsie = (window.ActiveXObject !== undefined);
@@ -564,7 +564,7 @@ Jmol = (function(document) {
 
 // this library is organized into the following sections:
 
-	// jQuery interface 
+	// jQuery interface
 	// protected variables
 	// feature detection
 	// AJAX-related core functionality
@@ -582,11 +582,11 @@ Jmol = (function(document) {
 	$(document).ready(function(){ Jmol._document = null });
 
 	Jmol.$ = function(objectOrId, subdiv) {
-		// if a subdiv, then return $("#objectOrId._id_subdiv") 
+		// if a subdiv, then return $("#objectOrId._id_subdiv")
 		// or if no subdiv, then just $(objectOrId)
 		if (objectOrId == null)alert (subdiv + arguments.callee.caller.toString());
 			return $(subdiv ? "#" + objectOrId._id + "_" + subdiv : objectOrId);
-	} 
+	}
 
 	Jmol._$ = function(id) {
 		// either the object or $("#" + id)
@@ -599,7 +599,7 @@ Jmol = (function(document) {
 		Jmol._ajaxCall = info.url;
 		info.cache = (info.cache != "NO");
     info.url = Jmol._fixProtocol(info.url);
-		// don't let jQuery add $_=... to URL unless we 
+		// don't let jQuery add $_=... to URL unless we
 		// use cache:"NO"; other packages might use $.ajaxSetup() to set this to cache:false
 		return $.ajax(info);
 	}
@@ -607,24 +607,24 @@ Jmol = (function(document) {
   Jmol._fixProtocol = function(url) {
     if (url.indexOf("get3d=True") >= 0)
       url = url.replace(/get3d\=True/, "get3d=true"); // NCI/CADD change 08/2016
-  	return (    
-    url.indexOf("http://www.rcsb.org/pdb/files/") == 0 && url.indexOf("/ligand/") < 0 ? 
-      "http://files.rcsb.org/view/" + url.substring(30).replace(/\.gz/,"")    
+  	return (
+    url.indexOf("http://www.rcsb.org/pdb/files/") == 0 && url.indexOf("/ligand/") < 0 ?
+      "http://files.rcsb.org/view/" + url.substring(30).replace(/\.gz/,"")
     : url.indexOf("http://") == 0 && (
       Jmol._httpProto == "https://"
-      || url.indexOf(".gov/") > 0 
-      || url.indexOf("http://www.materialsproject") == 0) 
+      || url.indexOf(".gov/") > 0
+      || url.indexOf("http://www.materialsproject") == 0)
       ? "https" + url.substring(4) : url);
   }
-  
+
 	Jmol._getNCIInfo = function(identifier, what, fCallback) {
 		return Jmol._getFileData("https://cactus.nci.nih.gov/chemical/structure/"+identifier +"/" + (what == "name" ? "names" : what));
 	}
-	
+
 	Jmol.$appEvent = function(app, subdiv, evt, f) {
-		var o = Jmol.$(app, subdiv); 
+		var o = Jmol.$(app, subdiv);
 		o.off(evt) && f && o.on(evt, f);
-	}   
+	}
 
 	Jmol.$resize = function (f) {
 		return $(window).resize(f);
@@ -647,13 +647,13 @@ Jmol = (function(document) {
 	Jmol.$closest = function(what, d) {
 		return $(what).closest(d);
 	}
-	
+
 	Jmol.$get = function(what, i) {
 	return $(what).get(i);
 	}
- 
+
 	// element id expected
-			 
+
 	Jmol.$documentOff = function(evt, id) {
 		return $(document).off(evt, "#" + id);
 	}
@@ -679,11 +679,11 @@ Jmol = (function(document) {
 	Jmol.$css = function(id, style) {
 		return Jmol._$(id).css(style);
 	}
-	 
+
 	Jmol.$find = function(id, d) {
 		return Jmol._$(id).find(d);
 	}
-	
+
 	Jmol.$focus = function(id) {
 		return Jmol._$(id).focus();
 	}
@@ -691,7 +691,7 @@ Jmol = (function(document) {
 	Jmol.$html = function(id, html) {
 		return Jmol._$(id).html(html);
 	}
-	 
+
 	Jmol.$offset = function(id) {
 		return Jmol._$(id).offset();
 	}
@@ -715,14 +715,14 @@ Jmol = (function(document) {
 	}
 
 	Jmol.$setEnabled = function(id, b) {
-		return Jmol._$(id).attr("disabled", b ? null : "disabled");  
+		return Jmol._$(id).attr("disabled", b ? null : "disabled");
 	}
 
   Jmol.$getSize = function(id) {
 		var o = Jmol._$(id);
     return [ o.width(), o.height() ]
   }
-  
+
 	Jmol.$setSize = function(id, w, h) {
 		return Jmol._$(id).width(w).height(h);
 	}
@@ -730,10 +730,10 @@ Jmol = (function(document) {
   Jmol.$is = function(id, test) { // e.g. :visible
     return Jmol._$(id).is(test);
   }
-  
+
 	Jmol.$setVisible = function(id, b) {
 		var o = Jmol._$(id);
-		return (b ? o.show() : o.hide());  
+		return (b ? o.show() : o.hide());
 	}
 
 	Jmol.$submit = function(id) {
@@ -788,7 +788,7 @@ Jmol = (function(document) {
 			var ua = features.ua;
 			var browserList = ["konqueror","webkit","omniweb","opera","webtv","icab","msie","mozilla"];
 			for (var i = 0; i < browserList.length; i++)
-			if (ua.indexOf(browserList[i])>=0) 
+			if (ua.indexOf(browserList[i])>=0)
 				return browserList[i];
 			return "unknown";
 		}
@@ -804,20 +804,20 @@ Jmol = (function(document) {
 		features._webGLtest = 0;
 
 		features.supportsWebGL = function() {
-		if (!Jmol.featureDetection._webGLtest) { 
+		if (!Jmol.featureDetection._webGLtest) {
 			var canvas;
-			Jmol.featureDetection._webGLtest = ( 
-				window.WebGLRenderingContext 
-					&& ((canvas = document.createElement("canvas")).getContext("webgl") 
+			Jmol.featureDetection._webGLtest = (
+				window.WebGLRenderingContext
+					&& ((canvas = document.createElement("canvas")).getContext("webgl")
 				|| canvas.getContext("experimental-webgl")) ? 1 : -1);
 		}
 		return (Jmol.featureDetection._webGLtest > 0);
 	};
 
 	features.supportsLocalization = function() {
-		//<meta charset="utf-8">                                     
-		var metas = document.getElementsByTagName('meta'); 
-		for (var i= metas.length; --i >= 0;) 
+		//<meta charset="utf-8">
+		var metas = document.getElementsByTagName('meta');
+		for (var i= metas.length; --i >= 0;)
 			if (metas[i].outerHTML.toLowerCase().indexOf("utf-8") >= 0) return true;
 		return false;
 		};
@@ -933,7 +933,7 @@ Jmol = (function(document) {
 				}
 				info.push("</table>");
 				header = (S.length - 1) + " matches";
-				break;      
+				break;
 			case "$": // NCI
 			case ":": // pubChem
 			break;
@@ -954,7 +954,7 @@ Jmol = (function(document) {
 
 	Jmol._loadError = function(fError){
 		Jmol._ajaxDone();
-		Jmol.say("Error connecting to server: " + Jmol._ajaxCall);  
+		Jmol.say("Error connecting to server: " + Jmol._ajaxCall);
 		null!=fError&&fError()
 	}
 
@@ -988,12 +988,12 @@ Jmol = (function(document) {
 					query = "name/" + encodeURIComponent(query.substring(pt));
 				}
 			} else {
-				query = encodeURIComponent(query.substring(pt));		
+				query = encodeURIComponent(query.substring(pt));
 			}
       if (query.indexOf(".mmtf") >= 0) {
         query = "https://mmtf.rcsb.org/v1.0/full/" + query.replace(/\.mmtf/, "");
 			} else if (call.indexOf("FILENCI") >= 0) {
-				query = query.replace(/\%2F/g, "/");				
+				query = query.replace(/\%2F/g, "/");
 				query = call.replace(/\%FILENCI/, query);
 			} else {
 				query = call.replace(/\%FILE/, query);
@@ -1004,9 +1004,9 @@ Jmol = (function(document) {
 
 	Jmol._getRawDataFromServer = function(database,query,fSuccess,fError,asBase64,noScript){
 	  // note that this method is now only enabled for "_"
-	  // server-side processing of database queries was too slow and only useful for 
+	  // server-side processing of database queries was too slow and only useful for
 	  // the IMAGE option, which has been abandoned.
-		var s = 
+		var s =
 			"?call=getRawDataFromDatabase&database=" + database + (query.indexOf("?POST?") >= 0 ? "?POST?" : "")
 				+ "&query=" + encodeURIComponent(query)
 				+ (asBase64 ? "&encoding=base64" : "")
@@ -1027,27 +1027,27 @@ Jmol = (function(document) {
 		}
 		return fileName;
 	}
-	
+
 	Jmol._checkCache = function(applet, fileName, fSuccess) {
 		if (applet._cacheFiles && Jmol._fileCache && !fileName.endsWith(".js")) {
 			var data = Jmol._fileCache[fileName];
 			if (data) {
-				System.out.println("using "  + data.length + " bytes of cached data for "  + fileName);
+				Zystem.out.println("using "  + data.length + " bytes of cached data for "  + fileName);
 				fSuccess(data);
 				return null;
 			} else {
-				fSuccess = function(fileName, data) { fSuccess(Jmol._fileCache[fileName] = data) };     
+				fSuccess = function(fileName, data) { fSuccess(Jmol._fileCache[fileName] = data) };
 			}
 		}
 		return fSuccess;
 	}
-	
+
   Jmol.playAudio = function(filePath) {
     Jmol.playAudio(null, filePath);
   }
-  
+
   Jmol.playAudio = function(applet, params) {
-  
+
     var get = (params.get ? function(key){return params.get(key)} : null);
     var put = (params.put ? function(key,val){return params.put(key,val)} : null);
     var filePath = (get ? get("audioFile") : params);
@@ -1065,7 +1065,7 @@ Jmol = (function(document) {
          close: function() { callback("close") },
          setMicrosecondPosition: function(us) { audio.currentTime = us / 1e6; }
       };
-    }    
+    }
     audio.controls = "true";
     audio.src = filePath;
     if (get && get("loop"))
@@ -1086,15 +1086,15 @@ Jmol = (function(document) {
       callback("open")
     }
   }
-  
+
 	Jmol._loadFileData = function(applet, fileName, fSuccess, fError){
 		var isRaw = [];
 		fileName = Jmol._checkFileName(applet, fileName, isRaw);
 		fSuccess = Jmol._checkCache(applet, fileName, fSuccess);
 		if (isRaw[0]) {
-				Jmol._getRawDataFromServer("_",fileName,fSuccess,fError);   
+				Jmol._getRawDataFromServer("_",fileName,fSuccess,fError);
 				return;
-		} 
+		}
 		var info = {
 			type: "GET",
 			dataType: "text",
@@ -1121,7 +1121,7 @@ Jmol = (function(document) {
 				async: Jmol._asynchronous
 			}
 			return Jmol._ajax(info);
-		}   
+		}
 		query = "?call=getInfoFromDatabase&database=" + database
 				+ "&query=" + encodeURIComponent(query);
 		return Jmol._contactServer(query, function(data) {Jmol._setInfo(applet, database, data)});
@@ -1130,7 +1130,7 @@ Jmol = (function(document) {
 	Jmol._extractInfoFromRCSB = function(applet, database, query, output) {
 		var n = output.length/5;
 		if (n == 0)
-			return; 
+			return;
 		if (query.length == 4 && n != 1) {
 			var QQQQ = query.toUpperCase();
 			var pt = output.indexOf(QQQQ);
@@ -1140,7 +1140,7 @@ Jmol = (function(document) {
 				output = output.substring(0, 250);
 			output = output.replace(/\n/g,",");
 			var url = Jmol._restReportUrl.replace(/IDLIST/,output);
-			Jmol._loadFileData(applet, url, function(data) {Jmol._setInfo(applet, database, data) });   
+			Jmol._loadFileData(applet, url, function(data) {Jmol._setInfo(applet, database, data) });
 		}
 	}
 
@@ -1192,7 +1192,7 @@ Jmol = (function(document) {
 		// remove exclamation point "immediate" indicator
 			applet._script(query.substring(1));
 			return;
-		} 
+		}
 		query && (query = query.replace(/\"/g, ""));
 		applet._showInfo(false);
 		Jmol._searchMol(applet, query, script, true);
@@ -1207,10 +1207,10 @@ Jmol = (function(document) {
 			database = (applet._hasOptions ? Jmol.$val(Jmol.$(applet, "select")) : "$");
 		}
 		if (database == "=" && query.length == 3)
-			query = "=" + query; // this is a ligand      
+			query = "=" + query; // this is a ligand
 		var dm = database + query;
 		if (!query || dm.indexOf("?") < 0 && dm == applet._thisJmolModel) {
-			return;    
+			return;
 		}
 		applet._thisJmolModel = dm;
 		var view;
@@ -1256,12 +1256,12 @@ Jmol = (function(document) {
 			}
 		} catch( e ) {
 			var s = "JSmolCore.js: synchronous binary file transfer is requested but not available";
-			System.out.println(s);
+			Zystem.out.println(s);
 			if (Jmol._alertNoBinary && !isSilent)
 				alert (s)
 			return Jmol._syncBinaryOK = false;
 		}
-		return true;  
+		return true;
 	}
 
 	Jmol._binaryTypes = ["mmtf",".gz",".bz2",".jpg",".gif",".png",".zip",".jmol",".bin",".smol",".spartan",".pmb",".mrc",".map",".ccp4",".dn6",".delphi",".omap",".pse",".dcd",".uk/pdbe/densities/"];
@@ -1327,12 +1327,12 @@ Jmol = (function(document) {
 		isBinary && (isBinary = Jmol._canSyncBinary(true));
 		return (isBinary ? Jmol._strToBytes(data) : JU.SB.newS(data));
 	}
-	
+
 	Jmol._xhrReturn = function(xhr){
 		if (!xhr.responseText || self.Clazz && Clazz.instanceOf(xhr.response, self.ArrayBuffer)) {
-			// Safari or error 
+			// Safari or error
 			return xhr.response || xhr.statusText;
-		} 
+		}
 		return xhr.responseText;
 	}
 
@@ -1370,21 +1370,21 @@ Jmol = (function(document) {
 	Jmol._getZ = function(applet, what) {
 		return applet && applet._z && applet._z[what] || Jmol._z[what];
 	}
-	
+
 	Jmol._incrZ = function(applet, what) {
 		return applet && applet._z && ++applet._z[what] || ++Jmol._z[what];
 	}
-	
+
   Jmol._hideLocalFileReader = function(applet, cursor) {
     applet._localReader && Jmol.$setVisible(applet._localReader, false);
     applet._readingLocal = false;
     Jmol.setCursor(applet, 0);
   }
-  
+
   Jmol.loadFileFromDialog = function(applet) {
     Jmol.loadFileAsynchronously(null, applet, null, null);
   }
-  
+
 	Jmol.loadFileAsynchronously = function(fileLoadThread, applet, fileName, appData) {
 		if (fileName && fileName.indexOf("?") != 0) {
 			// LOAD ASYNC command
@@ -1394,7 +1394,7 @@ Jmol = (function(document) {
 			fSuccess = Jmol._checkCache(applet, fileName, fSuccess);
 			if (fileName.indexOf("|") >= 0)
 				fileName = fileName.split("|")[0];
-			return (fSuccess == null ? null : Jmol._getFileData(fileName, fSuccess));		
+			return (fSuccess == null ? null : Jmol._getFileData(fileName, fSuccess));
 		}
 		// we actually cannot suggest a fileName, I believe.
 		if (!Jmol.featureDetection.hasFileReader) {
@@ -1415,7 +1415,7 @@ Jmol = (function(document) {
 		});
 		Jmol.$appEvent(applet, "localReader_loadfile", "click");
 		Jmol.$appEvent(applet, "localReader_loadfile", "click", function(evt) {
-			var file = Jmol.$(applet, "localReader_files")[0].files[0];   
+			var file = Jmol.$(applet, "localReader_files")[0].files[0];
 			var reader = new FileReader();
 			reader.onloadend = function(evt) {
 				if (evt.target.readyState == FileReader.DONE) { // DONE == 2
@@ -1442,12 +1442,12 @@ Jmol = (function(document) {
   Jmol._setData = function(fileLoadThread, filename, filename0, data, appData, applet) {
   	data && (data = Jmol._strToBytes(data));
 		if (data != null && (fileLoadThread == null || filename.indexOf(".jdx") >= 0))
-			Jmol.Cache.put("cache://" + filename, data); 
+			Jmol.Cache.put("cache://" + filename, data);
     if (fileLoadThread == null) {
       applet._applet.openFileAsyncSpecial(data == null ? filename : "cache://" + filename, 1);
-    } else {          
+    } else {
 		  fileLoadThread.setData(filename, filename0, data, appData);
-    }    
+    }
   }
 
 	Jmol.doAjax = function(url, postOut, dataOut) {
@@ -1468,24 +1468,24 @@ Jmol = (function(document) {
 	}
 
 	// Jmol._localFileSaveFunction --  // do something local here; Maybe try the FileSave interface? return true if successful
-	 
+
 	Jmol._saveFile = function(filename, data, mimetype, encoding) {
 		if (Jmol._localFileSaveFunction && Jmol._localFileSaveFunction(filename, data))
 			return "OK";
 		var filename = filename.substring(filename.lastIndexOf("/") + 1);
-		mimetype || (mimetype = (filename.indexOf(".pdf") >= 0 ? "application/pdf" 
-			: filename.indexOf(".png") >= 0 ? "image/png" 
-			: filename.indexOf(".gif") >= 0 ? "image/gif" 
+		mimetype || (mimetype = (filename.indexOf(".pdf") >= 0 ? "application/pdf"
+			: filename.indexOf(".png") >= 0 ? "image/png"
+			: filename.indexOf(".gif") >= 0 ? "image/gif"
 			: filename.indexOf(".jpg") >= 0 ? "image/jpg" : ""));
 		var isString = (typeof data == "string");
-		
+
 	if (isString && data.indexOf(";base64,") >= 0) {
 	  data = data.split(";base64,")[1];
-	} else {	
+	} else {
    	data = (JU || J.util).Base64.getBase64(isString ? data.getBytes("UTF-8") : data).toString();
    	}
 		encoding || (encoding = "base64");
-		
+
 		var url = Jmol._serverUrl;
 		url && url.indexOf("your.server") >= 0 && (url = "");
 		if (Jmol._useDataURI || !url) {
@@ -1493,12 +1493,12 @@ Jmol = (function(document) {
 			// btoa does not work with UTF-8 data///encoding || (data = btoa(data));
 			var a = document.createElement("a");
 			a.href = "data:" + mimetype + ";base64," + data;
-			a.type = mimetype || (mimetype = "text/plain;charset=utf-8");	
+			a.type = mimetype || (mimetype = "text/plain;charset=utf-8");
 			a.download = filename;
 			a.target = "_blank";
 				$("body").append(a);
 			a.click();
-			a.remove();		
+			a.remove();
 		} else {
 		// Asynchronous outputto be reflected as a download
 			if (!Jmol._formdiv) {
@@ -1544,16 +1544,16 @@ Jmol = (function(document) {
 
 	Jmol._registerApplet = function(id, applet) {
 		return window[id] = Jmol._applets[id] = Jmol._applets.master = Jmol._applets[id + "__" + Jmol._syncId + "__"] = applet;
-	} 
+	}
 
 	Jmol._readyCallback = function (appId,fullId,isReady,javaApplet,javaAppletPanel) {
 		appId = appId.split("_object")[0];
     var applet = Jmol._applets[appId];
 		isReady = (isReady.booleanValue ? isReady.booleanValue() : isReady);
-		// necessary for MSIE in strict mode -- apparently, we can't call 
+		// necessary for MSIE in strict mode -- apparently, we can't call
 		// jmol._readyCallback, but we can call Jmol._readyCallback. Go figure...
     if (isReady) {
-      // when leaving page, Java applet may be dead 
+      // when leaving page, Java applet may be dead
       applet._appletPanel = (javaAppletPanel || javaApplet);
       applet._applet = javaApplet;
     }
@@ -1572,39 +1572,39 @@ Jmol = (function(document) {
 			//       id_infodiv
 
 
-			// for whatever reason, without DOCTYPE, with MSIE, "height:auto" does not work, 
+			// for whatever reason, without DOCTYPE, with MSIE, "height:auto" does not work,
 			// and the text scrolls off the page.
 			// So I'm using height:95% here.
 			// The table was a fix for MSIE with no DOCTYPE tag to fix the miscalculation
-			// in height of the div when using 95% for height. 
-			// But it turns out the table has problems with DOCTYPE tags, so that's out. 
-			// The 95% is a compromise that we need until the no-DOCTYPE MSIE solution is found. 
+			// in height of the div when using 95% for height.
+			// But it turns out the table has problems with DOCTYPE tags, so that's out.
+			// The 95% is a compromise that we need until the no-DOCTYPE MSIE solution is found.
 			// (100% does not work with the JME linked applet)
 		var s;
 		// ... here are just for clarification in this code; they are removed immediately
 		if (isHeader) {
-			var img = ""; 
+			var img = "";
 			if (applet._coverImage){
 				var more = " onclick=\"Jmol.coverApplet(ID, false)\" title=\"" + (applet._coverTitle) + "\"";
 				var play = "<image id=\"ID_coverclickgo\" src=\"" + applet._makeLiveImage + "\" style=\"width:25px;height:25px;position:absolute;bottom:10px;left:10px;"
-					+ "z-index:" + Jmol._getZ(applet, "coverImage")+";opacity:0.5;\"" + more + " />"  
+					+ "z-index:" + Jmol._getZ(applet, "coverImage")+";opacity:0.5;\"" + more + " />"
 				img = "<div id=\"ID_coverdiv\" style=\"background-color:red;z-index:" + Jmol._getZ(applet, "coverImage")+";width:100%;height:100%;display:inline;position:absolute;top:0px;left:0px\"><image id=\"ID_coverimage\" src=\""
 				 + applet._coverImage + "\" style=\"width:100%;height:100%\"" + more + "/>" + play + "</div>";
 			}
-      
+
       var wait = (applet._isJava ? "" : "<image id=\"ID_waitimage\" src=\"" + applet._j2sPath + "/img/cursor_wait.gif\" style=\"display:none;position:absolute;bottom:10px;left:10px;"
-					+ "z-index:" + Jmol._getZ(applet, "coverImage")+";\" />");  
+					+ "z-index:" + Jmol._getZ(applet, "coverImage")+";\" />");
 
 			var css = Jmol._appletCssText.replace(/\'/g,'"');
       var spinner = applet._getSpinner && applet._getSpinner();
-      applet._spinner = spinner = (!spinner || spinner == "none" ? "" : "background-image:url("+spinner + "); background-repeat:no-repeat; background-position:center;");    
+      applet._spinner = spinner = (!spinner || spinner == "none" ? "" : "background-image:url("+spinner + "); background-repeat:no-repeat; background-position:center;");
 			css = spinner + (css.indexOf("style=\"") >= 0 ? css.split("style=\"")[1] : "\" " + css);
 			s = "\
 ...<div id=\"ID_appletinfotablediv\" style=\"width:Wpx;height:Hpx;position:relative;font-size:14px;text-align:left\">IMG WAIT\
 ......<div id=\"ID_appletdiv\" style=\"z-index:" + Jmol._getZ(applet, "header") + ";width:100%;height:100%;position:absolute;top:0px;left:0px;" + css + ">";
 			var height = applet._height;
 			var width = applet._width;
-			if (typeof height !== "string" || height.indexOf("%") < 0) 
+			if (typeof height !== "string" || height.indexOf("%") < 0)
 				height += "px";
 			if (typeof width !== "string" || width.indexOf("%") < 0)
 				width += "px";
@@ -1626,7 +1626,7 @@ Jmol = (function(document) {
     if (applet._spinner)
       Jmol.$css(Jmol.$(applet, "appletdiv"), {"background-image": ""});
   }
-  
+
 	Jmol._documentWrite = function(text) {
 		if (Jmol._document) {
 			if (Jmol._isXHTML && !Jmol._XhtmlElement) {
@@ -1666,13 +1666,13 @@ Jmol = (function(document) {
 		Ptr[0] = data.length;
 
 /*
-	// unnecessary ?  
+	// unnecessary ?
 
 		closetag || (closetag = "");
 		lvel || (lvel = 0);
 		var pt0 = Ptr[0];
 		var pt = pt0;
-		while (pt < data.length && data.charAt(pt) != "<") 
+		while (pt < data.length && data.charAt(pt) != "<")
 			pt++
 		if (pt != pt0) {
 			var text = data.substring(pt0, pt);
@@ -1681,7 +1681,7 @@ Jmol = (function(document) {
 		}
 		pt0 = ++pt;
 		var ch;
-		while (pt < data.length && "\n\r\t >".indexOf(ch = data.charAt(pt)) < 0) 
+		while (pt < data.length && "\n\r\t >".indexOf(ch = data.charAt(pt)) < 0)
 			pt++;
 		var tagname = data.substring(pt0, pt);
 		var e = (tagname == closetag  || tagname == "/" ? ""
@@ -1692,15 +1692,15 @@ Jmol = (function(document) {
 			return e;
 		}
 		while (pt < data.length && (ch = data.charAt(pt)) != ">") {
-			while (pt < data.length && "\n\r\t ".indexOf(ch = data.charAt(pt)) >= 0) 
+			while (pt < data.length && "\n\r\t ".indexOf(ch = data.charAt(pt)) >= 0)
 				pt++;
 			pt0 = pt;
-			while (pt < data.length && "\n\r\t =/>".indexOf(ch = data.charAt(pt)) < 0) 
+			while (pt < data.length && "\n\r\t =/>".indexOf(ch = data.charAt(pt)) < 0)
 				pt++;
 			var attrname = data.substring(pt0, pt).toLowerCase();
 			if (attrname && ch != "=")
 				e.setAttribute(attrname, "true");
-			while (pt < data.length && "\n\r\t ".indexOf(ch = data.charAt(pt)) >= 0) 
+			while (pt < data.length && "\n\r\t ".indexOf(ch = data.charAt(pt)) >= 0)
 				pt++;
 			if (ch == "/") {
 				Ptr[0] = pt + 2;
@@ -1708,7 +1708,7 @@ Jmol = (function(document) {
 			} else if (ch == "=") {
 				var quote = data.charAt(++pt);
 				pt0 = ++pt;
-				while (pt < data.length && (ch = data.charAt(pt)) != quote) 
+				while (pt < data.length && (ch = data.charAt(pt)) != quote)
 					pt++;
 				var attrvalue = data.substring(pt0, pt);
 				e.setAttribute(attrname, attrvalue);
@@ -1723,7 +1723,7 @@ Jmol = (function(document) {
 			e.appendChild(child);
 		}
 */
-		return e;    
+		return e;
 	}
 
 	Jmol._setObject = function(obj, id, Info) {
@@ -1756,7 +1756,7 @@ Jmol = (function(document) {
 		obj._j2sPath = Info.j2sPath;
 		obj._coverImage = Info.coverImage;
     obj._makeLiveImage = Info.makeLiveImage || Info.j2sPath + "/img/play_make_live.jpg";
-		obj._isCovered = !!obj._coverImage; 
+		obj._isCovered = !!obj._coverImage;
 		obj._deferApplet = Info.deferApplet || obj._isCovered && obj._isJava; // must do this if covered in Java
 		obj._deferUncover = Info.deferUncover && !obj._isJava; // can't do this with Java
 		obj._coverScript = Info.coverScript;
@@ -1848,7 +1848,7 @@ Jmol = (function(document) {
 		for (var i = 0; i < Jmol._syncedApplets.length; i++)
 			if (Jmol._syncedCommands[i])
 				s += "Jmol.script(Jmol._syncedApplets[" + i + "], Jmol._syncedCommands[" + i + "]);"
-		setTimeout(s, 50);  
+		setTimeout(s, 50);
 	}
 
 	Jmol._mySyncCallback = function(appFullName,msg) {
@@ -1865,14 +1865,14 @@ Jmol = (function(document) {
 			if (msg.indexOf(Jmol._syncedApplets[i]._syncKeyword) >= 0)
 				Jmol._syncedApplets[i]._syncScript(msg);
 		}
-		return 0 // prevents further Jmol sync processing 
-	}              
+		return 0 // prevents further Jmol sync processing
+	}
 
 	Jmol._getElement = function(applet, what) {
 		var d = document.getElementById(applet._id + "_" + what);
 		return (d || {});
-	} 
-	 
+	}
+
 	Jmol._evalJSON = function(s,key){
 		s = s + "";
 		if(!s)
@@ -1967,7 +1967,7 @@ Jmol = (function(document) {
       return;
     var curs;
     switch(c) {
-    case 1: 
+    case 1:
       curs = "crosshair";
       break;
     case 3: // wait
@@ -1975,12 +1975,12 @@ Jmol = (function(document) {
       Jmol.$setVisible(Jmol.$(applet, "waitimage"), true);
       break;
     case 8: // zoom
-      curs = "ns-resize"; 
+      curs = "ns-resize";
       break;
     case 12: // hand
-      curs = "grab"; 
+      curs = "grab";
       break;
-    case 13: 
+    case 13:
       curs = "move";
       break;
     default:
@@ -1990,7 +1990,7 @@ Jmol = (function(document) {
     }
     applet._canvas.style.cursor = curs;
   }
-  
+
 	Jmol._gestureUpdate = function(canvas, ev) {
 		ev.stopPropagation();
 		ev.preventDefault();
@@ -2036,7 +2036,7 @@ Jmol = (function(document) {
 			Jmol._setMouseOwner(canvas, true);
 			ev.stopPropagation();
       var ui = ev.target["data-UI"];
-      if (!ui || !ui.handleJSEvent(canvas, 501, ev)) 
+      if (!ui || !ui.handleJSEvent(canvas, 501, ev))
   			ev.preventDefault();
 			canvas.isDragging = true;
 			if ((ev.type == "touchstart") && Jmol._gestureUpdate(canvas, ev))
@@ -2050,7 +2050,7 @@ Jmol = (function(document) {
       }
 			return !!ui;
 		});
-    
+
 		Jmol.$bind(canvas, 'mouseup touchend', function(ev) {
       if (doIgnore(ev))
         return true;
@@ -2067,7 +2067,7 @@ Jmol = (function(document) {
   			canvas.applet._processEvent(502, xym);//java.awt.Event.MOUSE_UP
 			return !!ui;
 		});
-    
+
 		Jmol.$bind(canvas, 'mousemove touchmove', function(ev) { // touchmove
       if (doIgnore(ev))
         return true;
@@ -2080,18 +2080,18 @@ Jmol = (function(document) {
 			}
 			return Jmol._drag(canvas, ev);
 		});
-		
+
 		Jmol._drag = function(canvas, ev) {
-      
+
 			ev.stopPropagation();
 			ev.preventDefault();
-      
+
 			var isTouch = (ev.type == "touchmove");
 			if (isTouch && Jmol._gestureUpdate(canvas, ev))
 				return false;
 			var xym = Jmol._jsGetXY(canvas, ev);
 			if(!xym) return false;
-      
+
 			if (!canvas.isDragging)
 				xym[2] = 0;
 
@@ -2100,7 +2100,7 @@ Jmol = (function(document) {
 			canvas.applet._processEvent((canvas.isDragging ? 506 : 503), xym); // java.awt.Event.MOUSE_DRAG : java.awt.Event.MOUSE_MOVE
 			return !!ui;
 }
-		
+
 		Jmol.$bind(canvas, 'DOMMouseScroll mousewheel', function(ev) { // Zoom
       if (doIgnore(ev))
         return true;
@@ -2109,7 +2109,7 @@ Jmol = (function(document) {
 			// Webkit or Firefox
 			canvas.isDragging = false;
 			var oe = ev.originalEvent;
-			var scroll = (oe.detail ? oe.detail : (Jmol.featureDetection.os == "mac" ? 1 : -1) * oe.wheelDelta); // Mac and PC are reverse; but 
+			var scroll = (oe.detail ? oe.detail : (Jmol.featureDetection.os == "mac" ? 1 : -1) * oe.wheelDelta); // Mac and PC are reverse; but
 			var modifiers = Jmol._jsGetMouseModifiers(ev);
 			canvas.applet._processEvent(507,[scroll < 0 ? -1 : 1,0,modifiers]);
 			return false;
@@ -2122,7 +2122,7 @@ Jmol = (function(document) {
 		Jmol.$bind(canvas, 'mouseout', function(ev) {
       if (doIgnore(ev))
         return true;
-      if (Jmol._mouseOwner && !Jmol._mouseOwner.mouseMove) 
+      if (Jmol._mouseOwner && !Jmol._mouseOwner.mouseMove)
         Jmol._setMouseOwner(null);
 			if (canvas.applet._appletPanel)
 				canvas.applet._appletPanel.startHoverWatcher(false);
@@ -2145,7 +2145,7 @@ Jmol = (function(document) {
 				var xym = Jmol._jsGetXY(canvas, ev);
 				if (!xym)
 					return false;
-				canvas.applet._processEvent(504, xym);//J.api.Event.MOUSE_ENTERED	
+				canvas.applet._processEvent(504, xym);//J.api.Event.MOUSE_ENTERED
 				canvas.applet._processEvent(502, xym);//J.api.Event.MOUSE_UP
 				return false;
 			}
@@ -2165,7 +2165,7 @@ Jmol = (function(document) {
 					return;
 				canvas.applet._resize();
 			});
- 
+
 		Jmol.$bind('body', 'mouseup touchend', function(ev) {
       if (doIgnore(ev))
         return true;
@@ -2198,12 +2198,12 @@ Jmol.Swing = {
 SwingController = Swing; // see javajs.api.SwingController
 
 Swing.setDraggable = function(Obj) {
-	
+
 	var proto = Obj.prototype;
 	if (proto.setContainer)
 		return;
-	
-	// for menus, console, and 
+
+	// for menus, console, and
 	proto.setContainer = function(container) {
 		this.container = container;
 		container.obj = this;
@@ -2258,7 +2258,7 @@ Swing.setDraggable = function(Obj) {
 
 	proto.mouseMove = function(ev) {
 		if (this.isDragging && Jmol._mouseOwner == this) {
-			this.timestamp = System.currentTimeMillis(); // used for menu closure
+			this.timestamp = Zystem.currentTimeMillis(); // used for menu closure
 			var x = this.pageX0 + (ev.pageX - this.pageX);
 			var y = this.pageY0 + (ev.pageY - this.pageY);
       Jmol._mousePageX = x;
@@ -2307,24 +2307,24 @@ Swing.dispose = function(dialog) {
 //  var btns = $("#" + dialog.id + " *[id^='J']"); // add descendents with id starting with "J"
 //  for (var i = btns.length; --i >= 0;)
 //    delete Dialog.htDialogs[btns[i].id]
-	//System.out.println("JSmolCore.js: dispose " + dialog.id)
+	//Zystem.out.println("JSmolCore.js: dispose " + dialog.id)
 }
- 
+
 Swing.register = function(dialog, type) {
 	dialog.id = type + (++Swing.count);
 	Swing.htDialogs[dialog.id] = dialog;
-	//System.out.println("JSmolCore.js: register " + dialog.id)
+	//Zystem.out.println("JSmolCore.js: register " + dialog.id)
 
 }
 
 Swing.setDialog = function(dialog) {
 	Jmol._setMouseOwner(null);
 	Jmol.$remove(dialog.id);
-	//System.out.println("removed " + dialog.id)
+	//Zystem.out.println("removed " + dialog.id)
 	var id = dialog.id + "_mover";
 	var container = Jmol._$(id);
 	var jd;
-	//System.out.println("JSmolCore.js: setDialog " + dialog.id);
+	//Zystem.out.println("JSmolCore.js: setDialog " + dialog.id);
 	if (container[0]) {
 		container.html(dialog.html);
 		jd = container[0].jd;
@@ -2336,9 +2336,9 @@ Swing.setDialog = function(dialog) {
 		jd.applet = dialog.manager.vwr.html5Applet;
 		jd.setContainer(container);
 		jd.dialog = dialog;
-		jd.setPosition();  
+		jd.setPosition();
 		jd.dragBind(true);
-		container[0].jd = jd; 
+		container[0].jd = jd;
 	}
 	Jmol.$bind("#" + dialog.id + " .JButton", "mousedown touchstart", function(event) { jd.ignoreMouse=true });
 	Jmol.$bind("#" + dialog.id + " .JComboBox", "mousedown touchstart", function(event) { jd.ignoreMouse=true });
@@ -2349,7 +2349,7 @@ Swing.setDialog = function(dialog) {
 	Jmol.$bind("#" + dialog.id + " .JEditorPane", "mousedown touchstart", function(event) { jd.ignoreMouse=true });
 
 }
- 
+
 Swing.setSelected = function(chk) {
  Jmol.$prop(chk.id, 'checked', !!chk.selected);
 }
@@ -2371,11 +2371,11 @@ Swing.setEnabled = function(c) {
 }
 
 /// callbacks from the HTML elements ////
- 
+
 Swing.click = function(element, keyEvent) {
 	var component = Swing.htDialogs[element.id];
 	if (component) {
-		//System.out.println("click " + element + " " + component)
+		//Zystem.out.println("click " + element + " " + component)
 		var info = component.toString();
 		// table cells will have an id but are not registered
 		if (info.indexOf("JCheck") >= 0) {
@@ -2386,11 +2386,11 @@ Swing.click = function(element, keyEvent) {
 			component.text = element.value;
 			if (keyEvent && ((keyEvent.charCode || keyEvent.keyCode) != 13))
 				return;
-		}    
+		}
 	}
 	var dialog = Swing.htDialogs[Jmol.$getAncestorDiv(element.id, "JDialog").id];
 	var key = (component ? component.name :  dialog.registryKey + "/" + element.id);
-	//System.out.println("JSmolCore.js: click " + key); 
+	//Zystem.out.println("JSmolCore.js: click " + key);
 	dialog.manager.actionPerformed(key);
 }
 
@@ -2413,10 +2413,10 @@ Swing.hideMenus = function(applet) {
 Swing.windowClosing = function(element) {
 	var dialog = Swing.htDialogs[Jmol.$getAncestorDiv(element.id, "JDialog").id];
 	if (dialog.registryKey) {
-		//System.out.println("JSmolCore.js: windowClosing " + dialog.registryKey); 
+		//Zystem.out.println("JSmolCore.js: windowClosing " + dialog.registryKey);
 		dialog.manager.processWindowClosing(dialog.registryKey);
 	} else {
-		//System.out.println("JSmolCore.js: windowClosing " + dialog.title); 
+		//Zystem.out.println("JSmolCore.js: windowClosing " + dialog.title);
 		dialog.dispose();
 	}
 }
@@ -2424,17 +2424,17 @@ Swing.windowClosing = function(element) {
 })(Jmol.Swing);
 
 Jmol._track = function(applet) {
-	// this function inserts an iFrame that can be used to track your page's applet use. 
-	// By default it tracks to a page at St. Olaf College, but you can change that. 
+	// this function inserts an iFrame that can be used to track your page's applet use.
+	// By default it tracks to a page at St. Olaf College, but you can change that.
 	// and you can use
 	//
 	// delete Jmol._tracker
 	//
-	// yourself to not have you page execute this 
+	// yourself to not have you page execute this
 	//
 	if (Jmol._tracker){
-		try {  
-			var url = Jmol._tracker + "&applet=" + applet._jmolType + "&version=" + Jmol._version 
+		try {
+			var url = Jmol._tracker + "&applet=" + applet._jmolType + "&version=" + Jmol._version
 				+ "&appver=" + Jmol.___JmolVersion + "&url=" + encodeURIComponent(document.location.href);
 			var s = '<iframe style="display:none" width="0" height="0" frameborder="0" tabindex="-1" src="' + url + '"></iframe>'
 			Jmol.$after("body", s);
@@ -2464,7 +2464,7 @@ Jmol._getInChIKey = function(applet, data) {
 
 Jmol._getAttr = function(s, a) {
 	var pt = s.indexOf(a + "=");
-	return (pt >= 0 && (pt = s.indexOf('"', pt)) >= 0 
+	return (pt >= 0 && (pt = s.indexOf('"', pt)) >= 0
 		? s.substring(pt+1, s.indexOf('"', pt+1)) : null);
 }
 
@@ -2477,7 +2477,7 @@ Jmol.View = {
 // The objective of Jmol.View is to coordinate
 // asynchronous applet loading and atom/peak picking
 // among any combination of Jmol, JME, and JSV.
-// 
+//
 // basic element is a view object:
 //   view = {
 //     viewType1: viewRecord1,
@@ -2549,7 +2549,7 @@ View.updateFromSync = function(applet, msg) {
 		return Jmol.updateView(applet, msg); // JSV has been updated internally
 	if (view != applet._currentView)
 		View.__setView(view, applet, true);
-	var A = ((id = Jmol._getAttr(msg, "atoms")) && msg.indexOf("selectionhalos ON") >= 0  
+	var A = ((id = Jmol._getAttr(msg, "atoms")) && msg.indexOf("selectionhalos ON") >= 0
 		? eval("[" + id + "]") : []);
 	setTimeout(function(){if (applet._currentView == view)View.updateAtomPick(applet, A)}, 10);
 	if (Jmol.User.viewUpdatedCallback)
@@ -2579,14 +2579,14 @@ View.dumpViews = function(setID) {
 			+ " currentView=" + (applets[i]._currentView ? applets[i]._currentView.info.viewID : null);
 	for (var i = views.length; --i >= 0;) {
 		var view = views[i];
-		s += "\n\n<b>view=" + i 
-			+ " viewID=" + view.info.viewID 
+		s += "\n\n<b>view=" + i
+			+ " viewID=" + view.info.viewID
 			+ " chemID=" + view.info.chemID + "</b>\n"
 		var v;
-		for (var viewType in view) 
+		for (var viewType in view)
 			if (viewType != "info")
-				s += "\nview=" + i + " type=" + viewType + " applet=" 
-					+ ((v = view[viewType]).applet ? v.applet._id : null) 
+				s += "\nview=" + i + " type=" + viewType + " applet="
+					+ ((v = view[viewType]).applet ? v.applet._id : null)
 					+ " SMILES=" + v.smiles + "\n"
 					+ " atomMap=" + JSON.stringify(v.atomMap) + "\n"
 					+ " data=\n" + v.data + "\n"
@@ -2616,16 +2616,16 @@ View.__findView = function(set, Info) {
 		} else if (Info.chemID != null && Info.chemID == view.info.chemID) {
 				return view;
 		} else {
-			for (var viewType in view) { 
+			for (var viewType in view) {
 				if (viewType != "info") {
-					if (Info.data != null && view[viewType].data != null ? Info.data == view[viewType].data 
+					if (Info.data != null && view[viewType].data != null ? Info.data == view[viewType].data
 						: Info.type == viewType)
 							return view;
 				}
 			}
 		}
 	}
-	return null;  
+	return null;
 }
 
 View.__createViewSet = function(set, chemID, viewID, _createViewSet) {
@@ -2642,14 +2642,14 @@ View.__createViewSet = function(set, chemID, viewID, _createViewSet) {
 }
 
 View.__setView = function(view, applet, isSwitch, _setView) {
-	// called from Jmol._searchMol and Jmol.View.setCurrentView 
+	// called from Jmol._searchMol and Jmol.View.setCurrentView
 	// to notify the applets in the set that there may be new data for them
 	// skip the originating applet itself and cases where the data has not changed.
 	// stop at first null data, because that will initiate some sort of asynchronous
 	// call that will be back here afterward.
 
 	for (var viewType in view) {
-			if (viewType == "info") 
+			if (viewType == "info")
 				continue;
 		var rec = view[viewType];
 		var a = rec.applet;
@@ -2659,7 +2659,7 @@ View.__setView = function(view, applet, isSwitch, _setView) {
 			continue; // may be a mol3d required by JSV but not having a corresponding applet
 		var wasNull = (rec.data == null);
 		var haveView = (a._currentView != null);
-		a._currentView = view; 
+		a._currentView = view;
 		if (haveView && view[viewType].data == rec.data && !wasNull & !modified)
 			continue;
 		a._loadModelFromView(view);
@@ -2699,7 +2699,7 @@ Jmol.Cache.put = function(filename, data) {
 			var file = oe.dataTransfer.files[0];
 			if (file == null) {
 				// FF and Chrome will drop an image here
-				// but it will be only a URL, not an actual file. 
+				// but it will be only a URL, not an actual file.
 				try {
 				  file = "" + oe.dataTransfer.getData("text");
 				  if (file.indexOf("file:/") == 0 || file.indexOf("http:/") == 0 || file.indexOf("https:/") == 0) {
@@ -2733,7 +2733,7 @@ Jmol.Cache.put = function(filename, data) {
 			reader.readAsArrayBuffer(file);
 		});
 	}
-  
+
 })(Jmol, jQuery);
 Jmol._debugCode = false;
 // JSmol.js -- Jmol pure JavaScript version
@@ -2748,15 +2748,15 @@ Jmol._debugCode = false;
 // BH 3/28/2015 6:18:33 AM refactoring to generalize for non-Jmol-related SwingJS applications
 // BH 9/6/2014 5:42:32 PM  two-point gestures broken
 // BH 5/8/2014 11:16:40 AM j2sPath starting with "/" fails to add idiom
-// BH 1/16/2014 8:44:03 PM   __execDelayMS = 100; // FF bug when loading into a tab that is not 
-//                           immediately focused and not using jQuery for adding the applet and having  
+// BH 1/16/2014 8:44:03 PM   __execDelayMS = 100; // FF bug when loading into a tab that is not
+//                           immediately focused and not using jQuery for adding the applet and having
 //                           multiple applets.
 // BH 12/6/2013 10:12:30 AM adding corejmoljsv.z.js
-// BH 9/17/2013 10:18:40 AM  file transfer functions moved to JSmolCore 
+// BH 9/17/2013 10:18:40 AM  file transfer functions moved to JSmolCore
 // BH 3/5/2013 9:54:16 PM added support for a cover image: Info.coverImage, coverScript, coverTitle, deferApplet, deferUncover
 // BH 1/3/2013 4:54:01 AM mouse binding should return false -- see d.bind(...), and d.bind("contextmenu") is not necessary
 
-// This library requires prior inclusion of 
+// This library requires prior inclusion of
 
 //  jQuery 9 or higher
 //	JSmoljQueryExt.js
@@ -2769,14 +2769,14 @@ Jmol._debugCode = false;
 //  JSmolApi.js
 //  JSmolThree.js
 //  JSmolGLmol.js
-//  
-//  are optional 
+//
+//  are optional
 
 ;(function (Jmol) {
 
 	Jmol._isAsync = false; // testing only
 	Jmol._asyncCallbacks = {};
-	
+
 	Jmol._coreFiles = []; // required for package.js
 
 
@@ -2809,12 +2809,12 @@ Jmol._debugCode = false;
 		}
 		e.push("done");
 		var s = "JSmol exec " + e[0]._id + " " + e[3] + " " + e[2];
-		if (self.System)
-			System.out.println(s);
+		if (self.Zystem)
+			Zystem.out.println(s);
 			//alert(s)
 		if (self.console)console.log(s + " -- OK")
 		__execLog.push(s);
-		e[1](e[0],e[2]);	
+		e[1](e[0],e[2]);
 	};
 
 	var __loadClazz = function(applet) {
@@ -2826,7 +2826,7 @@ Jmol._debugCode = false;
 				Clazz._LoaderProgressMonitor.showStatus = function() {}
 			LoadClazz = null;
       if (applet.__Info.uncompressed)
-        Clazz.loadClass(); // for now; allows for no compression 
+        Clazz.loadClass(); // for now; allows for no compression
 			Clazz._Loader.onGlobalLoaded = function (file) {
 			 // not really.... just nothing more yet to do yet
 				Clazz._LoaderProgressMonitor.showStatus("Application loaded.", true);
@@ -2846,33 +2846,33 @@ Jmol._debugCode = false;
 		Clazz._Loader.loadClass(javaClass, function() {__nextExecution()});
 	};
 
-	Jmol.showExecLog = function() { return __execLog.join("\n") }; 
+	Jmol.showExecLog = function() { return __execLog.join("\n") };
 
 	Jmol._addExec = function(e) {
     e[1] || (e[1] = __loadClass);
 		var s = "JSmol load " + e[0]._id + " " + e[3];
 		if (self.console)console.log(s + "...")
-		__execLog.push(s);   
+		__execLog.push(s);
 		__execStack.push(e);
 	}
 
 	Jmol._addCoreFile = function(type, path, more) {
-  
-    // BH 3/15: idea here is that when both Jmol and JSV are present, 
+
+    // BH 3/15: idea here is that when both Jmol and JSV are present,
     // we want to load a common core file -- jmoljsv.z.js --
     // instead of just one. Otherwise we do a lot of duplication.
     // It is not clear how this would play with other concurrent
     // apps. So this will take some thinking. But the basic idea is that
-    // core file to load is 
-     
-    type = type.toLowerCase().split(".")[0]; // package name only 
+    // core file to load is
 
-    // return if type is already part of the set.    
+    type = type.toLowerCase().split(".")[0]; // package name only
+
+    // return if type is already part of the set.
 		if (__coreSet.join("").indexOf(type) >= 0) return;
-    
+
     // create a concatenated lower-case name for a core file that includes
     // all Java applets on the page
-    
+
 		__coreSet.push(type);
 		__coreSet.sort();
 		Jmol._coreFiles = [path + "/core/core" + __coreSet.join("") + ".z.js" ];
@@ -2882,7 +2882,7 @@ Jmol._debugCode = false;
 					__coreMore.push(path + "/core/core" + more[i] + ".z.js")
 		for (var i = 0; i < __coreMore.length; i++)
 			Jmol._coreFiles.push(__coreMore[i]);
-	}      		
+	}
 
 	Jmol._Canvas2D = function(id, Info, type, checkOnly){
 		// type: Jmol or JSV
@@ -2894,7 +2894,7 @@ Jmol._debugCode = false;
     this._isLayered = Info._isLayered || false;
     this._isSwing = Info._isSwing || false;
     this._isJSV = Info._isJSV || false;
-    this._isAstex = Info._isAstex || false;            
+    this._isAstex = Info._isAstex || false;
     this._platform = Info._platform || "";
 		if (checkOnly)
 			return this;
@@ -2916,12 +2916,12 @@ Jmol._debugCode = false;
 				else
 					params[i] = Info[i];
 			}
-	}     
-	 
+	}
+
 	Jmol._jsSetPrototype = function(proto) {
 		proto._init = function() {
 	 		this._setupJS();
-			this._showInfo(true); 
+			this._showInfo(true);
 			if (this._disableInitialConsole)
 				this._showInfo(false);
 		};
@@ -2932,12 +2932,12 @@ Jmol._debugCode = false;
 				this._GLmol = glmol;
 		 		this._GLmol.applet = this;
 				this._GLmol.id = this._id;
-			}      
+			}
 			var t = Jmol._getWrapper(this, true);
 			if (this._deferApplet) {
 			} else if (Jmol._document) {
 				Jmol._documentWrite(t);
-				this._newCanvas(false);				        
+				this._newCanvas(false);
 				t = "";
 			} else {
 				this._deferApplet = true;
@@ -2958,19 +2958,19 @@ Jmol._debugCode = false;
 				this._GLmol.create();
 		};
 
-//////// swingjs.api.HTML5Applet interface    
-    proto._getHtml5Canvas = function() { return this._canvas }; 
-    proto._getWidth = function() { return this._canvas.width }; 
+//////// swingjs.api.HTML5Applet interface
+    proto._getHtml5Canvas = function() { return this._canvas };
+    proto._getWidth = function() { return this._canvas.width };
     proto._getHeight = function() { return this._canvas.height };
     proto._getContentLayer = function() { return Jmol.$(this, "contentLayer")[0] };
-    proto._repaintNow = function() { Jmol.repaint(this, false) }; 
+    proto._repaintNow = function() { Jmol.repaint(this, false) };
 ////////
 
 
 		proto._createCanvas2d = function(doReplace) {
 			var container = Jmol.$(this, "appletdiv");
 			//if (doReplace) {
-      
+
 			try {
 			container[0].removeChild(this._canvas);
 			if (this._canvas.frontLayer)
@@ -3012,13 +3012,13 @@ Jmol._debugCode = false;
   				this._mouseInterface = this._getLayer("front", container, w, h, false);
         }
 				//this._getLayer("rear", container, w, h, true);
-				//Jmol._$(canvas.id).css({background:"rgb(0,0,0,0.001)", "z-index":Jmol._z.main}); 
+				//Jmol._$(canvas.id).css({background:"rgb(0,0,0,0.001)", "z-index":Jmol._z.main});
 			} else {
 				this._mouseInterface = canvas;
 			}
 			Jmol._jsSetMouse(this._mouseInterface);
 		}
-    
+
     proto._getLayer = function(name, container, w, h, isOpaque) {
   		var c = document.createElement("canvas");
 			this._canvas[name + "Layer"] = c;
@@ -3030,10 +3030,10 @@ Jmol._debugCode = false;
 			container.append(c);
 			c.applet = this;
 			Jmol._$(c.id).css({background:(isOpaque ? "rgb(0,0,0,1)" : "rgb(0,0,0,0.001)"), "z-index": Jmol._getZ(this,name),position:"absolute",left:"0px",top:"0px",overflow:"hidden"});
-			return c;	
+			return c;
     }
-    
-    
+
+
 		proto._setupJS = function() {
 			window["j2s.lib"] = {
 				base : this._j2sPath + "/",
@@ -3047,7 +3047,7 @@ Jmol._debugCode = false;
       this._addCoreFiles();
 			Jmol._addExec([this, this.__startAppletJS, null, "start applet"])
 			this._isSigned = true; // access all files via URL hook
-			this._ready = false; 
+			this._ready = false;
 			this._applet = null;
 			this._canScript = function(script) {return true;};
 			this._savedOrientations = [];
@@ -3066,7 +3066,7 @@ Jmol._debugCode = false;
 			viewerOptions.put("syncId", Jmol._syncId);
 			if (Jmol._isAsync)
 				viewerOptions.put("async", true);
-			if (applet._color) 
+			if (applet._color)
 				viewerOptions.put("bgcolor", applet._color);
 			if (applet._startupScript)
 				viewerOptions.put("script", applet._startupScript)
@@ -3080,7 +3080,7 @@ Jmol._debugCode = false;
 			// viewerOptions.put("repaintManager", "J.render");
 			viewerOptions.put("documentBase", document.location.href);
 			var codePath = applet._j2sPath + "/";
-      
+
 			if (codePath.indexOf("://") < 0) {
 				var base = document.location.href.split("#")[0].split("?")[0].split("/");
 				if (codePath.indexOf("/") == 0)
@@ -3095,10 +3095,10 @@ Jmol._debugCode = false;
 			try {
 				applet._newApplet(viewerOptions);
 			} catch (e) {
-				System.out.println((Jmol._isAsync ? "normal async abort from " : "") + e);
+				Zystem.out.println((Jmol._isAsync ? "normal async abort from " : "") + e);
 				return;
 			}
-      
+
 			applet._jsSetScreenDimensions();
 			__nextExecution();
 		};
@@ -3107,7 +3107,7 @@ Jmol._debugCode = false;
 	   	proto._restoreState = function(clazzName, state) {
         // applet-dependent
 		  }
-	
+
 		proto._jsSetScreenDimensions = function() {
 				if (!this._appletPanel)return
 				// strangely, if CTRL+/CTRL- are used repeatedly, then the
@@ -3126,7 +3126,7 @@ Jmol._debugCode = false;
 		proto._canScript = function(script) {return true};
 		proto.equals = function(a) { return this == a };
 		proto.clone = function() { return this };
-		proto.hashCode = function() { return parseInt(this._uniqueId) };  
+		proto.hashCode = function() { return parseInt(this._uniqueId) };
 
 
 		proto._processGesture = function(touches) {
@@ -3134,7 +3134,7 @@ Jmol._debugCode = false;
 		}
 
 		proto._processEvent = function(type, xym) {
-			this._appletPanel.processMouseEvent(type,xym[0],xym[1],xym[2],System.currentTimeMillis());
+			this._appletPanel.processMouseEvent(type,xym[0],xym[1],xym[2],Zystem.currentTimeMillis());
 		}
 
 		proto._resize = function() {
@@ -3150,7 +3150,7 @@ Jmol._debugCode = false;
 	};
 
 	Jmol.repaint = function(applet, asNewThread) {
-    // JmolObjectInterface 
+    // JmolObjectInterface
 		// asNewThread: true is from RepaintManager.repaintNow()
 		// false is from Repaintmanager.requestRepaintAndWait()
 		// called from apiPlatform Display.repaint()
@@ -3178,21 +3178,21 @@ Jmol._debugCode = false;
 		} else {
       f();
 		}
-		// System.out.println(applet._appletPanel.getFullName())
+		// Zystem.out.println(applet._appletPanel.getFullName())
 	}
 
   /**
-   * loadImage is called for asynchronous image loading.   
+   * loadImage is called for asynchronous image loading.
    * If bytes are not null, they are from a ZIP file. They are processed sychronously
    * here using an image data URI. Can all browsers handle MB of data in data URI?
    *
-   */        
+   */
 	Jmol.loadImage = function(platform, echoName, path, bytes, fOnload, image) {
-    // JmolObjectInterface  
+    // JmolObjectInterface
 		var id = "echo_" + echoName + path + (bytes ? "_" + bytes.length : "");
 		var canvas = Jmol.getHiddenCanvas(platform.vwr.html5Applet, id, 0, 0, false, true);
-//    System.out.println(["JSmol.js loadImage ",id,path,canvas,image])
-    if (canvas == null) { 
+//    Zystem.out.println(["JSmol.js loadImage ",id,path,canvas,image])
+    if (canvas == null) {
   		if (image == null) {
   			image = new Image();
         if (bytes == null) {
@@ -3200,8 +3200,8 @@ Jmol._debugCode = false;
     			image.src = path;
           return null;
         }
-        System.out.println("Jsmol.js Jmol.loadImage using data URI for " + id) 
-        image.src = (typeof bytes == "string" ? bytes : 
+        Zystem.out.println("Jsmol.js Jmol.loadImage using data URI for " + id)
+        image.src = (typeof bytes == "string" ? bytes :
           "data:" + JU.Rdr.guessMimeTypeForBytes(bytes) + ";base64," + JU.Base64.getBase64(bytes));
       }
   		var width = image.width;
@@ -3209,8 +3209,8 @@ Jmol._debugCode = false;
       if (echoName == "webgl") {
        // will be antialiased
        width /= 2;
-       height /= 2; 
-      } 
+       height /= 2;
+      }
 		  canvas = Jmol.getHiddenCanvas(platform.vwr.html5Applet, id, width, height, true, false);
   		canvas.imageWidth = width;
   		canvas.imageHeight = height;
@@ -3219,7 +3219,7 @@ Jmol._debugCode = false;
   		Jmol.setCanvasImage(canvas, width, height);
 		// return a null canvas and the error in path if there is a problem
     } else {
-      System.out.println("Jsmol.js Jmol.loadImage reading cached image for " + id) 
+      Zystem.out.println("Jsmol.js Jmol.loadImage reading cached image for " + id)
     }
     return (bytes == null? fOnload(canvas,path) : canvas);
 	};
@@ -3230,7 +3230,7 @@ Jmol._canvasCache = {};
 		id = applet._id + "_" + id;
     var d = Jmol._canvasCache[id];
     if (checkOnly)
-      return d; 
+      return d;
     if (forceNew || !d || d.width != width || d.height != height) {
       d = document.createElement( 'canvas' );
   			// for some reason both these need to be set, or maybe just d.width?
@@ -3238,9 +3238,9 @@ Jmol._canvasCache = {};
   		d.height = d.style.height = height;
   		d.id = id;
       Jmol._canvasCache[id] = d;
-      //System.out.println("JSmol.js loadImage setting cache" + id + " to " + d)
+      //Zystem.out.println("JSmol.js loadImage setting cache" + id + " to " + d)
     }
-    
+
 		return d;
    	}
 
@@ -3251,22 +3251,22 @@ Jmol._canvasCache = {};
 		canvas.height = height;
 		canvas.getContext("2d").drawImage(canvas.image, 0, 0, canvas.image.width, canvas.image.height, 0, 0, width, height);
 	};
-  
+
   Jmol.applyFunc = function(f,a) {
     // JmolObjectInterface
     return f(a);
   }
-  
+
 })(Jmol);
 // JmolApplet.js -- Jmol._Applet and Jmol._Image
 
 // BH 1/28/2018 7:15:09 AM adding _notifyAudioEnded
 // BH 2/14/2016 12:31:02 PM fixed local reader not disappearing after script call
 // BH 2/14/2016 12:30:41 PM Info.appletLoadingImage: "j2s/img/JSmol_spinner.gif", // can be set to "none" or some other image
-// BH 2/14/2016 12:27:09 PM Jmol.setCursor, proto._getSpinner 
+// BH 2/14/2016 12:27:09 PM Jmol.setCursor, proto._getSpinner
 // BH 1/15/2016 4:23:14 PM adding Info.makeLiveImage
-// BH 4/17/2015 2:33:32 PM update for SwingJS 
-// BH 10/19/2014 8:08:51 PM moved applet._cover and applet._displayCoverImage to 
+// BH 4/17/2015 2:33:32 PM update for SwingJS
+// BH 10/19/2014 8:08:51 PM moved applet._cover and applet._displayCoverImage to
 // BH 5/8/2014 11:20:21 AM trying to fix AH nd JG problem with multiple applets
 // BH 1/27/2014 8:36:43 AM adding Info.viewSet
 // BH 12/13/2013 9:04:53 AM _evaluate DEPRECATED (see JSmolApi.js Jmol.evaulateVar
@@ -3299,7 +3299,7 @@ Jmol._canvasCache = {};
 		this._isSigned = Info.isSigned;
 		this._readyFunction = Info.readyFunction;
 		this._ready = false;
-		this._isJava = true; 
+		this._isJava = true;
 		this._isInfoVisible = false;
 		this._applet = null;
 		this._memoryLimit = Info.memoryLimit || 512;
@@ -3328,8 +3328,8 @@ Jmol._canvasCache = {};
 			this._jarFile = Info.jarFile = (typeof(jarFile) == "string" ? jarFile : (jarFile ?  "JmolAppletSigned" : "JmolApplet") + "0.jar");
 			if (doReport)
 				alert ("The web page URL was ignored. Continuing using " + this._jarFile + ' in directory "' + this._jarPath + '"');
-			Jmol.controls == undefined || Jmol.controls._onloadResetForms();		
-		}		
+			Jmol.controls == undefined || Jmol.controls._onloadResetForms();
+		}
 		this._create(id, Info);
 		return this;
 	}
@@ -3362,12 +3362,12 @@ Jmol._canvasCache = {};
 			coverTitle: "",       // tip that is displayed before model starts to load
 			coverCommand: "",     // Jmol command executed upon clicking image
 			deferApplet: false,   // true == the model should not be loaded until the image is clicked
-			deferUncover: false,  // true == the image should remain until command execution is complete 
+			deferUncover: false,  // true == the image should remain until command execution is complete
 			disableJ2SLoadMonitor: false,
 			disableInitialConsole: true, // new default since now we have the spinner 2/14/2016 12:26:28 PM
       //appletLoadingImage: "j2s/img/JSmol_spinner.gif", // can be set to "none" or some other image
 			debug: false
-		};	 
+		};
 		Jmol._addDefaultInfo(Info, DefaultInfo);
 		Jmol._debugAlert = Info.debug;
 
@@ -3386,7 +3386,7 @@ Jmol._canvasCache = {};
 			case "WEBGL":
 				applet = Applet._getCanvas(id, Info, checkOnly, true);
 				break;
-			case "HTML5":               
+			case "HTML5":
   			if (Jmol.featureDetection.allowHTML5){
 				  applet = Applet._getCanvas(id, Info, checkOnly, false);
         } else {
@@ -3398,7 +3398,7 @@ Jmol._canvasCache = {};
 //				break;
 			}
 			if (applet != null)
-				break;		  
+				break;
 		}
 		if (applet == null) {
 			if (checkOnly || !javaAllowed)
@@ -3408,7 +3408,7 @@ Jmol._canvasCache = {};
 		}
 
 		// keyed to both its string id and itself
-		return (checkOnly ? applet : Jmol._registerApplet(id, applet));  
+		return (checkOnly ? applet : Jmol._registerApplet(id, applet));
 	}
 
 	Applet._getCanvas = function(id, Info, checkOnly, webGL) {
@@ -3436,7 +3436,7 @@ Jmol._canvasCache = {};
 			your web browser preferences, or install the Java Runtime Environment from <a href='http://www.java.com'>www.java.com</a>";
 
 	Applet._setCommonMethods = function(p) {
-		p._showInfo = proto._showInfo;	
+		p._showInfo = proto._showInfo;
 		p._search = proto._search;
 		p._getName = proto._getName;
 		p._readyCallback = proto._readyCallback;
@@ -3447,12 +3447,12 @@ Jmol._canvasCache = {};
 		var jarFile = applet._jarFile;
 		var jnlp = ""
 		if (Jmol._isFile) {
-			// local installations need jnlp here and should reference JmolApplet(Signed).jar, not JmolApplet(Signed)0.jar  
+			// local installations need jnlp here and should reference JmolApplet(Signed).jar, not JmolApplet(Signed)0.jar
 			jarFile = jarFile.replace(/0\.jar/,".jar");
 			//jnlp = " jnlp_href=\"" + jarFile.replace(/\.jar/,".jnlp") + "\"";
 		}
-		// size is set to 100% of containers' size, but only if resizable. 
-		// Note that resizability in MSIE requires: 
+		// size is set to 100% of containers' size, but only if resizable.
+		// Note that resizability in MSIE requires:
 		// <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 		var w = (applet._containerWidth.indexOf("px") >= 0 ? applet._containerWidth : "100%");
 		var h = (applet._containerHeight.indexOf("px") >= 0 ? applet._containerHeight : "100%");
@@ -3476,16 +3476,16 @@ Jmol._canvasCache = {};
 		params.jarPath = Info.jarPath;
 		Jmol._syncedApplets.length && (params.synccallback = "Jmol._mySyncCallback");
 		applet._startupScript && (params.script = applet._startupScript);
-		var t = "\n"; 
+		var t = "\n";
  		for (var i in params)
 			if(params[i])
 		 		t += "  <param name='"+i+"' value='"+params[i]+"' />\n";
 		if (Jmol.featureDetection.useIEObject || Jmol.featureDetection.useHtml4Object) {
 			t = "<object " + attributes
-				+ (Jmol.featureDetection.useIEObject ? 
+				+ (Jmol.featureDetection.useIEObject ?
 					 " classid='clsid:8AD9C840-044E-11D1-B3E9-00805F499D93' codebase='http://java.sun.com/update/1.6.0/jinstall-6u22-windows-i586.cab'>"
 				 : " type='application/x-java-applet'>")
-				 + t + "<p style='background-color:yellow;" + widthAndHeight.split('"')[1] 
+				 + t + "<p style='background-color:yellow;" + widthAndHeight.split('"')[1]
 				+ ";text-align:center;vertical-align:middle;'>\n" + Applet._noJavaMsg + "</p></object>\n";
 		} else { // use applet tag
 			t = "<applet " + attributes
@@ -3495,7 +3495,7 @@ Jmol._canvasCache = {};
 		}
 		if (applet._deferApplet)
 			applet._javaCode = t, t="";
-		t = Jmol._getWrapper(applet, true) + t + Jmol._getWrapper(applet, false) 
+		t = Jmol._getWrapper(applet, true) + t + Jmol._getWrapper(applet, false)
 			+ (Info.addSelectionOptions ? Jmol._getGrabberOptions(applet) : "");
 		if (Jmol._debugAlert)
 			alert (t);
@@ -3503,12 +3503,12 @@ Jmol._canvasCache = {};
 	}
 
 	proto._newApplet = function(viewerOptions) {
-		if (!this._is2D)  
+		if (!this._is2D)
 			viewerOptions.put("script", (viewerOptions.get("script") || "") + ";set multipleBondSpacing 0.35;");
 		this._viewerOptions = viewerOptions;
 		return new J.appletjs.Jmol(viewerOptions);
 	}
-	
+
 	proto._addCoreFiles = function() {
 		Jmol._addCoreFile("jmol", this._j2sPath, this.__Info.preloadCore);
 		if (!this._is2D) {
@@ -3518,12 +3518,12 @@ Jmol._canvasCache = {};
 		if (Jmol._debugCode)
 			Jmol._addExec([this, null, "J.appletjs.Jmol", "load Jmol"]);
   }
-  
+
 	proto._create = function(id, Info){
 		Jmol._setObject(this, id, Info);
 		var params = {
 			syncId: Jmol._syncId,
-			progressbar: "true",                      
+			progressbar: "true",
 			progresscolor: "blue",
 			boxbgcolor: this._color || "black",
 			boxfgcolor: "white",
@@ -3551,7 +3551,7 @@ Jmol._canvasCache = {};
 	}
 
 	proto._restoreState = function(clazzName, state) {
-		System.out.println("\n\nasynchronous restore state for " + clazzName + " " + state)
+		Zystem.out.println("\n\nasynchronous restore state for " + clazzName + " " + state)
 		var applet = this;
 		var vwr = applet._applet && applet._applet.viewer;
 		switch (state) {
@@ -3567,23 +3567,23 @@ Jmol._canvasCache = {};
 			case "J.shape.Frank":
 				return null;
 			}
-			
+
 			//if (vwr.rm.repaintPending)
 				//return function() {setTimeout(function(){vwr.refresh(2)},10)};
 			if (vwr && vwr.isScriptExecuting && vwr.isScriptExecuting()) {
 				if (Jmol._asyncCallbacks[clazzName]) {
-					System.out.println("...ignored");
+					Zystem.out.println("...ignored");
 					return 1;
 				}
 				var sc = vwr.getEvalContextAndHoldQueue(vwr.eval);
 				var pc = sc.pc - 1;
 				sc.asyncID = clazzName;
-				Jmol._asyncCallbacks[clazzName] = function(pc) {sc.pc=pc; System.out.println("sc.asyncID="+sc.asyncID+" sc.pc = " + sc.pc);vwr.eval.resumeEval(sc)};
+				Jmol._asyncCallbacks[clazzName] = function(pc) {sc.pc=pc; Zystem.out.println("sc.asyncID="+sc.asyncID+" sc.pc = " + sc.pc);vwr.eval.resumeEval(sc)};
 				vwr.eval.pc = vwr.eval.pcEnd;
-				System.out.println("setting resume for pc=" + sc.pc + " " + clazzName + " to " + Jmol._asyncCallbacks[clazzName] + "//" )
-				return function() {System.out.println("resuming " + clazzName + " " + Jmol._asyncCallbacks[clazzName]);Jmol._asyncCallbacks[clazzName](pc)};					
+				Zystem.out.println("setting resume for pc=" + sc.pc + " " + clazzName + " to " + Jmol._asyncCallbacks[clazzName] + "//" )
+				return function() {Zystem.out.println("resuming " + clazzName + " " + Jmol._asyncCallbacks[clazzName]);Jmol._asyncCallbacks[clazzName](pc)};
 			}
-			System.out.println(clazzName + "?????????????????????" + state)
+			Zystem.out.println(clazzName + "?????????????????????" + state)
 			return function() {setTimeout(function(){vwr.refresh(2)},10)};
 			//return null;
 		}
@@ -3592,7 +3592,7 @@ Jmol._canvasCache = {};
   proto._notifyAudioEnded = function(htParams) {
     this._applet.notifyAudioEnded(htParams);
   }
-  
+
 	proto._readyCallback = function(id, fullid, isReady) {
 		if (!isReady)
 			return; // ignore -- page is closing
@@ -3653,7 +3653,7 @@ Jmol._canvasCache = {};
   }
 
   proto._getAtomCorrelation = function(molData, isC13) {
-    // get the first atom mapping available by loading the model structure into model 2, 
+    // get the first atom mapping available by loading the model structure into model 2,
 
     var n = this._evaluate("{*}.count");
     if (n == 0)return;
@@ -3668,9 +3668,9 @@ Jmol._canvasCache = {};
 		  A[c[0] + 1] = c[1] - n + 1;
 		  B[c[1] - n + 1] = c[0] + 1;
 		}
-		return {fromJmol:A, toJmol:B}; // forward and rev.		
+		return {fromJmol:A, toJmol:B}; // forward and rev.
   }
-  
+
 	proto._show = function(tf) {
 		var x = (!tf ? 2 : "100%");
 		Jmol.$setSize(Jmol.$(this, "object"), x, x);
@@ -3687,7 +3687,7 @@ Jmol._canvasCache = {};
 		}
 
 
-	proto._addScript = function(script) {      
+	proto._addScript = function(script) {
 		this._readyScript || (this.readyScript = "");
 		this._readyScript && (this._readyScript += ";");
 		this._readyScript += script;
@@ -3707,7 +3707,7 @@ Jmol._canvasCache = {};
 	}
 
 	proto._scriptCheck = function(script) {
-		return this._ready && this._applet.scriptCheck(script);  
+		return this._ready && this._applet.scriptCheck(script);
 	}
 
 	proto._scriptWait = function(script, noReturn) {
@@ -3790,19 +3790,19 @@ Jmol._canvasCache = {};
 		}
 	}
 
-	proto._getPropertyAsJavaObject = function(sKey,sValue) {		
+	proto._getPropertyAsJavaObject = function(sKey,sValue) {
 		sValue == undefined && ( sValue = "");
 		return this._applet.getProperty(sKey,sValue);
 	}
 
-  proto._evaluate = function(expr) {  
+  proto._evaluate = function(expr) {
   	expr != null || (expr = "");
 		return this._getPropertyAsArray("variableInfo", expr);
 
   }
 
-	proto._evaluateDEPRECATED = function(molecularMath) {   // DEPRECATED!!!	
-	// DEPRECATED!!!	
+	proto._evaluateDEPRECATED = function(molecularMath) {   // DEPRECATED!!!
+	// DEPRECATED!!!
 		//carries out molecular math on a model
 		var result = "" + this._getPropertyAsJavaObject("evaluate", molecularMath);
 		var s = result.replace(/\-*\d+/, "");
@@ -3812,10 +3812,10 @@ Jmol._canvasCache = {};
 		if(s == "" && !isNaN(parseFloat(result)))
 			return parseFloat(result);
 		return result;
-	// DEPRECATED!!!	
+	// DEPRECATED!!!
 	}
 
-	proto._saveOrientation = function(id) {	
+	proto._saveOrientation = function(id) {
 		return this._savedOrientations[id] = this._getPropertyAsArray("orientationInfo","info").moveTo;
 	}
 
@@ -3860,12 +3860,12 @@ Jmol._canvasCache = {};
 
 		function _fixDim(x, units) {
 			var sx = "" + x;
-			return (sx.length == 0 ? (units ? "" : Jmol._allowedJmolSize[2]) 
-				: sx.indexOf("%") == sx.length - 1 ? sx 
-				: (x = parseFloat(x)) <= 1 && x > 0 ? x * 100 + "%" 
-				: (isNaN(x = Math.floor(x)) ? Jmol._allowedJmolSize[2] 
-				: x < Jmol._allowedJmolSize[0] ? Jmol._allowedJmolSize[0] 
-				: x > Jmol._allowedJmolSize[1] ? Jmol._allowedJmolSize[1] 
+			return (sx.length == 0 ? (units ? "" : Jmol._allowedJmolSize[2])
+				: sx.indexOf("%") == sx.length - 1 ? sx
+				: (x = parseFloat(x)) <= 1 && x > 0 ? x * 100 + "%"
+				: (isNaN(x = Math.floor(x)) ? Jmol._allowedJmolSize[2]
+				: x < Jmol._allowedJmolSize[0] ? Jmol._allowedJmolSize[0]
+				: x > Jmol._allowedJmolSize[1] ? Jmol._allowedJmolSize[1]
 				: x)
 				+ (units ? units : "")
 			);
@@ -3887,7 +3887,7 @@ Jmol._canvasCache = {};
 
 	proto._searchDatabase = function(query, database, script, _jmol_searchDatabase){
 		if (this._2dapplet && this._2dapplet._isEmbedded && !Jmol.$(this, "appletdiv:visible")[0])
-			return this._2dapplet._searchDatabase(query, database, script); 
+			return this._2dapplet._searchDatabase(query, database, script);
 		this._showInfo(false);
 		if (query.indexOf("?") >= 0) {
 			Jmol._getInfoFromDatabase(this, database, query.split("?")[0]);
@@ -3907,15 +3907,15 @@ Jmol._canvasCache = {};
 		this._fileName = fileName;
 		if (!this._scriptLoad(fileName, script)) {
 			// we load the data here instead of in Jmol in the case of
-			// JSmol/Java/Sandboxed or when part of a view set 
-			var me = this;      
-			Jmol._loadFileData(this, fileName, 
+			// JSmol/Java/Sandboxed or when part of a view set
+			var me = this;
+			Jmol._loadFileData(this, fileName,
 				function(data){me.__loadModel(data, script, chemID)},
 				function() {me.__loadModel(null)}
 			);
 		}
 	}
-					 
+
 	proto._scriptLoad = function(file, script, _jmol_scriptLoad) {
 		script || (script = "");
 		var doscript = (this._isJava || !this._noscript);
@@ -3935,7 +3935,7 @@ Jmol._canvasCache = {};
 		if (mol == null)
 			return;
 		if (this._viewSet != null) {
-			script || (script = ""); 
+			script || (script = "");
 			// first component only
 			script += ";if ({*}.molecule.max > 1 || {*}.modelindex.max > 0){ delete molecule > 1 or modelindex > 0;x = getProperty('extractModel',{*});load inline @x};"
 		}
@@ -3946,7 +3946,7 @@ Jmol._canvasCache = {};
 		}
 		if (this._viewSet != null) {
 			Jmol.View.updateView(this, {chemID:chemID, data:mol});
-		}      
+		}
 	}
 
   proto._loadMolData = function(mol, script, isAppend) {
@@ -3955,7 +3955,7 @@ Jmol._canvasCache = {};
 		script = 'load DATA "' + name + '"' + mol + '\nEND "'+ name +'" ;' + script;
 		this._applet.scriptWait(script);
   }
-  
+
 	proto._loadModelFromView = function(view, _jmol_loadModelFromView) {
 		// request from Jmol.View to update view with view.JME.data==null or needs changing
 		this._currentView = view;
@@ -3978,7 +3978,7 @@ Jmol._canvasCache = {};
   proto._reset = function(_jmol_resetView) {
     this._scriptWait("zap", true);
   }
-  
+
 	proto._updateView = function(_jmol_updateView) {
 		if (this._viewSet == null || !this._applet)
 			return;
@@ -3994,7 +3994,7 @@ Jmol._canvasCache = {};
 	proto._atomPickedCallback = function(imodel, iatom, _jmol_atomPickedCallback) {
 		// direct callback from Jmol HTML5 applet
 		if (iatom < 0) {
-		// TODO could be a model change? 
+		// TODO could be a model change?
 		} else {
 			var A = [iatom + 1];
 			Jmol.View.updateAtomPick(this, A);
@@ -4034,7 +4034,7 @@ Jmol._canvasCache = {};
 			Jmol._getElement(this, "coverimage").title = "3D model is loading...";
 		if (!this._isJava)
 			this._newCanvas(false);
-		if (this._defaultModel)	
+		if (this._defaultModel)
 			Jmol._search(this, this._defaultModel);
 		this._showInfo(false);
 		if (!this._deferUncover)
@@ -4052,18 +4052,18 @@ Jmol._canvasCache = {};
 	};
 
   proto._getSmiles = function() {
-		return this._evaluate("{visible}.find('SMILES')");   
+		return this._evaluate("{visible}.find('SMILES')");
   }
-  
+
   proto._getMol = function() {
-		return this._evaluate("getProperty('ExtractModel',{visible})");   
+		return this._evaluate("getProperty('ExtractModel',{visible})");
   }
 
   proto._getMol2D = function() {
 		return this._evaluate("script('select visible;show chemical sdf')"); // 2D equivalent no longer!
   }
-  
-  
+
+
 })(Jmol._Applet, Jmol._Applet.prototype);
 
 /* ****************************************
@@ -4088,7 +4088,7 @@ Jmol._canvasCache = {};
 		Jmol._setObject(this, id, Info);
 		thisnfo);
 		this._src || (this._src = "");
-		var t = Jmol._getWrapper(this, true) 
+		var t = Jmol._getWrapper(this, true)
 			+ '<img id="'+id+'_image" width="' + Info.width + '" height="' + Info.height + '" src=""/>'
 		 	+	Jmol._getWrapper(this, false)
 			+ (Info.addSelectionOptions ? Jmol._getGrabberOptions(this) : "");
@@ -4164,7 +4164,7 @@ Jmol._canvasCache = {};
 		params = (params ? params : "");
 		var database = "";
 		if (Jmol._isDatabaseCall(fileName)) {
-			database = fileName.substring(0, 1); 
+			database = fileName.substring(0, 1);
 			fileName = Jmol._getDirectDatabaseCall(fileName, false);
 		} else if (fileName.indexOf("://") < 0) {
 			var ref = document.location.href
@@ -4172,7 +4172,7 @@ Jmol._canvasCache = {};
 			fileName = ref.substring(0, pt + 1) + fileName;
 		}
 
-		var src = Jmol._serverUrl 
+		var src = Jmol._serverUrl
 				+ "?call=getImageForFileLoad"
 				+ "&file=" + escape(fileName)
 				+ "&width=" + this._width
@@ -4188,7 +4188,7 @@ Jmol._canvasCache = {};
 		}
 		this._showInfo(false);
 		script || (script = Jmol._getScriptForDatabase(database));
-		var src = Jmol._serverUrl 
+		var src = Jmol._serverUrl
 			+ "?call=getImageFromDatabase"
 			+ "&database=" + database
 			+ "&query=" + query
@@ -4213,7 +4213,7 @@ Jmol._canvasCache = {};
 // BH 5/15/2014 -- removed script check prior to execution
 // BH 12/3/2013 12:39:48 PM added up/down arrow key-driven command history for commandInput (changed keypress to keydown)
 // BH 5/16/2013 8:14:47 AM fix for checkbox groups and default radio names
-// BH 8:36 AM 7/27/2012  adds name/id for cmd button 
+// BH 8:36 AM 7/27/2012  adds name/id for cmd button
 // BH 8/12/2012 6:51:53 AM adds function() {...} option for all controls:
 //    Jmol.jmolButton(jmol, function(jmol) {...}, "xxxx")
 
@@ -4223,7 +4223,7 @@ Jmol._canvasCache = {};
 
 	var c = Jmol.controls = {
 
-		_hasResetForms: false,	
+		_hasResetForms: false,
 		_scripts: [""],
 		_checkboxMasters: {},
 		_checkboxItems: {},
@@ -4237,7 +4237,7 @@ Jmol._canvasCache = {};
 		_cmdCount: 0,
 		_menuCount: 0,
 
-		_previousOnloadHandler: null,	
+		_previousOnloadHandler: null,
 		_control: null,
 		_element: null,
 
@@ -4263,7 +4263,7 @@ Jmol._canvasCache = {};
 
 	c._getIdForControl = function(appletOrId, script) {
 	//alert(appletOrId + " " + typeof appletOrId + " " + script + appletOrId._canScript)
-		return (typeof appletOrId == "string" ? appletOrId 
+		return (typeof appletOrId == "string" ? appletOrId
 			: !script || !appletOrId._canScript || appletOrId._canScript(script) ? appletOrId._id
 			: null);
 	}
@@ -4312,12 +4312,12 @@ Jmol._canvasCache = {};
 		var ok = (d.value.indexOf("JSCONSOLE ") >= 0 || applet._scriptCheck(d.value) === "");
 		d.style.color = (ok ? "black" : "red");
 		return ok;
-	} 
+	}
 
 	c.__getCmd = function(dir, d) {
 		if (!d._cmds || !d._cmds.length)return
 		var s = d._cmds[d._cmdpt = (d._cmdpt + d._cmds.length + dir) % d._cmds.length]
-		setTimeout(function(){d.value = s},10);    
+		setTimeout(function(){d.value = s},10);
 		d._cmdadd = 1;
 		d._cmddir = dir;
 	}
@@ -4334,7 +4334,7 @@ Jmol._canvasCache = {};
 				 d._cmds = [];
 				 d._cmddir = 0;
 				 d._cmdpt = -1;
-				 d._cmdadd = 0;      
+				 d._cmdadd = 0;
 	}
 			 if (v && d._cmdadd == 0) {
 					++d._cmdpt;
@@ -4394,7 +4394,7 @@ Jmol._canvasCache = {};
     var mixed = false;
     var cb;
     for (var id in m.chkGroup){ //siblings of m
-      cb = m.chkGroup[id]; 
+      cb = m.chkGroup[id];
 		  if (cb.checked)
         allOff = false;
       else
@@ -4407,10 +4407,10 @@ Jmol._canvasCache = {};
 		else if (allOff) { cb.checked = false; }
 		else { mixed = true; }
 		cb.indeterminate = mixed;
-    (m = c._checkboxItems[cb.id]) && (cb = m.chkMaster) 
+    (m = c._checkboxItems[cb.id]) && (cb = m.chkMaster)
       && c._cbNotifyMaster(c._checkboxMasters[cb.id])
 	}
-  
+
 	c._cbNotifyGroup = function(m, isOn){
 		//called when a master item is checked
 		for (var chkBox in m.chkGroup){
@@ -4708,7 +4708,7 @@ Jmol._canvasCache = {};
 // BH 5/16/2013 9:01:41 AM checkbox group fix
 // BH 1/15/2013 10:55:06 AM updated to default to HTML5 not JAVA
 
-// This file is part of JSmol.min.js. 
+// This file is part of JSmol.min.js.
 // If you do not use that, then along with this file you need several other files. See JSmolCore.js for details.
 
 // default settings are below. Generally you would do something like this:
@@ -4719,7 +4719,7 @@ Jmol._canvasCache = {};
 // jmol = Jmol.getApplet(jmol, Info)
 // Jmol.script(jmol,"....")
 // Jmol.jmolLink(jmol,....)
-// etc. 
+// etc.
 // first parameter is always the applet id, either the string "jmol" or the object defined by Jmol.getApplet()
 // no need for waiting to start giving script commands. You can also define a callback function as part of Info.
 
@@ -4739,7 +4739,7 @@ Jmol._canvasCache = {};
 	Jmol._use = getField("_USE");
 		// allows URL-line setting of Info.use
 		// defaults to "HTML5"
-		// looking for "_USE=xxxx" 
+		// looking for "_USE=xxxx"
 		// _USE=SIGNED implies JAVA, sets Info.isSigned, and adds "Signed" to applet jar name if necessary
 
 	Jmol.getVersion = function(){return Jmol._jmolInfo.version};
@@ -4768,11 +4768,11 @@ Jmol._canvasCache = {};
 			coverTitle: "",       // tip that is displayed before model starts to load
 			coverCommand: "",     // Jmol command executed upon clicking image
 			deferApplet: false,   // true == the model should not be loaded until the image is clicked
-			deferUncover: false,  // true == the image should remain until command execution is complete 
+			deferUncover: false,  // true == the image should remain until command execution is complete
 			disableJ2SLoadMonitor: false,
 			disableInitialConsole: false,
 			debug: false
-		};	 
+		};
 
 		*/
 		return Jmol._Applet._get(id, Info, checkOnly);
@@ -4800,7 +4800,7 @@ Jmol._canvasCache = {};
 			// multipart - possibility to enter multipart structures
 			// number - possibility to number (mark) atoms
 			// depict - the applet will appear without editing butons,this is used for structure display only
-		};		    
+		};
 		*/
 		return Jmol._JMEApplet._get(id, Info, linkedApplet, checkOnly);
 	}
@@ -4824,7 +4824,7 @@ Jmol._canvasCache = {};
 		};
 		*/
 		return Jmol._JSVApplet._get(id, Info, checkOnly);
-	}	
+	}
 
 
 ////////////////// scripting ///////////////////
@@ -4834,14 +4834,14 @@ Jmol._canvasCache = {};
 	}
 
 	Jmol.script = function(applet, script) {
-		if (applet._checkDeferred(script)) 
+		if (applet._checkDeferred(script))
 			return;
 		applet._script(script);
 	}
 
 /**
  * returns false if cannot check, empty string if OK, or error message if not OK
- */	
+ */
 	Jmol.scriptCheck = function(applet, script) {
 		return applet && applet._scriptCheck && applet._ready && applet._scriptCheck(script);
 	}
@@ -4882,14 +4882,14 @@ Jmol._canvasCache = {};
 		return applet._evaluateDEPRECATED(molecularMath);
 	}
 
-	// optional Info here	
+	// optional Info here
 	Jmol.getAppletHtml = function(applet, Info) {
 		if (Info) {
 			var d = Jmol._document;
 			Jmol._document = null;
 			applet = Jmol.getApplet(applet, Info);
 			Jmol._document = d;
-		}  
+		}
 		return applet._code;
 	}
 
@@ -5012,10 +5012,10 @@ Jmol._canvasCache = {};
 	Jmol.setDocument = function(doc) {
 
 		// If doc is null or 0, Jmol.getApplet() will still return an Object, but the HTML will
-		// put in applet._code and not written to the page. This can be nice, because then you 
-		// can still refer to the applet, but place it on the page after the controls are made. 
+		// put in applet._code and not written to the page. This can be nice, because then you
+		// can still refer to the applet, but place it on the page after the controls are made.
 		//
-		// This really isn't necessary, though, because there is a simpler way: Just define the 
+		// This really isn't necessary, though, because there is a simpler way: Just define the
 		// applet variable like this:
 		//
 		// jmolApplet0 = "jmolApplet0"
@@ -5023,10 +5023,10 @@ Jmol._canvasCache = {};
 		// and then, in the getApplet command, use
 		//
 		// jmolapplet0 = Jmol.getApplet(jmolApplet0,....)
-		// 
+		//
 		// prior to this, "jmolApplet0" will suffice, and after it, the Object will work as well
-		// in any button creation 
-		//		 
+		// in any button creation
+		//
 		//  Bob Hanson 25.04.2012
 
 		Jmol._document = doc;
@@ -5047,7 +5047,7 @@ Jmol._canvasCache = {};
 	////////////////////////////////////////////////////////////////
 
 	// BH 4/25 -- added text option. setAppletCss(null, "style=\"xxxx\"")
-	// note that since you must add the style keyword, this can be used to add any attribute to these tags, not just css. 
+	// note that since you must add the style keyword, this can be used to add any attribute to these tags, not just css.
 
 	Jmol.setAppletCss = function(cssClass, text) {
 		cssClass != null && (Jmol._appletCssClass = cssClass);
@@ -5081,7 +5081,7 @@ Jmol._canvasCache = {};
 
 	Jmol.setAppletSync = function(applets, commands, isJmolJSV) {
 		Jmol._syncedApplets = applets;   // an array of appletIDs
-		Jmol._syncedCommands = commands; // an array of commands; one or more may be null 
+		Jmol._syncedCommands = commands; // an array of commands; one or more may be null
 		Jmol._syncedReady = {};
 		Jmol._isJmolJSVSync = isJmolJSV;
 	}
@@ -5099,7 +5099,7 @@ Jmol._canvasCache = {};
 	}
 
 	Jmol.setAppletHtml = function (applet, divid) {
-		if (!applet._code) 
+		if (!applet._code)
 			return;
 		Jmol.$html(divid, applet._code);
 		if (applet._init && !applet._deferApplet)
@@ -5117,7 +5117,7 @@ Jmol._canvasCache = {};
 		} else {
 			Jmol.fileCache = (doCache ? {} : null);
 		}
-	}  
+	}
 
 	Jmol.resetView = function(applet, appletNot) {
     Jmol.View.resetView(applet, appletNot);
@@ -5129,7 +5129,7 @@ Jmol._canvasCache = {};
 
 	Jmol.getChemicalInfo = function(appletOrIdentifier, what, fCallback) {
 		what || (what = "name");
-		if (typeof appletOrIdentifier != "string") 
+		if (typeof appletOrIdentifier != "string")
 			appletOrIdentifier = appletOrIdentifier._getSmiles();
 		return Jmol._getNCIInfo(appletOrIdentifier, what, fCallback);
 	}
@@ -5150,42 +5150,42 @@ Jmol._canvasCache = {};
 				return app._script("write PDF");
 			break;
 		case "JME":
-			return app._script("print");			
+			return app._script("print");
 		}
 		Jmol._saveFile(fname,app._canvas.toDataURL("image/png"));
 	}
-		
-		
+
+
 })(Jmol);
-// j2sjmol.js 
+// j2sjmol.js
 // NOTE: updates to this file should be copies to j2sSwingJS.js
 
 // latest author: Bob Hanson, St. Olaf College, hansonr@stolaf.edu
- 
+
 // Requires JSmolCore.js and (for now; probably) JSmol.js
 // This version of j2slib requires jQuery and works in both Chrome and MSIE locally,
 // though Chrome cannot read local data files, and MSIE cannot read local binary data files.
 
 // Java programming notes by Bob Hanson:
-//   
+//
 //   There are a few motifs to avoid when optimizing Java code to work smoothly
 //   with the J2S compiler:
-//   
-//   arrays: 
-//   
+//
+//   arrays:
+//
 // 1. an array with null elements cannot be typed and must be avoided.
 // 2. instances of Java "instance of" involving arrays must be found and convered to calls to Clazz.isA...
 // 3. new int[n][] must not be used. Use instead JU.AU.newInt2(n);
 // 4. new int[] { 1, 2, 3 } has problems because it creates simply [ ] and not IntArray32
-//   
+//
 //   numbers:
-//   
-// 1. Remember that EVERY number in JavaScript is a double -- doesn't matter if it is in IntArray32 or not. 
+//
+// 1. Remember that EVERY number in JavaScript is a double -- doesn't matter if it is in IntArray32 or not.
 // 2. You cannot reliably use Java long, because doubles consume bits for the exponent which cannot be tested.
-// 3. Bit 31 of an integer is unreliable, since (int) -1 is now  , not just 0zFFFFFFFF, and 
+// 3. Bit 31 of an integer is unreliable, since (int) -1 is now  , not just 0zFFFFFFFF, and
 //    FFFFFFFF + 1 = 100000000, not 0. In JavaScript, 0xFFFFFFFF is 4294967295, not -1.
 //    This means that writeInt(b) will fail if b is negative. What you need is instead
-//    writeInt((int)(b & 0xFFFFFFFFl) so that JavaScript knocks off the high bits explicitly. 
+//    writeInt((int)(b & 0xFFFFFFFFl) so that JavaScript knocks off the high bits explicitly.
 //
 //   general:
 //
@@ -5197,69 +5197,69 @@ Jmol._canvasCache = {};
 //    It's probably bad Java programming, anyway.
 // 4. Calls to super(...) can almost always be avoided. These trigger the SAEM
 //    (searchAndExecuteMethod) call, and it is very destructive to performance.
-//    Just find another way to do it.   
+//    Just find another way to do it.
 
- // NOTES by Bob Hanson: 
+ // NOTES by Bob Hanson:
   // J2S class changes:
 
  // BH 10/16/2017 6:30:14 AM fix for prepareCallback reducing arguments length to -1
  // BH 7/7/2017 7:10:39 AM fixes Clazz.clone for arrays
  // BH 1/14/2017 6:23:54 AM adds URL switch  j2sDebugCore
- // BH 1/8/2016 6:21:38 PM adjustments to prevent multiple load of corejmol.js 
+ // BH 1/8/2016 6:21:38 PM adjustments to prevent multiple load of corejmol.js
  // BH 12/30/2015 9:13:40 PM Clazz.floatToInt should return 0 for NaN
  // BH 12/23/2015 9:23:06 AM allowing browser to display stack for TypeError in exceptionOf
  // BH 12/21/2015 6:14:59 PM adding typeArray.buffer.slice to be compatible with Safari
  // BH 12/20/2015 6:13:52 AM adding Int8Array; streamlining array checking
  // BH 12/18/2015 5:02:52 PM adding .slice and also better array copy
  // BH 7/24/2015 6:48:50 AM adding optional ?j2sdebug flag on page URL
- //                      -- switches to using j2s/core/corexxx.js, not j2s/core/corexxx.z.js 
+ //                      -- switches to using j2s/core/corexxx.js, not j2s/core/corexxx.z.js
  //                      -- adds ";//# sourceURL="+file  in eval(js)
  //                      -- enables DebugJS.$(msg) call to debugger;
  //  see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/debugger
  //  see https://developer.mozilla.org/en-US/docs/Tools/Debugger/How_to/Debug_eval_sources
- // BH 7/23/2015 6:45:55 PM added sourceURL in each js class eval(), allowing full 
+ // BH 7/23/2015 6:45:55 PM added sourceURL in each js class eval(), allowing full
  //                         breakpoint debugging and code checking in Firefox and Chrome
- // BH 7/19/2015 6:18:17 PM added os.name, line.separator, etc. to System.getProperty()
- // BH 7/19/2015 5:39:10 PM added java.lang.System = System
+ // BH 7/19/2015 6:18:17 PM added os.name, line.separator, etc. to Zystem.getProperty()
+ // BH 7/19/2015 5:39:10 PM added java.lang.Zystem = Zystem
  // BH 7/19/2015 10:33:10 AM fix for SAEM equating "null" with number or boolean
  // BH 7/18/2015 6:08:05 PM for Jmol I was able to remove the $private/$fx business, but now
  //    I see that in general that cannot be done. Thinking about a strategy...
  // BH 7/18/2015 4:43:38 PM better handling of TypeError and InternalError for e.getMessage() and e.getStackTrace()
- // BH 7/17/2015 11:51:15 AM adds class.getResource(name) and class.getResourceAsStream(name) 
+ // BH 7/17/2015 11:51:15 AM adds class.getResource(name) and class.getResourceAsStream(name)
  // BH 7/16/2015 7:56:49 PM general instantiation using any constructor (in Java here):
  // BH  x = class.forName("my.class.name").newInstance()
  // BH or
  // BH  x = class.forName("my.class.name").getConstructor(String.class,String.class).newInstance(new Object[] {"test", "now"})
- // BH 7/15/2015 11:34:58 PM adding System.lineSeparator()
+ // BH 7/15/2015 11:34:58 PM adding Zystem.lineSeparator()
  // BH 7/15/2015 7:32:41 AM adding class.getCanonicalName == getName
  // BH 5/31/2015 5:38:14 PM  NPEExceptionPredicate fix
- // BH 4/25/2015 9:16:12 AM SAEM misrepresnting Number as Object in parameters and Integer as Number 
- // BH 4/24/2015 7:32:54 AM Object.hashCode() and System.getIdentityHashCode() fail. changed to:     return this._$hashcode || (this._$hashcode = ++Clazz._hashCode)
- // BH 4/23/2015 9:08:59 AM Clazz.instanceOf(a, b) needs to check for a == b.   
- // BH 4/23/2015 9:08:59 AM xx.getContentType() is nonfunctional. Array.newInstance now defines a wrapper for .getClass().getComponentType() that works  
+ // BH 4/25/2015 9:16:12 AM SAEM misrepresnting Number as Object in parameters and Integer as Number
+ // BH 4/24/2015 7:32:54 AM Object.hashCode() and Zystem.getIdentityHashCode() fail. changed to:     return this._$hashcode || (this._$hashcode = ++Clazz._hashCode)
+ // BH 4/23/2015 9:08:59 AM Clazz.instanceOf(a, b) needs to check for a == b.
+ // BH 4/23/2015 9:08:59 AM xx.getContentType() is nonfunctional. Array.newInstance now defines a wrapper for .getClass().getComponentType() that works
  // BH 4/12/2015 11:48:03 AM added Clazz.getStackTrace(-n) -- reports actual parameter values for n levels
  // BH 4/10/2015 8:23:05 AM adding Int32Array.prototype.clone and Float64.prototype.clone
  // BH 4/5/2015 8:12:57 AM refactoring j2slib (this file) to make private functions really private using var
  // BH 4/3/2015 6:14:34 AM adding anonymous local "ClazzLoader" (Clazz._Loader) --> "_Loader"
  // BH 4/3/2015 6:14:34 AM adding Clazz._Loader._classPending, Clazz._Loader._classCount
- // BH 4/3/2015 6:14:34 AM adding Clazz._Loader._checkLoad 
+ // BH 4/3/2015 6:14:34 AM adding Clazz._Loader._checkLoad
  //  -- forces asynchronous class loading
  //  -- builds Clazz._Loader._classPending and Clazz._classCount
- //  -- allows reporting 
- 
- // BH 3/24/2015 4:11:26 AM better file load failure message in _Loader.evaluate 
- // BH 2/28/2015 7:30:25 AM corrects newIntArray32() and newArray() for pre-defined arrays 
- //   		int[] a =  new int[] {1,2,3,343};
- //   		int[][] b = new int[][] {new int[]{4,5},new int[]{5,6}}; 
+ //  -- allows reporting
 
- // BH 9/29/2014 11:34:19 PM removing support for getClass().isArray() 
+ // BH 3/24/2015 4:11:26 AM better file load failure message in _Loader.evaluate
+ // BH 2/28/2015 7:30:25 AM corrects newIntArray32() and newArray() for pre-defined arrays
+ //   		int[] a =  new int[] {1,2,3,343};
+ //   		int[][] b = new int[][] {new int[]{4,5},new int[]{5,6}};
+
+ // BH 9/29/2014 11:34:19 PM removing support for getClass().isArray()
  // BH 8/29/2014 9:15:57 AM total reworking of Java2Script in preparation for all-asynchronous loading
- //                         (currently sync loading is only for 
+ //                         (currently sync loading is only for
  // 												   LOAD command and load() function without ASYNC
- //                            getInterface() 
+ //                            getInterface()
  //                         see JSmol.js and Jmol._isAsync flag
- // BH 5/11/2015 5:58:42 AM adding __signatures for debugging SAEM issues 
- // BH 3/29/2015 8:12:44 PM System.getProperty(x, "") does not return ""
+ // BH 5/11/2015 5:58:42 AM adding __signatures for debugging SAEM issues
+ // BH 3/29/2015 8:12:44 PM Zystem.getProperty(x, "") does not return ""
  // BH 8/23/2014 10:04:19 AM cleaning up a few general methods; Clazz.removeArrayItem
  // BH 6/1/2014 10:58:46 AM fix for Clazz.isAP() not working
  // BH 5/26/2014 5:19:29 PM removing superConstructor call in creating Enum constants
@@ -5270,29 +5270,29 @@ Jmol._canvasCache = {};
  // BH 4/1/2014 6:17:21 AM removing Class  -- only used for "Class.forName" in Jmol, which ANT will now change to "Clazz._4Name"
  // BH 3/7/2014 9:05:06 AM Array.prototype.toString should not be aliased. -- http://sourceforge.net/p/jmol/bugs/560/ with Google Visualization
 
- // BH 1/30/2014 12:54:22 PM gave all field variables prefix underscore. This allows Google Closure Compiler to skip them.  
+ // BH 1/30/2014 12:54:22 PM gave all field variables prefix underscore. This allows Google Closure Compiler to skip them.
  // BH 12/3/2013 3:39:57 PM window["j2s.lib"].base implemented
  // BH 12/1/2013 5:34:21 AM removed _LoaderProgressMonitor.initialize and all Clazz.event business; handled by Jmol.clearVars()
  // BH 11/30/2013 12:43:58 PM adding Clazz.arrayIs() -- avoids Number.constructor.toString() infinite recursion
  // BH 11/29/2013 6:33:51 AM adding Clazz._profiler -- reports use of SAEM
- // BH 11/10/2013 9:02:20 AM fixing fading in MSIE  
+ // BH 11/10/2013 9:02:20 AM fixing fading in MSIE
  // BH 11/3/2013 7:21:39 AM additional wrapping functions for better compressibility
  // BH 10/30/2013 8:10:58 AM added getClass().getResource() -- returning a relative string, not a URL
- // BH 10/30/2013 6:43:00 AM removed second System def and added System.$props and default System.property "line.separator" 
+ // BH 10/30/2013 6:43:00 AM removed second Zystem def and added Zystem.$props and default Zystem.property "line.separator"
  // BH 6/15/2013 8:02:07 AM corrections to Class.isAS to return true if first element is null
  // BH 6/14/2013 4:41:09 PM corrections to Clazz.isAI and related methods to include check for null object
- // BH 3/17/2013 11:54:28 AM adds stackTrace for ERROR 
+ // BH 3/17/2013 11:54:28 AM adds stackTrace for ERROR
 
- // BH 3/13/2013 6:58:26 PM adds Clazz.clone(me) for BS clone 
+ // BH 3/13/2013 6:58:26 PM adds Clazz.clone(me) for BS clone
  // BH 3/12/2013 6:30:53 AM fixes Clazz.exceptionOf for ERROR condition trapping
  // BH 3/2/2013 9:09:53 AM delete globals c$ and $fz
  // BH 3/2/2013 9:10:45 AM optimizing defineMethod using "look no further" "@" parameter designation (see "\\@" below -- removed 3/23/13)
  // BH 2/27/2013 optimizing Clazz.getParamsType for common cases () and (Number)
  // BH 2/27/2013 optimizing SAEM delegation for hashCode and equals -- disallows overloading of equals(Object)
- 
+
  // BH 2/23/2013 found String.replaceAll does not work -- solution was to never call it.
  // BH 2/9/2013 9:18:03 PM Int32Array/Float64Array fixed for MSIE9
- // BH 1/25/2013 1:55:31 AM moved package.js from j2s/java to j2s/core 
+ // BH 1/25/2013 1:55:31 AM moved package.js from j2s/java to j2s/core
  // BH 1/17/2013 4:37:17 PM String.compareTo() added
  // BH 1/17/2013 4:52:22 PM Int32Array and Float64Array may not have .prototype.sort method
  // BH 1/16/2013 6:20:34 PM Float64Array not available in Safari 5.1
@@ -5301,9 +5301,9 @@ Jmol._canvasCache = {};
 
  // BH 1/14/2013 12:53:41 AM  Fix for Opera 10 not loading any files
  // BH 1/13/2013 11:50:11 PM  Fix for MSIE not loading (nonbinary) files locally
- 
+
  // BH 12/1/2012 9:52:26 AM Compiler note: Thread.start() cannot be executed within the constructor;
- 
+
  // BH 11/24/2012 11:08:39 AM removed unneeded sections
  // BH 11/24/2012 10:23:22 AM  all XHR uses sync loading (_Loader.setLoadingMode)
  // BH 11/21/2012 7:30:06 PM 	if (base)	map["@" + pkg] = base;  critical for multiple applets
@@ -5318,22 +5318,22 @@ Jmol._canvasCache = {};
  // BH added j2s.lib.console
  // BH allowed for alias="."
  // BH removed alert def --> Clazz.alert
- // BH added wrapper at line 2856 
+ // BH added wrapper at line 2856
  // BH newArray fix at line 2205
- // BH System.getProperty fix at line 6693
+ // BH Zystem.getProperty fix at line 6693
  // BH added Enum .value() method at line 2183
- // BH added System.getSecurityManager() at end
+ // BH added Zystem.getSecurityManager() at end
  // BH added String.contains() at end
- // BH added System.gc() at end
+ // BH added Zystem.gc() at end
  // BH added Clazz.exceptionOf = updated
  // BH added String.getBytes() at end
- 
+
 
 LoadClazz = function() {
 
 // BH This is the ONLY global used in J2S now. I do not think it is necessary,
 // but it is created by the compiler, and I have not found a work-around.
-// it is used as a local variable in class definitions to point to the 
+// it is used as a local variable in class definitions to point to the
 // current method. See Clazz.p0p and Clazz.pu$h
 
 c$ = null;
@@ -5363,7 +5363,7 @@ window["j2s.object.native"] = true;
  * @author zhou renjian
  * @create Nov 5, 2005
  *******/
- 
+
 
 /**
  * Class Clazz. All the methods are static in this class.
@@ -5416,7 +5416,7 @@ Clazz._supportsNativeObject = window["j2s.object.native"];
 if (Clazz._supportsNativeObject) {
 	Clazz._O = function () {};
 	Clazz._O.__CLASS_NAME__ = "Object";
-	Clazz._O["getClass"] = function () { return Clazz._O; }; 
+	Clazz._O["getClass"] = function () { return Clazz._O; };
 } else {
 	Clazz._O = Object;
 }
@@ -5435,10 +5435,10 @@ var addProto = function(proto, name, func) {
 	});
 
 	addProto(proto, "hashCode", function () {
-  
+
     return this._$hashcode || (this._$hashcode = ++Clazz._hashCode)
 
-/*  
+/*
 		try {
 			return this.toString ().hashCode ();
 		} catch (e) {
@@ -5477,7 +5477,7 @@ var addProto = function(proto, name, func) {
 
 })(Clazz._O.prototype);
 
-Clazz.extendJO = function(c, name) {  
+Clazz.extendJO = function(c, name) {
 	if (name)
 		c.__CLASS_NAME__ = c.prototype.__CLASS_NAME__ = name;
 	if (Clazz._supportsNativeObject) {
@@ -5534,7 +5534,7 @@ Clazz.getClassName = function (obj) {
 			return "Object";
 		s = s.substring (idx1, idx2);
 		if (s.indexOf("Array") >= 0)
-			return "Array"; 
+			return "Array";
 		s = s.replace (/^\s+/, "").replace (/\s+$/, "");
 		return (s == "anonymous" || s == "" ? "Function" : s);
 	case "object":
@@ -5594,7 +5594,7 @@ Clazz.getClass = function (clazzHost) {
 /* private */
 var checkInnerFunction = function (hostSuper, funName) {
 	for (var k = 0; k < Clazz.innerFunctionNames.length; k++)
-		if (funName == Clazz.innerFunctionNames[k] && 
+		if (funName == Clazz.innerFunctionNames[k] &&
 				Clazz._innerFunctions[funName] === hostSuper[funName])
 			return true;
 	return false;
@@ -5605,8 +5605,8 @@ var args4InheritClass = function () {};
 Clazz.inheritArgs = new args4InheritClass ();
 
 /**
- * Inherit class with "extends" keyword and also copy those static members. 
- * Example, as in Java, if NAME is a static member of ClassA, and ClassB 
+ * Inherit class with "extends" keyword and also copy those static members.
+ * Example, as in Java, if NAME is a static member of ClassA, and ClassB
  * extends ClassA then ClassB.NAME can be accessed in some ways.
  *
  * @param clazzThis child class to be extended
@@ -5631,7 +5631,7 @@ Clazz.inheritClass = function (clazzThis, clazzSuper, objSuper) {
 		// OK for this reference to an instance, as this is anonymous instance,
 		// which is not referenced elsewhere.
 		// March 13, 2006
-		clazzThis.prototype = objSuper; 
+		clazzThis.prototype = objSuper;
 	} else if (clazzSuper !== Number) {
 		clazzThis.prototype = new clazzSuper (Clazz.inheritArgs);
 	} else { // Number
@@ -5651,7 +5651,7 @@ Clazz.inheritClass = function (clazzThis, clazzSuper, objSuper) {
  * As in JavaScript there are on "implements" keyword implemented, a property
  * of "implementz" is added to the class to record the interfaces the class
  * is implemented.
- * 
+ *
  * @param clazzThis the class to implement
  * @param interfacez Array of interfaces
  */
@@ -5686,7 +5686,7 @@ Clazz.implementOf = function (clazzThis, interfacez) {
 /* private */
 var copyProperties = function(clazzThis, clazzSuper) {
 	for (var o in clazzSuper)
-		if (o != "b$" 
+		if (o != "b$"
 				&& o != "prototype" && o != "superClazz"
 				&& o != "__CLASS_NAME__" && o != "implementz"
 				&& (typeof clazzSuper[o] != "function" || !checkInnerFunction(clazzSuper, o)))
@@ -5757,7 +5757,7 @@ Clazz.getInheritedLevel = function (clazzTarget, clazzBase) {
 		}
 		zzalc = zzalc.superClazz;
 		if (!zzalc)
-			return (clazzBase === Object || clazzBase === Clazz._O ? 
+			return (clazzBase === Object || clazzBase === Clazz._O ?
 				// getInheritedLevel(String, CharSequence) == 1
 				// getInheritedLevel(String, Object) == 1.5
 				// So if both #test(CharSequence) and #test(Object) existed,
@@ -5787,12 +5787,12 @@ Clazz.instanceOf = function (obj, clazz) {
 };
 
 /**
- * Call super method of the class. 
+ * Call super method of the class.
  * The same effect as Java's expression:
  * <code> super.* () </code>
- * 
+ *
  * @param objThis host object
- * @param clazzThis class of declaring method scope. It's hard to determine 
+ * @param clazzThis class of declaring method scope. It's hard to determine
  * which super class is right class for "super.*()" call when it's in runtime
  * environment. For example,
  * 1. ClasssA has method #run()
@@ -5800,8 +5800,8 @@ Clazz.instanceOf = function (obj, clazz) {
  * 3. ClassC extends ClassB
  * 4. objC is an instance of ClassC
  * Now we have to decide which super #run() method is to be invoked. Without
- * explicit clazzThis parameter, we only know that objC.getClass() is ClassC 
- * and current method scope is #run(). We do not known we are in scope 
+ * explicit clazzThis parameter, we only know that objC.getClass() is ClassC
+ * and current method scope is #run(). We do not known we are in scope
  * ClassA#run() or scope of ClassB#run(). if ClassB is given, Clazz can search
  * all super methods that are before ClassB and get the correct super method.
  * This is the reason why there must be an extra clazzThis parameter.
@@ -5814,12 +5814,12 @@ Clazz.superCall = function (objThis, clazzThis, funName, funParams) {
 	var i = -1;
 	var clazzFun = objThis[funName];
 	if (clazzFun) {
-		if (clazzFun.claxxOwner) { 
+		if (clazzFun.claxxOwner) {
 			// claxxOwner is a mark for methods that is single.
 			if (clazzFun.claxxOwner !== clazzThis) {
 				// This is a single method, call directly!
 				fx = clazzFun;
-        
+
 			}
 		} else if (!clazzFun.stacks && !(clazzFun.lastClaxxRef
 					&& clazzFun.lastClaxxRef.prototype[funName]
@@ -5831,7 +5831,7 @@ Clazz.superCall = function (objThis, clazzThis, funName, funParams) {
 				stacks = clazzFun.lastClaxxRef.prototype[funName].stacks;
 			for (i = stacks.length; --i >= 0;) {
 				/*
-				 * Once super call is computed precisely, there are no need 
+				 * Once super call is computed precisely, there are no need
 				 * to calculate the inherited level but just an equals
 				 * comparision
 				 */
@@ -5859,8 +5859,8 @@ Clazz.superCall = function (objThis, clazzThis, funName, funParams) {
 	if (!fx) {
 		if (funName != "construct") {
 			Clazz.alert (["j2slib","no class found",(funParams).typeString])
-			newMethodNotFoundException(objThis, clazzThis, funName, 
-					Clazz.getParamsType(funParams).typeString);	
+			newMethodNotFoundException(objThis, clazzThis, funName,
+					Clazz.getParamsType(funParams).typeString);
 		}
 		/* there are members which are initialized out of the constructor */
 		/* No super constructor! */
@@ -5890,8 +5890,8 @@ Clazz.superCall = function (objThis, clazzThis, funName, funParams) {
 };
 
 /**
- * Call super constructor of the class. 
- * The same effect as Java's expression: 
+ * Call super constructor of the class.
+ * The same effect as Java's expression:
  * <code> super () </code>
  */
 /* public */
@@ -5946,25 +5946,25 @@ Clazz.castNullAs = function (asClazz) {
 
 /*
  * Use to mark that the Throwable instance is created or not.
- * 
+ *
  * Called from java.lang.Throwable, as defined in JSmolJavaExt.js
- * 
- * The underscore is important - it tells the JSmol ANT task to NOT 
- * turn this into Clazz_initializingException, because coreBottom2.js does 
+ *
+ * The underscore is important - it tells the JSmol ANT task to NOT
+ * turn this into Clazz_initializingException, because coreBottom2.js does
  * not include that call, and so Google Closure Compiler does not minify it.
- *        
+ *
  */
 /* public */
 Clazz._initializingException = false;
 
 /**
  * BH: used in Throwable
- *  
- */  
+ *
+ */
 /* public */
 Clazz._callingStackTraces = [];
 
-/** 
+/**
  * MethodException will be used as a signal to notify that the method is
  * not found in the current clazz hierarchy.
  */
@@ -5984,9 +5984,9 @@ var MethodException = function () {
   var _isNPEExceptionPredicate;
 
 /* super private */
-;(function() { 
+;(function() {
   /* sgurin: native exception detection mechanism. Only NullPointerException detected and wrapped to java excepions */
-  /** private utility method for creating a general regexp that can be used later  
+  /** private utility method for creating a general regexp that can be used later
    * for detecting a certain kind of native exceptions. use with error messages like "blabla IDENTIFIER blabla"
    * @param msg String - the error message
    * @param spliterName String, must be contained once in msg
@@ -5994,39 +5994,39 @@ var MethodException = function () {
    */
   // reproduce NullPointerException for knowing how to detect them, and create detector function Clazz._isNPEExceptionPredicate
   var $$o$$ = null;
-  
+
   try {
   	$$o$$.hello();
   } catch (e) {
     var _ex_reg = function(msg, spliterName, spliterRegex) {
-    	if(!spliterRegex) 
-    		spliterRegex="[^\\s]+";	
-    	var idx = msg.indexOf (spliterName), 
-    		str = msg.substring (0, idx) + spliterRegex + msg.substring(idx + spliterName.length), 
+    	if(!spliterRegex)
+    		spliterRegex="[^\\s]+";
+    	var idx = msg.indexOf (spliterName),
+    		str = msg.substring (0, idx) + spliterRegex + msg.substring(idx + spliterName.length),
     		regexp = new RegExp("^"+str+"$");
     	return regexp;
     };
-  	if(/Opera[\/\s](\d+\.\d+)/.test(navigator.userAgent)) {// opera throws an exception with fixed messages like "Statement on line 23: Cannot convert undefined or null to Object Backtrace: Line....long text... " 
+  	if(/Opera[\/\s](\d+\.\d+)/.test(navigator.userAgent)) {// opera throws an exception with fixed messages like "Statement on line 23: Cannot convert undefined or null to Object Backtrace: Line....long text... "
   		var idx1 = e.message.indexOf(":"), idx2 = e.message.indexOf(":", idx1+2);
   		var _NPEMsgFragment = e.message.substr(idx1+1, idx2-idx1-20);
   		_isNPEExceptionPredicate = function(e) { return e.message.indexOf(_NPEMsgFragment)!=-1; };
-  	}	else if(navigator.userAgent.toLowerCase().indexOf("webkit")!=-1) { //webkit, google chrome prints the property name accessed. 
+  	}	else if(navigator.userAgent.toLowerCase().indexOf("webkit")!=-1) { //webkit, google chrome prints the property name accessed.
   		var _exceptionNPERegExp = _ex_reg(e.message, "hello");
   		_isNPEExceptionPredicate = function(e) { return _exceptionNPERegExp.test(e.message); };
-  	}	else {// ie, firefox and others print the name of the object accessed: 
+  	}	else {// ie, firefox and others print the name of the object accessed:
   		var _exceptionNPERegExp = _ex_reg(e.message, "$$o$$");
   		_isNPEExceptionPredicate = function(e) { return _exceptionNPERegExp.test(e.message); };
-  	}		
+  	}
   };
 })();
 
 /**sgurin
  * Implements Java's keyword "instanceof" in JavaScript's way **for exception objects**.
- * 
- * calls Clazz.instanceOf if e is a Java exception. If not, try to detect known native 
- * exceptions, like native NullPointerExceptions and wrap it into a Java exception and 
+ *
+ * calls Clazz.instanceOf if e is a Java exception. If not, try to detect known native
+ * exceptions, like native NullPointerExceptions and wrap it into a Java exception and
  * call Clazz.instanceOf again. if the native exception can't be wrapped, false is returned.
- * 
+ *
  * @param obj the object to be tested
  * @param clazz the class to be checked
  * @return whether the object is an instance of the class
@@ -6045,7 +6045,7 @@ Clazz.exceptionOf = function(e, clazz) {
 	if(clazz == Error) {
 		if (("" + e).indexOf("Error") < 0)
       return false;
-		System.out.println (Clazz.getStackTrace());
+		Zystem.out.println (Clazz.getStackTrace());
     return true;
 		// everything here is a Java Exception, not a Java Error
 	}
@@ -6055,7 +6055,7 @@ Clazz.exceptionOf = function(e, clazz) {
 
 /**
  * BH need to limit this, as JavaScript call stack may be recursive
- */ 
+ */
 Clazz.getStackTrace = function(n) {
 	n || (n = 25);
   // updateNode and updateParents cause infinite loop here
@@ -6093,7 +6093,7 @@ Clazz.getStackTrace = function(n) {
 /**
  * Make constructor for the class with the given function body and parameters
  * signature.
- * 
+ *
  * @param clazzThis host class
  * @param funBody constructor body
  * @param funParams constructor parameters signature
@@ -6110,7 +6110,7 @@ Clazz.makeConstructor = function (clazzThis, funBody, funParams) {
 /**
  * Override constructor for the class with the given function body and
  * parameters signature.
- * 
+ *
  * @param clazzThis host class
  * @param funBody constructor body
  * @param funParams constructor parameters signature
@@ -6138,7 +6138,7 @@ Clazz.overrideConstructor = function (clazzThis, funBody, funParams) {
  */
 /* public */
 Clazz.defineMethod = function (clazzThis, funName, funBody, funParams) {
-	//if (Clazz.assureInnerClass) 
+	//if (Clazz.assureInnerClass)
     //Clazz.assureInnerClass(clazzThis, funBody);
 	funBody.exName = funName;
 	var fpName = formatParameters(funParams);
@@ -6148,7 +6148,7 @@ Clazz.defineMethod = function (clazzThis, funName, funBody, funParams) {
     checkDuplicate(clazzThis, funName, fpName);
 	if (!f$ || (f$.claxxOwner === clazzThis && f$.funParams == fpName)) {
 		// property "funParams" will be used as a mark of only-one method
-		funBody.funParams = fpName; 
+		funBody.funParams = fpName;
 		funBody.claxxOwner = clazzThis;
 		funBody.exClazz = clazzThis; // make it traceable
 		return addProto(proto, funName, funBody);
@@ -6168,20 +6168,20 @@ Clazz.defineMethod = function (clazzThis, funName, funBody, funParams) {
 	 * Method that is already defined in super class will be overridden
 	 * with a new proxy method with class hierarchy stored in a stack.
 	 * That is to say, the super methods are lost in this class' proxy
-	 * method. 
-	 * When method are being called, methods defined in the new proxy 
+	 * method.
+	 * When method are being called, methods defined in the new proxy
 	 * method will be searched through first. And if no method fitted,
 	 * it will then try to search method in the super class stacks.
 	 */
 	if (!f$.stacks || f$.claxxReference !== clazzThis) {
-		//Generate a new delegating method for the class                
+		//Generate a new delegating method for the class
     var id = ++SAEMid;
   	var delegate = function () {
   		return searchAndExecuteMethod(id, this, arguments.callee.claxxReference, arguments.callee.methodName, arguments);
   	};
   	delegate.methodName = funName;
   	delegate.claxxReference = clazzThis;
-		f$ = addProto(proto, funName, delegate);				
+		f$ = addProto(proto, funName, delegate);
 		// Keep the class inheritance stacks
 		var arr = [];
 		for (var i = 0; i < oldStacks.length; i++)
@@ -6210,7 +6210,7 @@ Clazz.defineMethod = function (clazzThis, funName, funBody, funParams) {
 	funBody.exClazz = clazzThis; // make it traceable
 	f$[fpName] = funBody;
 	return f$;
-};                                                
+};
 
 duplicatedMethods = {};
 
@@ -6222,9 +6222,9 @@ var checkDuplicate = function(clazzThis, funName, fpName) {
     var m = duplicatedMethods[key];
     if (m) {
       var s = "Warning! Duplicate method found for " + key;
-      System.out.println(s);
+      Zystem.out.println(s);
       Clazz.alert(s);
-      duplicatedMethods[key] = m + 1; 
+      duplicatedMethods[key] = m + 1;
     } else {
       duplicatedMethods[key] = 1;
     }
@@ -6241,7 +6241,7 @@ Clazz.showDuplicates = function(quiet) {
       n++;
     }
   s = "Duplicates: " + n + "\n\n" + s;
-  System.out.println(s);
+  Zystem.out.println(s);
   if (!quiet)
     alert(s);
 }
@@ -6271,7 +6271,7 @@ var removeArrayItem = function(arr, item) {
  */
 /* protected */
 var formatParameters = function (funParams) {
-	return (funParams ? funParams.replace (/~([NABSO])/g, 
+	return (funParams ? funParams.replace (/~([NABSO])/g,
       function ($0, $1) {
       	switch ($1) {
       	case 'N':
@@ -6295,7 +6295,7 @@ var formatParameters = function (funParams) {
  * does not need to search the whole hierarchied methods to find the
  * correct method to execute.
  * Be cautious about this method. Incorrectly using this method may
- * break the inheritance system.
+ * break the inheritance Zystem.
  *
  * @param clazzThis host class in which the method to be defined
  * @param funName method name
@@ -6312,7 +6312,7 @@ Clazz.overrideMethod = function(clazzThis, funName, funBody, funParams) {
 	/*
 	 * Replace old methods with new method. No super methods are kept.
 	 */
-	funBody.funParams = fpName; 
+	funBody.funParams = fpName;
 	funBody.claxxOwner = clazzThis;
 	return addProto(clazzThis.prototype, funName, funBody);
 };
@@ -6326,9 +6326,9 @@ Clazz.overrideMethod = function(clazzThis, funName, funBody, funParams) {
  * BH Clazz.getProfile monitors exactly what is being delegated with SAEM,
  * which could be a bottle-neck for function calling.
  * This is critical for performance optimization.
- */ 
+ */
 
-  var __signatures = ""; 
+  var __signatures = "";
 
 Clazz.getProfile = function() {
   	var s = "";
@@ -6347,14 +6347,14 @@ Clazz.getProfile = function() {
 var addProfile = function(c, f, p, id) {
 	var s = c.__CLASS_NAME__ + " " + f + " ";// + JSON.stringify(p);
   if (__signatures.indexOf(s) < 0)
-    __signatures += s + "\n";    
+    __signatures += s + "\n";
 	_profile[s] || (_profile[s] = 0);
 	_profile[s]++;
 }
 
 /**
  * Called also by Throwable
- *  
+ *
 /* public */
 Clazz.getParamsType = function (funParams) {
 	// bh: optimization here for very common cases
@@ -6399,36 +6399,36 @@ var SAEMid = 0;
 /**
  * BH: OK, this was an idea that doesn't work. The idea was to tag SAEM calls
  * and then refer back to an array. But the id number cannot be put in the right place.
- * 
+ *
  * Say we have this:
- * 
- * StringBuffer sb = new StringBuffer(); 
+ *
+ * StringBuffer sb = new StringBuffer();
  * sb.append("").append(1);
- * 
+ *
  * Here we have two different append methods to call. They are saved under two
- * names:  StringBuffer.prototype.append["\\String"] 
+ * names:  StringBuffer.prototype.append["\\String"]
  *     and StringBuffer.prototype.append["\\Number"]
- * 
+ *
  * The job of generateDelegatingMethod is to discriminate between those two. We can do
  * that, but the real issue is that we have to do that EVERY time a call is made.
- * This is a problem that must be handled at compile time. There is no way to 
- * make .append("") to go one way the first time and another way the second time. 
+ * This is a problem that must be handled at compile time. There is no way to
+ * make .append("") to go one way the first time and another way the second time.
  * What we need at run time is something like this:
- * 
+ *
  * Clazz.delegate(sb.append,1,[""]) and Clazz.delegate(sb.append,2,[1])
  * The we would be able to log those numbers at run time and refer to them.
- *                     
- * The only real way to avoid SAEM is: 
- * 
+ *
+ * The only real way to avoid SAEM is:
+ *
  * 1) to never call super() -- always call a differently named function in a superclass.
- * 2) don't overload functions 
- *  
- */   
+ * 2) don't overload functions
+ *
+ */
 
 
 /**
  * Search the given class prototype, find the method with the same
- * method name and the same parameter signatures by the given 
+ * method name and the same parameter signatures by the given
  * parameters, and then run the method with the given parameters.
  *
  * @param objThis the current host object
@@ -6455,10 +6455,10 @@ var searchAndExecuteMethod = function (id, objThis, claxxRef, fxName, args, _sae
 //var s = "SAEM " + claxxRef.__CLASS_NAME__ + "." + fxName + "(" + params+ ")\n";
 //if (xxxSAEMlist.length > 300)xxxSAEMlist = "";
 //xxxSAEMlist += s;
- 
 
-  if (!fx)    
-    try {System.out.println(Clazz.getStackTrace(5))} catch (e){}
+
+  if (!fx)
+    try {Zystem.out.println(Clazz.getStackTrace(5))} catch (e){}
 	_profile && addProfile(claxxRef, fxName, params, id);
 	// Cache last matched method
 	if (fx.lastParams == params.typeString && fx.lastClaxxRef === claxxRef) {
@@ -6500,12 +6500,12 @@ var searchAndExecuteMethod = function (id, objThis, claxxRef, fxName, args, _sae
 				return ret;
 			}
 			/*
-			 * As there are no such methods in current class, Clazz will try 
+			 * As there are no such methods in current class, Clazz will try
 			 * to search its super class stacks. Here variable began indicates
 			 * that super searchi is began, and there is no need checking
 			 * <code>stacks[i] === claxxRef</code>
 			 */
-			began = true; 
+			began = true;
 		} // end of if
 	} // end of for
 	if ("construct" == fxName) {
@@ -6516,7 +6516,7 @@ var searchAndExecuteMethod = function (id, objThis, claxxRef, fxName, args, _sae
 		 */
 		return;
 	}
-	newMethodNotFoundException(objThis, claxxRef, 
+	newMethodNotFoundException(objThis, claxxRef,
 			fxName, params.typeString);
 };
 
@@ -6540,7 +6540,7 @@ var tryToSearchAndExecute = function(id, fxName, objThis, clazzFun, params, args
 		 * AbstractList.remove (int)
 		 * ArrayList.remove (int)
 		 *
-		 * Then calling #remove (Object) method on ArrayList instance will 
+		 * Then calling #remove (Object) method on ArrayList instance will
 		 * need to search up to the AbstractCollection.remove (Object),
 		 * which contains only one method.
 		 */
@@ -6560,13 +6560,13 @@ var tryToSearchAndExecute = function(id, fxName, objThis, clazzFun, params, args
 	  return new MethodException();
   if (debug) alert("OK: \\" + method)
 	var f = (generic ? clazzFun : clazzFun["\\" + method]);
-	//if (generic) 
+	//if (generic)
   //{ /* Use the generic method */
 		/*
 		 * Will this case be reachable?
 		 * March 4, 2006 josson
-		 * 
-		 * Reachable for calling #remove (Object) method on 
+		 *
+		 * Reachable for calling #remove (Object) method on
 		 * ArrayList instance
 		 * May 5, 2006 josson
 		 */
@@ -6611,10 +6611,10 @@ var searchMethod = function(roundOne, paramTypes, debug) {
 		var isFitted = true;
 		var len2 = roundOne[i].length;
 		for (var j = 0; j < len2; j++) {
-    
-			fittedLevel[j] = Clazz.getInheritedLevel (paramTypes[j], 
+
+			fittedLevel[j] = Clazz.getInheritedLevel (paramTypes[j],
 					roundOne[i][j]);
-      //if (debug)alert([paramTypes[j],fittedLevel[j],roundOne[i][j]])    
+      //if (debug)alert([paramTypes[j],fittedLevel[j],roundOne[i][j]])
 			if (fittedLevel[j] < 0) {
 				isFitted = false;
 				break;
@@ -6678,10 +6678,10 @@ Clazz.declarePackage = function (pkgName) {
 		var pkg = Clazz.allPackage;
 		for (var i = 0; i < pkgFrags.length; i++) {
 			if (!pkg[pkgFrags[i]]) {
-				pkg[pkgFrags[i]] = { 
-					__PKG_NAME__ : (pkg.__PKG_NAME__ ? 
+				pkg[pkgFrags[i]] = {
+					__PKG_NAME__ : (pkg.__PKG_NAME__ ?
 						pkg.__PKG_NAME__ + "." + pkgFrags[i] : pkgFrags[i])
-				}; 
+				};
 				// pkg[pkgFrags[i]] = {};
 				if (i == 0) {
 					// eval ...
@@ -6704,7 +6704,7 @@ Clazz.evalType = function (typeStr, isQualified) {
 		var pkg = Clazz.declarePackage (pkgName);
 		var clazzName = typeStr.substring (idx + 1);
 		return pkg[clazzName];
-	} 
+	}
 	if (isQualified)
 		return window[typeStr];
 	switch (typeStr) {
@@ -6788,7 +6788,7 @@ if (isSafari) {
 Clazz.instantialize = function (objThis, args) {
 
 
-	if (args && args.length == 1 && args[0] 
+	if (args && args.length == 1 && args[0]
 			&& args[0] instanceof args4InheritClass) {
 		return;
 	}
@@ -6812,9 +6812,9 @@ Clazz.instantialize = function (objThis, args) {
 		} else if (!objThis.getClass ().superClazz) { // the base class
 			objThis.con$truct.apply (objThis, []);
 			c.apply (objThis, args);
-		} else if ((c.claxxOwner 
+		} else if ((c.claxxOwner
 				&& c.claxxOwner === objThis.getClass ())
-				|| (c.stacks 
+				|| (c.stacks
 				&& c.stacks[c.stacks.length - 1] == objThis.getClass ())) {
 			/*
 			 * This #construct is defined by this class itself.
@@ -6823,7 +6823,7 @@ Clazz.instantialize = function (objThis, args) {
 			 */
 			c.apply (objThis, args);
 		} else { // constructor is a super constructor
-			if (c.claxxOwner && !c.claxxOwner.superClazz 
+			if (c.claxxOwner && !c.claxxOwner.superClazz
 						&& c.claxxOwner.con$truct) {
 				c.claxxOwner.con$truct.apply (objThis, []);
 			} else if (c.stacks && c.stacks.length == 1
@@ -6839,7 +6839,7 @@ Clazz.instantialize = function (objThis, args) {
 };
 
 /**
- * Once there are other methods registered to the Function.prototype, 
+ * Once there are other methods registered to the Function.prototype,
  * those method names should be add to the following Array.
  */
 /*
@@ -6859,11 +6859,11 @@ Clazz._innerFunctions = {
 	/*
 	 * Similar to Object#equals
 	 */
-   
+
   isInstance: function(c) {
     return Clazz.instanceOf(c, this);
   },
-  
+
 	equals : function (aFun) {
 		return this === aFun;
 	},
@@ -6991,7 +6991,7 @@ Clazz._innerFunctions = {
 					fname = baseFolder + clazzName.substring (0, idx)
 							.replace (/\./g, '/') +  "/" + name;
 				}
-			}            
+			}
 		}
     var url = null;
     try {
@@ -7006,8 +7006,8 @@ Clazz._innerFunctions = {
 		var data = (url == null ? null : Jmol._getFileData(fname.toString()));
     if (!data || data == "error" || data.indexOf("[Exception") == 0)
       return null;
-    var bytes = new java.lang.String(data).getBytes();      
-    var is = new java.io.BufferedInputStream ( new java.io.ByteArrayInputStream (bytes)); 
+    var bytes = new java.lang.String(data).getBytes();
+    var is = new java.io.BufferedInputStream ( new java.io.ByteArrayInputStream (bytes));
     is.url = url;
 		return is;
 	}/*# {$no.javascript.support} >>x #*/,
@@ -7042,7 +7042,7 @@ var cStack = [];
 /**
  * BH: I would like to be able to remove "self.c$" here, but that is tricky.
  */
-  
+
 Clazz.pu$h = function (c) {
   c || (c = self.c$); // old style
 	c && cStack.push(c);
@@ -7053,24 +7053,24 @@ Clazz.p0p = function () {
 };
 
 /* protected */
-Clazz.decorateAsClass = function (clazzFun, prefix, name, clazzParent, 
+Clazz.decorateAsClass = function (clazzFun, prefix, name, clazzParent,
 		interfacez, parentClazzInstance, _decorateAsClass) {
-    
+
 	var prefixName = null;
 	if (prefix) {
 		prefixName = prefix.__PKG_NAME__;
 		if (!prefixName)
-			prefixName = prefix.__CLASS_NAME__;      
+			prefixName = prefix.__CLASS_NAME__;
 	}
 	var qName = (prefixName ? prefixName + "." : "") + name;
-  
+
     if (Clazz._Loader._classPending[qName]) {
       delete Clazz._Loader._classPending[qName];
       Clazz._Loader._classCountOK++;
       Clazz._Loader._classCountPending--;
     }
   if (Clazz._Loader && Clazz._Loader._checkLoad) {
-    System.out.println("decorating class " + prefixName + "." + name);
+    Zystem.out.println("decorating class " + prefixName + "." + name);
   }
 	var cf = Clazz.unloadedClasses[qName];
 	if (cf) {
@@ -7113,7 +7113,7 @@ var decorateFunction = function (clazzFun, prefix, name, _decorateFunction) {
 		clazzFun[inF[i]] = Clazz._innerFunctions[inF[i]];
 	}
 
-	if (Clazz._Loader) 
+	if (Clazz._Loader)
     Clazz._Loader.updateNodeForFunctionDecoration(qName);
 };
 
@@ -7128,28 +7128,28 @@ Clazz.declareInterface = function (prefix, name, interfacez, _declareInterface) 
 };
 
 /* public */
-Clazz.declareType = function (prefix, name, clazzParent, interfacez, 
+Clazz.declareType = function (prefix, name, clazzParent, interfacez,
 		parentClazzInstance, _declareType) {
 	var f = function () {
 		Clazz.instantialize (this, arguments);
 	};
-	return Clazz.decorateAsClass (f, prefix, name, clazzParent, interfacez, 
+	return Clazz.decorateAsClass (f, prefix, name, clazzParent, interfacez,
 			parentClazzInstance);
 };
 
 /* public */
-Clazz.declareAnonymous = function (prefix, name, clazzParent, interfacez, 
+Clazz.declareAnonymous = function (prefix, name, clazzParent, interfacez,
 		parentClazzInstance, _declareAnonymous) {
 	var f = function () {
 		Clazz.prepareCallback(this, arguments);
 		Clazz.instantialize (this, arguments);
 	};
-	return Clazz.decorateAsClass (f, prefix, name, clazzParent, interfacez, 
+	return Clazz.decorateAsClass (f, prefix, name, clazzParent, interfacez,
 			parentClazzInstance);
 };
 
 /* public */
-Clazz.decorateAsType = function (clazzFun, qClazzName, clazzParent, 
+Clazz.decorateAsType = function (clazzFun, qClazzName, clazzParent,
 		interfacez, parentClazzInstance, inheritClazzFuns, _decorateAsType) {
 	Clazz.extendJO(clazzFun, qClazzName);
 	clazzFun.equals = Clazz._innerFunctions.equals;
@@ -7234,7 +7234,7 @@ java.lang.ClassLoader = {
  *
  * See also http://j2s.sourceforge.net/j2sclazz/
  */
- 
+
 /**
  * Clazz.MethodNotFoundException is used to notify the developer about calling
  * methods with incorrect parameters.
@@ -7252,23 +7252,23 @@ var newMethodNotFoundException = function (obj, clazz, method, params) {
 	} else {
 		leadingStr = "Constructor";
 	}
-	var message = leadingStr + " " + Clazz.getClassName (clazz, true) + "." 
+	var message = leadingStr + " " + Clazz.getClassName (clazz, true) + "."
 					+ method + "(" + paramStr + ") is not found!";
-  throw new java.lang.NoSuchMethodException(message);        
+  throw new java.lang.NoSuchMethodException(message);
 };
 
 /**
  * Prepare "callback" for instance of anonymous Class.
  * For example for the callback:
  *     this.callbacks.MyEditor.sayHello();
- *     
- * This is specifically for inner classes that are referring to 
- * outer class methods and fields.   
+ *
+ * This is specifically for inner classes that are referring to
+ * outer class methods and fields.
  *
  * @param objThis the host object for callback
  * @param args arguments object. args[0] will be classThisObj -- the "this"
  * object to be hooked
- * 
+ *
  * Attention: parameters should not be null!
  */
 /* protected */
@@ -7276,13 +7276,13 @@ Clazz.prepareCallback = function (innerObj, args) {
 	var outerObj = args[0];
 	var cbName = "b$"; // "callbacks";
 	if (innerObj && outerObj && outerObj !== window) {
-		var className = Clazz.getClassName(outerObj, true);		
+		var className = Clazz.getClassName(outerObj, true);
 		var obs = {};
 		if (innerObj[cbName]) // must make a copy!
 			for (var s in innerObj[cbName])
 				obs[s] = innerObj[cbName][s];
 		innerObj[cbName] = obs;
-		
+
 		/*
 		 * TODO: the following line is SWT-specific! Try to move it out!
 		 */
@@ -7355,19 +7355,19 @@ Clazz.innerTypeInstance = function (clazzInner, innerObj, finalVars) {
 		case 5:
 			return new clazzInner(innerObj, arguments[3], arguments[4]);
 		case 6:
-			return new clazzInner(innerObj, arguments[3], arguments[4], 
+			return new clazzInner(innerObj, arguments[3], arguments[4],
 					arguments[5]);
 		case 7:
-			return new clazzInner(innerObj, arguments[3], arguments[4], 
+			return new clazzInner(innerObj, arguments[3], arguments[4],
 					arguments[5], arguments[6]);
 		case 8:
-			return new clazzInner(innerObj, arguments[3], arguments[4], 
+			return new clazzInner(innerObj, arguments[3], arguments[4],
 					arguments[5], arguments[6], arguments[7]);
 		case 9:
-			return new clazzInner(innerObj, arguments[3], arguments[4], 
+			return new clazzInner(innerObj, arguments[3], arguments[4],
 					arguments[5], arguments[6], arguments[7], arguments[8]);
 		case 10:
-			return new clazzInner(innerObj, arguments[3], arguments[4], 
+			return new clazzInner(innerObj, arguments[3], arguments[4],
 					arguments[5], arguments[6], arguments[7], arguments[8],
 					arguments[9]);
 		default:
@@ -7401,7 +7401,7 @@ Clazz.cloneFinals = function () {
 
 /* public */
 Clazz.isClassDefined = Clazz.isDefinedClass = function(clazzName) {
-	if (!clazzName) 
+	if (!clazzName)
 		return false;		/* consider null or empty name as non-defined class */
 	if (Clazz.allClasses[clazzName])
 		return true;
@@ -7474,22 +7474,22 @@ var getArrayType = function(n, nbits) {
 	   	for (var i = 0; i < n; i++)b[i] = 0
     }
     b.BYTES_PER_ELEMENT = nbits >> 3;
-    b._fake = true;    
+    b._fake = true;
 		return b;
-} 
+}
 
 var arraySlice = function(istart, iend) {
   // could be Safari or could be fake
   istart || (istart = 0);
   iend || (iend = this.length);
-  if (this._fake) {    
-    var b = new this.constructor(iend - istart); 
-    System.arraycopy(this, istart, b, 0, iend - istart); 
-    return b; 
+  if (this._fake) {
+    var b = new this.constructor(iend - istart);
+    Zystem.arraycopy(this, istart, b, 0, iend - istart);
+    return b;
   }
   return new this.constructor(this.buffer.slice(istart * this.BYTES_PER_ELEMENT, iend * this.BYTES_PER_ELEMENT));
 };
-      
+
 if ((Clazz.haveInt32 = !!(self.Int32Array && self.Int32Array != Array)) == true) {
 	if (!Int32Array.prototype.sort)
 		Int32Array.prototype.sort = Array.prototype.sort
@@ -7510,7 +7510,7 @@ if ((Clazz.haveFloat64 = !!(self.Float64Array && self.Float64Array != Array)) ==
 	Float64Array.prototype.sort = Array.prototype.sort
 	Float64Array.prototype.toString = function() {return "[object Float64Array]"};
 // Darn! Mozilla makes this a double, not a float. It's 64-bit.
-// and Safari 5.1 doesn't have Float64Array 
+// and Safari 5.1 doesn't have Float64Array
 }
 if (!Float64Array.prototype.slice)
   Float64Array.prototype.slice = function() {return arraySlice.apply(this, arguments)};
@@ -7523,7 +7523,7 @@ Float64Array.prototype.clone =  function() { return this.slice(); };
  */
 /* public */
 Clazz.newArray = function (a, b, c, d) {
-  if (a != -1 || arguments.length == 2) { 
+  if (a != -1 || arguments.length == 2) {
     // Clazz.newArray(36,null)
     // Clazz.newArray(3, 0)
     // Clazz.newArray(-1, ["A","B"])
@@ -7621,7 +7621,7 @@ if ((Clazz.haveInt8 = !!self.Int8Array) == true) {
 	if (!Int8Array.prototype.sort)
 		Int8Array.prototype.sort = Array.prototype.sort
   if (!Int8Array.prototype.slice)
-    Int8Array.prototype.slice = function() {return arraySlice.apply(this, arguments)}; 
+    Int8Array.prototype.slice = function() {return arraySlice.apply(this, arguments)};
 } else {
   Clazz.newByteArray = Clazz.newIntArray;
 }
@@ -7684,7 +7684,7 @@ Clazz.makeFunction = function (jsr) {
 			jsr.setEvent(e);
 		jsr.run();
 		switch (jsr.returnSet) {
-		case 1: 
+		case 1:
 			return jsr.returnNumber;
 		case 2:
 			return jsr.returnBoolean;
@@ -7728,7 +7728,7 @@ Clazz.prepareFields = function (clazz, fieldsFun) {
 };
 
 /*
- * Serialize those public or protected fields in class 
+ * Serialize those public or protected fields in class
  * net.sf.j2s.ajax.SimpleSerializable.
  */
 /* protected */
@@ -7764,11 +7764,11 @@ Clazz.registerSerializableFields = function (clazz) {
 };
 */
 /*
- * Get the caller method for those methods that are wrapped by 
+ * Get the caller method for those methods that are wrapped by
  * Clazz.searchAndExecuteMethod.
  *
  * @param args caller method's arguments
- * @return caller method, null if there is not wrapped by 
+ * @return caller method, null if there is not wrapped by
  * Clazz.searchAndExecuteMethod or is called directly.
  */
 /* protected */
@@ -7783,8 +7783,8 @@ Clazz.getMixedCallerMethod = function (args) {
 		return null;
 	o.claxxRef = argc.arguments[1];
 	o.fxName = argc.arguments[2];
-	o.paramTypes = Clazz.getParamsType(argc.arguments[3]);	
-	argc = argc.arguments.callee.caller // Clazz.generateDelegatingMethod 
+	o.paramTypes = Clazz.getParamsType(argc.arguments[3]);
+	argc = argc.arguments.callee.caller // Clazz.generateDelegatingMethod
 					&& argc.arguments.callee.caller; // the private method's caller
 	if (!argc)
 		return null;
@@ -7794,17 +7794,17 @@ Clazz.getMixedCallerMethod = function (args) {
 */
 /* BH -- The issue here is a subclass calling its private method FOO when
  *       there is also a private method of the same name in its super class.
- *       This can ALWAYS be avoided and, one could argue, is bad 
+ *       This can ALWAYS be avoided and, one could argue, is bad
  *       program design anyway. In Jmol, the presence of this possibility
  *       creates over 8000 references to the global $fx, which was only
  *       checked in a few rare cases. We can then also remove $fz references.
- *         
+ *
  */
 
 /*
  * Check and return super private method.
  * In order make private methods be executed correctly, some extra javascript
- * must be inserted into the beggining of the method body of the non-private 
+ * must be inserted into the beggining of the method body of the non-private
  * methods that with the same method signature as following:
  * <code>
  *			var $private = Clazz.checkPrivateMethod (arguments);
@@ -7816,7 +7816,7 @@ Clazz.getMixedCallerMethod = function (args) {
  * compiler or with double checks to make sure things work correctly.
  *
  * @param args caller method's arguments
- * @return private method if there are private method fitted for the current 
+ * @return private method if there are private method fitted for the current
  * calling environment
  */
 /* public */
@@ -7829,13 +7829,13 @@ Clazz.checkPrivateMethod = function () {
   // if their classes are the same, no issue
   var mySig = "\\" + Clazz.getParamsType(arguments[0]).join("\\")
   if (!me.privateNote) {
-    me.privateNote = "You are seeing this note because the method " 
-    + me.exName + mySig + " in class " 
+    me.privateNote = "You are seeing this note because the method "
+    + me.exName + mySig + " in class "
     + me.exClazz.__CLASS_NAME__
     + " has a superclass method by the same name (possibly with the same parameters) that is private and "
     + " therefore might be called improperly from this class. If your "
     + " code does not run properly, or you want to make it run faster, change the name of this method to something else."
-    System.out.println(me.privateNote);
+    Zystem.out.println(me.privateNote);
     alert(me.privateNote);
   }
   /*
@@ -7844,16 +7844,16 @@ Clazz.checkPrivateMethod = function () {
   if (stack == null || caller.exClazz == me.exClazz)
     return null;
   // I am being called by a different class...
-  
+
   for (var i = stack.length; --i >= 0;) {
     if (stacks[i] != caller.claxxRef)
       continue;
     // and it is on MY class stack
 //    if (
-     
+
   }
   */
-  
+
 /*	var m = Clazz.getMixedCallerMethod (args);
 	if (m == null) return null;
 	var callerFx = m.claxxRef.prototype[m.caller.exName];
@@ -7886,7 +7886,7 @@ Clazz.checkPrivateMethod = function () {
 	if (ppFun && ppFun.isPrivate && ppFun !== args.callee) {
 		return ppFun;
 	}
-*/  
+*/
 	return null;
 };
 
@@ -7911,7 +7911,7 @@ Clazz.checkPrivateMethod = function () {
 
 /**
  * The first folder is considered as the primary folder.
- * And try to be compatiable with _Loader system.
+ * And try to be compatiable with _Loader Zystem.
  */
 /* private */
 
@@ -7990,10 +7990,10 @@ java.lang.Object = Clazz._O;
 
 Clazz._O.getName = Clazz._innerFunctions.getName;
 
-java.lang.System = System = {
+java.lang.Zystem = Zystem = {
 	props : null, //new java.util.Properties (),
 	$props : {},
-	arraycopy : function (src, srcPos, dest, destPos, length) {  
+	arraycopy : function (src, srcPos, dest, destPos, length) {
 		if (src !== dest || srcPos > destPos) {
 			for (var i = length; --i >= 0;)
 				dest[destPos++] = src[srcPos++];
@@ -8009,23 +8009,23 @@ java.lang.System = System = {
 	},
 	gc : function() {}, // bh
 	getProperties : function () {
-		return System.props;
+		return Zystem.props;
 	},
 	getProperty : function (key, def) {
-		if (System.props)
-			return System.props.getProperty (key, def);
-		var v = System.$props[key];
+		if (Zystem.props)
+			return Zystem.props.getProperty (key, def);
+		var v = Zystem.$props[key];
     if (typeof v != "undefined")
       return v;
     if (key.indexOf(".") > 0) {
-      v = null;    
+      v = null;
       switch (key) {
       case "java.version":
         v = "1.6";
       case "file.separator":
       case "path.separator":
         v = "/";
-        break;        
+        break;
       case "line.separator":
         v = (navigator.userAgent.indexOf("Windows") >= 0 ? "\r\n" : "\n");
         break;
@@ -8035,29 +8035,29 @@ java.lang.System = System = {
         break;
       }
       if (v)
-        return System.$props[key] = v;
+        return Zystem.$props[key] = v;
     }
     return (arguments.length == 1 ? null : def == null ? key : def); // BH
 	},
 	getSecurityManager : function() { return null },  // bh
 	setProperties : function (props) {
-		System.props = props;
+		Zystem.props = props;
 	},
   lineSeparator : function() { return '\n' }, // bh
 	setProperty : function (key, val) {
-		if (!System.props)
-			return System.$props[key] = val; // BH
-		System.props.setProperty (key, val);
+		if (!Zystem.props)
+			return Zystem.$props[key] = val; // BH
+		Zystem.props.setProperty (key, val);
 	}
 };
 
-System.identityHashCode=function(obj){
+Zystem.identityHashCode=function(obj){
   if(obj==null)
     return 0;
-    
+
         return obj._$hashcode || (obj._$hashcode = ++Clazz._hashCode)
 
-/*    
+/*
   try{
     return obj.toString().hashCode();
   }catch(e){
@@ -8067,24 +8067,24 @@ System.identityHashCode=function(obj){
     }
     return str.hashCode();
   }
-*/  
+*/
 }
 
-System.out = new Clazz._O ();
-System.out.__CLASS_NAME__ = "java.io.PrintStream";
-System.out.print = function () {};
-System.out.printf = function () {};
-System.out.println = function () {};
-System.out.write = function () {};
-System.out.flush = function() {};
+Zystem.out = new Clazz._O ();
+Zystem.out.__CLASS_NAME__ = "java.io.PrintStream";
+Zystem.out.print = function () {};
+Zystem.out.printf = function () {};
+Zystem.out.println = function () {};
+Zystem.out.write = function () {};
+Zystem.out.flush = function() {};
 
-System.err = new Clazz._O ();
-System.err.__CLASS_NAME__ = "java.io.PrintStream";
-System.err.print = function () {};
-System.err.printf = function () {};
-System.err.println = function () {};
-System.err.write = function () {};
-System.err.flush = function() {};
+Zystem.err = new Clazz._O ();
+Zystem.err.__CLASS_NAME__ = "java.io.PrintStream";
+Zystem.err.print = function () {};
+Zystem.err.printf = function () {};
+Zystem.err.println = function () {};
+Zystem.err.write = function () {};
+Zystem.err.flush = function() {};
 
 Clazz.popup = Clazz.assert = Clazz.log = Clazz.error = window.alert;
 
@@ -8228,25 +8228,25 @@ Clazz.int0RightShift = function (n, o) { // 64bit
 
 /* public */
 Clazz.innerFunctionNames = Clazz.innerFunctionNames.concat ([
-    "getSuperclass", "isAssignableFrom", 
-    "getConstructor", 
+    "getSuperclass", "isAssignableFrom",
+    "getConstructor",
     "getDeclaredMethod", "getDeclaredMethods",
-    "getMethod", "getMethods",   
+    "getMethod", "getMethods",
 		"getModifiers", /*"isArray",*/ "newInstance"]);
 
 /* public */
 Clazz._innerFunctions.getSuperclass = function () {
-	return this.superClazz;	
+	return this.superClazz;
 };
 
 /* public */
 Clazz._innerFunctions.isAssignableFrom = function (clazz) {
-	return Clazz.getInheritedLevel (clazz, this) >= 0;	
+	return Clazz.getInheritedLevel (clazz, this) >= 0;
 };
 
 /* public */
 Clazz._innerFunctions.getConstructor = function () {
-	return new java.lang.reflect.Constructor (this, [], [], 
+	return new java.lang.reflect.Constructor (this, [], [],
 			java.lang.reflect.Modifier.PUBLIC);
 };
 /**
@@ -8277,7 +8277,7 @@ Clazz._innerFunctions.getDeclaredMethods = Clazz._innerFunctions.getMethods = fu
 Clazz._innerFunctions.getDeclaredMethod = Clazz._innerFunctions.getMethod = function (name, clazzes) {
 	var p = this.prototype;
 	for (var attr in p) {
-		if (name == attr && typeof p[attr] == "function" 
+		if (name == attr && typeof p[attr] == "function"
 				&& !p[attr].__CLASS_NAME__) {
 			/* there are polynormical methods. */
 			return new java.lang.reflect.Method (this, attr,
@@ -8286,7 +8286,7 @@ Clazz._innerFunctions.getDeclaredMethod = Clazz._innerFunctions.getMethod = func
 	}
 	p = this;
 	for (var attr in p) {
-		if (name == attr && typeof p[attr] == "function" 
+		if (name == attr && typeof p[attr] == "function"
 				&& !p[attr].__CLASS_NAME__) {
 			return new java.lang.reflect.Method (this, attr,
 					[], java.lang.Void, [], java.lang.reflect.Modifier.PUBLIC
@@ -8401,7 +8401,7 @@ Clazz.unloadClass = function (qClazzName) {
 
 / * private * /
 var cleanDelegateMethod = function (m) {
-	if (!m) 
+	if (!m)
 		return;
 	if (typeof m == "function" && m.lastMethod
 			&& m.lastParams && m.lastClaxxRef) {
@@ -8437,8 +8437,8 @@ var cleanDelegateMethod = function (m) {
 
 /*
  * ClassLoader Summary
- * 
- * ClassLoader creates SCRIPT elements and setup class path and onload 
+ *
+ * ClassLoader creates SCRIPT elements and setup class path and onload
  * callback to continue class loading.
  *
  * In the onload callbacks, _Loader will try to calculate the next-to-be-
@@ -8447,31 +8447,31 @@ var cleanDelegateMethod = function (m) {
  * to provide information to build up the class dependency tree.
  *
  * Some known problems of different browsers:
- * 1. In IE, loading *.js through SCRIPT will first triggers onreadstatechange 
+ * 1. In IE, loading *.js through SCRIPT will first triggers onreadstatechange
  * event, and then executes inner *.js source.
- * 2. In Firefox, loading *.js will first executes *.js source and then 
+ * 2. In Firefox, loading *.js will first executes *.js source and then
  * triggers onload event.
- * 3. In Opera, similar to IE, but trigger onload event. (TODO: More details 
+ * 3. In Opera, similar to IE, but trigger onload event. (TODO: More details
  * should be studied. Currently, Opera supports no multiple-thread-loading)
- * 
+ *
  * For class dependency tree, actually, it is not a tree. It is a reference
- * net with nodes have n parents and n children. There is a root, which 
+ * net with nodes have n parents and n children. There is a root, which
  * ClassLoader knows where to start searching and loading classes, for such
- * a net. Each node is a class. Each class may require a set of must-classes, 
+ * a net. Each node is a class. Each class may require a set of must-classes,
  * which must be loaded before itself getting initialized, and also need a set
  * of optional classes, which also be loaded before being called.
  *
  * The class loading status will be in 6 stages.
  * 1. Unknown, the class is newly introduced by other class.
  * 2. Known, the class is already mentioned by other class.
- * 3. Loaded, *.js source is in memory, but may not be initialized yet. It 
+ * 3. Loaded, *.js source is in memory, but may not be initialized yet. It
  * requires all its must-classes be intiailized, which is in the next stage.
  * 4. Musts loaded, all must classes is already loaded and declared.
  * 5. Delcared, the class is already declared (_Loader#isClassDefined).
  * 6. Optionals loaded, all optional classes is loaded and declared.
  *
  * The ClassLoader tries to load all necessary classes in order, and intialize
- * them in order. For such job, it will traverse the dependency tree, and try 
+ * them in order. For such job, it will traverse the dependency tree, and try
  * to next class to-be-loaded. Sometime, the class dependencies may be in one
  * or more cycles, which must be broken down so classes is loaded in correct
  * order.
@@ -8480,13 +8480,13 @@ var cleanDelegateMethod = function (m) {
  * The following technical options are considered:
  * 1. SCRIPT is loading asynchronously, which means controling order must use
  * callback methods to continue.
- * 2. Multiple loading threads are later introduced, which requires the 
+ * 2. Multiple loading threads are later introduced, which requires the
  * ClassLoader should use variables to record the class status.
  * 3. Different browsers have different loading orders, which means extra tests
  * should be tested to make sure loading order won't be broken.
- * 4. Java2Script simulator itself have some loading orders that must be 
- * honored, which means it should be integrated seamlessly to Clazz system.
- * 5. Packed *.z.js is introduced to avoid lots of small *.js which requires 
+ * 4. Java2Script simulator itself have some loading orders that must be
+ * honored, which means it should be integrated seamlessly to Clazz Zystem.
+ * 5. Packed *.z.js is introduced to avoid lots of small *.js which requires
  * lots of HTTP connections, which means that packed *.z.js should be treated
  * specially (There will be mappings for such packed classes).
  * 6. *.js or *.css loading may fail according to network status, which means
@@ -8501,15 +8501,15 @@ var cleanDelegateMethod = function (m) {
  * <code>$_L(["$wt.widgets.Widget", "$wt.graphics.Drawable"],
  *  "$wt.widgets.Control", ...</code>
  * has no error.
- * 
+ *
  * Other maybe bug scenarios:
- * 1. In <code>_Loader.maxLoadingThreads = 1;</code> single loading thread 
- * mode, there are no errors, but in default multiple thread loading mode, 
+ * 1. In <code>_Loader.maxLoadingThreads = 1;</code> single loading thread
+ * mode, there are no errors, but in default multiple thread loading mode,
  * there are errors.
- * 2. No errors in one browser, but has errors on other browsers (Browser 
+ * 2. No errors in one browser, but has errors on other browsers (Browser
  * script loading order differences).
- * 3. First time loading has errors, but reloading it gets no errors (Maybe 
- * HTTP connections timeout, but should not accur in local file system, or it
+ * 3. First time loading has errors, but reloading it gets no errors (Maybe
+ * HTTP connections timeout, but should not accur in local file Zystem, or it
  * is a loading bug by using JavaScript timeout thread).
  */
 
@@ -8546,7 +8546,7 @@ var Node = function () {
 ;(function(Clazz, _Loader) {
 
 _Loader._checkLoad = Jmol._checkLoad;
- 
+
 _Loader.updateNodeForFunctionDecoration = function(qName) {
 	var node = findNode(qName);
 	if (node && node.status == Node.STATUS_KNOWN) {
@@ -8569,7 +8569,7 @@ Node.STATUS_MUSTS_LOADED = 3;
 Node.STATUS_DECLARED = 4;
 Node.STATUS_LOAD_COMPLETE = 5;
 
-						 
+
 var loaders = [];
 
 /* public */
@@ -8580,7 +8580,7 @@ _Loader.requireLoaderByBase = function (base) {
 		}
 	}
 	var loader = new _Loader ();
-	loader.base = base; 
+	loader.base = base;
 	loaders.push(loader);
 	return loader;
 };
@@ -8630,11 +8630,11 @@ if (isOpera) {
 		if (verNumber >= 9.6) {
 			maxLoadingThreads = 6;
 		}
-	} 
+	}
 }
 
 /**
- * Try to be compatiable with Clazz system.
+ * Try to be compatiable with Clazz Zystem.
  * In original design _Loader and Clazz are independent!
  *  -- zhourenjian @ December 23, 2006
  */
@@ -8654,11 +8654,11 @@ if (self.Clazz && Clazz.isClassDefined) {
  * Expand the shortened list of class names.
  * For example:
  * JU.Log, $.Display, $.Decorations
- * will be expanded to 
+ * will be expanded to
  * JU.Log, JU.Display, JU.Decorations
  * where "$." stands for the previous class name's package.
  *
- * This method will be used to unwrap the required/optional classes list and 
+ * This method will be used to unwrap the required/optional classes list and
  * the ignored classes list.
  */
 /* private */
@@ -8751,7 +8751,7 @@ _Loader.loadPackageClasspath = function (pkg, base, isIndex, fSuccess, mode, pt)
 			key = "@net.sf.j2s";
 			if (!map[key])
 				map[key] = base;
-		}		
+		}
 		break;
 	case "swt":
 		pkg = "org.eclipse.swt";
@@ -8786,7 +8786,7 @@ _Loader.loadPackageClasspath = function (pkg, base, isIndex, fSuccess, mode, pt)
 /**
  * BH: allows user/developer to load classes even though wrapping and Google
  * Closure Compiler has not been run on the class.
- *   
+ *
  */
 Clazz.loadClass = function (name, onLoaded, async) {
   if (!self.Class) {
@@ -8804,25 +8804,25 @@ Clazz.loadClass = function (name, onLoaded, async) {
 /* public */
 _Loader.loadClass = function (name, onLoaded, forced, async, mode) {
 
-  //System.out.println("loadClass " + name)
-  
+  //Zystem.out.println("loadClass " + name)
+
   mode || (mode = 0); // BH: not implemented
   (async == null) && (async = false);
-  
+
  	if (typeof onLoaded == "boolean")
 		return Clazz.evalType(name);
 
-	// Make sure that packageClasspath ("java", base, true); 
+	// Make sure that packageClasspath ("java", base, true);
 	// is called before any _Loader#loadClass is called.
 
 	if (needPackage("java")) {
 		_Loader.loadPackage("java");
   }
-    
-// BH unnecessary	
+
+// BH unnecessary
 // if (needPackage("core")) {
 //		_Loader.loadPackage("core");
-//    }	
+//    }
 
 //	var swtPkg = "org.eclipse.swt";
 //	if (name.indexOf (swtPkg) == 0 || name.indexOf ("$wt") == 0) {
@@ -8835,16 +8835,16 @@ _Loader.loadClass = function (name, onLoaded, forced, async, mode) {
 	// Any _Loader#loadClass calls will be queued until java.* core classes are loaded.
 
 	_Loader.keepOnLoading = true;
-	
+
 	if (!forced && (pkgRefCount && name.lastIndexOf(".package") != name.length - 8
 			|| name.indexOf("java.") != 0 && !isClassDefined(runtimeKeyClass)
-		 )) {	
+		 )) {
 		queueBe4KeyClazz.push([name, onLoaded]);
-    
-    
-  System.out.println("loadclass-queuing" + name+ runtimeKeyClass + " "+ isClassDefined(runtimeKeyClass))
 
-		return;    
+
+  Zystem.out.println("loadclass-queuing" + name+ runtimeKeyClass + " "+ isClassDefined(runtimeKeyClass))
+
+		return;
 	}
 	var b;
 	if ((b = isClassDefined(name)) || isClassExcluded(name)) {
@@ -8897,12 +8897,12 @@ _Loader.loadClass = function (name, onLoaded, forced, async, mode) {
 			break;
 		}
 	}
-	
+
 	if (n.isPackage) {//forced
 		// push class to queue
 		var pt = qq.length;
 		for (; --pt >= 0;) {
-			if (qq[pt].isPackage) 
+			if (qq[pt].isPackage)
 				break;
 			qq[pt + 1] = qq[pt];
 		}
@@ -8912,7 +8912,7 @@ _Loader.loadClass = function (name, onLoaded, forced, async, mode) {
 	}
 	if (!needBeingQueued) { // can be loaded directly
 		var bSave = false;
-		if (onLoaded) {	
+		if (onLoaded) {
 			bSave = isLoadingEntryClass;
 			isLoadingEntryClass = true;
 		}
@@ -8936,8 +8936,8 @@ var needPackage = function(pkg) {
 _Loader.loadPackage = function(pkg, fSuccess) {
 	fSuccess || (fSuccess = null);
 	window[pkg + ".registered"] = false;
-	_Loader.loadPackageClasspath(pkg, 
-		(_Loader.J2SLibBase || (_Loader.J2SLibBase = (_Loader.getJ2SLibBase() || "j2s/"))), 
+	_Loader.loadPackageClasspath(pkg,
+		(_Loader.J2SLibBase || (_Loader.J2SLibBase = (_Loader.getJ2SLibBase() || "j2s/"))),
 		true, fSuccess);
 };
 
@@ -9011,7 +9011,7 @@ _Loader.multipleSites = function (path) {
 		}
 	}
 	var length = path.length;
-	if (maxLoadingThreads > 1 
+	if (maxLoadingThreads > 1
 			&& ((length > 15 && path.substring (0, 15) == "http://archive.")
 			|| (length > 9 && path.substring (0, 9) == "http://a."))) {
 		var index = path.lastIndexOf("/");
@@ -9044,9 +9044,9 @@ _Loader.getClasspathFor = function (clazz, forRoot, ext) {
 		var base;
 		var idx;
 		if (path) {
-			clazz = clazz.replace(/\./g, "/");	
-			if ((idx = path.lastIndexOf(clazz)) >= 0 
-				|| (idx = clazz.lastIndexOf("/")) >= 0 
+			clazz = clazz.replace(/\./g, "/");
+			if ((idx = path.lastIndexOf(clazz)) >= 0
+				|| (idx = clazz.lastIndexOf("/")) >= 0
 					&& (idx = path.lastIndexOf(clazz.substring(0, idx))) >= 0)
 				base = path.substring(0, idx);
 		} else {
@@ -9055,18 +9055,18 @@ _Loader.getClasspathFor = function (clazz, forRoot, ext) {
 				if ((base = classpathMap["@" + clazz.substring(0, idx)]))
 					break;
 			if (!forRoot)
-				clazz = clazz.replace (/\./g, "/");	
+				clazz = clazz.replace (/\./g, "/");
 		}
 		if (base == null) {
 			var bins = "binaryFolders";
-			base = (window["Clazz"] && Clazz[bins] && Clazz[bins].length ? Clazz[bins][0] 
+			base = (window["Clazz"] && Clazz[bins] && Clazz[bins].length ? Clazz[bins][0]
 				: _Loader[bins]	&& _Loader[bins].length ? _Loader[bins][0]
 				: "j2s");
 		}
 		path = (base.lastIndexOf("/") == base.length - 1 ? base : base + "/") + (forRoot ? ""
 			: clazz.lastIndexOf("/*") == clazz.length - 2 ? clazz.substring(0, idx + 1)
 			: clazz + (!ext ? ".js" : ext.charAt(0) != '.' ? "." + ext : ext));
-	}		
+	}
 	return path;//_Loader.multipleSites(path);
 };
 
@@ -9089,7 +9089,7 @@ _Loader.ignore = function () {
 };
 
 /**
- * The following *.script* can be overriden to indicate the 
+ * The following *.script* can be overriden to indicate the
  * status of classes loading.
  *
  * TODO: There should be a Java interface with name like INativeLoaderStatus
@@ -9137,10 +9137,10 @@ var evaluate = function(file, file0, js, isLoaded) {
   if (!isLoaded)
  		try {
 			eval(js + ";//# sourceURL="+file);
-		} catch (e) {      
-      if (Clazz._isQuiet) 
+		} catch (e) {
+      if (Clazz._isQuiet)
         return;
-			var s = "[Java2Script] The required class file \n\n" + file + (js.indexOf("[Exception") == 0 && js.indexOf("data: no") ? 
+			var s = "[Java2Script] The required class file \n\n" + file + (js.indexOf("[Exception") == 0 && js.indexOf("data: no") ?
          "\nwas not found.\n"
         : "\ncould not be loaded. Script error: " + e.message + " \n\ndata:\n\n" + js) + "\n\n" + Clazz.getStackTrace();
   		alert(s)
@@ -9194,7 +9194,7 @@ Clazz._4Name = function(clazzName, applet, state) {
 
 /**
  * BH: possibly useful for debugging
- */ 
+ */
 Clazz.currentPath= "";
 
 /**
@@ -9205,7 +9205,7 @@ Clazz.currentPath= "";
 var loadScript = function (node, file, why, ignoreOnload, fSuccess, _loadScript) {
 
 	Clazz.currentPath = file;
-  
+
 	if (ignoreOnload)alert("WHY>>")
 //BH removed	// maybe some scripts are to be loaded without needs to know onload event.
 //	if (!ignoreOnload && loadedScripts[file]) {
@@ -9222,10 +9222,10 @@ var loadScript = function (node, file, why, ignoreOnload, fSuccess, _loadScript)
   // at least for now, force synchronous transfer of all class files
   isUsingXMLHttpRequest = true;
   isAsynchronousLoading = false;
-  
-  
+
+
   if (_Loader._checkLoad) {
-    System.out.println("\t" + file + (why ? "\n -- required by " + why : "") + "  ajax=" + isUsingXMLHttpRequest + " async=" + isAsynchronousLoading)
+    Zystem.out.println("\t" + file + (why ? "\n -- required by " + why : "") + "  ajax=" + isUsingXMLHttpRequest + " async=" + isAsynchronousLoading)
   }
 
   var file0 = file;
@@ -9234,7 +9234,7 @@ var loadScript = function (node, file, why, ignoreOnload, fSuccess, _loadScript)
   }
 
   if (!isLoaded)
-    System.out.println("loadScript " + file)
+    Zystem.out.println("loadScript " + file)
 
 	_Loader.onScriptLoading(file);
 	if (isUsingXMLHttpRequest && !isAsynchronousLoading) {
@@ -9249,16 +9249,16 @@ var loadScript = function (node, file, why, ignoreOnload, fSuccess, _loadScript)
       alert(e + " loading file " + file + " " + node.name + " " + Clazz.getStackTrace());
     }
     if (fSuccess) {
-//      System.out.println("firing in loadScript " + file + " " + (fSuccess && fSuccess.toString()))
-      fSuccess(); 
+//      Zystem.out.println("firing in loadScript " + file + " " + (fSuccess && fSuccess.toString()))
+      fSuccess();
     }
 		return;
 	}
-  // only when running asynchronously    
+  // only when running asynchronously
 	var info = {
 		dataType:"script",
-		async:true, 
-		type:"GET", 
+		async:true,
+		type:"GET",
 		url:file,
 		success:W3CScriptOnCallback(file, false, fSuccess),
 		error:W3CScriptOnCallback(file, true, fSuccess)
@@ -9281,10 +9281,10 @@ var W3CScriptOnCallback = function (path, forError, fSuccess) {
 			inLoadingThreads--;
 		this.onload = null;
 		this.onerror = null;
-		if (forError) 
+		if (forError)
 			alert ("There was a problem loading " + path);
 		_Loader.onScriptLoaded(path, true);
-		var node = this;			
+		var node = this;
 		var f;
     if (fSuccess)
       f = function(_W3scriptFS){removeScriptNode(node);tryToLoadNext(path, fSuccess); };
@@ -9367,11 +9367,11 @@ var tryToLoadNext = function (file, fSuccess) {
 		}
 	}
 	/*
-	 * Maybe in #optinalLoaded inside above _Loader#updateNode calls, 
+	 * Maybe in #optinalLoaded inside above _Loader#updateNode calls,
 	 * _Loader.keepOnLoading is set false (Already loaded the wanted
 	 * classes), so here check to stop.
 	 */
-	 
+
 	if (!_Loader.keepOnLoading) // set externally
 		return;
 
@@ -9385,11 +9385,11 @@ var tryToLoadNext = function (file, fSuccess) {
 				break;
 			loadClassNode(n); // will increase inLoadingThreads!
 		}
-	} else if ((cq = classQueue).length != 0) { 
+	} else if ((cq = classQueue).length != 0) {
 		/* queue must be loaded in order! */
 		n = cq.shift();
-		if (!loadedScripts[n.path] 
-				|| cq.length != 0 
+		if (!loadedScripts[n.path]
+				|| cq.length != 0
 				|| !isLoadingEntryClass
 				|| n.musts.length
 				|| n.optionals.length) {
@@ -9421,12 +9421,12 @@ var tryToLoadNext = function (file, fSuccess) {
 	}
 	if (working || inLoadingThreads > 0)
 		return;
-  // 
-  // now check all classes that MUST be loaded prior to initialization 
+  //
+  // now check all classes that MUST be loaded prior to initialization
   // of some other class (static calls, extends, implements)
   // and all classes REQUIRED somewhere in that class, possibly by the constructor
   // (that is, "new xxxx()" called somewhere in code) and update them
-  // that have content but are not declared already 
+  // that have content but are not declared already
 	var f = [findNextMustClass,findNextRequiredClass];
 	var lastNode = null;
 	for (var i = 0; i < 2; i++)
@@ -9436,27 +9436,27 @@ var tryToLoadNext = function (file, fSuccess) {
 			updateNode(n);
 			lastNode = n;
 		}
-    
+
   // check for load cycles
-  
+
 	while (true) {
 		tracks = [];
 		if (!checkCycle(clazzTreeRoot, file))
 			break;
 	}
-  
-  // and update all MUST and REQUIRED classes that are declared already 
-  
+
+  // and update all MUST and REQUIRED classes that are declared already
+
 	for (var i = 0; i < 2; i++) {
 		lastNode = null;
 		while ((n = f[i](Node.STATUS_DECLARED))) {
-			if (lastNode === n) 
+			if (lastNode === n)
 				break;
 			updateNode(lastNode = n);
 		}
 	}
 	var done = [];
-	for (var i = 0; i < 2; i++) 
+	for (var i = 0; i < 2; i++)
 		while ((n = f[i](Node.STATUS_DECLARED)))
 			done.push(n), n.status = Node.STATUS_LOAD_COMPLETE;
 	if (done.length) {
@@ -9466,34 +9466,34 @@ var tryToLoadNext = function (file, fSuccess) {
 			if ((f = done[i].onLoaded))
 				done[i].onLoaded = null, f();
 	}
-  
-  
-  
-  
-  
-  
-  
-	//System.out.println(node.name + " loaded completely" + _Loader.onGlobalLoaded + "\n\n")
+
+
+
+
+
+
+
+	//Zystem.out.println(node.name + " loaded completely" + _Loader.onGlobalLoaded + "\n\n")
   if (fSuccess) {
-    //System.out.println("tryToLoadNext firing " + _Loader._classCountOK + "/" + _Loader._classCountPending + " "   + fSuccess.toString() + " " + Clazz.getStackTrace())
+    //Zystem.out.println("tryToLoadNext firing " + _Loader._classCountOK + "/" + _Loader._classCountPending + " "   + fSuccess.toString() + " " + Clazz.getStackTrace())
 	  fSuccess();
   } else if (_Loader._classCountPending) {
     for (var name in _Loader._classPending) {
       var n = findNode(name);
-      System.out.println("class left pending " + name + " " + n);
+      Zystem.out.println("class left pending " + name + " " + n);
       if (n) {
         updateNode(n);
         break;
       }
     }
   } else {
-    
- // System.out.println("I think I'm done " 
-  // + _Loader._classCountOK + "/" + _Loader._classCountPending + " " 
+
+ // Zystem.out.println("I think I'm done "
+  // + _Loader._classCountOK + "/" + _Loader._classCountPending + " "
    //+ _Loader.onGlobalLoaded.toString() + " " + Clazz.getStackTrace()
  //  )
     if (_Loader._checkLoad) {
-      System.out.println("I think I'm done: SAEM call count: " + SAEMid);
+      Zystem.out.println("I think I'm done: SAEM call count: " + SAEMid);
       Clazz.showDuplicates(true);
     }
   }
@@ -9514,17 +9514,17 @@ var checkCycle = function (node, file) {
 	ts.push(node);
 	var i = len;
 	for (; --i >= 0;)
-		if (ts[i] === node && ts[i].status >= Node.STATUS_DECLARED) 
+		if (ts[i] === node && ts[i].status >= Node.STATUS_DECLARED)
 			break;
 	if (i >= 0) {
     // this node is already in tracks, and it has been declared already
     // for each node in tracks, set its status to "LOAD_COMPLETE"
     // update all parents, remove all parents, and fire its onLoaded function
-    // then clear tracks and return true (keep checking)  
+    // then clear tracks and return true (keep checking)
     if (_Loader._checkLoad) {
       var msg = "cycle found loading " + file + " for " + node;
-      System.out.println(msg)
-    } 
+      Zystem.out.println(msg)
+    }
 		for (; i < len; i++) {
       var n = ts[i];
 			n.status = Node.STATUS_LOAD_COMPLETE;
@@ -9535,8 +9535,8 @@ var checkCycle = function (node, file) {
       var f = n.onLoaded;
       if (_Loader._checkLoad) {
         var msg = "cycle setting status to LOAD_COMPLETE for " + n.name + (f ? " firing " + f.toString() : "");
-        System.out.println(msg)
-      } 
+        Zystem.out.println(msg)
+      }
 			if (f)
 				n.onLoaded = null, f();
 		}
@@ -9546,11 +9546,11 @@ var checkCycle = function (node, file) {
 	var a = [node.musts, node.optionals];
 	for (var j = 0; j < 2; j++)
 		for (var r = a[j], i = r.length; --i >= 0;)
-			if (r[i].status == Node.STATUS_DECLARED && checkCycle(r[i], file)) 
+			if (r[i].status == Node.STATUS_DECLARED && checkCycle(r[i], file))
 				return true;
-  // reset _tracks to its original length      
+  // reset _tracks to its original length
 	ts.length = len;
-	return false; // done 
+	return false; // done
 };
 
 
@@ -9567,8 +9567,8 @@ _Loader.showPending = function() {
       continue;
     }
     a.push(n);
-    System.out.println(showNode("", "", n, "", 0));     
-  }  
+    Zystem.out.println(showNode("", "", n, "", 0));
+  }
   return a;
 }
 
@@ -9593,8 +9593,8 @@ var showNode = function(s, names, node, inset, level) {
 //    s = showNode(s, names, node.requiredBy, inset + "\t", level+1);
 //    s += "\n";
 //  }
-  return s;    
-}     
+  return s;
+}
 
 /**
  * Update the dependency tree nodes recursively.
@@ -9662,7 +9662,7 @@ updateNode = function(node, _updateNode) {
               delete _Loader._classPending[node.name];
               _Loader._classCountOK;
               _Loader._classCountPending--;
-//              System.out.println("OK " + (_Loader._classCountOK) + " FOR " + node.name)
+//              Zystem.out.println("OK " + (_Loader._classCountOK) + " FOR " + node.name)
             }
     }
 		node.status = Node.STATUS_DECLARED;
@@ -9687,7 +9687,7 @@ updateNode = function(node, _updateNode) {
 	if (node.optionals.length == 0 && node.musts.length == 0
 			|| node.status > Node.STATUS_KNOWN && !node.declaration
 			|| checkStatusIs(node.musts, Node.STATUS_LOAD_COMPLETE)
-					&& checkStatusIs(node.optionals, Node.STATUS_LOAD_COMPLETE)) { 
+					&& checkStatusIs(node.optionals, Node.STATUS_LOAD_COMPLETE)) {
 		level = Node.STATUS_LOAD_COMPLETE;
 		if (!doneLoading(node, level))
 			return false;
@@ -9707,7 +9707,7 @@ updateNode = function(node, _updateNode) {
 	if (node.parents && node.parents.length) {
   	for (var i = 0; i < node.parents.length; i++) {
   		var p = node.parents[i];
-  		if (p.status < level) 
+  		if (p.status < level)
   			updateNode(p, p.name);
   	}
   	if (level == Node.STATUS_LOAD_COMPLETE)
@@ -9726,7 +9726,7 @@ var checkStatusIs = function(arr, status){
 var doneLoading = function(node, level, _doneLoading) {
 	node.status = level;
 	_Loader.onScriptCompleted(node.path);
-  
+
 	var onLoaded = node.onLoaded;
 	if (onLoaded) {
 		node.onLoaded = null;
@@ -9734,7 +9734,7 @@ var doneLoading = function(node, level, _doneLoading) {
 		if (!_Loader.keepOnLoading)
 			return false;
 	}
-  
+
 	destroyClassNode(node);
 	return true;
 }
@@ -9779,9 +9779,9 @@ var findNextMustClass = function(status) {
 var findNodeUnderNode = function(clazzName, node) {
 	var n;
 	// node, then musts then optionals
-	return (node.name == clazzName ? node 
+	return (node.name == clazzName ? node
 		: (n = findNodeWithin(clazzName, node.musts))
-		|| (n = findNodeWithin(clazzName, node.optionals)) 
+		|| (n = findNodeWithin(clazzName, node.optionals))
 		? n : null);
 };
 
@@ -9803,7 +9803,7 @@ var findNodeWithin = function(name, arr) {
 
 /* private */
 var checkStatus = function(n, status) {
-	return (n.status == status 
+	return (n.status == status
 			&& (status != Node.STATUS_KNOWN || !loadedScripts[n.path])
 			&& (status == Node.STATUS_DECLARED	|| !isClassDefined (n.name)));
 }
@@ -9813,9 +9813,9 @@ var findNextMustNode = function(node, status) {
 	for (var i = node.musts.length; --i >= 0;) {
 		var n = node.musts[i];
 		if (checkStatus(n, status) || (n = findNextMustNode(n, status)))
-			return n;	
+			return n;
 	}
-	return (checkStatus(node, status) ? node : null); 
+	return (checkStatus(node, status) ? node : null);
 };
 
 /* private */
@@ -9867,7 +9867,7 @@ var load = function (musts, name, optionals, declaration) {
 		for (var i = 0; i < name.length; i++)
 			load(musts, name[i], optionals, declaration, name);
 		return;
-	}	
+	}
 
   if (_Loader._checkLoad) {
     if (_Loader._classPending[name]) {
@@ -9876,7 +9876,7 @@ var load = function (musts, name, optionals, declaration) {
       _Loader._classPending[name] = 1;
       if (_Loader._classCountPending++ == 0)
         _Loader._classCountOK = 0;
-      System.out.println("Loading class " + name);
+      Zystem.out.println("Loading class " + name);
     }
   }
 
@@ -9898,7 +9898,7 @@ var load = function (musts, name, optionals, declaration) {
 		declaration.clazzList = arguments[4];
 	}
 	node.declaration = declaration;
-	if (declaration) 
+	if (declaration)
 		node.status = Node.STATUS_CONTENT_LOADED;
 	processRequired(node, optionals, false);
 };
@@ -9933,7 +9933,7 @@ if (window["Clazz"]) {
 	Clazz.load = load;
 } else {
   _Loader.load = load;
-}  
+}
 /**
  * Map different class to the same path! Many classes may be packed into
  * a *.z.js already.
@@ -9970,7 +9970,7 @@ var mappingPathNameNode = function (path, name, node) {
 /* protected */
 var loadClassNode = function (node) {
 	var name = node.name;
-	if (!isClassDefined (name) 
+	if (!isClassDefined (name)
 			&& !isClassExcluded (name)) {
 		var path = _Loader.getClasspathFor (name/*, true*/);
 		node.path = path;
@@ -10008,7 +10008,7 @@ _Loader.getJ2SLibBase = function () {
 };
 
 /**
- * Indicate whether _Loader is loading script synchronously or 
+ * Indicate whether _Loader is loading script synchronously or
  * asynchronously.
  */
 /* private */
@@ -10030,14 +10030,14 @@ _Loader.MODE_SYNC = 1;
  * async(...).script, async(...).xhr, async(...).xmlhttprequest,
  * script.async(...), xhr.async(...), xmlhttprequest.async(...),
  * script
- * 
+ *
  * synchronous modes:
  * sync(...).xhr, sync(...).xmlhttprequest,
  * xhr.sync(...), xmlhttprequest.sync(...),
  * xmlhttprequest, xhr
- *                                                    
+ *
  * Integer mode:
- * Script 4; XHR 2; SYNC bit 1; 
+ * Script 4; XHR 2; SYNC bit 1;
  */
 /* public */
 _Loader.setLoadingMode = function (mode, timeLag) {
@@ -10073,7 +10073,7 @@ var runtimeLoaded = function () {
 };
 
 /*
- * Load those key *.z.js. This *.z.js will be surely loaded before other 
+ * Load those key *.z.js. This *.z.js will be surely loaded before other
  * queued *.js.
  */
 /* public */
@@ -10084,9 +10084,9 @@ _Loader.loadZJar = function (zjarPath, keyClass) {
 	if (isArr)
 		keyClass = keyClass[keyClass.length - 1];
 	else
-		f = (keyClass == runtimeKeyClass ? runtimeLoaded : null);			
+		f = (keyClass == runtimeKeyClass ? runtimeLoaded : null);
 	_Loader.jarClasspath(zjarPath, isArr ? keyClass : [keyClass]);
-	// BH note: runtimeKeyClass is java.lang.String	
+	// BH note: runtimeKeyClass is java.lang.String
 	_Loader.loadClass(keyClass, f, true);
 };
 
@@ -10127,13 +10127,13 @@ var addChildClassNode = function (parent, child, isMust) {
 	}
 	if (!existed) {
 		arr.push(child);
-		if (isLoadingEntryClass 
-				&& child.name.indexOf("java") != 0 
+		if (isLoadingEntryClass
+				&& child.name.indexOf("java") != 0
 				&& child.name.indexOf("net.sf.j2s.ajax") != 0) {
 			if (besidesJavaPackage)
 				isLoadingEntryClass = false;
 			besidesJavaPackage = true;
-//		} else if (child.name.indexOf("org.eclipse.swt") == 0 
+//		} else if (child.name.indexOf("org.eclipse.swt") == 0
 //				|| child.name.indexOf("$wt") == 0) {
 //			window["swt.lazy.loading.callback"] = swtLazyLoading;
 //			if (needPackage("org.eclipse.swt"))
@@ -10192,11 +10192,11 @@ var assureInnerClass = function (clzz, fun) {
 		for (var s in Clazz.unloadedClasses)
 			if (Clazz.unloadedClasses[s] && s.indexOf(key) == 0)
 				list.push(s);
-		if (!list.length) 
+		if (!list.length)
 			return;
 		fun = "" + fun;
 		var idx1, idx2;
-		if ((idx1 = fun.indexOf(key)) < 0 || (idx2 = fun.indexOf("\"", idx1 + key.length)) < 0) 
+		if ((idx1 = fun.indexOf(key)) < 0 || (idx2 = fun.indexOf("\"", idx1 + key.length)) < 0)
 			return;
 		clzz = fun.substring(idx1, idx2);
 		if (!Clazz.unloadedClasses[clzz] || (idx1 = fun.indexOf("{", idx2) + 1) == 0)
@@ -10276,7 +10276,7 @@ CLPM.showStatus = function (msg, fading) {
     }
     return;
   }
-  
+
 	monitorEl.appendChild(document.createTextNode ("" + msg));
 	if (monitorEl.style.display == "none") {
 		monitorEl.style.display = "";
@@ -10292,7 +10292,7 @@ CLPM.showStatus = function (msg, fading) {
 	}
 };
 
-/* private static */ 
+/* private static */
 var clearChildren = function (el) {
 	if (!el)
 		return;
@@ -10307,7 +10307,7 @@ var clearChildren = function (el) {
 		} catch (e) {};
 	}
 };
-/* private */ 
+/* private */
 var setAlpha = function (alpha) {
 	if (fadeOutTimer && alpha == CLPM.DEFAULT_OPACITY) {
 		window.clearTimeout (fadeOutTimer);
@@ -10318,14 +10318,14 @@ var setAlpha = function (alpha) {
 	monitorEl.style.filter = "Alpha(Opacity=" + alpha + ")";
 	monitorEl.style.opacity = alpha / 100.0;
 };
-/* private */ 
+/* private */
 var hidingOnMouseOver = function () {
   CLPM.hideMonitor();
 };
 
-/* private */ 
+/* private */
 var attached = false;
-/* private */ 
+/* private */
 var cleanup = function () {
 	//if (monitorEl) {
 	//	monitorEl.onmouseover = null;
@@ -10336,12 +10336,12 @@ var cleanup = function () {
 	//window.detachEvent ("onunload", cleanup);
 	attached = false;
 };
-/* private */ 
+/* private */
 var createHandle = function () {
 	var div = document.createElement ("DIV");
 	div.id = "_Loader-status";
 	div.style.cssText = "position:absolute;bottom:4px;left:4px;padding:2px 8px;"
-			+ "z-index:" + (window["j2s.lib"].monitorZIndex || 10000) + ";background-color:#8e0000;color:yellow;" 
+			+ "z-index:" + (window["j2s.lib"].monitorZIndex || 10000) + ";background-color:#8e0000;color:yellow;"
 			+ "font-family:Arial, sans-serif;font-size:10pt;white-space:nowrap;";
 	div.onmouseover = hidingOnMouseOver;
 	monitorEl = div;
@@ -10352,7 +10352,7 @@ var createHandle = function () {
 	}
 	return div;
 };
-/* private */ 
+/* private */
 
 var fadeOut = function () {
 	if (monitorEl.style.display == "none") return;
@@ -10383,7 +10383,7 @@ var getFixedOffsetTop = function (){
 	var bcScrollTop = b.scrollTop + b.offsetTop;
 	var pcScrollTop = p.scrollTop + p.offsetTop;
 	return (dua.indexOf("Opera") < 0 && document.all ? (pcHeight == 0 ? bcScrollTop : pcScrollTop)
-		: dua.indexOf("Gecko") < 0 ? (pcHeight == p.offsetHeight 
+		: dua.indexOf("Gecko") < 0 ? (pcHeight == p.offsetHeight
 				&& pcHeight == p.scrollHeight ? bcScrollTop : pcScrollTop) : bcScrollTop);
 };
 
@@ -10508,7 +10508,7 @@ Con.consoleOutput = function (s, color) {
 	lines = s.split(/\r\n|\r|\n/g);
 	for (var i = 0, last = lines.length - 1; i <= last; i++) {
 		var lastLineEl = null;
-		if (Con.metLineBreak || Con.linesCount == 0 
+		if (Con.metLineBreak || Con.linesCount == 0
 				|| console.childNodes.length < 1) {
 			lastLineEl = document.createElement ("DIV");
 			console.appendChild (lastLineEl);
@@ -10571,11 +10571,11 @@ Clazz.alert = function (s) {
 
 
 /* public */
-Sys.out.print = function (s) { 
+Sys.out.print = function (s) {
 	Con.consoleOutput (s);
 };
 /* public */
-Sys.out.println = function(s) { 
+Sys.out.println = function(s) {
 	Con.consoleOutput(typeof s == "undefined" ? "\r\n" : s == null ?  s = "null\r\n" : s + "\r\n");
 };
 
@@ -10587,7 +10587,7 @@ Sys.out.write = function (buf, offset, len) {
 Sys.err.__CLASS_NAME__ = "java.io.PrintStream";
 
 /* public */
-Sys.err.print = function (s) { 
+Sys.err.print = function (s) {
 	Con.consoleOutput (s, "red");
 };
 
@@ -10600,11 +10600,11 @@ Sys.err.write = function (buf, offset, len) {
 	Sys.err.print(String.instantialize(buf).substring(offset, offset+len));
 };
 
-})(Clazz.Console, System);
+})(Clazz.Console, Zystem);
 
 })(Clazz, Jmol); // requires JSmolCore.js
 
-}; // called by external application 
+}; // called by external application
 Jmol.___JmolDate="$Date: 2021-08-17 21:17:38 -0500 (Tue, 17 Aug 2021) $"
 Jmol.___fullJmolProperties="src/org/jmol/viewer/Jmol.properties"
 Jmol.___JmolVersion="14.31.52"

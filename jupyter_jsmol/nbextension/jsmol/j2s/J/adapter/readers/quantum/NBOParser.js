@@ -5,15 +5,15 @@ this.vwr = null;
 this.haveBeta = false;
 Clazz.instantialize (this, arguments);
 }, J.adapter.readers.quantum, "NBOParser");
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function () {
 });
-Clazz.defineMethod (c$, "set", 
+Clazz.defineMethod (c$, "set",
 function (vwr) {
 this.vwr = vwr;
 return this;
 }, "JV.Viewer");
-Clazz.defineMethod (c$, "getAllStructures", 
+Clazz.defineMethod (c$, "getAllStructures",
 function (output, list) {
 if (output == null) return null;
 if (list == null) list =  new JU.Lst ();
@@ -26,13 +26,13 @@ this.getStructuresTOPO (this.getData (output, "TOPO matrix", "* Total *", 1), "R
 this.getStructuresTOPO (this.getData (output, "TOPO matrix", "* Total *", 2), "RSB", list);
 return list;
 }, "~S,JU.Lst");
-Clazz.defineMethod (c$, "getBlock", 
+Clazz.defineMethod (c$, "getBlock",
  function (output, key) {
 var pt = output.indexOf (key);
 var pt1 = output.indexOf ("$END", pt + 1);
 return (pt < 0 || pt1 < 0 ? null : output.substring (pt + key.length, pt1));
 }, "~S,~S");
-c$.getStructures46 = Clazz.defineMethod (c$, "getStructures46", 
+c$.getStructures46 = Clazz.defineMethod (c$, "getStructures46",
 function (tokens, type, structures, nAtoms) {
 if (tokens == null) return;
 var htData =  new java.util.Hashtable ();
@@ -58,7 +58,7 @@ continue;
 }var names = JU.PT.split (org, "-");
 switch (names.length) {
 case 3:
-System.out.println ("NBOParser 3-center bonnd " + org + " ignored for Kekule structure");
+Zystem.out.println ("NBOParser 3-center bonnd " + org + " ignored for Kekule structure");
 continue;
 case 2:
 if (names[0].startsWith ("BD(")) {
@@ -71,7 +71,7 @@ break;
 }
 J.adapter.readers.quantum.NBOParser.dumpMatrix (type, 0, matrix);
 }, "~A,~S,JU.Lst,~N");
-c$.getAtomIndex = Clazz.defineMethod (c$, "getAtomIndex", 
+c$.getAtomIndex = Clazz.defineMethod (c$, "getAtomIndex",
  function (xx99) {
 for (var n = xx99.length, i = n, val = 0, pow = 1, ch = 0; --i >= 0; ) {
 if ((ch = xx99.charCodeAt (i)) < 48 || ch > 57) return val - 1;
@@ -80,7 +80,7 @@ pow *= 10;
 }
 return 0;
 }, "~S");
-Clazz.defineMethod (c$, "getStructuresTOPO", 
+Clazz.defineMethod (c$, "getStructuresTOPO",
  function (data, nrtType, list) {
 if (data == null || data.length == 0) return;
 var parts = JU.PT.split (data, "Resonance");
@@ -170,14 +170,14 @@ for (var j = 0; j < nAtoms; j++) for (var k = 0; k < nAtoms; k++) matrix[j][k] =
 
 }}
 }, "~S,~S,JU.Lst");
-c$.dumpMatrix = Clazz.defineMethod (c$, "dumpMatrix", 
+c$.dumpMatrix = Clazz.defineMethod (c$, "dumpMatrix",
  function (nrtType, index, matrix) {
-System.out.println ("NBOParser matrix " + nrtType + " " + index);
-for (var j = 0, nAtoms = matrix.length; j < nAtoms; j++) System.out.println (JU.PT.toJSON (null, matrix[j]));
+Zystem.out.println ("NBOParser matrix " + nrtType + " " + index);
+for (var j = 0, nAtoms = matrix.length; j < nAtoms; j++) Zystem.out.println (JU.PT.toJSON (null, matrix[j]));
 
-System.out.println ("-------------------");
+Zystem.out.println ("-------------------");
 }, "~S,~N,~A");
-Clazz.defineMethod (c$, "getData", 
+Clazz.defineMethod (c$, "getData",
  function (output, start, end, n) {
 var pt = 0;
 var pt1 = 0;
@@ -187,7 +187,7 @@ pt1 = output.indexOf (end, pt + 1);
 }
 return (pt < 0 || pt1 < 0 ? null : output.substring (pt, pt1));
 }, "~S,~S,~S,~N");
-Clazz.defineMethod (c$, "getStructures", 
+Clazz.defineMethod (c$, "getStructures",
 function (data, nrtType, list) {
 if (data == null || data.length == 0) return 0;
 var n = 0;
@@ -265,11 +265,11 @@ throw e;
 }
 return n;
 }, "~S,~S,JU.Lst");
-Clazz.defineMethod (c$, "isOpenShell", 
+Clazz.defineMethod (c$, "isOpenShell",
 function () {
 return this.haveBeta;
 });
-c$.getStructureMap = Clazz.defineMethod (c$, "getStructureMap", 
+c$.getStructureMap = Clazz.defineMethod (c$, "getStructureMap",
 function (structureList, type, index) {
 if (type == null || structureList == null) return null;
 type = type.toLowerCase ();
@@ -281,7 +281,7 @@ return map;
 }}
 return null;
 }, "JU.Lst,~S,~N");
-Clazz.defineMethod (c$, "connectNBO", 
+Clazz.defineMethod (c$, "connectNBO",
 function (modelIndex, type) {
 try {
 if (type == null) type = "alpha";
@@ -314,11 +314,11 @@ return false;
 }
 return true;
 }, "~N,~S");
-Clazz.defineMethod (c$, "setJmolLewisStructure", 
+Clazz.defineMethod (c$, "setJmolLewisStructure",
  function (structureMap, modelIndex, resNo) {
 if (structureMap == null || modelIndex < 0) return false;
 var type = structureMap.get ("type");
-System.out.println ("creating structure " + modelIndex + " " + type);
+Zystem.out.println ("creating structure " + modelIndex + " " + type);
 var bonds = structureMap.get ("bond");
 var lonePairs = structureMap.get ("lone");
 var matrix = structureMap.get ("matrix");
@@ -364,7 +364,7 @@ var m = matrix[i];
 for (var j = i + 1; j < atomCount; j++) {
 var order = m[j];
 if (order == 0) continue;
-System.out.println ("adding bond " + this.vwr.ms.at[i + iatom0] + " " + this.vwr.ms.at[j + iatom0]);
+Zystem.out.println ("adding bond " + this.vwr.ms.at[i + iatom0] + " " + this.vwr.ms.at[j + iatom0]);
 this.vwr.ms.bondAtoms (this.vwr.ms.at[i + iatom0], this.vwr.ms.at[j + iatom0], order, mad, null, 0, false, true);
 if (needLP) {
 bondCounts[i] += order;
@@ -382,7 +382,7 @@ if (bondCounts[i] == 3 && lplv[i] % 10 == 0 || bondCounts[i] == 2) nH -= 2;
 }
 return true;
 }, "java.util.Map,~N,~N");
-Clazz.defineMethod (c$, "getNBOAtomLabel", 
+Clazz.defineMethod (c$, "getNBOAtomLabel",
 function (a) {
 var name = a.getAtomName ();
 var modelIndex = a.getModelIndex ();

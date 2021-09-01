@@ -35,10 +35,10 @@ this.minimizationThread = null;
 this.coordSaved = null;
 Clazz.instantialize (this, arguments);
 }, JM, "Minimizer");
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function () {
 });
-Clazz.defineMethod (c$, "setProperty", 
+Clazz.defineMethod (c$, "setProperty",
 function (propertyName, value) {
 switch (("ff        cancel    clear     constraintfixed     stop      vwr    ").indexOf (propertyName)) {
 case 0:
@@ -69,13 +69,13 @@ break;
 }
 return this;
 }, "~S,~O");
-Clazz.defineMethod (c$, "getProperty", 
+Clazz.defineMethod (c$, "getProperty",
 function (propertyName, param) {
 if (propertyName.equals ("log")) {
 return (this.pFF == null ? "" : this.pFF.getLogData ());
 }return null;
 }, "~S,~N");
-Clazz.defineMethod (c$, "addConstraint", 
+Clazz.defineMethod (c$, "addConstraint",
  function (o) {
 if (o == null) return;
 var indexes = o[0];
@@ -100,7 +100,7 @@ return;
 }this.constraintMap.put (id, c);
 this.constraints.addLast (c);
 }, "~A");
-Clazz.defineMethod (c$, "clear", 
+Clazz.defineMethod (c$, "clear",
  function () {
 this.setMinimizationOn (false);
 this.ac = 0;
@@ -125,7 +125,7 @@ this.constraints = null;
 this.constraintMap = null;
 this.pFF = null;
 });
-Clazz.defineMethod (c$, "minimize", 
+Clazz.defineMethod (c$, "minimize",
 function (steps, crit, bsSelected, bsFixed, flags, ff) {
 this.isSilent = ((flags & 1) == 1);
 this.isQuick = (ff.indexOf ("2D") >= 0 || (flags & 4) == 4);
@@ -178,12 +178,12 @@ if (steps <= 0) this.getEnergyOnly ();
  else this.setMinimizationOn (true);
 return true;
 }, "~N,~N,JU.BS,JU.BS,~N,~S");
-Clazz.defineMethod (c$, "setEnergyUnits", 
+Clazz.defineMethod (c$, "setEnergyUnits",
  function () {
 var s = this.vwr.g.energyUnits;
 this.units = (s.equalsIgnoreCase ("kcal") ? "kcal" : "kJ");
 });
-Clazz.defineMethod (c$, "setupMinimization", 
+Clazz.defineMethod (c$, "setupMinimization",
  function () {
 this.coordSaved = null;
 this.atomMap =  Clazz.newIntArray (this.atoms.length, 0);
@@ -210,7 +210,7 @@ JU.Logger.info ("minimize: getting torsions...");
 this.getTorsions ();
 return this.setModel (bsElements);
 });
-Clazz.defineMethod (c$, "setModel", 
+Clazz.defineMethod (c$, "setModel",
  function (bsElements) {
 if (!this.pFF.setModel (bsElements, this.elemnoMax)) {
 JU.Logger.error (J.i18n.GT.o (J.i18n.GT.$ ("could not setup force field {0}"), this.ff));
@@ -220,7 +220,7 @@ return this.setModel (bsElements);
 }return false;
 }return true;
 }, "JU.BS");
-Clazz.defineMethod (c$, "setAtomPositions", 
+Clazz.defineMethod (c$, "setAtomPositions",
  function () {
 for (var i = 0; i < this.ac; i++) this.minAtoms[i].set ();
 
@@ -230,7 +230,7 @@ this.bsMinFixed =  new JU.BS ();
 for (var i = this.bsAtoms.nextSetBit (0), pt = 0; i >= 0; i = this.bsAtoms.nextSetBit (i + 1), pt++) if (this.bsFixed.get (i)) this.bsMinFixed.set (pt);
 
 }});
-Clazz.defineMethod (c$, "getBonds", 
+Clazz.defineMethod (c$, "getBonds",
  function () {
 var bondInfo =  new JU.Lst ();
 this.bondCount = 0;
@@ -270,7 +270,7 @@ this.minAtoms[atom2].addBond (bond, atom1);
 for (var i = 0; i < this.ac; i++) this.minAtoms[i].getBondedAtomIndexes ();
 
 });
-Clazz.defineMethod (c$, "getAngles", 
+Clazz.defineMethod (c$, "getAngles",
 function () {
 var vAngles =  new JU.Lst ();
 var atomList;
@@ -295,7 +295,7 @@ this.minAtoms[ic].bsVdw.clear (ib);
 this.minAngles = vAngles.toArray ( new Array (vAngles.size ()));
 JU.Logger.info (this.minAngles.length + " angles");
 });
-Clazz.defineMethod (c$, "getTorsions", 
+Clazz.defineMethod (c$, "getTorsions",
 function () {
 var vTorsions =  new JU.Lst ();
 var id;
@@ -325,7 +325,7 @@ this.minAtoms[Math.min (ic, id)].bs14.set (Math.max (ic, id));
 this.minTorsions = vTorsions.toArray ( new Array (vTorsions.size ()));
 JU.Logger.info (this.minTorsions.length + " torsions");
 });
-Clazz.defineMethod (c$, "getForceField", 
+Clazz.defineMethod (c$, "getForceField",
 function (ff) {
 if (ff.startsWith ("MMFF")) ff = "MMFF";
 if (this.pFF == null || !ff.equals (this.ff) || (this.pFF.name.indexOf ("2D") >= 0) != this.isQuick) {
@@ -338,15 +338,15 @@ ff = "UFF";
 if (!this.isQuick) this.vwr.setStringProperty ("_minimizationForceField", ff);
 }return this.pFF;
 }, "~S");
-Clazz.defineMethod (c$, "minimizationOn", 
+Clazz.defineMethod (c$, "minimizationOn",
 function () {
 return this.$minimizationOn;
 });
-Clazz.defineMethod (c$, "getThread", 
+Clazz.defineMethod (c$, "getThread",
 function () {
 return this.minimizationThread;
 });
-Clazz.defineMethod (c$, "setMinimizationOn", 
+Clazz.defineMethod (c$, "setMinimizationOn",
  function (minimizationOn) {
 this.$minimizationOn = minimizationOn;
 if (!minimizationOn) {
@@ -358,7 +358,7 @@ this.minimizationThread =  new JM.MinimizationThread ();
 this.minimizationThread.setManager (this, this.vwr, null);
 this.minimizationThread.start ();
 }}, "~B");
-Clazz.defineMethod (c$, "getEnergyOnly", 
+Clazz.defineMethod (c$, "getEnergyOnly",
  function () {
 if (this.pFF == null || this.vwr == null) return;
 this.pFF.steepestDescentInitialize (this.steps, this.crit);
@@ -367,11 +367,11 @@ this.reportEnergy ();
 this.vwr.setStringProperty ("_minimizationStatus", "calculate");
 this.vwr.notifyMinimizationStatus ();
 });
-Clazz.defineMethod (c$, "reportEnergy", 
+Clazz.defineMethod (c$, "reportEnergy",
  function () {
 this.vwr.setFloatProperty ("_minimizationEnergy", this.pFF.toUserUnits (this.pFF.getEnergy ()));
 });
-Clazz.defineMethod (c$, "startMinimization", 
+Clazz.defineMethod (c$, "startMinimization",
 function () {
 try {
 JU.Logger.info ("minimizer: startMinimization");
@@ -395,7 +395,7 @@ throw e;
 this.$minimizationOn = true;
 return true;
 });
-Clazz.defineMethod (c$, "stepMinimization", 
+Clazz.defineMethod (c$, "stepMinimization",
 function () {
 if (!this.$minimizationOn) return false;
 var doRefresh = (!this.isSilent && this.vwr.getBooleanProperty ("minimizationRefresh"));
@@ -411,12 +411,12 @@ this.updateAtomXYZ ();
 this.vwr.refresh (3, "minimization step " + currentStep);
 }return going;
 });
-Clazz.defineMethod (c$, "endMinimization", 
+Clazz.defineMethod (c$, "endMinimization",
 function () {
 this.updateAtomXYZ ();
 this.setMinimizationOn (false);
 if (this.pFF == null) {
-System.out.println ("pFF was null");
+Zystem.out.println ("pFF was null");
 } else {
 var failed = this.pFF.detectExplosion ();
 if (failed) this.restoreCoordinates ();
@@ -427,14 +427,14 @@ this.vwr.notifyMinimizationStatus ();
 this.vwr.refresh (3, "Minimizer:done" + (failed ? " EXPLODED" : "OK"));
 }JU.Logger.info ("minimizer: endMinimization");
 });
-Clazz.defineMethod (c$, "saveCoordinates", 
+Clazz.defineMethod (c$, "saveCoordinates",
  function () {
 if (this.coordSaved == null) this.coordSaved =  Clazz.newDoubleArray (this.ac, 3, 0);
 for (var i = 0; i < this.ac; i++) for (var j = 0; j < 3; j++) this.coordSaved[i][j] = this.minAtoms[i].coord[j];
 
 
 });
-Clazz.defineMethod (c$, "restoreCoordinates", 
+Clazz.defineMethod (c$, "restoreCoordinates",
  function () {
 if (this.coordSaved == null) return;
 for (var i = 0; i < this.ac; i++) for (var j = 0; j < 3; j++) this.minAtoms[i].coord[j] = this.coordSaved[i][j];
@@ -442,14 +442,14 @@ for (var i = 0; i < this.ac; i++) for (var j = 0; j < 3; j++) this.minAtoms[i].c
 
 this.updateAtomXYZ ();
 });
-Clazz.defineMethod (c$, "stopMinimization", 
+Clazz.defineMethod (c$, "stopMinimization",
 function (coordAreOK) {
 if (!this.$minimizationOn) return;
 this.setMinimizationOn (false);
 if (coordAreOK) this.endMinimization ();
  else this.restoreCoordinates ();
 }, "~B");
-Clazz.defineMethod (c$, "updateAtomXYZ", 
+Clazz.defineMethod (c$, "updateAtomXYZ",
 function () {
 if (this.steps <= 0) return;
 for (var i = 0; i < this.ac; i++) {
@@ -461,20 +461,20 @@ atom.z = minAtom.coord[2];
 }
 this.vwr.refreshMeasures (false);
 });
-Clazz.defineMethod (c$, "minimizeWithoutThread", 
+Clazz.defineMethod (c$, "minimizeWithoutThread",
  function () {
 if (!this.startMinimization ()) return;
 while (this.stepMinimization ()) {
 }
 this.endMinimization ();
 });
-Clazz.defineMethod (c$, "report", 
+Clazz.defineMethod (c$, "report",
 function (msg, isEcho) {
 if (this.isSilent) JU.Logger.info (msg);
  else if (isEcho) this.vwr.showString (msg, false);
  else this.vwr.scriptEcho (msg);
 }, "~S,~B");
-Clazz.defineMethod (c$, "calculatePartialCharges", 
+Clazz.defineMethod (c$, "calculatePartialCharges",
 function (ms, bsAtoms, bsReport) {
 var ff =  new JM.FF.ForceFieldMMFF (this, false);
 ff.setArrays (ms.at, bsAtoms, ms.bo, ms.bondCount, true, true);

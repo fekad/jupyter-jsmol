@@ -44,23 +44,23 @@ this.pcResume = -1;
 this.isEmbedded = false;
 Clazz.instantialize (this, arguments);
 }, JS, "ScriptEval", JS.ScriptExpr);
-Clazz.overrideMethod (c$, "getAllowJSThreads", 
+Clazz.overrideMethod (c$, "getAllowJSThreads",
 function () {
 return this.allowJSThreads;
 });
-Clazz.defineMethod (c$, "setAllowJSThreads", 
+Clazz.defineMethod (c$, "setAllowJSThreads",
 function (b) {
 this.allowJSThreads = b;
 }, "~B");
-Clazz.defineMethod (c$, "doReport", 
+Clazz.defineMethod (c$, "doReport",
 function () {
 return (!this.tQuiet && this.scriptLevel <= JS.ScriptEval.scriptReportingLevel);
 });
-Clazz.overrideMethod (c$, "isStateScript", 
+Clazz.overrideMethod (c$, "isStateScript",
 function () {
 return this.$isStateScript;
 });
-Clazz.overrideMethod (c$, "setStatic", 
+Clazz.overrideMethod (c$, "setStatic",
 function (tok, ival) {
 switch (tok) {
 case 553648167:
@@ -75,38 +75,38 @@ return JS.ScriptEval.scriptReportingLevel;
 }
 return 0;
 }, "~N,~N");
-Clazz.overrideMethod (c$, "getScript", 
+Clazz.overrideMethod (c$, "getScript",
 function () {
 return this.script;
 });
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function () {
 this.currentThread = Thread.currentThread ();
 });
-Clazz.overrideMethod (c$, "setViewer", 
+Clazz.overrideMethod (c$, "setViewer",
 function (vwr) {
 this.vwr = vwr;
 this.compiler = (this.compiler == null ? vwr.compiler : this.compiler);
 this.isJS = vwr.isSingleThreaded;
 return this;
 }, "JV.Viewer");
-Clazz.overrideMethod (c$, "setCompiler", 
+Clazz.overrideMethod (c$, "setCompiler",
 function () {
 this.vwr.compiler = this.compiler =  new JS.ScriptCompiler (this.vwr);
 });
-Clazz.overrideMethod (c$, "compileScriptString", 
+Clazz.overrideMethod (c$, "compileScriptString",
 function (script, tQuiet) {
 this.clearState (tQuiet);
 this.contextPath = "[script]";
 return this.compileScript (null, script, this.debugScript);
 }, "~S,~B");
-Clazz.overrideMethod (c$, "compileScriptFile", 
+Clazz.overrideMethod (c$, "compileScriptFile",
 function (filename, tQuiet) {
 this.clearState (tQuiet);
 this.contextPath = filename;
 return this.compileScriptFileInternal (filename, null, null, null);
 }, "~S,~B");
-Clazz.overrideMethod (c$, "evaluateCompiledScript", 
+Clazz.overrideMethod (c$, "evaluateCompiledScript",
 function (isCmdLine_c_or_C_Option, isCmdLine_C_Option, historyDisabled, listCommands, outputBuffer, allowThreads) {
 var tempOpen = this.isCmdLine_C_Option;
 this.isCmdLine_C_Option = isCmdLine_C_Option;
@@ -116,7 +116,7 @@ this.outputBuffer = outputBuffer;
 this.currentThread = Thread.currentThread ();
 this.setAllowJSThreads ( new Boolean (allowThreads & !this.vwr.getBoolean (603979892)).valueOf ());
 this.listCommands = listCommands;
-this.timeBeginExecution = System.currentTimeMillis ();
+this.timeBeginExecution = Zystem.currentTimeMillis ();
 this.executionStopped = this.executionPaused = false;
 this.executionStepping = false;
 this.executing = true;
@@ -126,11 +126,11 @@ this.executeCommands (false, true);
 this.isCmdLine_C_Option = tempOpen;
 if (this.$isStateScript) JS.ScriptManager.setStateScriptVersion (this.vwr, null);
 }, "~B,~B,~B,~B,JU.SB,~B");
-Clazz.defineMethod (c$, "useThreads", 
+Clazz.defineMethod (c$, "useThreads",
 function () {
 return (!this.chk && !this.vwr.headless && !this.vwr.autoExit && this.vwr.haveDisplay && this.outputBuffer == null && this.allowJSThreads);
 });
-Clazz.defineMethod (c$, "executeCommands", 
+Clazz.defineMethod (c$, "executeCommands",
  function (isTry, reportCompletion) {
 var haveError = false;
 try {
@@ -166,7 +166,7 @@ throw e$$;
 if (haveError || !this.isJS || !this.allowJSThreads) {
 this.vwr.setTainted (true);
 this.vwr.popHoldRepaint ("executeCommands" + " " + (this.scriptLevel > 0 ? "\u0001## REPAINT_IGNORE ##" : ""));
-}this.timeEndExecution = System.currentTimeMillis ();
+}this.timeEndExecution = Zystem.currentTimeMillis ();
 if (this.errorMessage == null && this.executionStopped) this.setErrorMessage ("execution interrupted");
  else if (!this.tQuiet && reportCompletion) this.vwr.scriptStatus ("Script completed");
 this.executing = this.chk = this.isCmdLine_c_or_C_Option = this.historyDisabled = false;
@@ -174,7 +174,7 @@ var msg = this.getErrorMessageUntranslated ();
 this.vwr.setErrorMessage (this.errorMessage, msg);
 if (!this.tQuiet && reportCompletion) this.vwr.setScriptStatus ("Jmol script terminated", this.errorMessage, 1 + (this.timeEndExecution - this.timeBeginExecution), msg);
 }, "~B,~B");
-Clazz.overrideMethod (c$, "resumeEval", 
+Clazz.overrideMethod (c$, "resumeEval",
 function (sco) {
 var sc = sco;
 this.setErrorMessage (null);
@@ -189,17 +189,17 @@ this.pcResume = sc.pc;
 this.executeCommands (sc.isTryCatch, this.scriptLevel <= 0);
 this.pcResume = -1;
 }, "~O");
-Clazz.defineMethod (c$, "resumeViewer", 
+Clazz.defineMethod (c$, "resumeViewer",
  function (why) {
 this.vwr.setTainted (true);
 this.vwr.popHoldRepaint (why + (this.chk ? "\u0001## REPAINT_IGNORE ##" : ""));
 this.vwr.queueOnHold = false;
 }, "~S");
-Clazz.overrideMethod (c$, "runScript", 
+Clazz.overrideMethod (c$, "runScript",
 function (script) {
 if (!this.vwr.isPreviewOnly) this.runScriptBuffer (script, this.outputBuffer, false);
 }, "~S");
-Clazz.overrideMethod (c$, "runScriptBuffer", 
+Clazz.overrideMethod (c$, "runScriptBuffer",
 function (script, outputBuffer, isFuncReturn) {
 this.pushContext (null, "runScriptBuffer");
 this.contextPath += " >> script() ";
@@ -211,7 +211,7 @@ if (this.compileScript (null, script + "\u0001## EDITOR_IGNORE ##" + "\u0001## R
 this.popContext (false, false);
 this.isFuncReturn = fret;
 }, "~S,JU.SB,~B");
-Clazz.overrideMethod (c$, "checkScriptSilent", 
+Clazz.overrideMethod (c$, "checkScriptSilent",
 function (script) {
 var sc = this.compiler.compile (null, script, false, true, false, true);
 if (sc.errorType != null) return sc;
@@ -232,7 +232,7 @@ throw e;
 this.chk = false;
 return sc;
 }, "~S");
-c$.getContextTrace = Clazz.defineMethod (c$, "getContextTrace", 
+c$.getContextTrace = Clazz.defineMethod (c$, "getContextTrace",
 function (vwr, sc, sb, isTop) {
 if (sb == null) sb =  new JU.SB ();
 var pc = Math.min (sc.pc, sc.lineNumbers[sc.lineNumbers.length - 1]);
@@ -240,12 +240,12 @@ sb.append (JS.ScriptError.getErrorLineMessage (sc.functionName, sc.scriptFileNam
 if (sc.parentContext != null) JS.ScriptEval.getContextTrace (vwr, sc.parentContext, sb, false);
 return sb;
 }, "JV.Viewer,JS.ScriptContext,JU.SB,~B");
-Clazz.overrideMethod (c$, "setDebugging", 
+Clazz.overrideMethod (c$, "setDebugging",
 function () {
 this.debugScript = this.vwr.getBoolean (603979825);
 this.debugHigh = (this.debugScript && JU.Logger.debugging);
 });
-Clazz.overrideMethod (c$, "haltExecution", 
+Clazz.overrideMethod (c$, "haltExecution",
 function () {
 if (this.isEmbedded) {
 this.vwr.setBooleanProperty ("allowEmbeddedScripts", true);
@@ -253,7 +253,7 @@ this.isEmbedded = false;
 }this.resumePausedExecution ();
 this.executionStopped = true;
 });
-Clazz.overrideMethod (c$, "pauseExecution", 
+Clazz.overrideMethod (c$, "pauseExecution",
 function (withDelay) {
 if (this.chk || this.vwr.headless) return;
 if (withDelay && !this.isJS) this.delayScript (-100);
@@ -261,37 +261,37 @@ this.vwr.popHoldRepaint ("pauseExecution " + withDelay);
 this.executionStepping = false;
 this.executionPaused = true;
 }, "~B");
-Clazz.overrideMethod (c$, "stepPausedExecution", 
+Clazz.overrideMethod (c$, "stepPausedExecution",
 function () {
 this.executionStepping = true;
 this.executionPaused = false;
 });
-Clazz.overrideMethod (c$, "resumePausedExecution", 
+Clazz.overrideMethod (c$, "resumePausedExecution",
 function () {
 this.executionPaused = false;
 this.executionStepping = false;
 });
-Clazz.overrideMethod (c$, "isExecuting", 
+Clazz.overrideMethod (c$, "isExecuting",
 function () {
 return this.executing && !this.executionStopped;
 });
-Clazz.overrideMethod (c$, "isPaused", 
+Clazz.overrideMethod (c$, "isPaused",
 function () {
 return this.executionPaused;
 });
-Clazz.overrideMethod (c$, "isStepping", 
+Clazz.overrideMethod (c$, "isStepping",
 function () {
 return this.executionStepping;
 });
-Clazz.overrideMethod (c$, "isStopped", 
+Clazz.overrideMethod (c$, "isStopped",
 function () {
 return this.executionStopped || !this.isJS && this.currentThread !== Thread.currentThread ();
 });
-Clazz.overrideMethod (c$, "getNextStatement", 
+Clazz.overrideMethod (c$, "getNextStatement",
 function () {
 return (this.pc < this.aatoken.length ? JS.ScriptError.getErrorLineMessage (this.functionName, this.scriptFileName, this.getLinenumber (null), this.pc, JS.ScriptEval.statementAsString (this.vwr, this.aatoken[this.pc], -9999, this.debugHigh)) : "");
 });
-Clazz.defineMethod (c$, "getCommand", 
+Clazz.defineMethod (c$, "getCommand",
  function (pc, allThisLine, addSemi) {
 if (pc >= this.lineIndices.length) return "";
 if (allThisLine) {
@@ -325,7 +325,7 @@ throw e;
 }
 return s;
 }, "~N,~B,~B");
-Clazz.defineMethod (c$, "logDebugScript", 
+Clazz.defineMethod (c$, "logDebugScript",
  function (st, ifLevel) {
 this.iToken = -9999;
 if (this.debugHigh) {
@@ -340,7 +340,7 @@ this.vwr.scriptStatus (strbufLog.toString ());
 var cmd = this.getCommand (this.pc, false, false);
 if (cmd !== "") this.vwr.scriptStatus (cmd);
 }}, "~A,~N");
-Clazz.overrideMethod (c$, "evaluateExpression", 
+Clazz.overrideMethod (c$, "evaluateExpression",
 function (expr, asVariable, compileOnly) {
 var e = ( new JS.ScriptEval ()).setViewer (this.vwr);
 try {
@@ -359,7 +359,7 @@ var o = (e.evaluate (expr, asVariable, compileOnly));
 this.executing = exec0;
 return o;
 }, "~O,~B,~B");
-Clazz.defineMethod (c$, "runBufferedSafely", 
+Clazz.defineMethod (c$, "runBufferedSafely",
 function (script, outputBuffer) {
 if (outputBuffer == null) outputBuffer = this.outputBuffer;
 var e = ( new JS.ScriptEval ()).setViewer (this.vwr);
@@ -375,7 +375,7 @@ throw e1;
 }
 this.executing = exec0;
 }, "~S,JU.SB");
-c$.runUserAction = Clazz.defineMethod (c$, "runUserAction", 
+c$.runUserAction = Clazz.defineMethod (c$, "runUserAction",
 function (functionName, params, vwr) {
 var ev = ( new JS.ScriptEval ()).setViewer (vwr);
 var func = vwr.getFunction (functionName.toLowerCase ());
@@ -394,7 +394,7 @@ throw e;
 var ret = ev.getContextVariableAsVariable ("_retval", false);
 return (ret == null ? JS.SV.vT : ret);
 }, "~S,~A,JV.Viewer");
-Clazz.defineMethod (c$, "evaluate", 
+Clazz.defineMethod (c$, "evaluate",
  function (expr, asVariable, compileOnly) {
 try {
 if (Clazz.instanceOf (expr, String)) {
@@ -417,7 +417,7 @@ throw ex;
 }
 return (asVariable ? JS.SV.getVariable ("ERROR") : "ERROR");
 }, "~O,~B,~B");
-Clazz.overrideMethod (c$, "checkSelect", 
+Clazz.overrideMethod (c$, "checkSelect",
 function (h, where) {
 var ok = false;
 try {
@@ -433,7 +433,7 @@ throw ex;
 this.popContext (false, false);
 return ok;
 }, "java.util.Map,~A");
-Clazz.overrideMethod (c$, "getAtomBitSet", 
+Clazz.overrideMethod (c$, "getAtomBitSet",
 function (atomExpression) {
 if (Clazz.instanceOf (atomExpression, JU.BS)) return atomExpression;
 var bs =  new JU.BS ();
@@ -458,7 +458,7 @@ throw ex;
 this.executing = executing;
 return bs;
 }, "~O");
-Clazz.defineMethod (c$, "compileScript", 
+Clazz.defineMethod (c$, "compileScript",
 function (filename, strScript, debugCompiler) {
 this.scriptFileName = filename;
 strScript = this.fixScriptPath (strScript, filename);
@@ -471,7 +471,7 @@ if (!this.chk && this.vwr.scriptEditorVisible && strScript.indexOf ("\u0001## ED
 this.script = s;
 return !this.$error;
 }, "~S,~S,~B");
-Clazz.defineMethod (c$, "fixScriptPath", 
+Clazz.defineMethod (c$, "fixScriptPath",
  function (strScript, filename) {
 if (filename != null && strScript.indexOf ("$SCRIPT_PATH$") >= 0) {
 var path = filename;
@@ -481,7 +481,7 @@ strScript = JU.PT.rep (strScript, "$SCRIPT_PATH$/", path);
 strScript = JU.PT.rep (strScript, "$SCRIPT_PATH$", path);
 }return strScript;
 }, "~S,~S");
-Clazz.defineMethod (c$, "setScriptExtensions", 
+Clazz.defineMethod (c$, "setScriptExtensions",
  function () {
 var extensions = this.scriptExtensions;
 if (extensions == null) return 0;
@@ -498,7 +498,7 @@ if (this.lineIndices[this.pc][0] > pt || this.lineIndices[this.pc][1] >= pt) bre
 if (this.pc > 0 && this.pc < this.lineIndices.length && this.lineIndices[this.pc][0] > pt) --this.pc;
 return this.pc;
 });
-Clazz.defineMethod (c$, "compileScriptFileInternal", 
+Clazz.defineMethod (c$, "compileScriptFileInternal",
  function (filename, localPath, remotePath, scriptPath) {
 if (filename.toLowerCase ().indexOf ("javascript:") == 0) return this.compileScript (filename, this.vwr.jsEval (filename.substring (11)), this.debugScript);
 var data =  new Array (2);
@@ -539,7 +539,7 @@ scriptPath = scriptPath.substring (0, Math.max (scriptPath.lastIndexOf ("|"), sc
 }script = JV.FileManager.setScriptFileReferences (script, localPath, remotePath, scriptPath);
 return this.compileScript (filename, script + movieScript, this.debugScript);
 }, "~S,~S,~S,~S");
-Clazz.overrideMethod (c$, "evalFunctionFloat", 
+Clazz.overrideMethod (c$, "evalFunctionFloat",
 function (func, params, values) {
 try {
 var p = params;
@@ -555,11 +555,11 @@ throw e;
 }
 }
 }, "~O,~O,~A");
-Clazz.defineMethod (c$, "getUserFunctionResult", 
+Clazz.defineMethod (c$, "getUserFunctionResult",
 function (name, params, tokenAtom) {
 return this.runFunctionAndRet (null, name, params, tokenAtom, true, true, false);
 }, "~S,JU.Lst,JS.SV");
-Clazz.defineMethod (c$, "runFunctionAndRet", 
+Clazz.defineMethod (c$, "runFunctionAndRet",
  function ($function, name, params, tokenAtom, getReturn, setContextPath, allowThreads) {
 if ($function == null) {
 name = name.toLowerCase ();
@@ -601,7 +601,7 @@ this.dispatchCommands (false, true, false);
 this.popContext (false, false);
 return v;
 }, "J.api.JmolScriptFunction,~S,JU.Lst,JS.SV,~B,~B,~B");
-Clazz.defineMethod (c$, "processTry", 
+Clazz.defineMethod (c$, "processTry",
  function (cv) {
 this.vwr.displayLoadErrors = this.thisContext.displayLoadErrorsSave;
 this.popContext (false, false);
@@ -625,7 +625,7 @@ var ct = this.aatoken[this.pc + 1][0];
 if (ct.contextVariables != null && ct.name0 != null) ct.contextVariables.put (ct.name0, JS.SV.newS (errMsg));
 ct.intValue = (errMsg.length > 0 ? 1 : -1) * Math.abs (ct.intValue);
 }}, "java.util.Map");
-Clazz.defineMethod (c$, "breakAt", 
+Clazz.defineMethod (c$, "breakAt",
  function (pt) {
 if (pt < 0) {
 this.getContextVariableAsVariable ("_breakval", false).intValue = -pt;
@@ -647,7 +647,7 @@ this.popContext (true, false);
 }
 }this.pc = ptEnd;
 }, "~N");
-Clazz.defineMethod (c$, "restoreFunction", 
+Clazz.defineMethod (c$, "restoreFunction",
  function (f, params, tokenAtom) {
 var $function = f;
 this.aatoken = $function.aatoken;
@@ -660,11 +660,11 @@ this.contextVariables =  new java.util.Hashtable ();
 $function.setVariables (this.contextVariables, params);
 }if (tokenAtom != null) this.contextVariables.put ("_x", tokenAtom);
 }, "J.api.JmolScriptFunction,JU.Lst,JS.SV");
-Clazz.defineMethod (c$, "clearDefinedVariableAtomSets", 
+Clazz.defineMethod (c$, "clearDefinedVariableAtomSets",
 function () {
 this.vwr.definedAtomSets.remove ("# variable");
 });
-Clazz.defineMethod (c$, "defineSets", 
+Clazz.defineMethod (c$, "defineSets",
  function () {
 if (!this.vwr.definedAtomSets.containsKey ("# static")) {
 for (var i = 0; i < JV.JC.predefinedStatic.length; i++) this.defineAtomSet (JV.JC.predefinedStatic[i]);
@@ -702,7 +702,7 @@ this.defineAtomSet ("@_" + ei + def + " _e=" + e);
 }}
 this.defineAtomSet ("# variable");
 });
-Clazz.defineMethod (c$, "defineAtomSet", 
+Clazz.defineMethod (c$, "defineAtomSet",
  function (script) {
 if (script.indexOf ("#") == 0) {
 this.vwr.definedAtomSets.put (script, Boolean.TRUE);
@@ -726,14 +726,14 @@ return;
 if (name.startsWith ("dynamic_")) name = "!" + name.substring (8);
 this.vwr.definedAtomSets.put (name, statement);
 }, "~S");
-Clazz.defineMethod (c$, "lookupIdentifierValue", 
+Clazz.defineMethod (c$, "lookupIdentifierValue",
 function (identifier) {
 var bs = this.lookupValue (identifier, false);
 if (bs != null) return JU.BSUtil.copy (bs);
 bs = this.getAtomBits (1073741824, identifier);
 return (bs == null ?  new JU.BS () : bs);
 }, "~S");
-Clazz.defineMethod (c$, "lookupValue", 
+Clazz.defineMethod (c$, "lookupValue",
  function (setName, plurals) {
 if (this.chk) {
 return  new JU.BS ();
@@ -763,7 +763,7 @@ if (setName.endsWith ("ies")) setName = setName.substring (0, len - 3) + 'y';
  else setName = setName.substring (0, len - 1);
 return this.lookupValue (setName, true);
 }, "~S,~B");
-Clazz.overrideMethod (c$, "deleteAtomsInVariables", 
+Clazz.overrideMethod (c$, "deleteAtomsInVariables",
 function (bsDeleted) {
 for (var entry, $entry = this.vwr.definedAtomSets.entrySet ().iterator (); $entry.hasNext () && ((entry = $entry.next ()) || true);) {
 var value = entry.getValue ();
@@ -772,11 +772,11 @@ JU.BSUtil.deleteBits (value, bsDeleted);
 if (!entry.getKey ().startsWith ("!")) this.vwr.g.setUserVariable ("@" + entry.getKey (), JS.SV.newV (10, value));
 }}
 }, "JU.BS");
-Clazz.overrideMethod (c$, "getThisContext", 
+Clazz.overrideMethod (c$, "getThisContext",
 function () {
 return this.thisContext;
 });
-Clazz.defineMethod (c$, "clearState", 
+Clazz.defineMethod (c$, "clearState",
  function (tQuiet) {
 this.thisContext = null;
 this.scriptLevel = 0;
@@ -784,17 +784,17 @@ this.setErrorMessage (null);
 this.contextPath = "";
 this.tQuiet = tQuiet;
 }, "~B");
-Clazz.overrideMethod (c$, "pushContextDown", 
+Clazz.overrideMethod (c$, "pushContextDown",
 function (why) {
 this.scriptLevel--;
 this.pushContext2 (null, why);
 }, "~S");
-Clazz.defineMethod (c$, "pushContext", 
+Clazz.defineMethod (c$, "pushContext",
  function (token, why) {
 if (this.scriptLevel == JS.ScriptEval.contextDepthMax) this.error (44);
 this.pushContext2 (token, why);
 }, "JS.ContextToken,~S");
-Clazz.defineMethod (c$, "pushContext2", 
+Clazz.defineMethod (c$, "pushContext2",
  function (token, why) {
 this.thisContext = this.getScriptContext (why);
 this.thisContext.token = token;
@@ -807,7 +807,7 @@ if (token.contextVariables != null) for (var key, $key = token.contextVariables.
 
 }if (this.debugHigh || this.isCmdLine_c_or_C_Option) JU.Logger.info ("-->>----------------------".substring (0, Math.min (15, this.scriptLevel + 5)) + this.scriptLevel + " " + this.scriptFileName + " " + token + " " + this.thisContext.id + " " + why + " path=" + this.thisContext.contextPath);
 }, "JS.ContextToken,~S");
-Clazz.overrideMethod (c$, "getScriptContext", 
+Clazz.overrideMethod (c$, "getScriptContext",
 function (why) {
 var context =  new JS.ScriptContext ();
 if (this.debugHigh) JU.Logger.info ("creating context " + context.id + " for " + why + " path=" + this.contextPath);
@@ -844,7 +844,7 @@ context.mustResumeEval = this.mustResumeEval;
 context.allowJSThreads = this.allowJSThreads;
 return context;
 }, "~S");
-Clazz.defineMethod (c$, "popContext", 
+Clazz.defineMethod (c$, "popContext",
 function (isFlowCommand, statementOnly) {
 if (this.thisContext == null) return;
 if (this.thisContext.scriptLevel > 0) this.scriptLevel = this.thisContext.scriptLevel - 1;
@@ -853,7 +853,7 @@ this.restoreScriptContext (this.thisContext, true, isFlowCommand, statementOnly)
 if (scTemp != null) this.restoreScriptContext (scTemp, true, false, true);
 if (this.debugHigh || this.isCmdLine_c_or_C_Option) JU.Logger.info ("--<<------------".substring (0, Math.min (15, this.scriptLevel + 5)) + (this.scriptLevel + 1) + " " + this.scriptFileName + " isFlow " + isFlowCommand + " thisContext=" + (this.thisContext == null ? "" : "" + this.thisContext.id) + " pc=" + this.pc + "-->" + this.pc + " path=" + (this.thisContext == null ? "" : this.thisContext.contextPath));
 }, "~B,~B");
-Clazz.defineMethod (c$, "restoreScriptContext", 
+Clazz.defineMethod (c$, "restoreScriptContext",
 function (context, isPopContext, isFlowCommand, statementOnly) {
 this.executing = !this.chk;
 if (context == null) return;
@@ -893,7 +893,7 @@ this.errorMessageUntranslated = context.errorMessageUntranslated;
 this.iCommandError = context.iCommandError;
 this.errorType = context.errorType;
 }}, "JS.ScriptContext,~B,~B,~B");
-Clazz.defineMethod (c$, "setException", 
+Clazz.defineMethod (c$, "setException",
 function (sx, msg, untranslated) {
 sx.untranslated = (untranslated == null ? msg : untranslated);
 var isThrown = "!".equals (untranslated);
@@ -913,7 +913,7 @@ if (isThrown || this.thisContext != null || this.chk || msg.indexOf ("NOTE: file
 JU.Logger.error ("eval ERROR: " + s + "\n" + this.toString ());
 if (this.vwr.autoExit) this.vwr.exitJmol ();
 }, "JS.ScriptException,~S,~S");
-c$.statementAsString = Clazz.defineMethod (c$, "statementAsString", 
+c$.statementAsString = Clazz.defineMethod (c$, "statementAsString",
 function (vwr, statement, iTok, doLogMessages) {
 if (statement.length == 0) return "";
 var sb =  new JU.SB ();
@@ -1064,7 +1064,7 @@ if (token.value != null) sb.append (token.value.toString ());
 }
 return sb.toString ();
 }, "JV.Viewer,~A,~N,~B");
-Clazz.overrideMethod (c$, "setObjectPropSafe", 
+Clazz.overrideMethod (c$, "setObjectPropSafe",
 function (id, tokCommand) {
 try {
 return this.setObjectProp (id, tokCommand, -1);
@@ -1076,35 +1076,35 @@ throw e;
 }
 }
 }, "~S,~N");
-Clazz.defineMethod (c$, "setAtomProp", 
+Clazz.defineMethod (c$, "setAtomProp",
 function (prop, value, bs) {
 this.setShapePropertyBs (0, prop, value, bs);
 }, "~S,~O,JU.BS");
-Clazz.defineMethod (c$, "restrictSelected", 
+Clazz.defineMethod (c$, "restrictSelected",
 function (isBond, doInvert) {
 if (!this.chk) this.sm.restrictSelected (isBond, doInvert);
 }, "~B,~B");
-Clazz.defineMethod (c$, "showString", 
+Clazz.defineMethod (c$, "showString",
 function (str) {
 this.showStringPrint (str, false);
 }, "~S");
-Clazz.overrideMethod (c$, "showStringPrint", 
+Clazz.overrideMethod (c$, "showStringPrint",
 function (s, mustDo) {
 if (this.chk || s == null) return;
 if (this.outputBuffer == null) this.vwr.showString (s, mustDo);
  else this.appendBuffer (s, mustDo);
 }, "~S,~B");
-Clazz.defineMethod (c$, "report", 
+Clazz.defineMethod (c$, "report",
 function (s, isError) {
 if (this.chk) return;
 if (this.outputBuffer == null) this.vwr.scriptStatus (s);
  else this.appendBuffer (s, isError);
 }, "~S,~B");
-Clazz.defineMethod (c$, "appendBuffer", 
+Clazz.defineMethod (c$, "appendBuffer",
  function (str, mustDo) {
 if (mustDo || this.isFuncReturn || JU.Logger.isActiveLevel (4)) this.outputBuffer.append (str).appendC ('\n');
 }, "~S,~B");
-Clazz.defineMethod (c$, "addProcess", 
+Clazz.defineMethod (c$, "addProcess",
  function (vProcess, pc, pt) {
 if (this.parallelProcessor == null) return;
 var statements =  new Array (pt);
@@ -1116,7 +1116,7 @@ context.pc = 1 - pc;
 context.pcEnd = pt;
 this.parallelProcessor.addProcess ("p" + (++JS.ScriptEval.iProcess), context);
 }, "JU.Lst,~N,~N");
-Clazz.defineMethod (c$, "checkContinue", 
+Clazz.defineMethod (c$, "checkContinue",
  function () {
 if (this.executionStopped) return false;
 if (this.executionStepping && this.isCommandDisplayable (this.pc)) {
@@ -1163,7 +1163,7 @@ this.vwr.pushHoldRepaintWhy ("pause");
 this.notifyResumeStatus ();
 return !this.$error && !this.executionStopped;
 });
-Clazz.defineMethod (c$, "delayScript", 
+Clazz.defineMethod (c$, "delayScript",
 function (millis) {
 if (this.vwr.autoExit) return;
 this.stopScriptThreads ();
@@ -1172,26 +1172,26 @@ this.vwr.captureParams.put ("captureDelayMS", Integer.$valueOf (millis));
 }this.scriptDelayThread =  new JS.ScriptDelayThread (this, this.vwr, millis);
 this.scriptDelayThread.run ();
 }, "~N");
-Clazz.defineMethod (c$, "doDelay", 
+Clazz.defineMethod (c$, "doDelay",
  function (millis) {
 if (!this.useThreads ()) return;
 if (this.isJS) throw  new JS.ScriptInterruption (this, "delay", millis);
 this.delayScript (millis);
 }, "~N");
-Clazz.overrideMethod (c$, "evalParallel", 
+Clazz.overrideMethod (c$, "evalParallel",
 function (context, shapeManager) {
 return this.getCmdExt ().evalParallel (context, shapeManager);
 }, "JS.ScriptContext,JV.ShapeManager");
-Clazz.defineMethod (c$, "isCommandDisplayable", 
+Clazz.defineMethod (c$, "isCommandDisplayable",
  function (i) {
 if (i >= this.aatoken.length || i >= this.pcEnd || this.aatoken[i] == null) return false;
 return (this.lineIndices[i][1] > this.lineIndices[i][0]);
 }, "~N");
-Clazz.overrideMethod (c$, "loadFileResourceAsync", 
+Clazz.overrideMethod (c$, "loadFileResourceAsync",
 function (fileName) {
 this.loadFileAsync (null, fileName, -Math.abs (fileName.hashCode ()), false);
 }, "~S");
-Clazz.defineMethod (c$, "loadFileAsync", 
+Clazz.defineMethod (c$, "loadFileAsync",
 function (prefix, filename, i, doClear) {
 if (this.vwr.fm.cacheGet (filename, false) != null) {
 this.cancelFileThread ();
@@ -1209,7 +1209,7 @@ this.cancelFileThread ();
 this.vwr.queueOnHold = false;
 if ("#CANCELED#".equals (cacheName) || "#CANCELED#".equals (this.vwr.fm.cacheGet (cacheName, false))) this.evalError ("#CANCELED#", null);
 return cacheName;
-}this.thisContext.htFileCache.put (key, cacheName = prefix + System.currentTimeMillis ());
+}this.thisContext.htFileCache.put (key, cacheName = prefix + Zystem.currentTimeMillis ());
 if (doClear) this.vwr.cacheFileByName (prefix + "*", false);
 this.fileLoadThread =  new JS.FileLoadThread (this, this.vwr, filename, key, cacheName);
 if (this.vwr.testAsync) this.fileLoadThread.start ();
@@ -1217,13 +1217,13 @@ if (this.vwr.testAsync) this.fileLoadThread.start ();
 if (i < 0) this.fileLoadThread = null;
 throw  new JS.ScriptInterruption (this, "load", 1);
 }, "~S,~S,~N,~B");
-Clazz.defineMethod (c$, "cancelFileThread", 
+Clazz.defineMethod (c$, "cancelFileThread",
  function () {
 this.fileLoadThread = null;
 if (this.thisContext != null && this.thisContext.why === "loadFileAsync") {
 this.popContext (false, false);
 }});
-Clazz.defineMethod (c$, "logLoadInfo", 
+Clazz.defineMethod (c$, "logLoadInfo",
  function (msg) {
 if (msg.length > 0) JU.Logger.info (msg);
 var sb =  new JU.SB ();
@@ -1236,20 +1236,20 @@ sb.appendI ((moData.get ("mos")).size ()).append (" molecular orbitals in model 
 }
 if (sb.length () > 0) this.vwr.showString (sb.toString (), false);
 }, "~S");
-Clazz.overrideMethod (c$, "notifyResumeStatus", 
+Clazz.overrideMethod (c$, "notifyResumeStatus",
 function () {
 if (!this.chk && !this.executionStopped && !this.executionStepping && !this.executionPaused) {
 this.vwr.scriptStatus ("script execution " + (this.$error || this.executionStopped ? "interrupted" : "resumed"));
 }if (JU.Logger.debugging) JU.Logger.debug ("script execution resumed");
 });
-Clazz.defineMethod (c$, "refresh", 
+Clazz.defineMethod (c$, "refresh",
 function (doDelay) {
 if (this.chk) return;
 this.vwr.setTainted (true);
 this.vwr.requestRepaintAndWait ("refresh cmd");
 if (this.isJS && doDelay) this.doDelay (10);
 }, "~B");
-Clazz.overrideMethod (c$, "stopScriptThreads", 
+Clazz.overrideMethod (c$, "stopScriptThreads",
 function () {
 if (this.scriptDelayThread != null) {
 this.scriptDelayThread.interrupt ();
@@ -1259,15 +1259,15 @@ this.fileLoadThread.interrupt ();
 this.fileLoadThread.resumeEval ();
 this.cancelFileThread ();
 }});
-Clazz.defineMethod (c$, "getErrorLineMessage2", 
+Clazz.defineMethod (c$, "getErrorLineMessage2",
 function () {
 return JS.ScriptError.getErrorLineMessage (this.functionName, this.scriptFileName, this.getLinenumber (null), this.pc, JS.ScriptEval.statementAsString (this.vwr, this.st, -9999, this.debugHigh));
 });
-Clazz.defineMethod (c$, "getLinenumber", 
+Clazz.defineMethod (c$, "getLinenumber",
 function (c) {
 return (c == null ? this.lineNumbers[this.pc] : c.lineNumbers[c.pc]);
 }, "JS.ScriptContext");
-Clazz.defineMethod (c$, "dispatchCommands", 
+Clazz.defineMethod (c$, "dispatchCommands",
 function (isSpt, fromFunc, isTry) {
 if (this.sm == null) this.sm = this.vwr.shm;
 this.debugScript = this.debugHigh = false;
@@ -1291,12 +1291,12 @@ this.mustResumeEval = false;
 return done;
 }return true;
 }, "~B,~B,~B");
-Clazz.defineMethod (c$, "commandLoop", 
+Clazz.defineMethod (c$, "commandLoop",
  function (allowJSInterrupt) {
 var lastCommand = "";
 var isForCheck = false;
 var vProcess = null;
-var lastTime = System.currentTimeMillis ();
+var lastTime = Zystem.currentTimeMillis ();
 if (this.debugScript && this.debugHigh && !this.chk) {
 for (var i = this.pc; i < this.aatoken.length && i < this.pcEnd; i++) {
 JU.Logger.info ("Command " + i);
@@ -1305,15 +1305,15 @@ if (this.debugScript) this.logDebugScript (this.aatoken[i], 0);
 JU.Logger.info ("-----");
 }for (; this.pc < this.aatoken.length && this.pc < this.pcEnd; this.pc++) {
 if (allowJSInterrupt) {
-if (!this.executionPaused && System.currentTimeMillis () - lastTime > 1000) {
+if (!this.executionPaused && Zystem.currentTimeMillis () - lastTime > 1000) {
 this.pc--;
 this.doDelay (-1);
-}lastTime = System.currentTimeMillis ();
+}lastTime = Zystem.currentTimeMillis ();
 }if (!this.chk && !this.checkContinue ()) break;
 if (this.pc >= this.lineNumbers.length || this.lineNumbers[this.pc] > this.lineEnd) break;
 if (this.debugHigh) {
 var timeBegin = 0;
-timeBegin = System.currentTimeMillis ();
+timeBegin = Zystem.currentTimeMillis ();
 this.vwr.scriptStatus ("Eval.dispatchCommands():" + timeBegin);
 this.vwr.scriptStatus (this.script);
 }if (this.debugScript && !this.chk) JU.Logger.info ("Command " + this.pc + (this.thisContext == null ? "" : " path=" + this.thisContext.contextPath));
@@ -1373,7 +1373,7 @@ this.executionPaused = (this.isCommandDisplayable (this.pc + 1));
 }}
 }
 }, "~B");
-Clazz.defineMethod (c$, "processCommand", 
+Clazz.defineMethod (c$, "processCommand",
  function (tok) {
 if (JS.T.tokAttr (this.theToken.tok, 135168)) {
 this.processShapeCommand (tok);
@@ -1619,7 +1619,7 @@ default:
 this.checkExtension (this.theToken.tok);
 }
 }, "~N");
-Clazz.defineMethod (c$, "checkExtension", 
+Clazz.defineMethod (c$, "checkExtension",
  function (tok) {
 switch (tok) {
 case 4098:
@@ -1651,11 +1651,11 @@ case 134221856:
 this.getCmdExt ().dispatch (tok, false, this.st);
 break;
 default:
-System.out.println (JS.T.nameOf (tok) + " is not a command");
+Zystem.out.println (JS.T.nameOf (tok) + " is not a command");
 this.error (47);
 }
 }, "~N");
-Clazz.defineMethod (c$, "processShapeCommand", 
+Clazz.defineMethod (c$, "processShapeCommand",
  function (tok) {
 var iShape = 0;
 switch (tok) {
@@ -1838,7 +1838,7 @@ this.getIsoExt ().dispatch (iShape, false, this.st);
 return;
 }
 }, "~N");
-Clazz.defineMethod (c$, "cmdAnimation", 
+Clazz.defineMethod (c$, "cmdAnimation",
  function () {
 var animate = false;
 switch (this.getToken (1).tok) {
@@ -1908,7 +1908,7 @@ default:
 this.frameControl (1);
 }
 });
-Clazz.defineMethod (c$, "setFrameSet", 
+Clazz.defineMethod (c$, "setFrameSet",
  function (i) {
 var frames = this.expandFloatArray (this.floatParameterSet (i, 0, 2147483647), 1, false);
 this.checkLength (this.iToken + 1);
@@ -1918,7 +1918,7 @@ if (frames.length > 0) movie.put ("frames", frames);
 movie.put ("currentFrame", Integer.$valueOf (0));
 this.vwr.am.setMovie (movie);
 }, "~N");
-Clazz.defineMethod (c$, "cmdAxes", 
+Clazz.defineMethod (c$, "cmdAxes",
  function (index) {
 var tickInfo = this.tickParamAsStr (index, true, true, false);
 index = this.iToken + 1;
@@ -1983,7 +1983,7 @@ if (this.chk || mad10 == 2147483647) return;
 this.setObjectMad10 (34, "axes", mad10);
 if (tickInfo != null) this.setShapeProperty (34, "tickInfo", tickInfo);
 }, "~N");
-Clazz.defineMethod (c$, "cmdBackground", 
+Clazz.defineMethod (c$, "cmdBackground",
  function (i) {
 this.getToken (i);
 var argb;
@@ -2013,14 +2013,14 @@ return;
 }var iShape = this.getShapeType (this.theTok);
 this.colorShape (iShape, i + 1, true);
 }, "~N");
-Clazz.defineMethod (c$, "cmdBind", 
+Clazz.defineMethod (c$, "cmdBind",
  function () {
 var mouseAction = this.stringParameter (1);
 var name = this.paramAsStr (2);
 this.checkLength (3);
 if (!this.chk) this.vwr.bindAction (mouseAction, name);
 });
-Clazz.defineMethod (c$, "cmdBondorder", 
+Clazz.defineMethod (c$, "cmdBondorder",
  function () {
 this.checkLength (-3);
 var order = 0;
@@ -2036,7 +2036,7 @@ order = JS.ScriptParam.getPartialBondOrderFromFloatEncodedInt (this.st[2].intVal
 }}
 this.setShapeProperty (1, "bondOrder", Integer.$valueOf (order));
 });
-Clazz.defineMethod (c$, "cmdBoundbox", 
+Clazz.defineMethod (c$, "cmdBoundbox",
  function (index) {
 var tickInfo = this.tickParamAsStr (index, false, true, false);
 index = this.iToken + 1;
@@ -2075,13 +2075,13 @@ if (this.chk || mad10 == 2147483647) return;
 if (tickInfo != null) this.setShapeProperty (32, "tickInfo", tickInfo);
 this.setObjectMad10 (32, "boundbox", mad10);
 }, "~N");
-Clazz.defineMethod (c$, "cmdCD", 
+Clazz.defineMethod (c$, "cmdCD",
  function () {
 if (this.chk) return;
 var dir = (this.slen == 1 ? null : this.paramAsStr (1));
 this.showString (this.vwr.cd (dir));
 });
-Clazz.defineMethod (c$, "cmdCenter", 
+Clazz.defineMethod (c$, "cmdCenter",
  function (i) {
 if (this.slen == 1) {
 this.vwr.setNewRotationCenter (null);
@@ -2090,7 +2090,7 @@ return;
 if (center == null) this.invArg ();
 if (!this.chk) this.vwr.setNewRotationCenter (center);
 }, "~N");
-Clazz.defineMethod (c$, "cmdColor", 
+Clazz.defineMethod (c$, "cmdColor",
  function () {
 var i = 1;
 var strColor = (this.tokAt (1) == 4 ? this.stringParameter (1) : null);
@@ -2214,7 +2214,7 @@ break;
 }
 }this.colorShape (this.getShapeType (this.theTok), i, false);
 });
-Clazz.defineMethod (c$, "cmdDefine", 
+Clazz.defineMethod (c$, "cmdDefine",
  function () {
 if (this.slen < 3 || !(Clazz.instanceOf (this.getToken (1).value, String))) this.invArg ();
 var setName = (this.getToken (1).value).toLowerCase ();
@@ -2232,7 +2232,7 @@ var bs = this.atomExpressionAt (2);
 this.vwr.definedAtomSets.put (setName, bs);
 if (!this.chk) this.vwr.g.setUserVariable ("@" + setName, JS.SV.newV (10, bs));
 }});
-Clazz.defineMethod (c$, "cmdDelay", 
+Clazz.defineMethod (c$, "cmdDelay",
  function () {
 var millis = 0;
 switch (this.getToken (1).tok) {
@@ -2251,7 +2251,7 @@ this.error (34);
 this.refresh (false);
 this.doDelay (Math.abs (millis));
 });
-Clazz.defineMethod (c$, "cmdDelete", 
+Clazz.defineMethod (c$, "cmdDelete",
  function () {
 if (this.tokAt (1) == 1073742330) {
 if (this.slen == 4 && this.optParameterAsString (2).equals ("saved") && this.slen == 4) {
@@ -2266,7 +2266,7 @@ if (bs == null) bs = this.vwr.getAllAtoms ();
 var nDeleted = this.vwr.deleteAtoms (bs, false);
 if (this.doReport ()) this.report (J.i18n.GT.i (J.i18n.GT.$ ("{0} atoms deleted"), nDeleted), false);
 });
-Clazz.defineMethod (c$, "cmdDisplay", 
+Clazz.defineMethod (c$, "cmdDisplay",
  function (isDisplay) {
 var bs = null;
 var addRemove = 0;
@@ -2297,7 +2297,7 @@ this.vwr.ms.displayBonds (bs, isDisplay);
 return;
 }this.vwr.displayAtoms (bs, isDisplay, isGroup, addRemove, this.tQuiet);
 }, "~B");
-Clazz.defineMethod (c$, "cmdDots", 
+Clazz.defineMethod (c$, "cmdDots",
  function (iShape) {
 if (!this.chk) this.sm.loadShape (iShape);
 this.setShapeProperty (iShape, "init", null);
@@ -2346,7 +2346,7 @@ if (isOnly) {
 this.restrictSelected (false, false);
 }this.setShapeSize (iShape, rd);
 }, "~N");
-Clazz.defineMethod (c$, "cmdEcho", 
+Clazz.defineMethod (c$, "cmdEcho",
  function (index) {
 if (this.chk) return;
 var text = this.optParameterAsString (index);
@@ -2358,7 +2358,7 @@ doRefresh = false;
 }if (text != null) this.setShapeProperty (31, "text", text);
 }if (doRefresh && this.vwr.getRefreshing ()) this.showString (JU.Txt.formatText (this.vwr, text));
 }, "~N");
-Clazz.defineMethod (c$, "cmdFile", 
+Clazz.defineMethod (c$, "cmdFile",
  function () {
 var file = this.intParameter (this.checkLast (1));
 if (this.chk) return;
@@ -2373,13 +2373,13 @@ this.vwr.am.setAnimationDirection (1);
 this.vwr.setAnimationRange (modelIndex, modelIndex2);
 this.vwr.setCurrentModelIndex (-1);
 });
-Clazz.defineMethod (c$, "cmdFixed", 
+Clazz.defineMethod (c$, "cmdFixed",
  function () {
 var bs = (this.slen == 1 ? null : this.atomExpressionAt (1));
 if (this.chk) return;
 this.vwr.setMotionFixedAtoms (bs);
 });
-Clazz.defineMethod (c$, "cmdFor", 
+Clazz.defineMethod (c$, "cmdFor",
  function (tok, isForCheck) {
 var cmdToken = this.theToken;
 var pt = this.st[0].intValue;
@@ -2537,7 +2537,7 @@ this.popContext (true, false);
 if (!isOK && !this.chk) this.pc = Math.abs (pt) - 1;
 return isForCheck;
 }, "~N,~B");
-Clazz.defineMethod (c$, "cmdFlow", 
+Clazz.defineMethod (c$, "cmdFlow",
  function (tok, isForCheck, vProcess) {
 var ct;
 var pt = this.st[0].intValue;
@@ -2651,7 +2651,7 @@ break;
 if (!continuing && !this.chk) this.pc = Math.abs (pt) - 1;
 return isForCheck;
 }, "~N,~B,JU.Lst");
-Clazz.defineMethod (c$, "cmdFlowSwitch", 
+Clazz.defineMethod (c$, "cmdFlowSwitch",
  function (c, tok) {
 if (tok == 102410) c.addName ("_var");
 var $var = c.contextVariables.get ("_var");
@@ -2668,7 +2668,7 @@ return isOK ? 1 : -1;
 }c.contextVariables.put ("_var", v);
 return 1;
 }, "JS.ContextToken,~N");
-Clazz.defineMethod (c$, "cmdFont", 
+Clazz.defineMethod (c$, "cmdFont",
  function (shapeType, fontsize) {
 var fontface = "SansSerif";
 var fontstyle = "Plain";
@@ -2717,7 +2717,7 @@ this.sm.loadShape (shapeType);
 this.setShapeProperty (shapeType, "font", font3d);
 if (scaleAngstromsPerPixel >= 0) this.setShapeProperty (shapeType, "scalereference", Float.$valueOf (scaleAngstromsPerPixel));
 }, "~N,~N");
-Clazz.defineMethod (c$, "cmdFrank", 
+Clazz.defineMethod (c$, "cmdFrank",
  function (i) {
 var b = true;
 if (this.slen > i) switch (this.getToken (this.checkLast (i)).tok) {
@@ -2731,7 +2731,7 @@ this.error (5);
 }
 this.setBooleanProperty ("frank", b);
 }, "~N");
-Clazz.defineMethod (c$, "cmdFunc", 
+Clazz.defineMethod (c$, "cmdFunc",
  function () {
 if (this.chk && !this.isCmdLine_c_or_C_Option) return;
 var name = (this.getToken (0).value).toLowerCase ();
@@ -2743,7 +2743,7 @@ var params = (this.slen == 1 || this.slen == 3 && this.tokAt (1) == 268435472 &&
 if (this.chk) return;
 this.runFunctionAndRet (null, name, params, null, false, true, true);
 });
-Clazz.defineMethod (c$, "cmdGetProperty", 
+Clazz.defineMethod (c$, "cmdGetProperty",
  function () {
 if (this.chk) return;
 var retValue = "";
@@ -2777,7 +2777,7 @@ param = s;
 }retValue = this.vwr.getProperty ("readable", property, param);
 this.showString (retValue);
 });
-Clazz.defineMethod (c$, "cmdGoto", 
+Clazz.defineMethod (c$, "cmdGoto",
  function (isCmd) {
 var strTo = (isCmd ? this.paramAsStr (this.checkLast (1)) : null);
 var pcTo = (strTo == null ? this.aatoken.length - 1 : -1);
@@ -2832,7 +2832,7 @@ for (; nPush > 0; --nPush) this.popContext (false, false);
 }if (nPush != 0) this.invArg ();
 if (!this.chk) this.pc = pcTo - 1;
 }, "~B");
-Clazz.defineMethod (c$, "cmdHbond", 
+Clazz.defineMethod (c$, "cmdHbond",
  function () {
 if (this.slen == 2 && this.getToken (1).tok == 4102) {
 if (this.chk) return;
@@ -2849,7 +2849,7 @@ this.setShapeProperty (1, "type", Integer.$valueOf (30720));
 this.setShapeSizeBs (1, mad, null);
 this.setShapeProperty (1, "type", Integer.$valueOf (1023));
 });
-Clazz.defineMethod (c$, "cmdHelp", 
+Clazz.defineMethod (c$, "cmdHelp",
  function () {
 if (this.chk) return;
 var what = this.optParameterAsString (1).toLowerCase ();
@@ -2860,7 +2860,7 @@ return;
 }if (JS.T.tokAttr (JS.T.getTokFromName (what), 4096)) what = "?command=" + what;
 this.vwr.getHelp (what);
 });
-Clazz.defineMethod (c$, "cmdHistory", 
+Clazz.defineMethod (c$, "cmdHistory",
  function (pt) {
 if (this.slen == 1) {
 this.showString (this.vwr.getSetHistory (2147483647));
@@ -2882,7 +2882,7 @@ default:
 this.errorStr (24, "ON, OFF, CLEAR");
 }
 }, "~N");
-Clazz.defineMethod (c$, "cmdHover", 
+Clazz.defineMethod (c$, "cmdHover",
  function () {
 if (this.chk) return;
 var strLabel = (this.slen == 1 ? "on" : this.paramAsStr (1));
@@ -2890,7 +2890,7 @@ if (strLabel.equalsIgnoreCase ("on")) strLabel = "%U";
  else if (strLabel.equalsIgnoreCase ("off")) strLabel = null;
 this.vwr.setHoverLabel (strLabel);
 });
-Clazz.defineMethod (c$, "cmdLabel", 
+Clazz.defineMethod (c$, "cmdLabel",
  function (index, bs) {
 if (this.chk) return;
 this.sm.loadShape (5);
@@ -2913,7 +2913,7 @@ strLabel = this.paramAsStr (index);
 }
 this.sm.setLabel (strLabel, bs == null ? this.vwr.bsA () : bs);
 }, "~N,JU.BS");
-Clazz.defineMethod (c$, "cmdLoad", 
+Clazz.defineMethod (c$, "cmdLoad",
 function () {
 var doLoadFiles = (!this.chk || this.isCmdLine_C_Option);
 var isAppend = false;
@@ -3278,7 +3278,7 @@ throw  new JS.ScriptInterruption (this, "async", 1);
 }if (this.debugHigh) this.report ("Successfully loaded:" + (filenames == null ? htParams.get ("fullPathName") : modelName), false);
 this.finalizeLoad (isAppend, appendNew, isConcat, doOrient, nFiles, ac0, modelCount0);
 });
-Clazz.defineMethod (c$, "checkFileExists", 
+Clazz.defineMethod (c$, "checkFileExists",
 function (prefix, isAsync, filename, i, doClear) {
 if (this.chk || filename.startsWith ("cache://")) return filename;
 if ((this.vwr.testAsync || JV.Viewer.isJS) && (isAsync || filename.startsWith ("?")) || this.vwr.apiPlatform.forceAsyncLoad (filename)) {
@@ -3288,12 +3288,12 @@ filename = fullPathNameOrError[0];
 if (fullPathNameOrError[1] != null) this.errorStr (17, filename + ":" + fullPathNameOrError[1]);
 return filename;
 }, "~S,~B,~S,~N,~B");
-Clazz.defineMethod (c$, "addFilterAttribute", 
+Clazz.defineMethod (c$, "addFilterAttribute",
  function (htParams, filter, key) {
 var val = JU.PT.getQuotedOrUnquotedAttribute (filter, key);
 if (val != null && val.length > 0) htParams.put (key, val);
 }, "java.util.Map,~S,~S");
-Clazz.defineMethod (c$, "addLoadData", 
+Clazz.defineMethod (c$, "addLoadData",
  function (loadScript, key, htParams, i) {
 loadScript.append (" /*data*/ data");
 var ptVar = key.indexOf ("@");
@@ -3307,7 +3307,7 @@ loadScript.appendC ('\n').append (strModel).append (" end ").append (JU.PT.esc (
 if (ptVar < 0) i += 2;
 return i;
 }, "JU.SB,~S,java.util.Map,~N");
-Clazz.defineMethod (c$, "loadPNGJVar", 
+Clazz.defineMethod (c$, "loadPNGJVar",
  function (varName, o, htParams) {
 var av =  Clazz.newArray (-1, [JS.SV.newV (6, o)]);
 this.getCmdExt ().dispatch (1073741866, false, av);
@@ -3320,7 +3320,7 @@ this.vwr.cacheFileByName ("cache://VAR_*", false);
 this.vwr.cachePut (modelName, out.toByteArray ());
 this.cmdScript (0, modelName, null);
 }, "~S,~O,java.util.Map");
-Clazz.defineMethod (c$, "getLoadFilesList", 
+Clazz.defineMethod (c$, "getLoadFilesList",
  function (i, loadScript, sOptions, htParams, fNames) {
 var firstLastSteps = null;
 var filter = null;
@@ -3374,7 +3374,7 @@ loadScript.append (" COORD " + JU.Escape.eBS (bs));
 if (firstLastSteps != null) htParams.put ("firstLastSteps", firstLastSteps);
 return filter;
 }, "~N,JU.SB,JU.SB,java.util.Map,JU.Lst");
-Clazz.defineMethod (c$, "isLoadOption", 
+Clazz.defineMethod (c$, "isLoadOption",
  function (tok) {
 switch (tok) {
 case 1073742010:
@@ -3401,7 +3401,7 @@ return (this.tokAt (this.iToken + 2) != 1073742329);
 }
 return false;
 }, "~N");
-Clazz.defineMethod (c$, "getLoadModelIndex", 
+Clazz.defineMethod (c$, "getLoadModelIndex",
  function (i, sOptions, htParams) {
 var n;
 switch (this.tokAt (i)) {
@@ -3434,7 +3434,7 @@ break;
 }
 return this.iToken + 1;
 }, "~N,JU.SB,java.util.Map");
-Clazz.defineMethod (c$, "finalizeLoad", 
+Clazz.defineMethod (c$, "finalizeLoad",
  function (isAppend, appendNew, isConcat, doOrient, nFiles, ac0, modelCount0) {
 if (isAppend && (appendNew || nFiles > 1)) {
 this.vwr.setAnimationRange (-1, -1);
@@ -3465,7 +3465,7 @@ if (doOrient) script += ";restore orientation preload";
 if (script.length > 0 && !this.isCmdLine_c_or_C_Option) this.runScript (script);
 this.isEmbedded = false;
 }, "~B,~B,~B,~B,~N,~N,~N");
-Clazz.defineMethod (c$, "cmdLog", 
+Clazz.defineMethod (c$, "cmdLog",
  function () {
 if (this.slen == 1) this.bad ();
 if (this.chk) return;
@@ -3473,13 +3473,13 @@ var s = this.parameterExpressionString (1, 0);
 if (this.tokAt (1) == 1073742334) this.setStringProperty ("logFile", "");
  else this.vwr.log (s);
 });
-Clazz.defineMethod (c$, "cmdLoop", 
+Clazz.defineMethod (c$, "cmdLoop",
  function () {
 if (this.vwr.headless) return;
 if (!this.chk) this.pc = -1;
 this.cmdDelay ();
 });
-Clazz.defineMethod (c$, "cmdMessage", 
+Clazz.defineMethod (c$, "cmdMessage",
  function () {
 var text = this.paramAsStr (this.checkLast (1));
 if (this.chk) return;
@@ -3487,7 +3487,7 @@ var s = JU.Txt.formatText (this.vwr, text);
 if (this.outputBuffer == null && !this.vwr.isPrintOnly) JU.Logger.warn (s);
 if (!s.startsWith ("_")) this.report (s, false);
 });
-Clazz.defineMethod (c$, "cmdModel", 
+Clazz.defineMethod (c$, "cmdModel",
  function (offset) {
 var isFrame = (this.theTok == 4115 || this.vwr.ms.mc > 1);
 var frameList =  Clazz.newIntArray (-1, [-1, -1]);
@@ -3700,7 +3700,7 @@ this.vwr.setAnimationRange (modelIndex, modelIndex2);
 this.vwr.setCurrentModelIndexClear (isHyphen && !isRange ? -1 : modelIndex >= 0 ? modelIndex : 0, false);
 }if (isPlay) this.vwr.setAnimation (4143);
 }, "~N");
-Clazz.defineMethod (c$, "loadDssr", 
+Clazz.defineMethod (c$, "loadDssr",
  function (modelIndex, data) {
 if (modelIndex < 0 && (modelIndex = this.vwr.am.cmi) < 0) this.errorStr (30, "load <dssr file>");
 if (!data.startsWith ("{")) data = this.vwr.getFileAsString3 (data, true, "script");
@@ -3709,7 +3709,7 @@ var map = this.vwr.parseJSONMap (data);
 this.showString (this.vwr.getAnnotationParser (true).fixDSSRJSONMap (map));
 this.vwr.ms.setInfo (modelIndex, "dssr", map);
 }, "~N,~S");
-Clazz.defineMethod (c$, "cmdMove", 
+Clazz.defineMethod (c$, "cmdMove",
  function () {
 this.checkLength (-11);
 var dRot = JU.V3.new3 (this.floatParameter (1), this.floatParameter (2), this.floatParameter (3));
@@ -3724,7 +3724,7 @@ if (!this.useThreads ()) floatSecondsTotal = 0;
 this.vwr.move (this, dRot, dZoom, dTrans, dSlab, floatSecondsTotal, fps);
 if (floatSecondsTotal > 0 && this.isJS) throw  new JS.ScriptInterruption (this, "move", 1);
 });
-Clazz.defineMethod (c$, "cmdMoveto", 
+Clazz.defineMethod (c$, "cmdMoveto",
  function () {
 if (this.slen == 2 && this.tokAt (1) == 1073742162) {
 if (!this.chk) this.vwr.tm.stopMotion ();
@@ -3908,7 +3908,7 @@ cameraDepth = cameraX = cameraY = NaN;
  else this.vwr.moveTo (this, floatSecondsTotal, center, axis, degrees, null, zoom, xTrans, yTrans, rotationRadius, navCenter, xNav, yNav, navDepth, cameraDepth, cameraX, cameraY);
 if (this.isJS && floatSecondsTotal > 0 && this.vwr.g.waitForMoveTo) throw  new JS.ScriptInterruption (this, "moveTo", 1);
 });
-Clazz.defineMethod (c$, "isAtomExpression", 
+Clazz.defineMethod (c$, "isAtomExpression",
 function (i) {
 switch (this.tokAt (i)) {
 case 12290:
@@ -3919,7 +3919,7 @@ default:
 return false;
 }
 }, "~N");
-Clazz.defineMethod (c$, "cmdPause", 
+Clazz.defineMethod (c$, "cmdPause",
  function () {
 if (this.chk || this.isJS && !this.allowJSThreads) return false;
 var msg = this.optParameterAsString (1);
@@ -3933,14 +3933,14 @@ this.pauseExecution (true);
 this.vwr.scriptStatusMsg ("script execution paused" + msg, "script paused for RESUME");
 return true;
 });
-Clazz.defineMethod (c$, "cmdPrint", 
+Clazz.defineMethod (c$, "cmdPrint",
  function () {
 if (this.slen == 1) {
 if (!this.chk) this.showStringPrint ("\0", true);
 return;
 }this.showStringPrint (this.parameterExpressionString (1, 0), true);
 });
-Clazz.defineMethod (c$, "cmdPrompt", 
+Clazz.defineMethod (c$, "cmdPrompt",
  function () {
 var msg = null;
 if (this.slen == 1) {
@@ -3949,7 +3949,7 @@ if (!this.chk) msg = JS.ScriptEval.getContextTrace (this.vwr, this.getScriptCont
 msg = this.parameterExpressionString (1, 0);
 }if (!this.chk) this.vwr.prompt (msg, null, null, true);
 });
-Clazz.defineMethod (c$, "cmdReset", 
+Clazz.defineMethod (c$, "cmdReset",
  function () {
 if (this.slen == 3 && this.tokAt (1) == 134320141) {
 if (!this.chk) this.vwr.removeFunction (this.stringParameter (2));
@@ -3997,17 +3997,17 @@ var $var = this.paramAsStr (1);
 if ($var.charAt (0) == '_') this.invArg ();
 this.vwr.unsetProperty ($var);
 });
-Clazz.defineMethod (c$, "resetError", 
+Clazz.defineMethod (c$, "resetError",
  function () {
 this.vwr.g.removeParam ("_errormessage");
 });
-Clazz.defineMethod (c$, "cmdRestrict", 
+Clazz.defineMethod (c$, "cmdRestrict",
  function () {
 var isBond = (this.tokAt (1) == 1677721602);
 this.cmdSelect (isBond ? 2 : 1);
 this.restrictSelected (isBond, true);
 });
-Clazz.defineMethod (c$, "cmdReturn", 
+Clazz.defineMethod (c$, "cmdReturn",
  function (tv) {
 if (this.chk) return;
 var t = this.getContextVariableAsVariable ("_retval", false);
@@ -4019,7 +4019,7 @@ t.intValue = tv.intValue;
 t.tok = tv.tok;
 }this.cmdGoto (false);
 }, "JS.SV");
-Clazz.defineMethod (c$, "cmdRotate", 
+Clazz.defineMethod (c$, "cmdRotate",
 function (isSpin, isSelected) {
 if (this.slen == 2) switch (this.getToken (1).tok) {
 case 1073742335:
@@ -4339,7 +4339,7 @@ this.vwr.setAtomCoords (bsAtoms, 1145047050, ptsB);
 if (requiresThread && !this.useThreads ()) return;
 if (this.vwr.rotateAboutPointsInternal (this, points[0], points[1], rate, endDegrees, isSpin, bsAtoms, translation, ptsB, dihedralList, is4x4 ? m4 : null) && this.isJS && isSpin) throw  new JS.ScriptInterruption (this, "rotate", 1);
 }}, "~B,~B");
-Clazz.defineMethod (c$, "cmdRestore", 
+Clazz.defineMethod (c$, "cmdRestore",
  function () {
 if (this.slen > 1) {
 var saveName = this.optParameterAsString (2);
@@ -4412,7 +4412,7 @@ return;
 }
 }this.errorStr2 (53, "RESTORE", "bonds? context? coordinates? orientation? rotation? selection? state? structure?");
 });
-Clazz.defineMethod (c$, "cmdSave", 
+Clazz.defineMethod (c$, "cmdSave",
  function () {
 if (this.slen > 1) {
 var saveName = this.optParameterAsString (2);
@@ -4444,7 +4444,7 @@ return;
 }
 }this.errorStr2 (53, "SAVE", "bonds? context? coordinates? orientation? rotation? selection? state? structure?");
 });
-Clazz.defineMethod (c$, "cmdScript", 
+Clazz.defineMethod (c$, "cmdScript",
 function (tok, filename, theScript) {
 if (tok == 134238732) {
 this.checkLength (2);
@@ -4562,7 +4562,7 @@ this.evalError (null, null);
 }}this.chk = wasSyntaxCheck;
 this.isCmdLine_c_or_C_Option = wasScriptCheck;
 }, "~N,~S,~S");
-Clazz.defineMethod (c$, "cmdSelect", 
+Clazz.defineMethod (c$, "cmdSelect",
  function (i) {
 if (this.slen == 1) {
 this.vwr.select (null, false, 0, !this.doReport ());
@@ -4631,7 +4631,7 @@ bs1.and (bs);
 bs = bs1;
 }this.vwr.select (bs, isGroup, addRemove, !this.doReport ());
 }}, "~N");
-Clazz.defineMethod (c$, "cmdSelectionHalos", 
+Clazz.defineMethod (c$, "cmdSelectionHalos",
  function (pt) {
 var showHalo = false;
 switch (pt == this.slen ? 1073742335 : this.getToken (pt).tok) {
@@ -4647,7 +4647,7 @@ default:
 this.invArg ();
 }
 }, "~N");
-Clazz.defineMethod (c$, "cmdSet", 
+Clazz.defineMethod (c$, "cmdSet",
  function () {
 if (this.slen == 1) {
 this.showString (this.vwr.getAllSettings (null));
@@ -5016,7 +5016,7 @@ this.setVariable (1, 0, key, true);
 if (!isJmolSet) return;
 }if (showing) this.vwr.showParameter (key, true, 80);
 });
-Clazz.defineMethod (c$, "cmdSetEcho", 
+Clazz.defineMethod (c$, "cmdSetEcho",
  function () {
 var propertyName = null;
 var propertyValue = null;
@@ -5164,7 +5164,7 @@ break;
 }this.checkLength (pt);
 if (!this.chk && propertyName != null) this.setShapeProperty (31, propertyName, propertyValue);
 });
-Clazz.defineMethod (c$, "cmdSetLabel", 
+Clazz.defineMethod (c$, "cmdSetLabel",
  function (str) {
 this.sm.loadShape (5);
 var propertyValue = null;
@@ -5250,7 +5250,7 @@ if (bs == null) this.setShapeProperty (5, str, propertyValue);
  else this.setShapePropertyBs (5, str, propertyValue, bs);
 return true;
 }, "~S");
-Clazz.defineMethod (c$, "cmdSetPicking", 
+Clazz.defineMethod (c$, "cmdSetPicking",
  function () {
 if (this.slen == 2) {
 this.setStringProperty ("picking", "identify");
@@ -5304,7 +5304,7 @@ mode = JV.ActionManager.getPickingMode (str.substring (0, mode));
 if (mode < 0) this.errorStr2 (50, "SET PICKING " + type, str);
 this.setStringProperty ("picking", str);
 });
-Clazz.defineMethod (c$, "cmdSetPickingStyle", 
+Clazz.defineMethod (c$, "cmdSetPickingStyle",
  function () {
 if (this.slen > 4 || this.tokAt (2) == 4) {
 this.setStringProperty ("pickingStyle", this.getSettingStr (2, false));
@@ -5335,7 +5335,7 @@ break;
 if (JV.ActionManager.getPickingStyleIndex (str) < 0) this.errorStr2 (50, "SET PICKINGSTYLE " + type, str);
 this.setStringProperty ("pickingStyle", str);
 });
-Clazz.defineMethod (c$, "cmdSlab", 
+Clazz.defineMethod (c$, "cmdSlab",
  function (isDepth) {
 var TF = false;
 var plane = null;
@@ -5388,7 +5388,7 @@ this.invArg ();
 }
 if (!this.chk) this.vwr.tm.slabInternal (plane, isDepth);
 }, "~B");
-Clazz.defineMethod (c$, "cmdSsbond", 
+Clazz.defineMethod (c$, "cmdSsbond",
  function () {
 var mad = this.getMadParameter ();
 if (mad == 2147483647) return;
@@ -5396,7 +5396,7 @@ this.setShapeProperty (1, "type", Integer.$valueOf (256));
 this.setShapeSizeBs (1, mad, null);
 this.setShapeProperty (1, "type", Integer.$valueOf (1023));
 });
-Clazz.defineMethod (c$, "cmdStructure", 
+Clazz.defineMethod (c$, "cmdStructure",
  function () {
 var type = J.c.STR.getProteinStructureType (this.paramAsStr (1));
 if (type === J.c.STR.NOT) this.invArg ();
@@ -5415,14 +5415,14 @@ if (this.chk) return;
 this.clearDefinedVariableAtomSets ();
 this.vwr.setProteinType (type, bs);
 });
-Clazz.defineMethod (c$, "cmdSubset", 
+Clazz.defineMethod (c$, "cmdSubset",
  function () {
 var bs = null;
 if (!this.chk) this.vwr.slm.setSelectionSubset (null);
 if (this.slen != 1 && (this.slen != 4 || !this.getToken (2).value.equals ("off"))) bs = this.atomExpressionAt (1);
 if (!this.chk) this.vwr.slm.setSelectionSubset (bs);
 });
-Clazz.defineMethod (c$, "cmdSync", 
+Clazz.defineMethod (c$, "cmdSync",
  function () {
 var text = "";
 var applet = "";
@@ -5458,7 +5458,7 @@ applet = null;
 }if (this.chk) return;
 this.vwr.syncScript (text, applet, port);
 });
-Clazz.defineMethod (c$, "cmdThrow", 
+Clazz.defineMethod (c$, "cmdThrow",
  function () {
 if (this.chk) return;
 var pt = (this.tokAt (1) == 14 ? 2 : 1);
@@ -5471,14 +5471,14 @@ if (this.doReport ()) this.report (J.i18n.GT.o (J.i18n.GT.$ ("to resume, enter: 
 throw  new JS.ScriptInterruption (this, info, -2147483648);
 }this.evalError (info, null);
 });
-Clazz.defineMethod (c$, "saveContext", 
+Clazz.defineMethod (c$, "saveContext",
  function (saveName) {
 var sc = this.getScriptContext ("Context_" + saveName);
 this.vwr.stm.saveContext (saveName, sc);
 this.vwr.g.setUserVariable (saveName, JS.SV.newV (14, sc));
 return sc;
 }, "~S");
-Clazz.defineMethod (c$, "cmdTimeout", 
+Clazz.defineMethod (c$, "cmdTimeout",
  function (index) {
 var name = null;
 var script = null;
@@ -5510,7 +5510,7 @@ break;
 
 if (!this.chk) this.vwr.setTimeout (name, mSec, script);
 }, "~N");
-Clazz.defineMethod (c$, "cmdTranslate", 
+Clazz.defineMethod (c$, "cmdTranslate",
  function (isSelected) {
 var bs = null;
 var i = 1;
@@ -5547,7 +5547,7 @@ if (!this.chk) {
 this.vwr.translate (xyz, amount, type, bs);
 this.refresh (false);
 }}, "~B");
-Clazz.defineMethod (c$, "cmdUnbind", 
+Clazz.defineMethod (c$, "cmdUnbind",
  function () {
 if (this.slen != 1) this.checkLength23 ();
 var mouseAction = this.optParameterAsString (1);
@@ -5559,7 +5559,7 @@ name = mouseAction;
 mouseAction = null;
 }if (!this.chk) this.vwr.unBindAction (mouseAction, name);
 });
-Clazz.defineMethod (c$, "cmdUndoRedoMove", 
+Clazz.defineMethod (c$, "cmdUndoRedoMove",
  function () {
 var n = 1;
 var len = 2;
@@ -5579,7 +5579,7 @@ this.invArg ();
 this.checkLength (len);
 if (!this.chk) this.vwr.undoMoveAction (this.tokAt (0), n);
 });
-Clazz.defineMethod (c$, "setCurrentCagePts", 
+Clazz.defineMethod (c$, "setCurrentCagePts",
 function (originABC, name) {
 var sym = J.api.Interface.getSymmetry (this.vwr, "eval");
 if (sym == null && this.vwr.async) throw  new NullPointerException ();
@@ -5592,11 +5592,11 @@ throw e;
 }
 }
 }, "~A,~S");
-Clazz.defineMethod (c$, "cmdUnitcell", 
+Clazz.defineMethod (c$, "cmdUnitcell",
  function (i) {
 this.getCmdExt ().dispatch (1814695966, i == 2, null);
 }, "~N");
-Clazz.defineMethod (c$, "cmdVector", 
+Clazz.defineMethod (c$, "cmdVector",
  function () {
 var type = J.atomdata.RadiusData.EnumType.SCREEN;
 var value = 1;
@@ -5641,7 +5641,7 @@ break;
 }
 this.setShapeSize (18,  new J.atomdata.RadiusData (null, value, type, null));
 });
-Clazz.defineMethod (c$, "cmdVibration", 
+Clazz.defineMethod (c$, "cmdVibration",
  function () {
 this.checkLength (-3);
 var period = 0;
@@ -5682,7 +5682,7 @@ this.vwr.tm.setVibrationPeriod (0);
 return;
 }this.vwr.setVibrationPeriod (-period);
 });
-Clazz.defineMethod (c$, "cmdWireframe", 
+Clazz.defineMethod (c$, "cmdWireframe",
  function () {
 var mad = -2147483648;
 if (this.tokAt (1) == 4141) this.checkLast (1);
@@ -5691,7 +5691,7 @@ if (this.chk || mad == 2147483647) return;
 this.setShapeProperty (1, "type", Integer.$valueOf (1023));
 this.setShapeSizeBs (1, mad == -2147483648 ? 300 : mad, null);
 });
-Clazz.defineMethod (c$, "cmdZap", 
+Clazz.defineMethod (c$, "cmdZap",
  function (isZapCommand) {
 if (this.slen == 1 || !isZapCommand) {
 var doAll = (isZapCommand && !this.$isStateScript);
@@ -5710,7 +5710,7 @@ var isQuiet = !this.doReport ();
 if (!isQuiet) this.report (J.i18n.GT.i (J.i18n.GT.$ ("{0} atoms deleted"), nDeleted), false);
 this.vwr.select (null, false, 0, isQuiet);
 }, "~B");
-Clazz.defineMethod (c$, "cmdZoom", 
+Clazz.defineMethod (c$, "cmdZoom",
  function (isZoomTo) {
 if (!isZoomTo) {
 var tok = (this.slen > 1 ? this.getToken (1).tok : 1073742335);
@@ -5772,7 +5772,7 @@ if (isSameAtom && Math.abs (zoom - newZoom) < 1 || !this.useThreads ()) floatSec
 this.vwr.moveTo (this, floatSecondsTotal, center, JV.JC.center, NaN, null, newZoom, xTrans, yTrans, NaN, null, NaN, NaN, NaN, NaN, NaN, NaN);
 if (this.isJS && floatSecondsTotal > 0 && this.vwr.g.waitForMoveTo) throw  new JS.ScriptInterruption (this, "zoomTo", 1);
 }, "~B");
-Clazz.defineMethod (c$, "colorShape", 
+Clazz.defineMethod (c$, "colorShape",
  function (shapeType, index, isBackground) {
 var translucency = null;
 var colorvalue = null;
@@ -5977,7 +5977,7 @@ if (typeMask != 0) this.setShapeProperty (1, "type", Integer.$valueOf (1023));
 if (doClearBondSet) this.vwr.selectBonds (null);
 if (shapeType == 0) this.vwr.shm.checkInheritedShapes ();
 }, "~N,~N,~B");
-Clazz.defineMethod (c$, "getPartialCharges", 
+Clazz.defineMethod (c$, "getPartialCharges",
 function (bs) {
 try {
 this.vwr.getOrCalcPartialCharges (bs, null);
@@ -5989,7 +5989,7 @@ throw e;
 }
 }
 }, "JU.BS");
-Clazz.defineMethod (c$, "encodeRadiusParameter", 
+Clazz.defineMethod (c$, "encodeRadiusParameter",
 function (index, isOnly, allowAbsolute) {
 var value = NaN;
 var factorType = J.atomdata.RadiusData.EnumType.ABSOLUTE;
@@ -6069,7 +6069,7 @@ this.iToken = index;
 vdwType = J.c.VDW.AUTO;
 }}return  new J.atomdata.RadiusData (null, value, factorType, vdwType);
 }, "~N,~B,~B");
-Clazz.defineMethod (c$, "expandFloatArray", 
+Clazz.defineMethod (c$, "expandFloatArray",
 function (a, min, asBS) {
 var n = a.length;
 var haveNeg = false;
@@ -6113,7 +6113,7 @@ throw e;
 }
 }
 }, "~A,~N,~B");
-Clazz.defineMethod (c$, "frameControl", 
+Clazz.defineMethod (c$, "frameControl",
  function (i) {
 switch (this.getToken (this.checkLast (i)).tok) {
 case 1073742098:
@@ -6130,7 +6130,7 @@ return;
 }
 this.invArg ();
 }, "~N");
-Clazz.defineMethod (c$, "getColorRange", 
+Clazz.defineMethod (c$, "getColorRange",
 function (i) {
 var color1 = this.getArgbParam (i);
 if (this.tokAt (++this.iToken) != 1073742170) this.invArg ();
@@ -6138,23 +6138,23 @@ var color2 = this.getArgbParam (++this.iToken);
 var nColors = (this.tokAt (this.iToken + 1) == 2 ? this.intParameter (++this.iToken) : 0);
 return JU.ColorEncoder.getColorSchemeList (JU.ColorEncoder.getPaletteAtoB (color1, color2, nColors));
 }, "~N");
-Clazz.defineMethod (c$, "getFullPathName", 
+Clazz.defineMethod (c$, "getFullPathName",
 function () {
 var filename = (!this.chk || this.isCmdLine_C_Option ? this.vwr.fm.getFullPathName (true) : "test.xyz");
 if (filename == null) this.invArg ();
 return filename;
 });
-Clazz.defineMethod (c$, "getObjectBoundingBox", 
+Clazz.defineMethod (c$, "getObjectBoundingBox",
  function (id) {
 var data =  Clazz.newArray (-1, [id, null, null]);
 return (this.getShapePropertyData (24, "getBoundingBox", data) || this.getShapePropertyData (29, "getBoundingBox", data) || this.getShapePropertyData (25, "getBoundingBox", data) || this.getShapePropertyData (28, "getBoundingBox", data) || this.getShapePropertyData (27, "getBoundingBox", data) ? data[2] : null);
 }, "~S");
-Clazz.defineMethod (c$, "getObjectCenter", 
+Clazz.defineMethod (c$, "getObjectCenter",
 function (axisID, index, modelIndex) {
 var data =  Clazz.newArray (-1, [axisID, Integer.$valueOf (index), Integer.$valueOf (modelIndex)]);
 return (this.getShapePropertyData (22, "getCenter", data) || this.getShapePropertyData (24, "getCenter", data) || this.getShapePropertyData (29, "getCenter", data) || this.getShapePropertyData (25, "getCenter", data) || this.getShapePropertyData (28, "getCenter", data) || this.getShapePropertyData (27, "getCenter", data) ? data[2] : null);
 }, "~S,~N,~N");
-Clazz.defineMethod (c$, "getPlaneForObject", 
+Clazz.defineMethod (c$, "getPlaneForObject",
 function (id, vAB) {
 var shapeType = this.sm.getShapeIdFromObjectName (id);
 switch (shapeType) {
@@ -6169,7 +6169,7 @@ return this.getShapeProperty (24, "plane");
 }
 return null;
 }, "~S,JU.V3");
-Clazz.defineMethod (c$, "getQuaternionArray", 
+Clazz.defineMethod (c$, "getQuaternionArray",
 function (quaternionOrSVData, itype) {
 var data;
 switch (itype) {
@@ -6196,7 +6196,7 @@ return null;
 }
 return data;
 }, "~O,~N");
-Clazz.defineMethod (c$, "getSetAxesTypeMad10", 
+Clazz.defineMethod (c$, "getSetAxesTypeMad10",
 function (index) {
 if (index == this.slen) return 1;
 switch (this.getToken (this.checkLast (index)).tok) {
@@ -6215,38 +6215,38 @@ return (Float.isNaN (angstroms) ? 2147483647 : Clazz.doubleToInt (Math.floor (an
 if (!this.chk) this.errorStr (7, "\"DOTTED\"");
 return 0;
 }, "~N");
-Clazz.defineMethod (c$, "getSettingFloat", 
+Clazz.defineMethod (c$, "getSettingFloat",
  function (pt) {
 return (pt >= this.slen ? NaN : JS.SV.fValue (this.parameterExpressionToken (pt)));
 }, "~N");
-Clazz.defineMethod (c$, "getSettingInt", 
+Clazz.defineMethod (c$, "getSettingInt",
  function (pt) {
 return (pt >= this.slen ? -2147483648 : this.parameterExpressionToken (pt).asInt ());
 }, "~N");
-Clazz.defineMethod (c$, "getSettingStr", 
+Clazz.defineMethod (c$, "getSettingStr",
  function (pt, isJmolSet) {
 return (isJmolSet && this.slen == pt + 1 ? this.paramAsStr (pt) : this.parameterExpressionToken (pt).asString ());
 }, "~N,~B");
-Clazz.defineMethod (c$, "getShapeProperty", 
+Clazz.defineMethod (c$, "getShapeProperty",
 function (shapeType, propertyName) {
 return this.sm.getShapePropertyIndex (shapeType, propertyName, -2147483648);
 }, "~N,~S");
-Clazz.defineMethod (c$, "getShapePropertyData", 
+Clazz.defineMethod (c$, "getShapePropertyData",
 function (shapeType, propertyName, data) {
 return this.sm.getShapePropertyData (shapeType, propertyName, data);
 }, "~N,~S,~A");
-Clazz.defineMethod (c$, "getShapeType", 
+Clazz.defineMethod (c$, "getShapeType",
  function (tok) {
 var iShape = JV.JC.shapeTokenIndex (tok);
 if (iShape < 0) this.error (49);
 return iShape;
 }, "~N");
-Clazz.defineMethod (c$, "getTranslucentLevel", 
+Clazz.defineMethod (c$, "getTranslucentLevel",
 function (i) {
 var f = this.floatParameter (i);
 return (this.theTok == 2 && f > 0 && f < 9 ? f + 1 : f);
 }, "~N");
-Clazz.defineMethod (c$, "getZoom", 
+Clazz.defineMethod (c$, "getZoom",
  function (ptCenter, i, bs, currentZoom) {
 var zoom = (this.isFloatParameter (i) ? this.floatParameter (i++) : NaN);
 if (zoom == 0 || currentZoom == 0) {
@@ -6293,7 +6293,7 @@ zoom = (bs == null ? -currentZoom : currentZoom);
 }this.iToken = i - 1;
 return zoom;
 }, "~N,~N,JU.BS,~N");
-Clazz.defineMethod (c$, "setElementColor", 
+Clazz.defineMethod (c$, "setElementColor",
  function (str, argb) {
 for (var i = JU.Elements.elementNumberMax; --i >= 0; ) {
 if (str.equalsIgnoreCase (JU.Elements.elementNameFromNumber (i))) {
@@ -6321,7 +6321,7 @@ return true;
 }}
 return false;
 }, "~S,~N");
-Clazz.defineMethod (c$, "setMeshDisplayProperty", 
+Clazz.defineMethod (c$, "setMeshDisplayProperty",
 function (shape, i, tok) {
 var propertyName = null;
 var propertyValue = null;
@@ -6390,16 +6390,16 @@ if ((this.tokAt (this.iToken + 1)) != 0) {
 if (!this.setMeshDisplayProperty (shape, ++this.iToken, 0)) --this.iToken;
 }return true;
 }, "~N,~N,~N");
-Clazz.defineMethod (c$, "setObjectArgb", 
+Clazz.defineMethod (c$, "setObjectArgb",
  function (str, argb) {
 if (this.chk) return;
 this.vwr.setObjectArgb (str, argb);
 }, "~S,~N");
-Clazz.defineMethod (c$, "setObjectMad10", 
+Clazz.defineMethod (c$, "setObjectMad10",
 function (iShape, name, mad10) {
 if (!this.chk) this.vwr.setObjectMad10 (iShape, name, mad10);
 }, "~N,~S,~N");
-Clazz.defineMethod (c$, "setObjectProp", 
+Clazz.defineMethod (c$, "setObjectProp",
  function (id, tokCommand, ptColor) {
 var data =  Clazz.newArray (-1, [id, null]);
 var s = "";
@@ -6442,12 +6442,12 @@ if (iShape < 21) break;
 }
 return s;
 }, "~S,~N,~N");
-Clazz.defineMethod (c$, "setObjectProperty", 
+Clazz.defineMethod (c$, "setObjectProperty",
 function () {
 var id = this.setShapeNameParameter (2);
 return (this.chk ? "" : this.setObjectProp (id, this.tokAt (0), this.iToken));
 });
-Clazz.defineMethod (c$, "setShapeNameParameter", 
+Clazz.defineMethod (c$, "setShapeNameParameter",
 function (i) {
 var id = this.paramAsStr (i);
 var isWild = id.equals ("*");
@@ -6470,23 +6470,23 @@ id += this.optParameterAsString (++i);
 this.iToken = i;
 return id;
 }, "~N");
-Clazz.defineMethod (c$, "setShapeProperty", 
+Clazz.defineMethod (c$, "setShapeProperty",
 function (shapeType, propertyName, propertyValue) {
 if (!this.chk) this.sm.setShapePropertyBs (shapeType, propertyName, propertyValue, null);
 }, "~N,~S,~O");
-Clazz.defineMethod (c$, "setShapePropertyBs", 
+Clazz.defineMethod (c$, "setShapePropertyBs",
 function (iShape, propertyName, propertyValue, bs) {
 if (!this.chk) this.sm.setShapePropertyBs (iShape, propertyName, propertyValue, bs);
 }, "~N,~S,~O,JU.BS");
-Clazz.defineMethod (c$, "setShapeSize", 
+Clazz.defineMethod (c$, "setShapeSize",
  function (shapeType, rd) {
 if (!this.chk) this.sm.setShapeSizeBs (shapeType, 0, rd, null);
 }, "~N,J.atomdata.RadiusData");
-Clazz.defineMethod (c$, "setShapeSizeBs", 
+Clazz.defineMethod (c$, "setShapeSizeBs",
 function (shapeType, size, bs) {
 if (!this.chk) this.sm.setShapeSizeBs (shapeType, size, null, bs);
 }, "~N,~N,JU.BS");
-Clazz.defineMethod (c$, "setShapeTranslucency", 
+Clazz.defineMethod (c$, "setShapeTranslucency",
 function (shapeType, prefix, translucency, translucentLevel, bs) {
 if (translucentLevel == 3.4028235E38) translucentLevel = this.vwr.getFloat (570425353);
 this.setShapeProperty (shapeType, "translucentLevel", Float.$valueOf (translucentLevel));
@@ -6494,7 +6494,7 @@ if (prefix == null) return;
 if (bs == null) this.setShapeProperty (shapeType, prefix + "translucency", translucency);
  else if (!this.chk) this.setShapePropertyBs (shapeType, prefix + "translucency", translucency, bs);
 }, "~N,~S,~S,~N,JU.BS");
-Clazz.defineMethod (c$, "setSize", 
+Clazz.defineMethod (c$, "setSize",
  function (shape, scale) {
 var rd = null;
 var tok = this.tokAt (1);
@@ -6519,7 +6519,7 @@ if (rd == null) rd =  new J.atomdata.RadiusData (null, scale, J.atomdata.RadiusD
 if (isOnly) this.restrictSelected (false, false);
 this.setShapeSize (shape, rd);
 }, "~N,~N");
-Clazz.defineMethod (c$, "setSizeBio", 
+Clazz.defineMethod (c$, "setSizeBio",
  function (iShape) {
 var mad = 0;
 switch (this.getToken (1).tok) {
@@ -6556,7 +6556,7 @@ this.error (6);
 }
 this.setShapeSizeBs (iShape, mad, null);
 }, "~N");
-Clazz.defineMethod (c$, "setUnits", 
+Clazz.defineMethod (c$, "setUnits",
  function (units, tok) {
 if (tok == 545259568 && (units.toLowerCase ().endsWith ("hz") || JU.PT.isOneOf (units.toLowerCase (), ";angstroms;au;bohr;nanometers;nm;picometers;pm;vanderwaals;vdw;"))) {
 if (!this.chk) this.vwr.setUnits (units, true);
@@ -6566,7 +6566,7 @@ if (!this.chk) this.vwr.setUnits (units, false);
 this.errorStr2 (50, "set " + JS.T.nameOf (tok), units);
 }return true;
 }, "~S,~N");
-Clazz.defineMethod (c$, "toString", 
+Clazz.defineMethod (c$, "toString",
 function () {
 var str =  new JU.SB ();
 str.append ("Eval\n pc:");

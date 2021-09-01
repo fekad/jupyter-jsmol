@@ -31,10 +31,10 @@ this.nodes =  new JU.Lst ();
 this.links =  new JU.Lst ();
 this.nets =  new JU.Lst ();
 });
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function () {
 });
-Clazz.defineMethod (c$, "addNodeIfNull", 
+Clazz.defineMethod (c$, "addNodeIfNull",
 function (label) {
 var node = this.getTopo (this.nodes, label, 'n');
 var atom = this.reader.asc.getAtomFromName (node.atomName);
@@ -47,7 +47,7 @@ this.nodes.addLast (n);
 atom = n;
 }return atom;
 }, "~S");
-Clazz.defineMethod (c$, "getTopo", 
+Clazz.defineMethod (c$, "getTopo",
 function (l, id, type) {
 for (var i = 0; i < l.size (); i++) {
 var o = l.get (i);
@@ -62,7 +62,7 @@ break;
 }
 return null;
 }, "JU.Lst,~S,~S");
-Clazz.overrideMethod (c$, "setReader", 
+Clazz.overrideMethod (c$, "setReader",
 function (reader) {
 if (reader.checkFilterKey ("NOTOPOL")) {
 return this;
@@ -72,7 +72,7 @@ if (types != null && types.length > 1) types = "+" + types.substring (1).toLower
 if (reader.doApplySymmetry) reader.asc.setNoAutoBond ();
 return this;
 }, "J.adapter.readers.cif.CifReader");
-Clazz.overrideMethod (c$, "processBlock", 
+Clazz.overrideMethod (c$, "processBlock",
 function (key) {
 if (this.reader == null) return;
 if (this.ac0 < 0) {
@@ -91,7 +91,7 @@ this.processLink ();
 this.processNet ();
 }}
 }, "~S");
-Clazz.defineMethod (c$, "processNode", 
+Clazz.defineMethod (c$, "processNode",
  function () {
 var label = this.getField (18);
 var atomLabel = this.getField (17);
@@ -104,7 +104,7 @@ var n = Clazz.innerTypeInstance (J.adapter.readers.cif.TopoCifParser.Node, this,
 this.nodes.addLast (n);
 if (!Float.isNaN (x)) n.set (x, y, z);
 });
-Clazz.defineMethod (c$, "processLink", 
+Clazz.defineMethod (c$, "processLink",
  function () {
 var t1 =  Clazz.newIntArray (3, 0);
 var t2 =  Clazz.newIntArray (3, 0);
@@ -137,11 +137,11 @@ t2[1] = this.getInt (9);
 t2[2] = this.getInt (10);
 }this.links.addLast (Clazz.innerTypeInstance (J.adapter.readers.cif.TopoCifParser.Link, this, null, this.linkIndex++, label1, label2, d, op1, t1, op2, t2, multiplicity, type, angle, order));
 });
-Clazz.defineMethod (c$, "processNet", 
+Clazz.defineMethod (c$, "processNet",
  function () {
 this.nets.addLast (Clazz.innerTypeInstance (J.adapter.readers.cif.TopoCifParser.Net, this, null, this.netIndex++, this.getField (24)));
 });
-Clazz.overrideMethod (c$, "finalizeReader", 
+Clazz.overrideMethod (c$, "finalizeReader",
 function () {
 if (this.reader == null) return false;
 for (var i = 0; i < this.nodes.size (); i++) {
@@ -153,7 +153,7 @@ this.links.get (i).finalizeLink ();
 this.reader.applySymmetryAndSetTrajectory ();
 return true;
 });
-Clazz.overrideMethod (c$, "finalizeSymmetry", 
+Clazz.overrideMethod (c$, "finalizeSymmetry",
 function (haveSymmetry) {
 if (this.reader == null || !haveSymmetry || !this.reader.doApplySymmetry) return;
 var sym = this.reader.asc.getXSymmetry ().getBaseSymmetry ();
@@ -184,7 +184,7 @@ info.addLast (this.links.get (i).getInfo ());
 }
 this.reader.asc.setCurrentModelInfo ("topology", info);
 }, "~B");
-Clazz.defineMethod (c$, "setBonds", 
+Clazz.defineMethod (c$, "setBonds",
  function (index, atoms, carts, link, sym, nOps, bsConnected) {
 var nbonds = 0;
 var bs1 =  new JU.BS ();
@@ -231,21 +231,21 @@ bsConnected.set (at2.index);
 }
 return nbonds;
 }, "~N,~A,~A,J.adapter.readers.cif.TopoCifParser.Link,J.api.SymmetryInterface,~N,JU.BS");
-c$.isEqualD = Clazz.defineMethod (c$, "isEqualD", 
+c$.isEqualD = Clazz.defineMethod (c$, "isEqualD",
 function (p1, p2, d) {
 return Double.isNaN (d) || Math.abs (p1.distance (p2) - d) < J.adapter.readers.cif.TopoCifParser.ERROR_TOLERANCE;
 }, "JU.T3,JU.T3,~N");
-Clazz.defineMethod (c$, "getField", 
+Clazz.defineMethod (c$, "getField",
  function (field) {
 var f = this.reader.getField (field);
 return ("\0".equals (f) ? null : f);
 }, "~N");
-Clazz.defineMethod (c$, "getInt", 
+Clazz.defineMethod (c$, "getInt",
  function (field) {
 var f = this.getField (field);
 return (f == null ? -2147483648 : this.reader.parseIntStr (f));
 }, "~N");
-Clazz.defineMethod (c$, "getFloat", 
+Clazz.defineMethod (c$, "getFloat",
  function (field) {
 var f = this.getField (field);
 return (f == null ? NaN : this.reader.parseFloatStr (f));
@@ -261,7 +261,7 @@ this.net = null;
 this.formula = null;
 Clazz.instantialize (this, arguments);
 }, J.adapter.readers.cif.TopoCifParser, "Node", J.adapter.smarter.Atom);
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function (a, b, c, d, e) {
 Clazz.superConstructor (this, J.adapter.readers.cif.TopoCifParser.Node);
 this.idx = a;
@@ -274,7 +274,7 @@ this.getElementSymbol ();
 if (!d.equals (this.elementSymbol)) this.elementSymbol = "Z";
 }this.atomName = c;
 }, "~N,~S,~S,~S,~S");
-Clazz.defineMethod (c$, "finalizeNode", 
+Clazz.defineMethod (c$, "finalizeNode",
 function () {
 var a = (this.atomName == null ? null : this.b$["J.adapter.readers.cif.TopoCifParser"].reader.asc.getAtomFromName (this.atomName));
 if (a == null) {
@@ -295,11 +295,11 @@ if (b == null) b = this.b$["J.adapter.readers.cif.TopoCifParser"].getTopo (this.
 this.atomName = this.netID + "_" + this.label;
 this.b$["J.adapter.readers.cif.TopoCifParser"].reader.addCifAtom (this, this.atomName, null, null);
 });
-Clazz.defineMethod (c$, "info", 
+Clazz.defineMethod (c$, "info",
 function () {
 return "[node " + this.idx + " " + this.label + "/" + this.atomName + " " + Clazz.superCall (this, J.adapter.readers.cif.TopoCifParser.Node, "toString", []) + "]";
 });
-Clazz.defineMethod (c$, "toString", 
+Clazz.defineMethod (c$, "toString",
 function () {
 return this.info ();
 });
@@ -333,7 +333,7 @@ this.symops = null;
 this.topoOrder = 0;
 Clazz.instantialize (this, arguments);
 }, J.adapter.readers.cif.TopoCifParser, "Link");
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function (a, b, c, d, e, f, g, h, i, j, k, l) {
 this.idx = a;
 this.topoOrder = l;
@@ -350,7 +350,7 @@ this.dt = JU.P3.new3 ((h[0] - f[0]), (h[1] - f[1]), (h[2] - f[2]));
 this.multiplicity = i;
 this.voronoiAngle = k;
 }, "~N,~S,~S,~N,~N,~A,~N,~A,~N,~S,~N,~N");
-Clazz.defineMethod (c$, "getInfo", 
+Clazz.defineMethod (c$, "getInfo",
 function () {
 var a =  new java.util.Hashtable ();
 a.put ("label1", this.a1.atomName);
@@ -380,7 +380,7 @@ a.put ("topoOrder", Integer.$valueOf (this.topoOrder));
 a.put ("order", Integer.$valueOf (this.order));
 return a;
 });
-Clazz.defineMethod (c$, "setPrimitives", 
+Clazz.defineMethod (c$, "setPrimitives",
 function (a, b) {
 var c = b.length;
 this.p1f = JU.P3.new3 (this.a1.x, this.a1.y, this.a1.z);
@@ -395,15 +395,15 @@ if (!e.isValid) continue;
 this.primitives[d] = e;
 }
 }, "J.api.SymmetryInterface,~A");
-Clazz.defineMethod (c$, "info", 
+Clazz.defineMethod (c$, "info",
 function () {
 return "[link " + (this.idx + 1) + " " + this.label1 + " " + this.label2 + " " + this.d + " " + this.type + "]";
 });
-Clazz.overrideMethod (c$, "toString", 
+Clazz.overrideMethod (c$, "toString",
 function () {
 return this.info ();
 });
-Clazz.defineMethod (c$, "finalizeLink", 
+Clazz.defineMethod (c$, "finalizeLink",
 function () {
 this.a1 = this.b$["J.adapter.readers.cif.TopoCifParser"].addNodeIfNull (this.label1);
 this.a2 = this.b$["J.adapter.readers.cif.TopoCifParser"].addNodeIfNull (this.label2);
@@ -425,7 +425,7 @@ Clazz.instantialize (this, arguments);
 Clazz.prepareFields (c$, function () {
 this.nodes =  new JU.BS ();
 });
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function (a, b) {
 this.idx = a;
 this.id = b;
@@ -443,7 +443,7 @@ this.isValid = false;
 this.symop = 0;
 Clazz.instantialize (this, arguments);
 }, J.adapter.readers.cif.TopoCifParser, "TopoPrimitive");
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function (a, b, c, d) {
 this.symop = b;
 var e =  new JU.P3 ();
@@ -462,7 +462,7 @@ f.setT (this.p2u);
 c.toCartesian (e, true);
 c.toCartesian (f, true);
 if (Float.isNaN (a.d) || a.d == 0) {
-System.out.println ("TopoCifParser link distance " + a.p1f + "-" + a.p2f + " assigned " + e.distance (f) + " given as " + a.d);
+Zystem.out.println ("TopoCifParser link distance " + a.p1f + "-" + a.p2f + " assigned " + e.distance (f) + " given as " + a.d);
 a.d = e.distance (f);
 this.isValid = true;
 } else {
@@ -471,11 +471,11 @@ this.isValid = J.adapter.readers.cif.TopoCifParser.isEqualD (e, f, a.d);
 var g = "TopoCifParser link ignored due to distance error " + a.p1f + "-" + a.p2f + " actual " + e.distance (f) + " expected " + a.d + " for operator " + b + "\n";
 this.b$["J.adapter.readers.cif.TopoCifParser"].reader.appendLoadNote (g);
 }}, "J.adapter.readers.cif.TopoCifParser.Link,~N,J.api.SymmetryInterface,JU.M4");
-Clazz.defineMethod (c$, "info", 
+Clazz.defineMethod (c$, "info",
 function () {
 return "op=" + this.symop + " pt=" + this.p1u + " v=" + this.v12f;
 });
-Clazz.overrideMethod (c$, "toString", 
+Clazz.overrideMethod (c$, "toString",
 function () {
 return this.info ();
 });

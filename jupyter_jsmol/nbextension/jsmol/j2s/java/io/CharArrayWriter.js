@@ -27,7 +27,7 @@ Clazz.defineMethod(c$,"expand",
 if(this.count+i<=this.buf.length){
 return;
 }var newbuf=Clazz.newArray(this.buf.length+(2*i),'\0');
-System.arraycopy(this.buf,0,newbuf,0,this.count);
+Zystem.arraycopy(this.buf,0,newbuf,0,this.count);
 this.buf=newbuf;
 },$fz.isPrivate=true,$fz),"~N");
 Clazz.overrideMethod(c$,"flush",
@@ -47,7 +47,7 @@ Clazz.defineMethod(c$,"toCharArray",
 function(){
 {
 var result=Clazz.newArray(this.count,'\0');
-System.arraycopy(this.buf,0,result,0,this.count);
+Zystem.arraycopy(this.buf,0,result,0,this.count);
 return result;
 }});
 Clazz.overrideMethod(c$,"toString",
@@ -60,7 +60,7 @@ function(c,offset,len){
 if(0<=offset&&offset<=c.length&&0<=len&&len<=c.length-offset){
 {
 this.expand(len);
-System.arraycopy(c,offset,this.buf,this.count,len);
+Zystem.arraycopy(c,offset,this.buf,this.count,len);
 this.count+=len;
 }}else{
 throw new IndexOutOfBoundsException();

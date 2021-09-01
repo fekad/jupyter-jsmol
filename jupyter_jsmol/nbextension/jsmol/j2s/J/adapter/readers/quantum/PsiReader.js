@@ -11,13 +11,13 @@ this.atomNames =  new JU.Lst ();
 this.shellsByUniqueAtom =  new JU.Lst ();
 this.uniqueAtomMap =  new java.util.Hashtable ();
 });
-Clazz.overrideMethod (c$, "checkLine", 
+Clazz.overrideMethod (c$, "checkLine",
 function () {
 if (this.line.indexOf ("-Geometry after Center-of-Mass shift and reorientation (a.u.):") >= 0) {
 this.readAtoms (true);
 this.doProcessLines = true;
 return true;
-}if (this.line.indexOf ("-Unique atoms in the canonical coordinate system (a.u.):") >= 0) {
+}if (this.line.indexOf ("-Unique atoms in the canonical coordinate Zystem (a.u.):") >= 0) {
 this.readUniqueAtoms ();
 this.doProcessLines = true;
 return true;
@@ -45,11 +45,11 @@ this.readFrequencies ();
 return true;
 }return this.checkNboLine ();
 });
-Clazz.defineMethod (c$, "readSCFDone", 
+Clazz.defineMethod (c$, "readSCFDone",
  function () {
 this.asc.setAtomSetName (this.line);
 });
-Clazz.defineMethod (c$, "readAtoms", 
+Clazz.defineMethod (c$, "readAtoms",
  function (isInitial) {
 if (isInitial) {
 this.asc.newAtomSet ();
@@ -68,7 +68,7 @@ atom.elementNumber = this.parseIntStr (tokens[0]);
 this.setAtomCoordScaled (atom, tokens, 1, 0.5291772);
 }
 }, "~B");
-Clazz.defineMethod (c$, "readBasis", 
+Clazz.defineMethod (c$, "readBasis",
 function () {
 var gdata =  new JU.Lst ();
 this.gaussianCount = 0;
@@ -119,7 +119,7 @@ if (this.debugging) {
 JU.Logger.debug (this.shellCount + " slater shells read");
 JU.Logger.debug (this.gaussianCount + " gaussian primitives read");
 }});
-Clazz.defineMethod (c$, "readUniqueAtoms", 
+Clazz.defineMethod (c$, "readUniqueAtoms",
  function () {
 var sdata =  new JU.Lst ();
 this.discardLinesUntilContains ("----");
@@ -143,7 +143,7 @@ sdata.addLast ( Clazz.newIntArray (-1, [i + 1, slater[0], slater[1], slater[2]])
 }
 this.moData.put ("shells", sdata);
 });
-Clazz.defineMethod (c$, "readPsiMolecularOrbitals", 
+Clazz.defineMethod (c$, "readPsiMolecularOrbitals",
 function () {
 var mos = JU.AU.createArrayOfHashtable (5);
 var data = JU.AU.createArrayOfArrayList (5);
@@ -182,7 +182,7 @@ this.addMOData (nThisLine, data, mos);
 this.moData.put ("mos", this.orbitals);
 this.finalizeMOData (this.moData);
 });
-Clazz.defineMethod (c$, "readFrequencies", 
+Clazz.defineMethod (c$, "readFrequencies",
  function () {
 this.rd ();
 var ac = this.asc.getLastAtomSetAtomCount ();

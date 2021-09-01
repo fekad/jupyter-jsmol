@@ -18,7 +18,7 @@ this.isDone = false;
 this.m4 = null;
 Clazz.instantialize (this, arguments);
 }, J.thread, "SpinThread", J.thread.JmolThread);
-Clazz.overrideMethod (c$, "setManager", 
+Clazz.overrideMethod (c$, "setManager",
 function (manager, vwr, params) {
 this.transformManager = manager;
 this.setViewer (vwr, "SpinThread");
@@ -34,7 +34,7 @@ this.bsAtoms = options[3];
 this.isGesture = (options[4] != null);
 }return 0;
 }, "~O,JV.Viewer,~O");
-Clazz.overrideMethod (c$, "run1", 
+Clazz.overrideMethod (c$, "run1",
 function (mode) {
 while (true) switch (mode) {
 case -1:
@@ -51,17 +51,17 @@ break;
 }if (this.isNav && this.myFps != this.transformManager.navFps) {
 this.myFps = this.transformManager.navFps;
 this.index = 0;
-this.startTime = System.currentTimeMillis ();
+this.startTime = Zystem.currentTimeMillis ();
 } else if (!this.isNav && this.myFps != this.transformManager.spinFps && this.bsAtoms == null) {
 this.myFps = this.transformManager.spinFps;
 this.index = 0;
-this.startTime = System.currentTimeMillis ();
+this.startTime = Zystem.currentTimeMillis ();
 }if (this.myFps == 0 || !(this.isNav ? this.transformManager.navOn : this.transformManager.spinOn)) {
 mode = -2;
 break;
 }var refreshNeeded = (this.endDegrees >= 1e10 ? true : this.isNav ? this.transformManager.navX != 0 || this.transformManager.navY != 0 || this.transformManager.navZ != 0 : this.transformManager.isSpinInternal && this.transformManager.internalRotationAxis.angle != 0 || this.transformManager.isSpinFixed && this.transformManager.fixedRotationAxis.angle != 0 || !this.transformManager.isSpinFixed && !this.transformManager.isSpinInternal && (this.transformManager.spinX != 0 || this.transformManager.spinY != 0 || this.transformManager.spinZ != 0));
 this.targetTime = Clazz.floatToLong (++this.index * 1000 / this.myFps);
-this.currentTime = System.currentTimeMillis () - this.startTime;
+this.currentTime = Zystem.currentTimeMillis () - this.startTime;
 this.sleepTime = (this.targetTime - this.currentTime);
 if (this.sleepTime < 0) {
 if (!this.haveNotified) JU.Logger.info ("spinFPS is set too fast (" + this.myFps + ") -- can't keep up!");
@@ -105,7 +105,7 @@ return;
 }
 
 }, "~N");
-Clazz.defineMethod (c$, "doTransform", 
+Clazz.defineMethod (c$, "doTransform",
  function () {
 if (this.dihedralList != null) {
 var f = 1 / this.myFps / this.endDegrees;

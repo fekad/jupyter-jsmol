@@ -59,11 +59,11 @@ Clazz.instantialize (this, arguments);
 Clazz.prepareFields (c$, function () {
 this.vPush =  new JU.Lst ();
 });
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function (vwr) {
 this.vwr = vwr;
 }, "JV.Viewer");
-Clazz.defineMethod (c$, "compile", 
+Clazz.defineMethod (c$, "compile",
 function (filename, script, isPredefining, isSilent, debugScript, isCheckOnly) {
 this.isCheckOnly = isCheckOnly;
 this.filename = filename;
@@ -93,7 +93,7 @@ sc.lineNumbers = this.lineNumbers;
 sc.vars = this.contextVariables;
 return sc;
 }, "~S,~S,~B,~B,~B,~B");
-Clazz.defineMethod (c$, "newContextVariable", 
+Clazz.defineMethod (c$, "newContextVariable",
  function (ident) {
 this.theToken = JS.T.o (1073741824, ident);
 if (this.pushCount > 0) {
@@ -106,11 +106,11 @@ JS.ScriptCompiler.addContextVariable (this.contextVariables, ident);
 } else {
 this.thisFunction.addVariable (ident, false);
 }}, "~S");
-c$.addContextVariable = Clazz.defineMethod (c$, "addContextVariable", 
+c$.addContextVariable = Clazz.defineMethod (c$, "addContextVariable",
 function (contextVariables, name) {
 contextVariables.put (name, JS.SV.newS ("").setName (name));
 }, "java.util.Map,~S");
-Clazz.defineMethod (c$, "isContextVariable", 
+Clazz.defineMethod (c$, "isContextVariable",
  function (ident) {
 for (var i = this.vPush.size (); --i >= 0; ) {
 var ct = this.vPush.get (i);
@@ -118,7 +118,7 @@ if (ct.contextVariables != null && ct.contextVariables.containsKey (ident)) retu
 }
 return (this.thisFunction != null ? this.thisFunction.isVariable (ident) : this.contextVariables != null && this.contextVariables.containsKey (ident));
 }, "~S");
-Clazz.defineMethod (c$, "cleanScriptComments", 
+Clazz.defineMethod (c$, "cleanScriptComments",
  function (script) {
 if (script.indexOf ('\u00A0') >= 0) script = script.$replace ('\u00A0', ' ');
 if (script.indexOf ('\u201C') >= 0) script = script.$replace ('\u201C', '"');
@@ -132,13 +132,13 @@ this.allowMissingEnd = (this.scriptExtensions.indexOf ("##noendcheck") >= 0);
 }this.haveComments = (script.indexOf ("#") >= 0);
 return JV.FileManager.getEmbeddedScript (script);
 }, "~S");
-Clazz.defineMethod (c$, "addTokenToPrefix", 
+Clazz.defineMethod (c$, "addTokenToPrefix",
  function (token) {
 if (this.logMessages) JU.Logger.info ("addTokenToPrefix" + this.lineCurrent + " " + this.iCommand + " " + token);
 this.ltoken.addLast (token);
 if (token.tok != 0) this.lastToken = token;
 }, "JS.T");
-Clazz.defineMethod (c$, "compile0", 
+Clazz.defineMethod (c$, "compile0",
  function (isFull) {
 this.haveENDIF = false;
 this.script = this.cleanScriptComments (this.script);
@@ -293,11 +293,11 @@ continue;
 }
 }
 }, "~B");
-Clazz.defineMethod (c$, "setAaTokenCompiled", 
+Clazz.defineMethod (c$, "setAaTokenCompiled",
  function () {
 this.aatokenCompiled = this.lltoken.toArray ( new Array (this.lltoken.size ()));
 });
-Clazz.defineMethod (c$, "lookingAtLeadingWhitespace", 
+Clazz.defineMethod (c$, "lookingAtLeadingWhitespace",
  function () {
 var ichT = this.ichToken;
 while (JS.ScriptCompiler.isSpaceOrTab (this.charAt (ichT))) ++ichT;
@@ -308,13 +308,13 @@ if (this.cchToken == 0) return false;
 this.afterWhite = ichT;
 return true;
 });
-Clazz.defineMethod (c$, "isLineContinuation", 
+Clazz.defineMethod (c$, "isLineContinuation",
  function (ichT, checkMathop) {
 var isEscaped = (ichT + 2 < this.cchScript && this.script.charAt (ichT) == '\\' && this.nCharNewLine (ichT + 1) > 0 || !this.isShowScriptOutput && checkMathop && this.lookingAtMathContinuation (ichT));
 if (isEscaped) this.lineCurrent++;
 return isEscaped;
 }, "~N,~B");
-Clazz.defineMethod (c$, "lookingAtMathContinuation", 
+Clazz.defineMethod (c$, "lookingAtMathContinuation",
  function (ichT) {
 var n;
 if ((n = this.nCharNewLine (ichT)) == 0 || this.lastToken.tok == 1073742332) return false;
@@ -347,19 +347,19 @@ while (JS.ScriptCompiler.isSpaceOrTab (this.charAt (ichT))) ++ichT;
 
 return (this.lookingAtLookupToken (ichT) && this.tokLastMath == 1);
 }, "~N");
-Clazz.defineMethod (c$, "lookingAtEndOfLine", 
+Clazz.defineMethod (c$, "lookingAtEndOfLine",
  function () {
 if (this.ichToken >= this.cchScript) {
 this.ichEnd = this.cchScript;
 return true;
 }return ((this.cchToken = this.nCharNewLine (this.ichEnd = this.ichToken)) > 0);
 });
-Clazz.defineMethod (c$, "nCharNewLine", 
+Clazz.defineMethod (c$, "nCharNewLine",
  function (ichT) {
 var ch;
 return ((ch = this.charAt (ichT)) != '\r' ? (ch == '\n' ? 1 : 0) : this.charAt (++ichT) == '\n' ? 2 : 1);
 }, "~N");
-Clazz.defineMethod (c$, "lookingAtTerminator", 
+Clazz.defineMethod (c$, "lookingAtTerminator",
  function () {
 var isSemi = (this.script.charAt (this.ichToken) == ';');
 if (isSemi && this.nTokens > 0) this.ptSemi = this.nTokens;
@@ -367,7 +367,7 @@ if (!isSemi || this.nSemiSkip-- > 0) return false;
 this.cchToken = 1;
 return true;
 });
-Clazz.defineMethod (c$, "lookingAtComment", 
+Clazz.defineMethod (c$, "lookingAtComment",
  function () {
 var ch = this.script.charAt (this.ichToken);
 var ichT = this.ichToken;
@@ -426,11 +426,11 @@ return 2;
 this.cchToken = ichT - this.ichToken;
 return (this.nTokens == 0 ? 1 : 2);
 });
-Clazz.defineMethod (c$, "charAt", 
+Clazz.defineMethod (c$, "charAt",
  function (i) {
 return (i < this.cchScript ? this.script.charAt (i) : '\0');
 }, "~N");
-Clazz.defineMethod (c$, "processTokenList", 
+Clazz.defineMethod (c$, "processTokenList",
  function (iLine, doCompile) {
 var n = this.ltoken.size ();
 if (n > 0 || this.comment != null) {
@@ -499,7 +499,7 @@ if (doEval) {
 if (this.iCommand == this.lnLength) {
 this.lineNumbers = JU.AU.doubleLengthShort (this.lineNumbers);
 var lnI =  Clazz.newIntArray (this.lnLength * 2, 2, 0);
-System.arraycopy (this.lineIndices, 0, lnI, 0, this.lnLength);
+Zystem.arraycopy (this.lineIndices, 0, lnI, 0, this.lnLength);
 this.lineIndices = lnI;
 this.lnLength *= 2;
 }this.lineNumbers[this.iCommand] = this.lineNumbers[this.lineNumbers.length - 1] = iLine;
@@ -556,17 +556,17 @@ this.ichToken = this.cchScript;
 return 0;
 }return 0;
 }, "~N,~B");
-Clazz.defineMethod (c$, "addBrace", 
+Clazz.defineMethod (c$, "addBrace",
  function (t) {
 this.vBraces.addLast (t);
 this.iBrace++;
 }, "JS.T");
-Clazz.defineMethod (c$, "pushContext", 
+Clazz.defineMethod (c$, "pushContext",
  function (t) {
 this.pushCount++;
 this.vPush.addLast (t);
 }, "JS.T");
-Clazz.defineMethod (c$, "wasImpliedScript", 
+Clazz.defineMethod (c$, "wasImpliedScript",
  function () {
 if (this.checkImpliedScriptCmd && this.nTokens >= 2 && (this.tokCommand == 134222850 || this.tokCommand == 4124)) {
 var s = (this.nTokens == 2 ? this.lastToken.value.toString ().toUpperCase () : null);
@@ -579,7 +579,7 @@ this.tokCommand = 0;
 return true;
 }}return false;
 });
-Clazz.defineMethod (c$, "compileCommand", 
+Clazz.defineMethod (c$, "compileCommand",
  function () {
 switch (this.ltoken.size ()) {
 case 0:
@@ -616,15 +616,15 @@ this.addTokenToPrefix (JS.T.tokenRightParen);
 }}this.atokenInfix = this.ltoken.toArray ( new Array (size = this.ltoken.size ()));
 return this.compileExpressions ();
 });
-Clazz.defineMethod (c$, "tokenAt", 
+Clazz.defineMethod (c$, "tokenAt",
  function (i) {
 return this.ltoken.get (i);
 }, "~N");
-Clazz.overrideMethod (c$, "tokAt", 
+Clazz.overrideMethod (c$, "tokAt",
 function (i) {
 return (i < this.ltoken.size () ? this.tokenAt (i).tok : 0);
 }, "~N");
-Clazz.defineMethod (c$, "setCommand", 
+Clazz.defineMethod (c$, "setCommand",
  function (token) {
 this.tokenCommand = token;
 if (token == null) {
@@ -637,12 +637,12 @@ this.isCommaAsOrAllowed = JS.T.tokAttr (this.tokCommand, 12288);
 this.implicitString = JS.T.tokAttr (this.tokCommand, 20480);
 }return token;
 }, "JS.T");
-Clazz.defineMethod (c$, "replaceCommand", 
+Clazz.defineMethod (c$, "replaceCommand",
  function (token) {
 this.ltoken.removeItemAt (0);
 this.ltoken.add (0, this.setCommand (token));
 }, "JS.T");
-Clazz.defineMethod (c$, "getPrefixToken", 
+Clazz.defineMethod (c$, "getPrefixToken",
  function () {
 this.ident = this.script.substring (this.ichToken, this.ichToken + this.cchToken);
 this.identLC = this.ident.toLowerCase ();
@@ -669,7 +669,7 @@ this.theToken = JS.T.o (this.theToken.tok, this.ident);
 this.theToken = JS.SV.newSV ((this.identLC.indexOf ("property_") == 0 ? 1715472409 : 1073741824), 2147483647, this.ident).setName (myName);
 }return this.theTok = this.theToken.tok;
 });
-Clazz.defineMethod (c$, "checkSpecialParameterSyntax", 
+Clazz.defineMethod (c$, "checkSpecialParameterSyntax",
  function () {
 if (this.lookingAtString (!this.implicitString)) {
 if (this.cchToken < 0) return this.ERROR (4);
@@ -891,11 +891,11 @@ this.addTokenToPrefix (JS.T.o ((Clazz.instanceOf (m, JU.M4) ? 12 : 11), m));
 return 2;
 }}}return 0;
 });
-Clazz.defineMethod (c$, "addNumber", 
+Clazz.defineMethod (c$, "addNumber",
  function (tok, i, v) {
 this.addTokenToPrefix (this.afterWhite == this.ichToken ? JS.SV.newSV (tok, i, v) : JS.T.tv (tok, i, v));
 }, "~N,~N,~O");
-Clazz.defineMethod (c$, "lookingAtMatrix", 
+Clazz.defineMethod (c$, "lookingAtMatrix",
  function () {
 var ipt;
 var m;
@@ -903,7 +903,7 @@ if (this.ichToken + 4 >= this.cchScript || this.script.charAt (this.ichToken) !=
 this.cchToken = ipt + 2 - this.ichToken;
 return m;
 });
-Clazz.defineMethod (c$, "parseKnownToken", 
+Clazz.defineMethod (c$, "parseKnownToken",
  function () {
 var tok = this.getPrefixToken ();
 var token;
@@ -1066,7 +1066,7 @@ return 2;
 }
 return 0;
 });
-Clazz.defineMethod (c$, "tokenizePlusPlus", 
+Clazz.defineMethod (c$, "tokenizePlusPlus",
  function (tok, isPlusPlusX) {
 if (isPlusPlusX) {
 this.setCommand (JS.T.tokenSet);
@@ -1079,7 +1079,7 @@ for (var i = 1; i < this.nTokens; i++) this.addTokenToPrefix (this.ltoken.get (i
 this.addTokenToPrefix (tok == 268435649 ? JS.T.tokenMinus : JS.T.tokenPlus);
 this.addTokenToPrefix (JS.T.i (1));
 }, "~N,~B");
-Clazz.defineMethod (c$, "checkNewSetCommand", 
+Clazz.defineMethod (c$, "checkNewSetCommand",
  function () {
 var name = this.ltoken.get (0).value.toString ();
 if (!this.isContextVariable (name.toLowerCase ())) return false;
@@ -1089,7 +1089,7 @@ this.ltoken.add (0, this.tokenCommand);
 this.ltoken.set (1, t);
 return true;
 });
-Clazz.defineMethod (c$, "parseCommandParameter", 
+Clazz.defineMethod (c$, "parseCommandParameter",
  function (iLine, isFull) {
 this.nTokens = this.ltoken.size ();
 switch (this.tokCommand) {
@@ -1363,7 +1363,7 @@ break;
 }
 return 0;
 }, "~N,~B");
-Clazz.defineMethod (c$, "setNewSetCommand", 
+Clazz.defineMethod (c$, "setNewSetCommand",
  function (isSetBrace, ident) {
 this.tokCommand = 36867;
 this.isNewSet = (!isSetBrace && !this.isUserFunction (ident));
@@ -1373,7 +1373,7 @@ this.setEqualPt = 2147483647;
 this.ptNewSetModifier = (this.isNewSet ? (ident.equals ("(") ? 2 : 1) : 2147483647);
 return ((isSetBrace || this.theToken.tok == 268435472 || this.theToken.tok == 536870918 || this.theToken.tok == 268435650 || this.theToken.tok == 268435649) ? this.theToken : JS.T.o (1073741824, ident));
 }, "~B,~S");
-Clazz.defineMethod (c$, "checkUnquotedFileName", 
+Clazz.defineMethod (c$, "checkUnquotedFileName",
  function () {
 var ichT = this.ichToken;
 var ch;
@@ -1383,7 +1383,7 @@ var name = this.script.substring (this.ichToken, ichT).$replace ('\\', '/');
 this.cchToken = ichT - this.ichToken;
 this.theToken = JS.T.o (4, name);
 });
-Clazz.defineMethod (c$, "checkFlowStartBrace", 
+Clazz.defineMethod (c$, "checkFlowStartBrace",
  function (atEnd) {
 var tok = this.tokCommand;
 switch (tok) {
@@ -1407,7 +1407,7 @@ case 102408:
 return false;
 }
 }, "~B");
-Clazz.defineMethod (c$, "checkFlowEndBrace", 
+Clazz.defineMethod (c$, "checkFlowEndBrace",
  function () {
 if (this.iBrace <= 0 || this.vBraces.get (this.iBrace - 1).tok != 1073742338) return 0;
 this.vBraces.removeItemAt (--this.iBrace);
@@ -1433,7 +1433,7 @@ if (this.tokCommand == 102411 || this.tokCommand == 102413) return 0;
 }
 return this.forceFlowEnd (token);
 });
-Clazz.defineMethod (c$, "forceFlowEnd", 
+Clazz.defineMethod (c$, "forceFlowEnd",
  function (token) {
 var t0 = this.tokenCommand;
 this.forceFlowContext = this.flowContext;
@@ -1450,7 +1450,7 @@ this.addTokenToPrefix (token);
 this.setCommand (t0);
 return 2;
 }, "JS.T");
-Clazz.defineMethod (c$, "flowStart", 
+Clazz.defineMethod (c$, "flowStart",
  function (token) {
 switch (token.tok) {
 case 134320649:
@@ -1464,11 +1464,11 @@ default:
 return JS.T.getTokenFromName (token.value);
 }
 }, "JS.T");
-c$.isBreakableContext = Clazz.defineMethod (c$, "isBreakableContext", 
+c$.isBreakableContext = Clazz.defineMethod (c$, "isBreakableContext",
 function (tok) {
 return tok == 134320648 || tok == 102439 || tok == 102406 || tok == 102411 || tok == 102413;
 }, "~N");
-Clazz.defineMethod (c$, "checkFlowCommand", 
+Clazz.defineMethod (c$, "checkFlowCommand",
  function (ident) {
 var pt = this.lltoken.size ();
 switch (this.tokCommand) {
@@ -1554,11 +1554,11 @@ this.flowContext =  new JS.ScriptFlowContext (this, ct, pt, this.flowContext, th
 }
 return 0;
 }, "~S");
-Clazz.defineMethod (c$, "setFlowEnd", 
+Clazz.defineMethod (c$, "setFlowEnd",
  function (tokCommand, ident) {
 this.setCommand (JS.T.tv (tokCommand, (this.flowContext.ptDefault > 0 ? this.flowContext.ptDefault : -this.flowContext.pt0), ident));
 }, "~N,~S");
-Clazz.defineMethod (c$, "isFlowIfContextOK", 
+Clazz.defineMethod (c$, "isFlowIfContextOK",
  function (f) {
 switch (f == null ? 0 : f.token.tok) {
 case 134320649:
@@ -1569,7 +1569,7 @@ return this.tokCommand != 364547;
 }
 return false;
 }, "JS.ScriptFlowContext");
-Clazz.defineMethod (c$, "checkFlowEnd", 
+Clazz.defineMethod (c$, "checkFlowEnd",
  function (tok, ident, pt1, isExplicitEnd) {
 if (isExplicitEnd) {
 if (this.flowContext == null) return this.errorStr (1, "end " + ident);
@@ -1617,7 +1617,7 @@ this.flowContext = this.flowContext.parent;
 this.fixFlowAddLine (this.flowContext);
 return true;
 }, "~N,~S,~N,~B");
-Clazz.defineMethod (c$, "fixFlowAddLine", 
+Clazz.defineMethod (c$, "fixFlowAddLine",
  function (flowContext) {
 while (flowContext != null) {
 if (flowContext.addLine > 0 || flowContext.forceEndIf) {
@@ -1626,7 +1626,7 @@ flowContext.forceEndIf = true;
 }flowContext = flowContext.parent;
 }
 }, "JS.ScriptFlowContext");
-Clazz.defineMethod (c$, "getData", 
+Clazz.defineMethod (c$, "getData",
  function (key) {
 this.addTokenToPrefix (JS.T.o (4, key));
 this.ichToken += key.length + 2;
@@ -1646,7 +1646,7 @@ this.addTokenToPrefix (JS.T.o (4, key));
 this.cchToken = i - this.ichToken + key.length + 6;
 return true;
 }, "~S");
-Clazz.defineMethod (c$, "incrementLineCount", 
+Clazz.defineMethod (c$, "incrementLineCount",
  function (str) {
 var ch;
 var pt = str.indexOf ('\r');
@@ -1659,15 +1659,15 @@ if ((ch = str.charAt (i)) == '\n' || ch == '\r') this.lineCurrent++;
 }
 return this.lineCurrent - n;
 }, "~S");
-c$.isSpaceOrTab = Clazz.defineMethod (c$, "isSpaceOrTab", 
+c$.isSpaceOrTab = Clazz.defineMethod (c$, "isSpaceOrTab",
  function (ch) {
 return ch == ' ' || ch == '\t';
 }, "~S");
-Clazz.defineMethod (c$, "eol", 
+Clazz.defineMethod (c$, "eol",
  function (ch) {
 return (ch == '\0' || ch == '\r' || ch == '\n' || ch == ';' && this.nSemiSkip <= 0);
 }, "~S");
-Clazz.defineMethod (c$, "lookingAtSetBraceSyntax", 
+Clazz.defineMethod (c$, "lookingAtSetBraceSyntax",
  function () {
 var ichT = this.ichToken;
 var nParen = 1;
@@ -1696,7 +1696,7 @@ if (this.charAt (ichT) == '.' && nParen == 0) {
 return true;
 }return false;
 });
-Clazz.defineMethod (c$, "lookingAtString", 
+Clazz.defineMethod (c$, "lookingAtString",
  function (allowPrime) {
 if (this.ichToken + 2 > this.cchScript) return false;
 this.chFirst = this.script.charAt (this.ichToken);
@@ -1716,7 +1716,7 @@ this.ichEnd = this.cchScript;
 this.cchToken = ++ichT - this.ichToken;
 }return true;
 }, "~B");
-Clazz.defineMethod (c$, "getUnescapedStringLiteral", 
+Clazz.defineMethod (c$, "getUnescapedStringLiteral",
  function (isFileName) {
 if (isFileName) {
 var s = this.script.substring (this.ichToken + 1, this.ichToken + this.cchToken - 1);
@@ -1724,7 +1724,7 @@ if (s.indexOf ("\\u") >= 0) s = JU.Escape.unescapeUnicode (s);
 if (s.indexOf (";base64,") != 0) return s;
 }return JS.ScriptCompiler.unescapeString (this.script, this.ichToken + 1, this.cchToken - 2);
 }, "~B");
-c$.unescapeString = Clazz.defineMethod (c$, "unescapeString", 
+c$.unescapeString = Clazz.defineMethod (c$, "unescapeString",
 function (script, ich, nChar) {
 var sb = JU.SB.newN (nChar);
 var ichMax = ich + nChar;
@@ -1764,7 +1764,7 @@ ch = String.fromCharCode (unicode);
 }
 return sb.toString ();
 }, "~S,~N,~N");
-Clazz.defineMethod (c$, "lookingAtLoadFormat", 
+Clazz.defineMethod (c$, "lookingAtLoadFormat",
  function (allchar) {
 var ichT = this.ichToken;
 var ch;
@@ -1774,7 +1774,7 @@ if (!allchar && ichT == this.ichToken || !JS.ScriptCompiler.isSpaceOrTab (ch)) r
 this.cchToken = ichT - this.ichToken;
 return true;
 }, "~B");
-Clazz.defineMethod (c$, "lookingAtImpliedString", 
+Clazz.defineMethod (c$, "lookingAtImpliedString",
  function (allowSpace, allowEquals, allowSptParen) {
 var ichT = this.ichToken;
 var ch = this.script.charAt (ichT);
@@ -1823,7 +1823,7 @@ if (isVariable && (!allowSpace || ptSpace < 0 && parenpt <= 0 && ichT - this.ich
 return false;
 }return (this.cchToken = ichT - this.ichToken) > 0;
 }, "~B,~B,~B");
-Clazz.defineMethod (c$, "lookingAtExponential", 
+Clazz.defineMethod (c$, "lookingAtExponential",
  function () {
 if (this.ichToken == this.cchScript) return NaN;
 var ichT = this.ichToken;
@@ -1853,7 +1853,7 @@ if (!isOK) return NaN;
 this.cchToken = ichT - this.ichToken;
 return JU.PT.dVal (this.script.substring (pt0, ichT));
 });
-Clazz.defineMethod (c$, "lookingAtDecimal", 
+Clazz.defineMethod (c$, "lookingAtDecimal",
  function () {
 if (this.ichToken == this.cchScript) return false;
 var ichT = this.ichToken;
@@ -1874,7 +1874,7 @@ digitSeen = true;
 this.cchToken = ichT - this.ichToken;
 return digitSeen;
 });
-Clazz.defineMethod (c$, "lookingAtSeqcode", 
+Clazz.defineMethod (c$, "lookingAtSeqcode",
  function () {
 var ichT = this.ichToken;
 var ch;
@@ -1893,7 +1893,7 @@ if (ch != ' ' && ch != '*' && ch != '?' && !JU.PT.isLetter (ch)) return false;
 this.cchToken = ichT - this.ichToken;
 return true;
 });
-Clazz.defineMethod (c$, "lookingAtInteger", 
+Clazz.defineMethod (c$, "lookingAtInteger",
  function () {
 if (this.ichToken == this.cchScript) return 2147483647;
 var ichT = this.ichToken;
@@ -1914,7 +1914,7 @@ throw e;
 }
 return 2147483647;
 });
-Clazz.defineMethod (c$, "lookingAtBitset", 
+Clazz.defineMethod (c$, "lookingAtBitset",
 function () {
 if (this.script.indexOf ("({null})", this.ichToken) == this.ichToken) {
 this.cchToken = 8;
@@ -1925,7 +1925,7 @@ var bs = JU.BS.unescape (this.script.substring (this.ichToken, ichT + 2));
 if (bs != null) this.cchToken = ichT + 2 - this.ichToken;
 return bs;
 });
-Clazz.defineMethod (c$, "lookingAtObjectID", 
+Clazz.defineMethod (c$, "lookingAtObjectID",
  function () {
 var allowWildID = (this.nTokens == 1);
 var ichT = this.ichToken;
@@ -1952,7 +1952,7 @@ break;
 this.cchToken = ichT - (++this.ichToken);
 return true;
 });
-Clazz.defineMethod (c$, "lookingAtLookupToken", 
+Clazz.defineMethod (c$, "lookingAtLookupToken",
  function (ichT) {
 if (ichT == this.cchScript) return false;
 var ichT0 = ichT;
@@ -2024,7 +2024,7 @@ break;
 this.cchToken = ichT - ichT0;
 return true;
 }, "~N");
-Clazz.defineMethod (c$, "lookForSyncID", 
+Clazz.defineMethod (c$, "lookForSyncID",
  function () {
 var ch;
 if ((ch = this.charAt (this.ichToken)) == '"' || ch == '@' || ch == '\0') return false;
@@ -2034,17 +2034,17 @@ while (!JS.ScriptCompiler.isSpaceOrTab (ch = this.charAt (ichT)) && ch != '#' &&
 this.cchToken = ichT - this.ichToken;
 return true;
 });
-Clazz.defineMethod (c$, "ERROR", 
+Clazz.defineMethod (c$, "ERROR",
  function (error) {
 this.errorIntStr2 (error, null, null);
 return 4;
 }, "~N");
-Clazz.defineMethod (c$, "ERROR", 
+Clazz.defineMethod (c$, "ERROR",
  function (error, value) {
 this.errorStr (error, value);
 return 4;
 }, "~N,~S");
-Clazz.defineMethod (c$, "handleError", 
+Clazz.defineMethod (c$, "handleError",
  function () {
 this.errorType = this.errorMessage;
 this.errorLine = this.script.substring (this.ichCurrentCommand, this.ichEnd <= this.ichCurrentCommand ? this.ichToken + this.cchToken : this.ichEnd);

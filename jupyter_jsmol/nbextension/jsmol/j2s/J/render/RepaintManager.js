@@ -12,23 +12,23 @@ Clazz.instantialize (this, arguments);
 Clazz.prepareFields (c$, function () {
 this.bsTranslucent = JU.BS.newN (37);
 });
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function () {
 });
-Clazz.overrideMethod (c$, "set", 
+Clazz.overrideMethod (c$, "set",
 function (vwr, shapeManager) {
 this.vwr = vwr;
 this.shapeManager = shapeManager;
 }, "JV.Viewer,JV.ShapeManager");
-Clazz.overrideMethod (c$, "isRepaintPending", 
+Clazz.overrideMethod (c$, "isRepaintPending",
 function () {
 return this.repaintPending;
 });
-Clazz.overrideMethod (c$, "pushHoldRepaint", 
+Clazz.overrideMethod (c$, "pushHoldRepaint",
 function (why) {
 ++this.holdRepaint;
 }, "~S");
-Clazz.overrideMethod (c$, "popHoldRepaint", 
+Clazz.overrideMethod (c$, "popHoldRepaint",
 function (andRepaint, why) {
 --this.holdRepaint;
 if (this.holdRepaint <= 0) {
@@ -37,7 +37,7 @@ if (andRepaint) {
 this.repaintPending = true;
 this.repaintNow (why);
 }}}, "~B,~S");
-Clazz.overrideMethod (c$, "requestRepaintAndWait", 
+Clazz.overrideMethod (c$, "requestRepaintAndWait",
 function (why) {
 var jmol = null;
 if (JV.Viewer.isJS && !JV.Viewer.isSwingJS) {
@@ -52,7 +52,7 @@ JU.Logger.error ("repaintManager requestRepaintAndWait timeout");
 this.repaintDone ();
 }} catch (e) {
 if (Clazz.exceptionOf (e, InterruptedException)) {
-System.out.println ("repaintManager requestRepaintAndWait interrupted thread=" + Thread.currentThread ().getName ());
+Zystem.out.println ("repaintManager requestRepaintAndWait interrupted thread=" + Thread.currentThread ().getName ());
 } else {
 throw e;
 }
@@ -61,31 +61,31 @@ throw e;
 jmol.repaint (this.vwr.html5Applet, false);
 this.repaintDone ();
 }}, "~S");
-Clazz.overrideMethod (c$, "repaintIfReady", 
+Clazz.overrideMethod (c$, "repaintIfReady",
 function (why) {
 if (this.repaintPending) return false;
 this.repaintPending = true;
 if (this.holdRepaint == 0) this.repaintNow (why);
 return true;
 }, "~S");
-Clazz.defineMethod (c$, "repaintNow", 
+Clazz.defineMethod (c$, "repaintNow",
  function (why) {
 if (!this.vwr.haveDisplay) return;
 this.vwr.apiPlatform.repaint (this.vwr.display);
 }, "~S");
-Clazz.overrideMethod (c$, "repaintDone", 
+Clazz.overrideMethod (c$, "repaintDone",
 function () {
 this.repaintPending = false;
 {
 }});
-Clazz.overrideMethod (c$, "clear", 
+Clazz.overrideMethod (c$, "clear",
 function (iShape) {
 if (this.renderers == null) return;
 if (iShape >= 0) this.renderers[iShape] = null;
  else for (var i = 0; i < 37; ++i) this.renderers[i] = null;
 
 }, "~N");
-Clazz.defineMethod (c$, "getRenderer", 
+Clazz.defineMethod (c$, "getRenderer",
  function (shapeID) {
 if (this.renderers[shapeID] != null) return this.renderers[shapeID];
 var className = JV.JC.getShapeClassName (shapeID, true) + "Renderer";
@@ -94,7 +94,7 @@ if ((renderer = J.api.Interface.getInterface (className, this.vwr, "render")) ==
 renderer.setViewerG3dShapeID (this.vwr, shapeID);
 return this.renderers[shapeID] = renderer;
 }, "~N");
-Clazz.overrideMethod (c$, "render", 
+Clazz.overrideMethod (c$, "render",
 function (gdata, modelSet, isFirstPass, navMinMax) {
 var g3d = gdata;
 if (this.renderers == null) this.renderers =  new Array (37);
@@ -129,7 +129,7 @@ throw e;
 }
 }
 }, "JU.GData,JM.ModelSet,~B,~A");
-Clazz.defineMethod (c$, "getAllRenderers", 
+Clazz.defineMethod (c$, "getAllRenderers",
  function () {
 var isOK = true;
 for (var i = 0; i < 37; ++i) {
@@ -138,7 +138,7 @@ isOK = this.repaintPending = !this.vwr.async;
 }
 if (!isOK) throw  new NullPointerException ();
 });
-Clazz.overrideMethod (c$, "renderExport", 
+Clazz.overrideMethod (c$, "renderExport",
 function (gdata, modelSet, params) {
 var isOK;
 this.shapeManager.finalizeAtoms (null, true);

@@ -1,13 +1,13 @@
 Clazz.declarePackage ("JSV.source");
 Clazz.load (null, "JSV.source.JDXDecompressorTest", ["JSV.source.JDXDecompressor"], function () {
 c$ = Clazz.declareType (JSV.source, "JDXDecompressorTest");
-c$.main = Clazz.defineMethod (c$, "main", 
+c$.main = Clazz.defineMethod (c$, "main",
 function (args) {
 for (var i = 0; i < 6; i++) {
 JSV.source.JDXDecompressorTest.testRun (i);
 }
 }, "~A");
-c$.testRun = Clazz.defineMethod (c$, "testRun", 
+c$.testRun = Clazz.defineMethod (c$, "testRun",
  function (t) {
 var d =  new JSV.source.JDXDecompressor (JSV.source.JDXDecompressorTest.testLines[t], 0);
 var i = 0;
@@ -16,23 +16,23 @@ var v = d.next ().doubleValue ();
 var vr = JSV.source.JDXDecompressorTest.testResults[t][i++];
 var isOK = (v == vr);
 if (!isOK) {
-System.err.println ("test " + t + " failed " + i + ": " + v + " != " + vr);
+Zystem.err.println ("test " + t + " failed " + i + ": " + v + " != " + vr);
 return;
 }}
-System.out.println ("test " + t + " OK");
+Zystem.out.println ("test " + t + " OK");
 }, "~N");
-c$.testCreate = Clazz.defineMethod (c$, "testCreate", 
+c$.testCreate = Clazz.defineMethod (c$, "testCreate",
 function (t) {
 var d =  new JSV.source.JDXDecompressor (JSV.source.JDXDecompressorTest.testLines[t], 0);
 var n = 1;
-System.out.println ("new double[] {");
+Zystem.out.println ("new double[] {");
 while (d.hasNext ()) {
-System.out.print (d.next () + ",");
-if ((++n % 5) == 0) System.out.println ();
+Zystem.out.print (d.next () + ",");
+if ((++n % 5) == 0) Zystem.out.println ();
 }
-System.out.println ("\n},");
+Zystem.out.println ("\n},");
 }, "~N");
-c$.testDemo = Clazz.defineMethod (c$, "testDemo", 
+c$.testDemo = Clazz.defineMethod (c$, "testDemo",
 function (args) {
 var line;
 var x;
@@ -57,9 +57,9 @@ var n = 0;
 while (d.hasNext ()) {
 var s = line.substring (d.ich);
 if (n > 0) x += dx;
-System.out.println ((++n) + " " + x + " " + d.next () + " " + s);
+Zystem.out.println ((++n) + " " + x + " " + d.next () + " " + s);
 }
-if (xexp >= 0) System.out.println ("expected x " + xexp + " final x " + x + " expected y " + yexp + " final y " + d.lastY);
+if (xexp >= 0) Zystem.out.println ("expected x " + xexp + " final x " + x + " expected y " + yexp + " final y " + d.lastY);
 }, "~A");
 c$.testLines = c$.prototype.testLines =  Clazz.newArray (-1, ["1JT%jX", "D7m9jNOj9RjLmoPKLMj4oJ8j7PJT%olJ3MnJj2J0j7MQpJ9j3j0TJ0J2j3PKmJ2KJ4Ok2J4Mk", "A4j5lqkJ4rNj0J6j3JTpPqPNj6K0%j1J1lnJ8k3Pj1%J3j8J6J2j0J%Jj1Pkj1RJ5nj2OnjJJ3", "Ak8K1MPj4Nj2RJQoKnJ0j8J5mQl4L0j5J7k2NJMTJ1noLNj0KkqLmJ7Lk3MJ7p%qoLJ3nRjoJQ", "b2TJ2j7Nj0J8jpLOlOj2Jj0RJ5pmqJ1lpJ1pPjKJjkPj2MjJ2j2Qj2k3L4qnJ4prmRKmoJ6J5r", "I82314Q00sQ01Q00S2J85%W3A000100"]);
 Clazz.defineStatics (c$,

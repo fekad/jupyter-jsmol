@@ -43,11 +43,11 @@ this.nAxes =  Clazz.newIntArray (JS.PointGroup.maxAxis, 0);
 this.axes =  new Array (JS.PointGroup.maxAxis);
 this.vTemp =  new JU.V3 ();
 });
-Clazz.defineMethod (c$, "getName", 
+Clazz.defineMethod (c$, "getName",
 function () {
 return this.name;
 });
-c$.getPointGroup = Clazz.defineMethod (c$, "getPointGroup", 
+c$.getPointGroup = Clazz.defineMethod (c$, "getPointGroup",
 function (pgLast, center, atomset, bsAtoms, haveVibration, distanceTolerance, linearTolerance, localEnvOnly) {
 var pg =  new JS.PointGroup ();
 if (distanceTolerance == 0) {
@@ -63,10 +63,10 @@ pg.center = center;
 pg.localEnvOnly = localEnvOnly;
 return (pg.set (pgLast, atomset) ? pg : pgLast);
 }, "JS.PointGroup,JU.T3,~A,JU.BS,~B,~N,~N,~B");
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
  function () {
 });
-Clazz.defineMethod (c$, "isEqual", 
+Clazz.defineMethod (c$, "isEqual",
  function (pg) {
 if (pg == null) return false;
 if (this.linearTolerance != pg.linearTolerance || this.distanceTolerance != pg.distanceTolerance || this.nAtoms != pg.nAtoms || this.localEnvOnly != pg.localEnvOnly || this.haveVibration != pg.haveVibration || this.bsAtoms == null ? pg.bsAtoms != null : !this.bsAtoms.equals (pg.bsAtoms)) return false;
@@ -75,7 +75,7 @@ if (this.elements[i] != pg.elements[i] || !this.points[i].equals (pg.points[i]))
 }
 return true;
 }, "JS.PointGroup");
-Clazz.defineMethod (c$, "set", 
+Clazz.defineMethod (c$, "set",
  function (pgLast, atomset) {
 this.cosTolerance = (Math.cos (this.linearTolerance / 180 * 3.141592653589793));
 if (!this.getPointsAndElements (atomset)) {
@@ -179,7 +179,7 @@ throw e;
 JU.Logger.info ("Point group found: " + this.name);
 return true;
 }, "JS.PointGroup,~A");
-Clazz.defineMethod (c$, "setPrincipalAxis", 
+Clazz.defineMethod (c$, "setPrincipalAxis",
  function (n, nPlanes) {
 var principalPlane = this.setPrincipalPlane (n, nPlanes);
 if (nPlanes == 0 && n < 14 || this.nAxes[n] == 1) {
@@ -195,7 +195,7 @@ this.axes[16][i] = o;
 }
 return null;
 }, "~N,~N");
-Clazz.defineMethod (c$, "setPrincipalPlane", 
+Clazz.defineMethod (c$, "setPrincipalPlane",
  function (n, nPlanes) {
 if (nPlanes == 1) return this.principalPlane = this.axes[0][0];
 if (nPlanes == 0 || nPlanes == n - 14) return null;
@@ -209,7 +209,7 @@ this.axes[0][i] = o;
 
 return null;
 }, "~N,~N");
-Clazz.defineMethod (c$, "getPointsAndElements", 
+Clazz.defineMethod (c$, "getPointsAndElements",
  function (atomset) {
 var ac = this.bsAtoms.cardinality ();
 if (this.isAtoms && ac > 100) return false;
@@ -253,17 +253,17 @@ this.radius = Math.sqrt (this.radius);
 if (this.radius < 1.5 && this.distanceTolerance > 0.15) {
 this.distanceTolerance = this.radius / 10;
 this.distanceTolerance2 = this.distanceTolerance * this.distanceTolerance;
-System.out.println ("PointGroup calculation adjusting distanceTolerance to " + this.distanceTolerance);
+Zystem.out.println ("PointGroup calculation adjusting distanceTolerance to " + this.distanceTolerance);
 }return true;
 }, "~A");
-Clazz.defineMethod (c$, "findInversionCenter", 
+Clazz.defineMethod (c$, "findInversionCenter",
  function () {
 this.haveInversionCenter = this.checkOperation (null, this.center, -1);
 if (this.haveInversionCenter) {
 this.axes[1] =  new Array (1);
 this.axes[1][0] = Clazz.innerTypeInstance (JS.PointGroup.Operation, this, null);
 }});
-Clazz.defineMethod (c$, "checkOperation", 
+Clazz.defineMethod (c$, "checkOperation",
  function (q, center, iOrder) {
 var pt =  new JU.P3 ();
 var nFound = 0;
@@ -297,11 +297,11 @@ return false;
 }
 return true;
 }, "JU.Quat,JU.T3,~N");
-Clazz.defineMethod (c$, "getPointIndex", 
+Clazz.defineMethod (c$, "getPointIndex",
  function (j) {
 return j < this.atomMap.length && this.atomMap[j] > 0 ? this.atomMap[j] - 1 : j;
 }, "~N");
-Clazz.defineMethod (c$, "isLinear", 
+Clazz.defineMethod (c$, "isLinear",
  function (atoms) {
 var v1 = null;
 if (atoms.length < 2) return false;
@@ -319,15 +319,15 @@ if (!this.isParallel (v1, this.vTemp)) return false;
 }
 return true;
 }, "~A");
-Clazz.defineMethod (c$, "isParallel", 
+Clazz.defineMethod (c$, "isParallel",
  function (v1, v2) {
 return (Math.abs (v1.dot (v2)) >= this.cosTolerance);
 }, "JU.V3,JU.V3");
-Clazz.defineMethod (c$, "isPerpendicular", 
+Clazz.defineMethod (c$, "isPerpendicular",
  function (v1, v2) {
 return (Math.abs (v1.dot (v2)) <= 1 - this.cosTolerance);
 }, "JU.V3,JU.V3");
-Clazz.defineMethod (c$, "getElementCounts", 
+Clazz.defineMethod (c$, "getElementCounts",
  function () {
 for (var i = this.points.length; --i >= 0; ) {
 var e1 = this.elements[i];
@@ -337,7 +337,7 @@ this.eCounts =  Clazz.newIntArray (++this.maxElement, 0);
 for (var i = this.points.length; --i >= 0; ) this.eCounts[this.elements[i]]++;
 
 });
-Clazz.defineMethod (c$, "findCAxes", 
+Clazz.defineMethod (c$, "findCAxes",
  function () {
 var v1 =  new JU.V3 ();
 var v2 =  new JU.V3 ();
@@ -426,12 +426,12 @@ this.checkAxisOrder (16, v1, this.center);
 
 return this.getHighestOrder ();
 });
-Clazz.defineMethod (c$, "getAllAxes", 
+Clazz.defineMethod (c$, "getAllAxes",
  function (v3) {
 for (var o = 16; o < JS.PointGroup.maxAxis; o++) if (this.nAxes[o] < JS.PointGroup.axesMaxN[o]) this.checkAxisOrder (o, v3, this.center);
 
 }, "JU.V3");
-Clazz.defineMethod (c$, "getHighestOrder", 
+Clazz.defineMethod (c$, "getHighestOrder",
  function () {
 var n = 0;
 for (n = 14; --n > 1 && this.nAxes[n] == 0; ) {
@@ -441,7 +441,7 @@ for (n = JS.PointGroup.maxAxis; --n > 1 && this.nAxes[n] == 0; ) {
 }
 return n;
 });
-Clazz.defineMethod (c$, "checkAxisOrder", 
+Clazz.defineMethod (c$, "checkAxisOrder",
  function (iOrder, v, center) {
 switch (iOrder) {
 case 22:
@@ -493,13 +493,13 @@ break;
 }
 return true;
 }, "~N,JU.V3,JU.T3");
-Clazz.defineMethod (c$, "addAxis", 
+Clazz.defineMethod (c$, "addAxis",
  function (iOrder, v) {
 if (this.haveAxis (iOrder, v)) return;
 if (this.axes[iOrder] == null) this.axes[iOrder] =  new Array (JS.PointGroup.axesMaxN[iOrder]);
 this.axes[iOrder][this.nAxes[iOrder]++] = Clazz.innerTypeInstance (JS.PointGroup.Operation, this, null, v, iOrder);
 }, "~N,JU.V3");
-Clazz.defineMethod (c$, "haveAxis", 
+Clazz.defineMethod (c$, "haveAxis",
  function (iOrder, v) {
 if (this.nAxes[iOrder] == JS.PointGroup.axesMaxN[iOrder]) {
 return true;
@@ -508,7 +508,7 @@ if (this.isParallel (v, this.axes[iOrder][i].normalOrAxis)) return true;
 }
 return false;
 }, "~N,JU.V3");
-Clazz.defineMethod (c$, "findPlanes", 
+Clazz.defineMethod (c$, "findPlanes",
  function () {
 var pt =  new JU.P3 ();
 var v1 =  new JU.V3 ();
@@ -542,12 +542,12 @@ if (haveAxes) for (var i = 16; i < JS.PointGroup.maxAxis; i++) for (var j = 0; j
 
 return nPlanes;
 });
-Clazz.defineMethod (c$, "getPlane", 
+Clazz.defineMethod (c$, "getPlane",
  function (v3) {
 if (!this.haveAxis (0, v3) && this.checkOperation (JU.Quat.newVA (v3, 180), this.center, -1)) this.axes[0][this.nAxes[0]++] = Clazz.innerTypeInstance (JS.PointGroup.Operation, this, null, v3);
 return this.nAxes[0];
 }, "JU.V3");
-Clazz.defineMethod (c$, "findAdditionalAxes", 
+Clazz.defineMethod (c$, "findAdditionalAxes",
  function (nPlanes) {
 var planes = this.axes[0];
 var Cn = 0;
@@ -564,7 +564,7 @@ this.checkAxisOrder (16, this.vTemp, this.center);
 }
 }
 }}, "~N");
-Clazz.defineMethod (c$, "getInfo", 
+Clazz.defineMethod (c$, "getInfo",
 function (modelIndex, drawID, asInfo, type, index, scaleFactor) {
 var asDraw = (drawID != null);
 this.info = (asInfo ?  new java.util.Hashtable () : null);
@@ -689,7 +689,7 @@ if (this.principalAxis != null && this.principalAxis.index > 0) this.info.put ("
 if (this.principalPlane != null && this.principalPlane.index > 0) this.info.put ("principalPlane", this.principalPlane.normalOrAxis);
 return this.info;
 }, "~N,~S,~B,~S,~N,~N");
-Clazz.defineMethod (c$, "isDrawType", 
+Clazz.defineMethod (c$, "isDrawType",
 function (type, index, scale) {
 return (this.drawInfo != null && this.drawType.equals (type == null ? "" : type) && this.drawIndex == index && this.scale == scale);
 }, "~S,~N,~N");
@@ -703,14 +703,14 @@ this.index = 0;
 this.normalOrAxis = null;
 Clazz.instantialize (this, arguments);
 }, JS.PointGroup, "Operation");
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function () {
 this.index = ++this.b$["JS.PointGroup"].nOps;
 this.type = 3;
 this.order = 1;
 if (JU.Logger.debugging) JU.Logger.debug ("new operation -- " + JS.PointGroup.typeNames[this.type]);
 });
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function (a, b) {
 this.index = ++this.b$["JS.PointGroup"].nOps;
 this.type = (b < 14 ? 2 : 1);
@@ -718,7 +718,7 @@ this.order = b % 14;
 this.normalOrAxis = JU.Quat.newVA (a, 180).getNormal ();
 if (JU.Logger.debugging) JU.Logger.debug ("new operation -- " + (this.order == b ? "S" : "C") + this.order + " " + this.normalOrAxis);
 }, "JU.V3,~N");
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function (a) {
 if (a == null) return;
 this.index = ++this.b$["JS.PointGroup"].nOps;
@@ -726,7 +726,7 @@ this.type = 0;
 this.normalOrAxis = JU.Quat.newVA (a, 180).getNormal ();
 if (JU.Logger.debugging) JU.Logger.debug ("new operation -- plane " + this.normalOrAxis);
 }, "JU.V3");
-Clazz.defineMethod (c$, "getLabel", 
+Clazz.defineMethod (c$, "getLabel",
 function () {
 switch (this.type) {
 case 0:

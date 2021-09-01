@@ -8,7 +8,7 @@ this.intThread = 0;
 this.isFirst = false;
 Clazz.instantialize (this, arguments);
 }, J.thread, "AnimationThread", J.thread.JmolThread);
-Clazz.overrideMethod (c$, "setManager", 
+Clazz.overrideMethod (c$, "setManager",
 function (manager, vwr, params) {
 var options = params;
 this.framePointer1 = options[0];
@@ -19,7 +19,7 @@ this.setViewer (vwr, "AnimationThread");
 vwr.startHoverWatcher (false);
 return 0;
 }, "~O,JV.Viewer,~O");
-Clazz.defineMethod (c$, "interrupt", 
+Clazz.defineMethod (c$, "interrupt",
 function () {
 if (this.stopped) return;
 this.stopped = true;
@@ -34,7 +34,7 @@ throw e;
 }
 Clazz.superCall (this, J.thread.AnimationThread, "interrupt", []);
 });
-Clazz.overrideMethod (c$, "run1", 
+Clazz.overrideMethod (c$, "run1",
 function (mode) {
 while (true) {
 switch (mode) {
@@ -52,14 +52,14 @@ mode = -2;
 break;
 }if (this.am.currentFrameIs (this.framePointer1)) {
 this.targetTime += this.am.firstFrameDelayMs;
-this.sleepTime = (this.targetTime - (System.currentTimeMillis () - this.startTime));
+this.sleepTime = (this.targetTime - (Zystem.currentTimeMillis () - this.startTime));
 if (!this.runSleep (this.sleepTime, 1)) return;
 }mode = 1;
 break;
 case 1:
 if (this.am.currentFrameIs (this.framePointer2)) {
 this.targetTime += this.am.lastFrameDelayMs;
-this.sleepTime = (this.targetTime - (System.currentTimeMillis () - this.startTime));
+this.sleepTime = (this.targetTime - (Zystem.currentTimeMillis () - this.startTime));
 if (!this.runSleep (this.sleepTime, 2)) return;
 }mode = 2;
 break;
@@ -76,7 +76,7 @@ while (this.am.animationOn && !this.checkInterrupted (this.am.animationThread) &
 if (!this.runSleep (10, 3)) return;
 }
 if (!this.vwr.tm.spinOn) this.vwr.refresh (1, "animationThread");
-this.sleepTime = (this.targetTime - (System.currentTimeMillis () - this.startTime));
+this.sleepTime = (this.targetTime - (Zystem.currentTimeMillis () - this.startTime));
 if (!this.runSleep (this.sleepTime, 0)) return;
 mode = 0;
 break;

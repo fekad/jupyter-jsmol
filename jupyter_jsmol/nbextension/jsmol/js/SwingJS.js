@@ -1,7 +1,7 @@
 // SwingJS.js
 
 // BH 7/24/2015 9:09:39 AM allows setting Info.resourcePath
-// BH 4/28/2015 10:15:32 PM adds getAppletHtml 
+// BH 4/28/2015 10:15:32 PM adds getAppletHtml
 // BH 4/2/2015 5:17:44 PM  adds SwingJS.getJavaResource(path)
 
 // BH 3/27/2015 6:34:49 AM  just a shell
@@ -22,11 +22,11 @@ if (typeof(SwingJS) == "undefined") {
 		if (path.indexOf("http") != 0) {
       var applet = Jmol._applets[java.lang.Thread.currentThread().getName()];
       path = (!isJavaPath && applet.__Info.resourcePath || applet.__Info.j2sPath) + "/" + path
-      }      
-    System.out.println("Swingjs.js getJavaResource " + path)
+      }
+    Zystem.out.println("Swingjs.js getJavaResource " + path)
     var s = Jmol._getFileData(path);
     if (s.indexOf("[Exception") == 0)
-      return null; 
+      return null;
     if (path.lastIndexOf(".css") == path.length - 4) {
       path = path.substring(0, path.lastIndexOf("/") + 1) + "images/";
       s = s.replace(/images\//g, path)
@@ -40,17 +40,17 @@ if (typeof(SwingJS) == "undefined") {
         return null;
       }
     }
-    return s; 
+    return s;
   }
 
-  	// optional Info here	
+  	// optional Info here
 	SwingJS.getAppletHtml = function(applet, Info) {
 		if (Info) {
 			var d = SwingJS._document;
 			SwingJS._document = null;
 			applet = SwingJS.getApplet(applet, Info);
 			SwingJS._document = d;
-		}  
+		}
 		return applet._code;
 	}
 
@@ -64,7 +64,7 @@ if (typeof(SwingJS) == "undefined") {
 		this._isSigned = Info.isSigned;
 		this._readyFunction = Info.readyFunction;
 		this._ready = false;
-		this._isJava = true; 
+		this._isJava = true;
 		this._isInfoVisible = false;
 		this._applet = null;
 		this._memoryLimit = Info.memoryLimit || 512;
@@ -93,14 +93,14 @@ if (typeof(SwingJS) == "undefined") {
 			this._jarFile = Info.jarFile = jarFile;
 			if (doReport)
 				alert ("The web page URL was ignored. Continuing using " + this._jarFile + ' in directory "' + this._jarPath + '"');
-			// could do something like this: Jmol.controls == undefined || Jmol.controls._onloadResetForms();		
-		}		
+			// could do something like this: Jmol.controls == undefined || Jmol.controls._onloadResetForms();
+		}
 		this._create(id, Info);
 		return this;
 	}
 
 	;(function(Applet, proto) {
-  
+
 	Applet._get = function(id, Info, checkOnly) {
 
 		checkOnly || (checkOnly = false);
@@ -121,10 +121,10 @@ if (typeof(SwingJS) == "undefined") {
 			disableJ2SLoadMonitor: false,
 			disableInitialConsole: false,
 			debug: false
-		};	 
-    
+		};
+
     // Jmol here
-    
+
 		Jmol._addDefaultInfo(Info, DefaultInfo);
     Info.jarFile && Info.code && Info.jarFile.replace(/\[code\]/,Info.code);
 		Jmol._debugAlert = Info.debug;
@@ -140,7 +140,7 @@ if (typeof(SwingJS) == "undefined") {
 				if (Jmol.featureDetection.supportsJava())
 					applet = new Applet(id, Info, checkOnly);
 				break;
-			case "HTML5":               
+			case "HTML5":
   			if (Jmol.featureDetection.allowHTML5){
 				  applet = Applet._getCanvas(id, Info, checkOnly);
         } else {
@@ -149,7 +149,7 @@ if (typeof(SwingJS) == "undefined") {
 				break;
 			}
 			if (applet != null)
-				break;		  
+				break;
 		}
 		if (applet == null) {
 			if (checkOnly || !javaAllowed)
@@ -159,7 +159,7 @@ if (typeof(SwingJS) == "undefined") {
 		}
 
 		// keyed to both its string id and itself
-		return (checkOnly ? applet : Jmol._registerApplet(id, applet));  
+		return (checkOnly ? applet : Jmol._registerApplet(id, applet));
 	}
 
 	Applet._getCanvas = function(id, Info, checkOnly) {
@@ -180,7 +180,7 @@ if (typeof(SwingJS) == "undefined") {
 			your web browser preferences, or install the Java Runtime Environment from <a href='http://www.java.com'>www.java.com</a>";
 
 	Applet._setCommonMethods = function(p) {
-		p._showInfo = proto._showInfo;	
+		p._showInfo = proto._showInfo;
 ///		p._search = proto._search;
 		p._getName = proto._getName;
 		p._readyCallback = proto._readyCallback;
@@ -191,12 +191,12 @@ if (typeof(SwingJS) == "undefined") {
 		var jarFile = applet._jarFile;
 		var jnlp = ""
 		if (Jmol._isFile) {
-			// local installations need jnlp here and should reference JmolApplet(Signed).jar, not JmolApplet(Signed)0.jar  
+			// local installations need jnlp here and should reference JmolApplet(Signed).jar, not JmolApplet(Signed)0.jar
 			jarFile = jarFile.replace(/0\.jar/,".jar");
 			//jnlp = " jnlp_href=\"" + jarFile.replace(/\.jar/,".jnlp") + "\"";
 		}
-		// size is set to 100% of containers' size, but only if resizable. 
-		// Note that resizability in MSIE requires: 
+		// size is set to 100% of containers' size, but only if resizable.
+		// Note that resizability in MSIE requires:
 		// <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 		var w = (applet._containerWidth.indexOf("px") >= 0 ? applet._containerWidth : "100%");
 		var h = (applet._containerHeight.indexOf("px") >= 0 ? applet._containerHeight : "100%");
@@ -220,16 +220,16 @@ if (typeof(SwingJS) == "undefined") {
 		params.jarPath = Info.jarPath;
 		Jmol._syncedApplets.length && (params.synccallback = "Jmol._mySyncCallback");
 		applet._startupScript && (params.script = applet._startupScript);
-		var t = "\n"; 
+		var t = "\n";
  		for (var i in params)
 			if(params[i])
 		 		t += "  <param name='"+i+"' value='"+params[i]+"' />\n";
 		if (Jmol.featureDetection.useIEObject || Jmol.featureDetection.useHtml4Object) {
 			t = "<object " + attributes
-				+ (Jmol.featureDetection.useIEObject ? 
+				+ (Jmol.featureDetection.useIEObject ?
 					 " classid='clsid:8AD9C840-044E-11D1-B3E9-00805F499D93' codebase='http://java.sun.com/update/1.6.0/jinstall-6u22-windows-i586.cab'>"
 				 : " type='application/x-java-applet'>")
-				 + t + "<p style='background-color:yellow;" + widthAndHeight.split('"')[1] 
+				 + t + "<p style='background-color:yellow;" + widthAndHeight.split('"')[1]
 				+ ";text-align:center;vertical-align:middle;'>\n" + Applet._noJavaMsg + "</p></object>\n";
 		} else { // use applet tag
 			t = "<applet " + attributes
@@ -239,7 +239,7 @@ if (typeof(SwingJS) == "undefined") {
 		}
 		if (applet._deferApplet)
 			applet._javaCode = t, t="";
-		t = Jmol._getWrapper(applet, true) + t + Jmol._getWrapper(applet, false) 
+		t = Jmol._getWrapper(applet, true) + t + Jmol._getWrapper(applet, false)
 			+ (Info.addSelectionOptions ? Jmol._getGrabberOptions(applet) : "");
 		if (Jmol._debugAlert)
 			alert (t);
@@ -252,21 +252,21 @@ if (typeof(SwingJS) == "undefined") {
 		this._appletPanel = new swingjs.JSAppletPanel(viewerOptions);
     this._appletPanel.start();
 	}
-	
+
 	proto._addCoreFiles = function() {
 		Jmol._addCoreFile("swingjs", this._j2sPath, this.__Info.preloadCore);
 		if (Jmol._debugCode) {
 		// no min package for that
 			Jmol._addExec([this, null, "swingjs.JSAppletPanel", "load " + this.__Info.code]);
-      
+
 		}
   }
-  
+
 	proto._create = function(id, Info){
 		Jmol._setObject(this, id, Info);
 		var params = {
 			syncId: Jmol._syncId,
-			progressbar: "true",                      
+			progressbar: "true",
 			progresscolor: "blue",
 			boxbgcolor: this._color || "black",
 			boxfgcolor: "white",
@@ -379,12 +379,12 @@ if (typeof(SwingJS) == "undefined") {
 
 		function _fixDim(x, units) {
 			var sx = "" + x;
-			return (sx.length == 0 ? (units ? "" : Jmol._allowedJmolSize[2]) 
-				: sx.indexOf("%") == sx.length - 1 ? sx 
-				: (x = parseFloat(x)) <= 1 && x > 0 ? x * 100 + "%" 
-				: (isNaN(x = Math.floor(x)) ? Jmol._allowedJmolSize[2] 
-				: x < Jmol._allowedJmolSize[0] ? Jmol._allowedJmolSize[0] 
-				: x > Jmol._allowedJmolSize[1] ? Jmol._allowedJmolSize[1] 
+			return (sx.length == 0 ? (units ? "" : Jmol._allowedJmolSize[2])
+				: sx.indexOf("%") == sx.length - 1 ? sx
+				: (x = parseFloat(x)) <= 1 && x > 0 ? x * 100 + "%"
+				: (isNaN(x = Math.floor(x)) ? Jmol._allowedJmolSize[2]
+				: x < Jmol._allowedJmolSize[0] ? Jmol._allowedJmolSize[0]
+				: x > Jmol._allowedJmolSize[1] ? Jmol._allowedJmolSize[1]
 				: x)
 				+ (units ? units : "")
 			);
@@ -408,7 +408,7 @@ if (typeof(SwingJS) == "undefined") {
 	};
 
 
-  
+
 })(SwingJS._Applet, SwingJS._Applet.prototype);
 
 })(SwingJS, jQuery);

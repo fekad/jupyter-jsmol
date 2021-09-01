@@ -7,14 +7,14 @@ this.doPopPush = false;
 this.isPauseDelay = false;
 Clazz.instantialize (this, arguments);
 }, JS, "ScriptDelayThread", J.thread.JmolThread);
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function (eval, vwr, millis) {
 Clazz.superConstructor (this, JS.ScriptDelayThread, []);
 this.setViewer (vwr, "ScriptDelayThread");
 this.millis = millis;
 this.setEval (eval);
 }, "J.api.JmolScriptEvaluator,JV.Viewer,~N");
-Clazz.overrideMethod (c$, "run1", 
+Clazz.overrideMethod (c$, "run1",
 function (mode) {
 while (true) switch (mode) {
 case -1:
@@ -23,7 +23,7 @@ this.doPopPush = (this.millis > 0);
 this.isPauseDelay = (this.millis == -100);
 if (!this.doPopPush) this.millis = -this.millis;
  else if ((delayMax = this.vwr.getDelayMaximumMs ()) > 0 && this.millis > delayMax) this.millis = delayMax;
-this.millis -= System.currentTimeMillis () - this.startTime;
+this.millis -= Zystem.currentTimeMillis () - this.startTime;
 if (this.isJS) {
 this.seconds = 0;
 } else {

@@ -42,27 +42,27 @@ Clazz.prepareFields (c$, function () {
 this.bzGamma =  new JU.P3 ();
 this.ret =  new Array (1);
 });
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function () {
 });
-Clazz.defineMethod (c$, "setViewer", 
+Clazz.defineMethod (c$, "setViewer",
 function (vwr) {
 this.vwr = vwr;
 this.eval = vwr.eval;
 return this;
 }, "JV.Viewer");
-Clazz.defineMethod (c$, "createBZ", 
+Clazz.defineMethod (c$, "createBZ",
 function (zone, array, isK, id, scale) {
 if (this.vwr == null) return;
 if (array != null) this.demoBZ (array, isK);
  else this.createAllBZs (zone, true, id, scale);
 }, "~N,~A,~B,~S,~N");
-Clazz.defineMethod (c$, "createWS", 
+Clazz.defineMethod (c$, "createWS",
 function (id) {
 if (this.vwr == null) return;
 this.createAllBZs (-1, false, id, 1);
 }, "~S");
-Clazz.defineMethod (c$, "createAllBZs", 
+Clazz.defineMethod (c$, "createAllBZs",
  function (n, discardPrev, id, scale) {
 this.cmd ("unitcell reset");
 this.cmd ("unitcell primitive");
@@ -94,7 +94,7 @@ this.vwr.setBooleanProperty ("legacyJavaFloat", wasPrecise);
 if (this.bzSavePmeshes) {
 this.cmd ("polyhedra * off;pmesh * on;");
 }}, "~N,~B,~S,~N");
-Clazz.defineMethod (c$, "createNextBZ", 
+Clazz.defineMethod (c$, "createNextBZ",
  function (zone, zonePrev, id) {
 this.getNewLatticePoints (zone);
 if (this.bzDrawPointsAndEdges) this.drawZoneCenters (zone);
@@ -107,7 +107,7 @@ this.createSubzonePolyhedron (subzone, id);
 }
 this.finalizeZone (zone);
 }, "JU.BZone,JU.BZone,~S");
-Clazz.defineMethod (c$, "newSubZone", 
+Clazz.defineMethod (c$, "newSubZone",
  function (zone, id, index) {
 var subzone =  new JU.BZone ();
 subzone.index = index;
@@ -130,7 +130,7 @@ subzone.center =  new JU.P3 ();
 zone.subzones.addLast (subzone);
 return subzone;
 }, "JU.BZone,~S,~N");
-Clazz.defineMethod (c$, "getSubzones", 
+Clazz.defineMethod (c$, "getSubzones",
  function (zone, zonePrev) {
 if (zone.index == 1) {
 var subzone = this.newSubZone (zone, "", 1);
@@ -156,7 +156,7 @@ this.addBZ (subzone.planes, subzone.latticePts, planesNew, ptsNew, -1);
 }
 }
 }, "JU.BZone,JU.BZone");
-Clazz.defineMethod (c$, "addBZ", 
+Clazz.defineMethod (c$, "addBZ",
  function (planes, pts, planes0, pts0, j) {
 if (j >= 0) {
 var pt4 = JU.P4.newPt (planes0.get (j));
@@ -170,7 +170,7 @@ planes.addLast (planes0.get (k));
 pts.addLast (pts0.get (k));
 }}
 }, "JU.Lst,JU.Lst,JU.Lst,JU.Lst,~N");
-Clazz.defineMethod (c$, "getNewLatticePoints", 
+Clazz.defineMethod (c$, "getNewLatticePoints",
  function (zone) {
 var unusedPts =  new JU.Lst ();
 var unusedLatticePts =  new JU.Lst ();
@@ -198,7 +198,7 @@ al.addLast (this.bzLatticePts.get (i));
 this.bzPlanePts = unusedPts;
 this.bzLatticePts = unusedLatticePts;
 }, "JU.BZone");
-Clazz.defineMethod (c$, "plane", 
+Clazz.defineMethod (c$, "plane",
  function (pt1, pt2, f) {
 var norm = JU.V3.newVsub (pt2, pt1);
 var pt3 =  new JU.P3 ();
@@ -207,7 +207,7 @@ var plane =  new JU.P4 ();
 JU.Measure.getPlaneThroughPoint (pt3, norm, plane);
 return plane;
 }, "JU.P3,JU.P3,~N");
-Clazz.defineMethod (c$, "within", 
+Clazz.defineMethod (c$, "within",
  function (radius, center, pts) {
 var ret =  new JU.Lst ();
 var r2 = radius * radius;
@@ -217,7 +217,7 @@ if (center.distanceSquared (pt) < r2) ret.addLast (pt);
 }
 return ret;
 }, "~N,JU.P3,JU.Lst");
-Clazz.defineMethod (c$, "newBZ", 
+Clazz.defineMethod (c$, "newBZ",
  function (i) {
 var bzone =  new JU.BZone ();
 bzone.id = "bz" + i + "_";
@@ -230,11 +230,11 @@ bzone.newPlanes =  new JU.Lst ();
 bzone.volume = 0;
 return bzone;
 }, "~N");
-Clazz.defineMethod (c$, "bzColor", 
+Clazz.defineMethod (c$, "bzColor",
  function (i) {
 return JU.BZone.bzColors[(i - 1) % JU.BZone.bzColors.length];
 }, "~N");
-Clazz.defineMethod (c$, "getLatticePoints", 
+Clazz.defineMethod (c$, "getLatticePoints",
  function (n) {
 var minmax =  Clazz.newIntArray (3, 3, 0);
 var pt =  new JU.P3 ();
@@ -255,13 +255,13 @@ this.bzLatticePts.addLast (lppt);
 var ppt = JU.P3.newP (lppt);
 ppt.scale (0.5);
 this.bzPlanePts.addLast (ppt);
-System.out.println ("draw ID 'pt" + i + j + k + "' " + lppt);
+Zystem.out.println ("draw ID 'pt" + i + j + k + "' " + lppt);
 }}
 }
 }
 this.bzLatticePtsAll = pts.toArray ( new Array (pts.size ()));
 }, "~N");
-Clazz.defineMethod (c$, "newPoint", 
+Clazz.defineMethod (c$, "newPoint",
  function (i, j, k, pt) {
 pt.x = i;
 pt.y = j;
@@ -269,9 +269,9 @@ pt.z = k;
 this.vwr.toCartesian (pt, false);
 return pt;
 }, "~N,~N,~N,JU.P3");
-Clazz.defineMethod (c$, "cmd", 
+Clazz.defineMethod (c$, "cmd",
  function (cmd) {
-System.out.println (cmd);
+Zystem.out.println (cmd);
 try {
 this.eval.runScript (cmd);
 } catch (e) {
@@ -281,10 +281,10 @@ throw e;
 }
 }
 }, "~S");
-Clazz.defineMethod (c$, "demoBZ", 
+Clazz.defineMethod (c$, "demoBZ",
  function (array, isK) {
 }, "~A,~B");
-Clazz.defineMethod (c$, "getSubzonePmeshes", 
+Clazz.defineMethod (c$, "getSubzonePmeshes",
  function (subzone) {
 this.planes = subzone.planes;
 this.latticePts = subzone.latticePts;
@@ -339,11 +339,11 @@ subzone.latticePts = ptsUsed;
 subzone.totalArea = totalArea;
 return (totalArea > 0);
 }, "JU.BZone");
-Clazz.defineMethod (c$, "toScript", 
+Clazz.defineMethod (c$, "toScript",
  function (p4) {
 return "{" + p4.x + " " + p4.y + " " + p4.z + " " + p4.w + "}";
 }, "JU.P4");
-Clazz.defineMethod (c$, "getProperty", 
+Clazz.defineMethod (c$, "getProperty",
  function (name, key) {
 var data =  new Array (3);
 var shapeID;
@@ -356,7 +356,7 @@ var index = (data[1]).intValue ();
 data[1] = this.vwr.shm.getShapePropertyIndex (shapeID, key.intern (), index);
 }}return data[1];
 }, "~S,~S");
-Clazz.defineMethod (c$, "createSubzonePolyhedron", 
+Clazz.defineMethod (c$, "createSubzonePolyhedron",
  function (subzone, id) {
 if (id == null) id = "p" + subzone.id;
 subzone.polyid = id;
@@ -395,23 +395,23 @@ if (this.bzDrawPointsAndEdges) {
 this.cmd ("color $" + id + " translucent");
 this.cmd ("draw pts points " + pts + " dots nofill nomesh");
 }}, "JU.BZone,~S");
-Clazz.defineMethod (c$, "faceIndices", 
+Clazz.defineMethod (c$, "faceIndices",
  function (p3s, pts) {
 J.bspt.PointIterator.withinDistPoints (0, null, pts, p3s, this.ret);
 return this.ret[0];
 }, "~A,~A");
-Clazz.defineMethod (c$, "closest", 
+Clazz.defineMethod (c$, "closest",
  function (center, ap3) {
 J.bspt.PointIterator.withinDistPoints (0, center, ap3, null, this.ret);
 return this.ret[0];
 }, "JU.P3,~A");
-Clazz.defineMethod (c$, "cleanFace", 
+Clazz.defineMethod (c$, "cleanFace",
  function (face) {
 J.bspt.PointIterator.withinDistPoints (0.01, JU.BZone.ptInner, face, null, this.ret);
 var l = this.ret[0];
 return l.toArray ( new Array (l.size ()));
 }, "~A");
-Clazz.defineMethod (c$, "average", 
+Clazz.defineMethod (c$, "average",
  function (face) {
 var a =  new JU.P3 ();
 for (var i = face.length; --i >= 0; ) a.add (face[i]);
@@ -419,7 +419,7 @@ for (var i = face.length; --i >= 0; ) a.add (face[i]);
 a.scale (1 / face.length);
 return a;
 }, "~A");
-Clazz.defineMethod (c$, "join", 
+Clazz.defineMethod (c$, "join",
  function (faces) {
 var n = 0;
 for (var i = faces.size (); --i >= 0; ) n += faces.get (i).length;
@@ -433,13 +433,13 @@ for (var j = face.length; --j >= 0; ) pts[n++] = face[j];
 }
 return pts;
 }, "JU.Lst");
-Clazz.defineMethod (c$, "drawZoneCenters", 
+Clazz.defineMethod (c$, "drawZoneCenters",
  function (zone) {
 }, "JU.BZone");
-Clazz.defineMethod (c$, "drawSubzonePolygons", 
+Clazz.defineMethod (c$, "drawSubzonePolygons",
  function (subzone) {
 }, "JU.BZone");
-Clazz.defineMethod (c$, "finalizeZone", 
+Clazz.defineMethod (c$, "finalizeZone",
  function (zone) {
 for (var i = zone.subzones.size (); --i >= 0; ) if (zone.subzones.get (i).totalArea == 0) zone.subzones.removeItemAt (i);
 

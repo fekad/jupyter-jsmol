@@ -3,10 +3,10 @@
 // BH 1/28/2018 7:15:09 AM adding _notifyAudioEnded
 // BH 2/14/2016 12:31:02 PM fixed local reader not disappearing after script call
 // BH 2/14/2016 12:30:41 PM Info.appletLoadingImage: "j2s/img/JSmol_spinner.gif", // can be set to "none" or some other image
-// BH 2/14/2016 12:27:09 PM Jmol.setCursor, proto._getSpinner 
+// BH 2/14/2016 12:27:09 PM Jmol.setCursor, proto._getSpinner
 // BH 1/15/2016 4:23:14 PM adding Info.makeLiveImage
-// BH 4/17/2015 2:33:32 PM update for SwingJS 
-// BH 10/19/2014 8:08:51 PM moved applet._cover and applet._displayCoverImage to 
+// BH 4/17/2015 2:33:32 PM update for SwingJS
+// BH 10/19/2014 8:08:51 PM moved applet._cover and applet._displayCoverImage to
 // BH 5/8/2014 11:20:21 AM trying to fix AH nd JG problem with multiple applets
 // BH 1/27/2014 8:36:43 AM adding Info.viewSet
 // BH 12/13/2013 9:04:53 AM _evaluate DEPRECATED (see JSmolApi.js Jmol.evaulateVar
@@ -39,7 +39,7 @@
 		this._isSigned = Info.isSigned;
 		this._readyFunction = Info.readyFunction;
 		this._ready = false;
-		this._isJava = true; 
+		this._isJava = true;
 		this._isInfoVisible = false;
 		this._applet = null;
 		this._memoryLimit = Info.memoryLimit || 512;
@@ -68,8 +68,8 @@
 			this._jarFile = Info.jarFile = (typeof(jarFile) == "string" ? jarFile : (jarFile ?  "JmolAppletSigned" : "JmolApplet") + "0.jar");
 			if (doReport)
 				alert ("The web page URL was ignored. Continuing using " + this._jarFile + ' in directory "' + this._jarPath + '"');
-			Jmol.controls == undefined || Jmol.controls._onloadResetForms();		
-		}		
+			Jmol.controls == undefined || Jmol.controls._onloadResetForms();
+		}
 		this._create(id, Info);
 		return this;
 	}
@@ -102,12 +102,12 @@
 			coverTitle: "",       // tip that is displayed before model starts to load
 			coverCommand: "",     // Jmol command executed upon clicking image
 			deferApplet: false,   // true == the model should not be loaded until the image is clicked
-			deferUncover: false,  // true == the image should remain until command execution is complete 
+			deferUncover: false,  // true == the image should remain until command execution is complete
 			disableJ2SLoadMonitor: false,
 			disableInitialConsole: true, // new default since now we have the spinner 2/14/2016 12:26:28 PM
       //appletLoadingImage: "j2s/img/JSmol_spinner.gif", // can be set to "none" or some other image
 			debug: false
-		};	 
+		};
 		Jmol._addDefaultInfo(Info, DefaultInfo);
 		Jmol._debugAlert = Info.debug;
 
@@ -126,7 +126,7 @@
 			case "WEBGL":
 				applet = Applet._getCanvas(id, Info, checkOnly, true);
 				break;
-			case "HTML5":               
+			case "HTML5":
   			if (Jmol.featureDetection.allowHTML5){
 				  applet = Applet._getCanvas(id, Info, checkOnly, false);
         } else {
@@ -138,7 +138,7 @@
 //				break;
 			}
 			if (applet != null)
-				break;		  
+				break;
 		}
 		if (applet == null) {
 			if (checkOnly || !javaAllowed)
@@ -148,7 +148,7 @@
 		}
 
 		// keyed to both its string id and itself
-		return (checkOnly ? applet : Jmol._registerApplet(id, applet));  
+		return (checkOnly ? applet : Jmol._registerApplet(id, applet));
 	}
 
 	Applet._getCanvas = function(id, Info, checkOnly, webGL) {
@@ -176,7 +176,7 @@
 			your web browser preferences, or install the Java Runtime Environment from <a href='http://www.java.com'>www.java.com</a>";
 
 	Applet._setCommonMethods = function(p) {
-		p._showInfo = proto._showInfo;	
+		p._showInfo = proto._showInfo;
 		p._search = proto._search;
 		p._getName = proto._getName;
 		p._readyCallback = proto._readyCallback;
@@ -187,12 +187,12 @@
 		var jarFile = applet._jarFile;
 		var jnlp = ""
 		if (Jmol._isFile) {
-			// local installations need jnlp here and should reference JmolApplet(Signed).jar, not JmolApplet(Signed)0.jar  
+			// local installations need jnlp here and should reference JmolApplet(Signed).jar, not JmolApplet(Signed)0.jar
 			jarFile = jarFile.replace(/0\.jar/,".jar");
 			//jnlp = " jnlp_href=\"" + jarFile.replace(/\.jar/,".jnlp") + "\"";
 		}
-		// size is set to 100% of containers' size, but only if resizable. 
-		// Note that resizability in MSIE requires: 
+		// size is set to 100% of containers' size, but only if resizable.
+		// Note that resizability in MSIE requires:
 		// <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 		var w = (applet._containerWidth.indexOf("px") >= 0 ? applet._containerWidth : "100%");
 		var h = (applet._containerHeight.indexOf("px") >= 0 ? applet._containerHeight : "100%");
@@ -216,16 +216,16 @@
 		params.jarPath = Info.jarPath;
 		Jmol._syncedApplets.length && (params.synccallback = "Jmol._mySyncCallback");
 		applet._startupScript && (params.script = applet._startupScript);
-		var t = "\n"; 
+		var t = "\n";
  		for (var i in params)
 			if(params[i])
 		 		t += "  <param name='"+i+"' value='"+params[i]+"' />\n";
 		if (Jmol.featureDetection.useIEObject || Jmol.featureDetection.useHtml4Object) {
 			t = "<object " + attributes
-				+ (Jmol.featureDetection.useIEObject ? 
+				+ (Jmol.featureDetection.useIEObject ?
 					 " classid='clsid:8AD9C840-044E-11D1-B3E9-00805F499D93' codebase='http://java.sun.com/update/1.6.0/jinstall-6u22-windows-i586.cab'>"
 				 : " type='application/x-java-applet'>")
-				 + t + "<p style='background-color:yellow;" + widthAndHeight.split('"')[1] 
+				 + t + "<p style='background-color:yellow;" + widthAndHeight.split('"')[1]
 				+ ";text-align:center;vertical-align:middle;'>\n" + Applet._noJavaMsg + "</p></object>\n";
 		} else { // use applet tag
 			t = "<applet " + attributes
@@ -235,7 +235,7 @@
 		}
 		if (applet._deferApplet)
 			applet._javaCode = t, t="";
-		t = Jmol._getWrapper(applet, true) + t + Jmol._getWrapper(applet, false) 
+		t = Jmol._getWrapper(applet, true) + t + Jmol._getWrapper(applet, false)
 			+ (Info.addSelectionOptions ? Jmol._getGrabberOptions(applet) : "");
 		if (Jmol._debugAlert)
 			alert (t);
@@ -243,12 +243,12 @@
 	}
 
 	proto._newApplet = function(viewerOptions) {
-		if (!this._is2D)  
+		if (!this._is2D)
 			viewerOptions.put("script", (viewerOptions.get("script") || "") + ";set multipleBondSpacing 0.35;");
 		this._viewerOptions = viewerOptions;
 		return new J.appletjs.Jmol(viewerOptions);
 	}
-	
+
 	proto._addCoreFiles = function() {
 		Jmol._addCoreFile("jmol", this._j2sPath, this.__Info.preloadCore);
 		if (!this._is2D) {
@@ -258,12 +258,12 @@
 		if (Jmol._debugCode)
 			Jmol._addExec([this, null, "J.appletjs.Jmol", "load Jmol"]);
   }
-  
+
 	proto._create = function(id, Info){
 		Jmol._setObject(this, id, Info);
 		var params = {
 			syncId: Jmol._syncId,
-			progressbar: "true",                      
+			progressbar: "true",
 			progresscolor: "blue",
 			boxbgcolor: this._color || "black",
 			boxfgcolor: "white",
@@ -291,7 +291,7 @@
 	}
 
 	proto._restoreState = function(clazzName, state) {
-		System.out.println("\n\nasynchronous restore state for " + clazzName + " " + state)
+		Zystem.out.println("\n\nasynchronous restore state for " + clazzName + " " + state)
 		var applet = this;
 		var vwr = applet._applet && applet._applet.viewer;
 		switch (state) {
@@ -307,23 +307,23 @@
 			case "J.shape.Frank":
 				return null;
 			}
-			
+
 			//if (vwr.rm.repaintPending)
 				//return function() {setTimeout(function(){vwr.refresh(2)},10)};
 			if (vwr && vwr.isScriptExecuting && vwr.isScriptExecuting()) {
 				if (Jmol._asyncCallbacks[clazzName]) {
-					System.out.println("...ignored");
+					Zystem.out.println("...ignored");
 					return 1;
 				}
 				var sc = vwr.getEvalContextAndHoldQueue(vwr.eval);
 				var pc = sc.pc - 1;
 				sc.asyncID = clazzName;
-				Jmol._asyncCallbacks[clazzName] = function(pc) {sc.pc=pc; System.out.println("sc.asyncID="+sc.asyncID+" sc.pc = " + sc.pc);vwr.eval.resumeEval(sc)};
+				Jmol._asyncCallbacks[clazzName] = function(pc) {sc.pc=pc; Zystem.out.println("sc.asyncID="+sc.asyncID+" sc.pc = " + sc.pc);vwr.eval.resumeEval(sc)};
 				vwr.eval.pc = vwr.eval.pcEnd;
-				System.out.println("setting resume for pc=" + sc.pc + " " + clazzName + " to " + Jmol._asyncCallbacks[clazzName] + "//" )
-				return function() {System.out.println("resuming " + clazzName + " " + Jmol._asyncCallbacks[clazzName]);Jmol._asyncCallbacks[clazzName](pc)};					
+				Zystem.out.println("setting resume for pc=" + sc.pc + " " + clazzName + " to " + Jmol._asyncCallbacks[clazzName] + "//" )
+				return function() {Zystem.out.println("resuming " + clazzName + " " + Jmol._asyncCallbacks[clazzName]);Jmol._asyncCallbacks[clazzName](pc)};
 			}
-			System.out.println(clazzName + "?????????????????????" + state)
+			Zystem.out.println(clazzName + "?????????????????????" + state)
 			return function() {setTimeout(function(){vwr.refresh(2)},10)};
 			//return null;
 		}
@@ -332,7 +332,7 @@
   proto._notifyAudioEnded = function(htParams) {
     this._applet.notifyAudioEnded(htParams);
   }
-  
+
 	proto._readyCallback = function(id, fullid, isReady) {
 		if (!isReady)
 			return; // ignore -- page is closing
@@ -393,7 +393,7 @@
   }
 
   proto._getAtomCorrelation = function(molData, isC13) {
-    // get the first atom mapping available by loading the model structure into model 2, 
+    // get the first atom mapping available by loading the model structure into model 2,
 
     var n = this._evaluate("{*}.count");
     if (n == 0)return;
@@ -408,9 +408,9 @@
 		  A[c[0] + 1] = c[1] - n + 1;
 		  B[c[1] - n + 1] = c[0] + 1;
 		}
-		return {fromJmol:A, toJmol:B}; // forward and rev.		
+		return {fromJmol:A, toJmol:B}; // forward and rev.
   }
-  
+
 	proto._show = function(tf) {
 		var x = (!tf ? 2 : "100%");
 		Jmol.$setSize(Jmol.$(this, "object"), x, x);
@@ -427,7 +427,7 @@
 		}
 
 
-	proto._addScript = function(script) {      
+	proto._addScript = function(script) {
 		this._readyScript || (this.readyScript = "");
 		this._readyScript && (this._readyScript += ";");
 		this._readyScript += script;
@@ -447,7 +447,7 @@
 	}
 
 	proto._scriptCheck = function(script) {
-		return this._ready && this._applet.scriptCheck(script);  
+		return this._ready && this._applet.scriptCheck(script);
 	}
 
 	proto._scriptWait = function(script, noReturn) {
@@ -530,19 +530,19 @@
 		}
 	}
 
-	proto._getPropertyAsJavaObject = function(sKey,sValue) {		
+	proto._getPropertyAsJavaObject = function(sKey,sValue) {
 		sValue == undefined && ( sValue = "");
 		return this._applet.getProperty(sKey,sValue);
 	}
 
-  proto._evaluate = function(expr) {  
+  proto._evaluate = function(expr) {
   	expr != null || (expr = "");
 		return this._getPropertyAsArray("variableInfo", expr);
 
   }
 
-	proto._evaluateDEPRECATED = function(molecularMath) {   // DEPRECATED!!!	
-	// DEPRECATED!!!	
+	proto._evaluateDEPRECATED = function(molecularMath) {   // DEPRECATED!!!
+	// DEPRECATED!!!
 		//carries out molecular math on a model
 		var result = "" + this._getPropertyAsJavaObject("evaluate", molecularMath);
 		var s = result.replace(/\-*\d+/, "");
@@ -552,10 +552,10 @@
 		if(s == "" && !isNaN(parseFloat(result)))
 			return parseFloat(result);
 		return result;
-	// DEPRECATED!!!	
+	// DEPRECATED!!!
 	}
 
-	proto._saveOrientation = function(id) {	
+	proto._saveOrientation = function(id) {
 		return this._savedOrientations[id] = this._getPropertyAsArray("orientationInfo","info").moveTo;
 	}
 
@@ -600,12 +600,12 @@
 
 		function _fixDim(x, units) {
 			var sx = "" + x;
-			return (sx.length == 0 ? (units ? "" : Jmol._allowedJmolSize[2]) 
-				: sx.indexOf("%") == sx.length - 1 ? sx 
-				: (x = parseFloat(x)) <= 1 && x > 0 ? x * 100 + "%" 
-				: (isNaN(x = Math.floor(x)) ? Jmol._allowedJmolSize[2] 
-				: x < Jmol._allowedJmolSize[0] ? Jmol._allowedJmolSize[0] 
-				: x > Jmol._allowedJmolSize[1] ? Jmol._allowedJmolSize[1] 
+			return (sx.length == 0 ? (units ? "" : Jmol._allowedJmolSize[2])
+				: sx.indexOf("%") == sx.length - 1 ? sx
+				: (x = parseFloat(x)) <= 1 && x > 0 ? x * 100 + "%"
+				: (isNaN(x = Math.floor(x)) ? Jmol._allowedJmolSize[2]
+				: x < Jmol._allowedJmolSize[0] ? Jmol._allowedJmolSize[0]
+				: x > Jmol._allowedJmolSize[1] ? Jmol._allowedJmolSize[1]
 				: x)
 				+ (units ? units : "")
 			);
@@ -627,7 +627,7 @@
 
 	proto._searchDatabase = function(query, database, script, _jmol_searchDatabase){
 		if (this._2dapplet && this._2dapplet._isEmbedded && !Jmol.$(this, "appletdiv:visible")[0])
-			return this._2dapplet._searchDatabase(query, database, script); 
+			return this._2dapplet._searchDatabase(query, database, script);
 		this._showInfo(false);
 		if (query.indexOf("?") >= 0) {
 			Jmol._getInfoFromDatabase(this, database, query.split("?")[0]);
@@ -647,15 +647,15 @@
 		this._fileName = fileName;
 		if (!this._scriptLoad(fileName, script)) {
 			// we load the data here instead of in Jmol in the case of
-			// JSmol/Java/Sandboxed or when part of a view set 
-			var me = this;      
-			Jmol._loadFileData(this, fileName, 
+			// JSmol/Java/Sandboxed or when part of a view set
+			var me = this;
+			Jmol._loadFileData(this, fileName,
 				function(data){me.__loadModel(data, script, chemID)},
 				function() {me.__loadModel(null)}
 			);
 		}
 	}
-					 
+
 	proto._scriptLoad = function(file, script, _jmol_scriptLoad) {
 		script || (script = "");
 		var doscript = (this._isJava || !this._noscript);
@@ -675,7 +675,7 @@
 		if (mol == null)
 			return;
 		if (this._viewSet != null) {
-			script || (script = ""); 
+			script || (script = "");
 			// first component only
 			script += ";if ({*}.molecule.max > 1 || {*}.modelindex.max > 0){ delete molecule > 1 or modelindex > 0;x = getProperty('extractModel',{*});load inline @x};"
 		}
@@ -686,7 +686,7 @@
 		}
 		if (this._viewSet != null) {
 			Jmol.View.updateView(this, {chemID:chemID, data:mol});
-		}      
+		}
 	}
 
   proto._loadMolData = function(mol, script, isAppend) {
@@ -695,7 +695,7 @@
 		script = 'load DATA "' + name + '"' + mol + '\nEND "'+ name +'" ;' + script;
 		this._applet.scriptWait(script);
   }
-  
+
 	proto._loadModelFromView = function(view, _jmol_loadModelFromView) {
 		// request from Jmol.View to update view with view.JME.data==null or needs changing
 		this._currentView = view;
@@ -718,7 +718,7 @@
   proto._reset = function(_jmol_resetView) {
     this._scriptWait("zap", true);
   }
-  
+
 	proto._updateView = function(_jmol_updateView) {
 		if (this._viewSet == null || !this._applet)
 			return;
@@ -734,7 +734,7 @@
 	proto._atomPickedCallback = function(imodel, iatom, _jmol_atomPickedCallback) {
 		// direct callback from Jmol HTML5 applet
 		if (iatom < 0) {
-		// TODO could be a model change? 
+		// TODO could be a model change?
 		} else {
 			var A = [iatom + 1];
 			Jmol.View.updateAtomPick(this, A);
@@ -774,7 +774,7 @@
 			Jmol._getElement(this, "coverimage").title = "3D model is loading...";
 		if (!this._isJava)
 			this._newCanvas(false);
-		if (this._defaultModel)	
+		if (this._defaultModel)
 			Jmol._search(this, this._defaultModel);
 		this._showInfo(false);
 		if (!this._deferUncover)
@@ -792,18 +792,18 @@
 	};
 
   proto._getSmiles = function() {
-		return this._evaluate("{visible}.find('SMILES')");   
+		return this._evaluate("{visible}.find('SMILES')");
   }
-  
+
   proto._getMol = function() {
-		return this._evaluate("getProperty('ExtractModel',{visible})");   
+		return this._evaluate("getProperty('ExtractModel',{visible})");
   }
 
   proto._getMol2D = function() {
 		return this._evaluate("script('select visible;show chemical sdf')"); // 2D equivalent no longer!
   }
-  
-  
+
+
 })(Jmol._Applet, Jmol._Applet.prototype);
 
 /* ****************************************
@@ -828,7 +828,7 @@
 		Jmol._setObject(this, id, Info);
 		thisnfo);
 		this._src || (this._src = "");
-		var t = Jmol._getWrapper(this, true) 
+		var t = Jmol._getWrapper(this, true)
 			+ '<img id="'+id+'_image" width="' + Info.width + '" height="' + Info.height + '" src=""/>'
 		 	+	Jmol._getWrapper(this, false)
 			+ (Info.addSelectionOptions ? Jmol._getGrabberOptions(this) : "");
@@ -904,7 +904,7 @@
 		params = (params ? params : "");
 		var database = "";
 		if (Jmol._isDatabaseCall(fileName)) {
-			database = fileName.substring(0, 1); 
+			database = fileName.substring(0, 1);
 			fileName = Jmol._getDirectDatabaseCall(fileName, false);
 		} else if (fileName.indexOf("://") < 0) {
 			var ref = document.location.href
@@ -912,7 +912,7 @@
 			fileName = ref.substring(0, pt + 1) + fileName;
 		}
 
-		var src = Jmol._serverUrl 
+		var src = Jmol._serverUrl
 				+ "?call=getImageForFileLoad"
 				+ "&file=" + escape(fileName)
 				+ "&width=" + this._width
@@ -928,7 +928,7 @@
 		}
 		this._showInfo(false);
 		script || (script = Jmol._getScriptForDatabase(database));
-		var src = Jmol._serverUrl 
+		var src = Jmol._serverUrl
 			+ "?call=getImageFromDatabase"
 			+ "&database=" + database
 			+ "&query=" + query

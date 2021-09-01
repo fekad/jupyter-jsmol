@@ -1,10 +1,10 @@
 Clazz.declarePackage ("J.dssx");
 Clazz.load (["J.api.JmolAnnotationParser"], "J.dssx.AnnotationParser", ["java.lang.Boolean", "$.Float", "java.util.Hashtable", "JU.AU", "$.BS", "$.Lst", "$.PT", "$.SB", "JM.Group", "JM.BioResolver", "JS.SV", "JU.BSUtil", "$.Logger"], function () {
 c$ = Clazz.declareType (J.dssx, "AnnotationParser", null, J.api.JmolAnnotationParser);
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function () {
 });
-Clazz.defineMethod (c$, "getAnnotationKVPairs", 
+Clazz.defineMethod (c$, "getAnnotationKVPairs",
  function (a, match, dotPath, sb, pre, showDetail, isMappingOnly, type) {
 var map = a.getMap ();
 if (map == null || map.isEmpty ()) return;
@@ -32,7 +32,7 @@ sb.append (key).append ("=");
 sb.append (s).append ("\n");
 }}}
 }, "JS.SV,~S,~S,JU.SB,~S,~B,~B,~N");
-Clazz.defineMethod (c$, "getDataKey", 
+Clazz.defineMethod (c$, "getDataKey",
  function (type) {
 switch (type) {
 case 1073741925:
@@ -42,7 +42,7 @@ return "outliers";
 }
 return null;
 }, "~N");
-Clazz.overrideMethod (c$, "catalogStructureUnits", 
+Clazz.overrideMethod (c$, "catalogStructureUnits",
 function (viewer, map0, modelAtomIndices, resMap, object, modelMap) {
 var note = "Use within(rna3d, TYPE) where TYPE is one of: ";
 var data = map0.getMap ();
@@ -92,7 +92,7 @@ throw e;
 }
 return note;
 }, "JV.Viewer,JS.SV,~A,java.util.Map,~O,java.util.Map");
-Clazz.overrideMethod (c$, "catalogValidations", 
+Clazz.overrideMethod (c$, "catalogValidations",
 function (viewer, map0, modelAtomIndices, resMap, atomMap, modelMap) {
 var data = map0.getMap ();
 if (data == null) return null;
@@ -162,7 +162,7 @@ throw e;
 }
 }
 }, "JV.Viewer,JS.SV,~A,java.util.Map,java.util.Map,java.util.Map");
-Clazz.defineMethod (c$, "getMainItem", 
+Clazz.defineMethod (c$, "getMainItem",
  function (data) {
 for (var e, $e = data.entrySet ().iterator (); $e.hasNext () && ((e = $e.next ()) || true);) {
 var key = e.getKey ();
@@ -170,7 +170,7 @@ if (!key.contains ("metadata")) return e.getValue ();
 }
 return null;
 }, "java.util.Map");
-Clazz.overrideMethod (c$, "initializeAnnotation", 
+Clazz.overrideMethod (c$, "initializeAnnotation",
 function (objAnn, type, modelIndex) {
 var map = objAnn.getMap ();
 var _list = map.get ("_list");
@@ -219,10 +219,10 @@ mmap.put ("domain", _domainMap);
 }
 return list;
 }, "JS.SV,~N,~N");
-Clazz.defineMethod (c$, "findAnnotationAtoms", 
+Clazz.defineMethod (c$, "findAnnotationAtoms",
  function (vwr, name, _list, key, bs) {
 if (_list == null) return;
-System.out.println ("Checking " + name + " for " + key);
+Zystem.out.println ("Checking " + name + " for " + key);
 var data = vwr.extractProperty (_list, "[" + key + "]", -1);
 var list = null;
 if (Clazz.instanceOf (data, JU.Lst)) {
@@ -237,7 +237,7 @@ if (mapping == null) return;
 bs.or (this.setAnnotationAtoms (vwr, mapping, i));
 }
 }, "JV.Viewer,~S,JU.Lst,~S,JU.BS");
-Clazz.defineMethod (c$, "setAnnotationAtoms", 
+Clazz.defineMethod (c$, "setAnnotationAtoms",
  function (vwr, mapping, i) {
 var _atoms = mapping.get ("_atoms");
 if (_atoms.tok != 10) {
@@ -247,7 +247,7 @@ _atoms.tok = 10;
 _atoms.value = bs2;
 }return _atoms.value;
 }, "JV.Viewer,java.util.Map,~N");
-Clazz.defineMethod (c$, "catalogUnit", 
+Clazz.defineMethod (c$, "catalogUnit",
  function (viewer, vals, unitID, val, bsAtoms, modelAtomIndices, resMap, atomMap, modelMap) {
 var s = JU.PT.split (unitID + (vals == null ? "||||" : "|||"), "|");
 if (s.length < 8 || s[1].length == 0 || s[2].length == 0 || s[3].length == 0 || s[4].length == 0) return false;
@@ -275,7 +275,7 @@ bsAtoms.set (i0 + j);
 if (vals != null) vals[m][j] += Math.abs (val);
 }}return isRes;
 }, "JV.Viewer,~A,~S,~N,JU.BS,~A,java.util.Map,java.util.Map,java.util.Map");
-Clazz.overrideMethod (c$, "getAtomBits", 
+Clazz.overrideMethod (c$, "getAtomBits",
 function (vwr, key, dbObj, annotationCache, type, modelIndex, bsModel) {
 if (dbObj == null) return  new JU.BS ();
 var doCache = !key.contains ("NOCACHE");
@@ -300,7 +300,7 @@ this.findAnnotationAtoms (vwr, path, list, newKey, bs);
 bs.and (bsModel);
 } catch (e) {
 if (Clazz.exceptionOf (e, Exception)) {
-System.out.println (e.toString () + " in AnnotationParser");
+Zystem.out.println (e.toString () + " in AnnotationParser");
 bs.clearAll ();
 } else {
 throw e;
@@ -308,7 +308,7 @@ throw e;
 }
 return bs;
 }, "JV.Viewer,~S,~O,java.util.Map,~N,~N,JU.BS");
-Clazz.overrideMethod (c$, "getAtomValidation", 
+Clazz.overrideMethod (c$, "getAtomValidation",
 function (vwr, type, atom) {
 var i = 0;
 var n = 0;
@@ -334,7 +334,7 @@ throw e;
 }
 }
 }, "JV.Viewer,~S,JM.Atom");
-Clazz.overrideMethod (c$, "getAnnotationInfo", 
+Clazz.overrideMethod (c$, "getAnnotationInfo",
 function (vwr, a, match, type, modelIndex) {
 var sb =  new JU.SB ();
 if ("".equals (match)) match = null;
@@ -353,14 +353,14 @@ this.getAnnotationKVPairs (a, match, "", sb, "", isDetail, isMappingOnly, type);
 } catch (e) {
 if (Clazz.exceptionOf (e, Exception)) {
 {
-System.out.println(e);
+Zystem.out.println(e);
 }} else {
 throw e;
 }
 }
 return sb.toString ();
 }, "JV.Viewer,JS.SV,~S,~N,~N");
-Clazz.defineMethod (c$, "getAttachedAtomForPDBH", 
+Clazz.defineMethod (c$, "getAttachedAtomForPDBH",
 function (group3, name) {
 if (name.charAt (0) == 'H') {
 if (J.dssx.AnnotationParser.pdbAtomForH == null) {
@@ -374,7 +374,7 @@ if (a == null) a = J.dssx.AnnotationParser.pdbAtomForH.get (group3 + name);
 if (a != null) return a;
 }return name;
 }, "~S,~S");
-Clazz.defineMethod (c$, "assignPDBH", 
+Clazz.defineMethod (c$, "assignPDBH",
  function (group3, sNames) {
 var names = JU.PT.getTokens (JU.PT.rep (sNames, "@", " "));
 var a = null;
@@ -393,7 +393,7 @@ J.dssx.AnnotationParser.pdbAtomForH.put (s + "3", a);
 J.dssx.AnnotationParser.pdbAtomForH.put (s, a);
 }}
 }, "~S,~S");
-Clazz.overrideMethod (c$, "fixAtoms", 
+Clazz.overrideMethod (c$, "fixAtoms",
 function (modelIndex, dbObj, bsAddedMask, type, margin) {
 var _list = this.initializeAnnotation (dbObj, type, modelIndex);
 for (var i = _list.size (); --i >= 0; ) {
@@ -402,28 +402,28 @@ var _atoms = m.get ("_atoms");
 if (_atoms != null && _atoms.tok == 10) JU.BSUtil.shiftBits (_atoms.value, bsAddedMask, _list.get (i).mapGet ("_isres") != null, (_atoms.value).length () + margin);
 }
 }, "~N,JS.SV,JU.BS,~N,~N");
-Clazz.overrideMethod (c$, "getBasePairs", 
+Clazz.overrideMethod (c$, "getBasePairs",
 function (vwr, modelIndex) {
 }, "JV.Viewer,~N");
-Clazz.overrideMethod (c$, "calculateDSSRStructure", 
+Clazz.overrideMethod (c$, "calculateDSSRStructure",
 function (vwr, bsAtoms) {
 return null;
 }, "JV.Viewer,JU.BS");
-Clazz.overrideMethod (c$, "fixDSSRJSONMap", 
+Clazz.overrideMethod (c$, "fixDSSRJSONMap",
 function (map) {
 return null;
 }, "java.util.Map");
-Clazz.overrideMethod (c$, "getHBonds", 
+Clazz.overrideMethod (c$, "getHBonds",
 function (ms, modelIndex, vHBonds, doReport) {
 return null;
 }, "JM.ModelSet,~N,JU.Lst,~B");
-Clazz.overrideMethod (c$, "getAtomicDSSRData", 
+Clazz.overrideMethod (c$, "getAtomicDSSRData",
 function (ms, modelIndex, dssrData, dataType) {
 }, "JM.ModelSet,~N,~A,~S");
-Clazz.overrideMethod (c$, "setGroup1", 
+Clazz.overrideMethod (c$, "setGroup1",
 function (ms, modelIndex) {
 }, "JM.ModelSet,~N");
-Clazz.overrideMethod (c$, "getDSSRFrame", 
+Clazz.overrideMethod (c$, "getDSSRFrame",
 function (dssrNT) {
 return null;
 }, "java.util.Map");

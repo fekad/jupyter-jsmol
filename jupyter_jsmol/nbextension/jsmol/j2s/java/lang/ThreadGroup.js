@@ -7,7 +7,7 @@ Clazz.instantialize(this,arguments);
 },java.lang,"ThreadGroup");
 Clazz.makeConstructor(c$,
 function(){
-this.name="system";
+this.name="Zystem";
 this.maxPriority=10;
 });
 Clazz.makeConstructor(c$,

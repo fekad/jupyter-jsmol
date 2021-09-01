@@ -4,7 +4,7 @@ c$ = Clazz.decorateAsClass (function () {
 this.htParams = null;
 Clazz.instantialize (this, arguments);
 }, J.appletjs, "Jmol", JU.GenericApplet, javajs.api.JSInterface);
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function (vwrOptions) {
 Clazz.superConstructor (this, J.appletjs.Jmol, []);
 this.htParams =  new java.util.Hashtable ();
@@ -17,34 +17,34 @@ this.codeBase = "" + vwrOptions.get ("codePath");
 this.isJS = true;
 this.init (this);
 }, "java.util.Map");
-Clazz.overrideMethod (c$, "setStereoGraphics", 
+Clazz.overrideMethod (c$, "setStereoGraphics",
 function (isStereo) {
 {
 if (isStereo)
 return vwr.apiPlatform.context;
 }return null;
 }, "~B");
-Clazz.overrideMethod (c$, "initOptions", 
+Clazz.overrideMethod (c$, "initOptions",
 function () {
 this.vwrOptions.remove ("debug");
 this.vwrOptions.put ("fullName", this.fullName);
 this.haveDocumentAccess = "true".equalsIgnoreCase ("" + this.getValue ("allowjavascript", "true"));
 this.mayScript = true;
 });
-Clazz.overrideMethod (c$, "getJmolParameter", 
+Clazz.overrideMethod (c$, "getJmolParameter",
 function (paramName) {
 var o = this.htParams.get (paramName.toLowerCase ());
 return (o == null ? null : "" + o);
 }, "~S");
-Clazz.overrideMethod (c$, "doSendJsTextStatus", 
+Clazz.overrideMethod (c$, "doSendJsTextStatus",
 function (message) {
-System.out.println (message);
+Zystem.out.println (message);
 }, "~S");
-Clazz.overrideMethod (c$, "doSendJsTextareaStatus", 
+Clazz.overrideMethod (c$, "doSendJsTextareaStatus",
 function (message) {
-System.out.println (message);
+Zystem.out.println (message);
 }, "~S");
-Clazz.overrideMethod (c$, "doFunctionXY", 
+Clazz.overrideMethod (c$, "doFunctionXY",
 function (functionName, nX, nY) {
 var fxy =  Clazz.newFloatArray (Math.abs (nX), Math.abs (nY), 0);
 if (!this.mayScript || !this.haveDocumentAccess || nX == 0 || nY == 0) return fxy;
@@ -79,7 +79,7 @@ throw e;
 }
 return fxy;
 }, "~S,~N,~N");
-Clazz.overrideMethod (c$, "doFunctionXYZ", 
+Clazz.overrideMethod (c$, "doFunctionXYZ",
 function (functionName, nX, nY, nZ) {
 var fxyz =  Clazz.newFloatArray (Math.abs (nX), Math.abs (nY), Math.abs (nZ), 0);
 if (!this.mayScript || !this.haveDocumentAccess || nX == 0 || nY == 0 || nZ == 0) return fxyz;
@@ -95,7 +95,7 @@ throw e;
 }
 return fxyz;
 }, "~S,~N,~N,~N");
-Clazz.overrideMethod (c$, "doShowDocument", 
+Clazz.overrideMethod (c$, "doShowDocument",
 function (url) {
 var surl = JU.PT.split (url.toString (), "?POST?");
 if (surl.length == 1) {
@@ -120,7 +120,7 @@ f += "</form>";
 {
 var w=window.open("");w.document.write(f);w.document.getElementById("f").submit();
 }}, "java.net.URL");
-Clazz.overrideMethod (c$, "doSendCallback", 
+Clazz.overrideMethod (c$, "doSendCallback",
 function (callback, data, strInfo) {
 if (callback == null || callback.length == 0) {
 } else if (callback.equals ("alert")) {
@@ -136,10 +136,10 @@ o = o[tokens[i]];
 for (var i = 0; i < data.length; i++)
 data[i] && data[i].booleanValue && (data[i] = data[i].booleanValue());
 return o.apply(null,data)
-} catch (e) { System.out.println(callback + " failed " + e); }
+} catch (e) { Zystem.out.println(callback + " failed " + e); }
 }}return "";
 }, "~S,~A,~S");
-Clazz.overrideMethod (c$, "doEval", 
+Clazz.overrideMethod (c$, "doEval",
 function (strEval) {
 try {
 {
@@ -153,10 +153,10 @@ throw e;
 }
 return "";
 }, "~S");
-Clazz.overrideMethod (c$, "doShowStatus", 
+Clazz.overrideMethod (c$, "doShowStatus",
 function (message) {
 try {
-System.out.println (message);
+Zystem.out.println (message);
 } catch (e) {
 if (Clazz.exceptionOf (e, Exception)) {
 } else {
@@ -164,66 +164,66 @@ throw e;
 }
 }
 }, "~S");
-Clazz.defineMethod (c$, "getGLmolView", 
+Clazz.defineMethod (c$, "getGLmolView",
 function () {
 return this.viewer.getGLmolView ();
 });
-Clazz.defineMethod (c$, "openFile", 
+Clazz.defineMethod (c$, "openFile",
 function (fileName) {
 return this.viewer.openFile (fileName);
 }, "~S");
-Clazz.overrideMethod (c$, "cacheFileByName", 
+Clazz.overrideMethod (c$, "cacheFileByName",
 function (fileName, isAdd) {
 return this.viewer.cacheFileByName (fileName, isAdd);
 }, "~S,~B");
-Clazz.overrideMethod (c$, "cachePut", 
+Clazz.overrideMethod (c$, "cachePut",
 function (key, data) {
 this.viewer.cachePut (key, data);
 }, "~S,~O");
-Clazz.overrideMethod (c$, "getFullName", 
+Clazz.overrideMethod (c$, "getFullName",
 function () {
 return this.fullName;
 });
-Clazz.overrideMethod (c$, "processMouseEvent", 
+Clazz.overrideMethod (c$, "processMouseEvent",
 function (id, x, y, modifiers, time) {
 return this.viewer.processMouseEvent (id, x, y, modifiers, time);
 }, "~N,~N,~N,~N,~N");
-Clazz.overrideMethod (c$, "setDisplay", 
+Clazz.overrideMethod (c$, "setDisplay",
 function (canvas) {
 this.viewer.setDisplay (canvas);
 }, "~O");
-Clazz.overrideMethod (c$, "setStatusDragDropped", 
+Clazz.overrideMethod (c$, "setStatusDragDropped",
 function (mode, x, y, fileName) {
 return this.viewer.setStatusDragDropped (mode, x, y, fileName);
 }, "~N,~N,~N,~S");
-Clazz.overrideMethod (c$, "startHoverWatcher", 
+Clazz.overrideMethod (c$, "startHoverWatcher",
 function (enable) {
 this.viewer.startHoverWatcher (enable);
 }, "~B");
-Clazz.overrideMethod (c$, "update", 
+Clazz.overrideMethod (c$, "update",
 function () {
 this.viewer.updateJS ();
 });
-Clazz.overrideMethod (c$, "openFileAsyncSpecial", 
+Clazz.overrideMethod (c$, "openFileAsyncSpecial",
 function (fileName, flags) {
 this.viewer.openFileAsyncSpecial (fileName, flags);
 }, "~S,~N");
-Clazz.overrideMethod (c$, "processTwoPointGesture", 
+Clazz.overrideMethod (c$, "processTwoPointGesture",
 function (touches) {
 this.viewer.processTwoPointGesture (touches);
 }, "~A");
-Clazz.overrideMethod (c$, "setScreenDimension", 
+Clazz.overrideMethod (c$, "setScreenDimension",
 function (width, height) {
 this.viewer.setScreenDimension (width, height);
 }, "~N,~N");
-Clazz.overrideMethod (c$, "resizeInnerPanel", 
+Clazz.overrideMethod (c$, "resizeInnerPanel",
 function (data) {
 var dims =  Clazz.newFloatArray (2, 0);
 JU.Parser.parseStringInfestedFloatArray (data, null, dims);
 this.resizeDisplay (Clazz.floatToInt (dims[0]), Clazz.floatToInt (dims[1]));
 return  Clazz.newIntArray (-1, [Clazz.floatToInt (dims[0]), Clazz.floatToInt (dims[1])]);
 }, "~S");
-Clazz.defineMethod (c$, "resizeDisplay", 
+Clazz.defineMethod (c$, "resizeDisplay",
 function (width, height) {
 var jmol = J.awtjs2d.Platform.Jmol ();
 jmol.resizeApplet (this.viewer.html5Applet,  Clazz.newIntArray (-1, [width, height]));

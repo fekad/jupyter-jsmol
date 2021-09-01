@@ -70,11 +70,11 @@ this.buf = null;
 this.pos = 0;
 Clazz_instantialize (this, arguments);
 }, java.io, "PushbackInputStream", java.io.FilterInputStream);
-Clazz_defineMethod (c$, "ensureOpen", 
+Clazz_defineMethod (c$, "ensureOpen",
  function () {
 if (this.$in == null) throw  new java.io.IOException ("Stream closed");
 });
-Clazz_makeConstructor (c$, 
+Clazz_makeConstructor (c$,
 function ($in, size) {
 Clazz_superConstructor (this, java.io.PushbackInputStream, [$in]);
 if (size <= 0) {
@@ -82,14 +82,14 @@ throw  new IllegalArgumentException ("size <= 0");
 }this.buf =  Clazz_newByteArray (size, 0);
 this.pos = size;
 }, "java.io.InputStream,~N");
-Clazz_overrideMethod (c$, "readByteAsInt", 
+Clazz_overrideMethod (c$, "readByteAsInt",
 function () {
 this.ensureOpen ();
 if (this.pos < this.buf.length) {
 return this.buf[this.pos++] & 0xff;
 }return this.$in.readByteAsInt ();
 });
-Clazz_defineMethod (c$, "read", 
+Clazz_defineMethod (c$, "read",
 function (b, off, len) {
 this.ensureOpen ();
 if (b == null) {
@@ -102,7 +102,7 @@ return 0;
 if (avail > 0) {
 if (len < avail) {
 avail = len;
-}System.arraycopy (this.buf, this.pos, b, off, avail);
+}Zystem.arraycopy (this.buf, this.pos, b, off, avail);
 this.pos += avail;
 off += avail;
 len -= avail;
@@ -113,29 +113,29 @@ return avail == 0 ? -1 : avail;
 }return avail + len;
 }return avail;
 }, "~A,~N,~N");
-Clazz_defineMethod (c$, "unreadByte", 
+Clazz_defineMethod (c$, "unreadByte",
 function (b) {
 this.ensureOpen ();
 if (this.pos == 0) {
 throw  new java.io.IOException ("Push back buffer is full");
 }this.buf[--this.pos] = b;
 }, "~N");
-Clazz_defineMethod (c$, "unread", 
+Clazz_defineMethod (c$, "unread",
 function (b, off, len) {
 this.ensureOpen ();
 if (len > this.pos) {
 throw  new java.io.IOException ("Push back buffer is full");
 }this.pos -= len;
-System.arraycopy (b, off, this.buf, this.pos, len);
+Zystem.arraycopy (b, off, this.buf, this.pos, len);
 }, "~A,~N,~N");
-Clazz_overrideMethod (c$, "available", 
+Clazz_overrideMethod (c$, "available",
 function () {
 this.ensureOpen ();
 var n = this.buf.length - this.pos;
 var avail = this.$in.available ();
 return n > (2147483647 - avail) ? 2147483647 : n + avail;
 });
-Clazz_overrideMethod (c$, "skip", 
+Clazz_overrideMethod (c$, "skip",
 function (n) {
 this.ensureOpen ();
 if (n <= 0) {
@@ -150,18 +150,18 @@ n -= pskip;
 pskip += this.$in.skip (n);
 }return pskip;
 }, "~N");
-Clazz_overrideMethod (c$, "markSupported", 
+Clazz_overrideMethod (c$, "markSupported",
 function () {
 return false;
 });
-Clazz_overrideMethod (c$, "mark", 
+Clazz_overrideMethod (c$, "mark",
 function (readlimit) {
 }, "~N");
-Clazz_overrideMethod (c$, "reset", 
+Clazz_overrideMethod (c$, "reset",
 function () {
 throw  new java.io.IOException ("mark/reset not supported");
 });
-Clazz_overrideMethod (c$, "close", 
+Clazz_overrideMethod (c$, "close",
 function () {
 if (this.$in == null) return;
 this.$in.close ();
@@ -235,27 +235,27 @@ c$ = Clazz_decorateAsClass (function () {
 this.cksum = null;
 Clazz_instantialize (this, arguments);
 }, java.util.zip, "CheckedInputStream", java.io.FilterInputStream);
-Clazz_defineMethod (c$, "set", 
+Clazz_defineMethod (c$, "set",
 function (cksum) {
 this.$in = this.$in;
 this.cksum = cksum;
 return this;
 }, "JU.Checksum");
-Clazz_overrideMethod (c$, "readByteAsInt", 
+Clazz_overrideMethod (c$, "readByteAsInt",
 function () {
 var b = this.$in.readByteAsInt ();
 if (b != -1) {
 this.cksum.updateByteAsInt (b);
 }return b;
 });
-Clazz_defineMethod (c$, "read", 
+Clazz_defineMethod (c$, "read",
 function (buf, off, len) {
 len = this.$in.read (buf, off, len);
 if (len != -1) {
 this.cksum.update (buf, off, len);
 }return len;
 }, "~A,~N,~N");
-Clazz_overrideMethod (c$, "skip", 
+Clazz_overrideMethod (c$, "skip",
 function (n) {
 var buf =  Clazz_newByteArray (512, 0);
 var total = 0;
@@ -268,7 +268,7 @@ return total;
 }
 return total;
 }, "~N");
-Clazz_defineMethod (c$, "getChecksum", 
+Clazz_defineMethod (c$, "getChecksum",
 function () {
 return this.cksum;
 });
@@ -276,7 +276,7 @@ return this.cksum;
 Clazz_declarePackage ("java.util.zip");
 Clazz_load (["JU.Inflater"], "java.util.zip.Inflater", null, function () {
 c$ = Clazz_declareType (java.util.zip, "Inflater", JU.Inflater);
-Clazz_defineMethod (c$, "initialize", 
+Clazz_defineMethod (c$, "initialize",
 function (nowrap) {
 return this.init (0, nowrap);
 }, "~B");
@@ -343,7 +343,7 @@ this.extra = null;
 this.comment = null;
 Clazz_instantialize (this, arguments);
 }, java.util.zip, "ZipEntry", null, [java.util.zip.ZipConstants, Cloneable]);
-Clazz_makeConstructor (c$, 
+Clazz_makeConstructor (c$,
 function (name) {
 if (name == null) {
 throw  new NullPointerException ();
@@ -351,88 +351,88 @@ throw  new NullPointerException ();
 throw  new IllegalArgumentException ("entry name too long");
 }this.name = name;
 }, "~S");
-Clazz_defineMethod (c$, "getName", 
+Clazz_defineMethod (c$, "getName",
 function () {
 return this.name;
 });
-Clazz_defineMethod (c$, "setTime", 
+Clazz_defineMethod (c$, "setTime",
 function (time) {
 this.time = java.util.zip.ZipEntry.javaToDosTime (time);
 }, "~N");
-Clazz_defineMethod (c$, "getTime", 
+Clazz_defineMethod (c$, "getTime",
 function () {
 return this.time != -1 ? java.util.zip.ZipEntry.dosToJavaTime (this.time) : -1;
 });
-Clazz_defineMethod (c$, "setSize", 
+Clazz_defineMethod (c$, "setSize",
 function (size) {
 if (size < 0) {
 throw  new IllegalArgumentException ("invalid entry size");
 }this.size = size;
 }, "~N");
-Clazz_defineMethod (c$, "getSize", 
+Clazz_defineMethod (c$, "getSize",
 function () {
 return this.size;
 });
-Clazz_defineMethod (c$, "getCompressedSize", 
+Clazz_defineMethod (c$, "getCompressedSize",
 function () {
 return this.csize;
 });
-Clazz_defineMethod (c$, "setCompressedSize", 
+Clazz_defineMethod (c$, "setCompressedSize",
 function (csize) {
 this.csize = csize;
 }, "~N");
-Clazz_defineMethod (c$, "setCrc", 
+Clazz_defineMethod (c$, "setCrc",
 function (crc) {
 if (crc < 0 || crc > 0xFFFFFFFF) {
 throw  new IllegalArgumentException ("invalid entry crc-32");
 }this.crc = crc;
 }, "~N");
-Clazz_defineMethod (c$, "getCrc", 
+Clazz_defineMethod (c$, "getCrc",
 function () {
 return this.crc;
 });
-Clazz_defineMethod (c$, "setMethod", 
+Clazz_defineMethod (c$, "setMethod",
 function (method) {
 if (method != 0 && method != 8) {
 throw  new IllegalArgumentException ("invalid compression method");
 }this.method = method;
 }, "~N");
-Clazz_defineMethod (c$, "getMethod", 
+Clazz_defineMethod (c$, "getMethod",
 function () {
 return this.method;
 });
-Clazz_defineMethod (c$, "setExtra", 
+Clazz_defineMethod (c$, "setExtra",
 function (extra) {
 if (extra != null && extra.length > 0xFFFF) {
 throw  new IllegalArgumentException ("invalid extra field length");
 }this.extra = extra;
 }, "~A");
-Clazz_defineMethod (c$, "getExtra", 
+Clazz_defineMethod (c$, "getExtra",
 function () {
 return this.extra;
 });
-Clazz_defineMethod (c$, "setComment", 
+Clazz_defineMethod (c$, "setComment",
 function (comment) {
 this.comment = comment;
 }, "~S");
-Clazz_defineMethod (c$, "getComment", 
+Clazz_defineMethod (c$, "getComment",
 function () {
 return this.comment;
 });
-Clazz_defineMethod (c$, "isDirectory", 
+Clazz_defineMethod (c$, "isDirectory",
 function () {
 return this.name.endsWith ("/");
 });
-Clazz_overrideMethod (c$, "toString", 
+Clazz_overrideMethod (c$, "toString",
 function () {
 return this.getName ();
 });
-c$.dosToJavaTime = Clazz_defineMethod (c$, "dosToJavaTime", 
+c$.dosToJavaTime = Clazz_defineMethod (c$, "dosToJavaTime",
  function (dtime) {
 var d =  new java.util.Date ((((dtime >> 25) & 0x7f) + 80), (((dtime >> 21) & 0x0f) - 1), ((dtime >> 16) & 0x1f), ((dtime >> 11) & 0x1f), ((dtime >> 5) & 0x3f), ((dtime << 1) & 0x3e));
 return d.getTime ();
 }, "~N");
-c$.javaToDosTime = Clazz_defineMethod (c$, "javaToDosTime", 
+c$.javaToDosTime = Clazz_defineMethod (c$, "javaToDosTime",
  function (time) {
 var d =  new java.util.Date (time);
 var year = d.getYear () + 1900;
@@ -440,17 +440,17 @@ if (year < 1980) {
 return 2162688;
 }return (year - 1980) << 25 | (d.getMonth () + 1) << 21 | d.getDate () << 16 | d.getHours () << 11 | d.getMinutes () << 5 | d.getSeconds () >> 1;
 }, "~N");
-Clazz_overrideMethod (c$, "hashCode", 
+Clazz_overrideMethod (c$, "hashCode",
 function () {
 return this.name.hashCode ();
 });
-Clazz_defineMethod (c$, "clone", 
+Clazz_defineMethod (c$, "clone",
 function () {
 try {
 var e = Clazz_superCall (this, java.util.zip.ZipEntry, "clone", []);
 if (this.extra != null) {
 e.extra =  Clazz_newByteArray (this.extra.length, 0);
-System.arraycopy (this.extra, 0, e.extra, 0, this.extra.length);
+Zystem.arraycopy (this.extra, 0, e.extra, 0, this.extra.length);
 }return e;
 } catch (e) {
 if (Clazz_exceptionOf (e, CloneNotSupportedException)) {
@@ -513,12 +513,12 @@ this.tmpbuf =  Clazz_newByteArray (512, 0);
 this.byteTest =  Clazz_newByteArray (-1, [0x20]);
 this.$b =  Clazz_newByteArray (256, 0);
 });
-Clazz_defineMethod (c$, "ensureOpen", 
+Clazz_defineMethod (c$, "ensureOpen",
  function () {
 if (this.$closed) {
 throw  new java.io.IOException ("Stream closed");
 }});
-Clazz_makeConstructor (c$, 
+Clazz_makeConstructor (c$,
 function ($in) {
 Clazz_superConstructor (this, java.util.zip.ZipInputStream, [ new java.io.PushbackInputStream ($in, 1024), java.util.zip.ZipInputStream.newInflater (), 512]);
 var charset = "UTF-8";
@@ -533,11 +533,11 @@ throw e;
 }
 this.zc = charset;
 }, "java.io.InputStream");
-c$.newInflater = Clazz_defineMethod (c$, "newInflater", 
+c$.newInflater = Clazz_defineMethod (c$, "newInflater",
  function () {
 return  new java.util.zip.Inflater ().init (0, true);
 });
-Clazz_defineMethod (c$, "getNextEntry", 
+Clazz_defineMethod (c$, "getNextEntry",
 function () {
 this.ensureOpen ();
 if (this.entry != null) {
@@ -551,19 +551,19 @@ this.remaining = this.entry.size;
 }this.entryEOF = false;
 return this.entry;
 });
-Clazz_defineMethod (c$, "closeEntry", 
+Clazz_defineMethod (c$, "closeEntry",
 function () {
 this.ensureOpen ();
 while (this.read (this.tmpbuf, 0, this.tmpbuf.length) != -1) {
 }
 this.entryEOF = true;
 });
-Clazz_overrideMethod (c$, "available", 
+Clazz_overrideMethod (c$, "available",
 function () {
 this.ensureOpen ();
 return (this.entryEOF ? 0 : 1);
 });
-Clazz_defineMethod (c$, "read", 
+Clazz_defineMethod (c$, "read",
 function (b, off, len) {
 this.ensureOpen ();
 if (off < 0 || len < 0 || off > b.length - len) {
@@ -601,7 +601,7 @@ default:
 throw  new java.util.zip.ZipException ("invalid compression method");
 }
 }, "~A,~N,~N");
-Clazz_overrideMethod (c$, "skip", 
+Clazz_overrideMethod (c$, "skip",
 function (n) {
 if (n < 0) {
 throw  new IllegalArgumentException ("negative skip length");
@@ -620,13 +620,13 @@ break;
 }
 return total;
 }, "~N");
-Clazz_defineMethod (c$, "close", 
+Clazz_defineMethod (c$, "close",
 function () {
 if (!this.$closed) {
 Clazz_superCall (this, java.util.zip.ZipInputStream, "close", []);
 this.$closed = true;
 }});
-Clazz_defineMethod (c$, "readLOC", 
+Clazz_defineMethod (c$, "readLOC",
  function () {
 try {
 this.readFully (this.tmpbuf, 0, 30);
@@ -679,7 +679,7 @@ break;
 }
 }}return e;
 });
-Clazz_defineMethod (c$, "toStringUTF8", 
+Clazz_defineMethod (c$, "toStringUTF8",
  function (b2, len) {
 try {
 return  String.instantialize (b2, 0, len, this.zc);
@@ -691,15 +691,15 @@ throw e;
 }
 }
 }, "~A,~N");
-Clazz_defineMethod (c$, "toStringb2", 
+Clazz_defineMethod (c$, "toStringb2",
  function (b2, len) {
 return  String.instantialize (b2, 0, len);
 }, "~A,~N");
-Clazz_defineMethod (c$, "createZipEntry", 
+Clazz_defineMethod (c$, "createZipEntry",
 function (name) {
 return  new java.util.zip.ZipEntry (name);
 }, "~S");
-Clazz_defineMethod (c$, "readEnd", 
+Clazz_defineMethod (c$, "readEnd",
  function (e) {
 var n = this.inf.getAvailIn ();
 if (n > 0) {
@@ -737,7 +737,7 @@ throw  new java.util.zip.ZipException ("invalid entry compressed size (expected 
 }if (e.crc != this.crc.getValue ()) {
 throw  new java.util.zip.ZipException ("invalid entry CRC (expected 0x" + Long.toHexString (e.crc) + " but got 0x" + Long.toHexString (this.crc.getValue ()) + ")");
 }}, "java.util.zip.ZipEntry");
-Clazz_defineMethod (c$, "readFully", 
+Clazz_defineMethod (c$, "readFully",
  function (b, off, len) {
 while (len > 0) {
 var n = this.$in.read (b, off, len);
@@ -747,15 +747,15 @@ throw  new java.io.EOFException ();
 len -= n;
 }
 }, "~A,~N,~N");
-c$.get16 = Clazz_defineMethod (c$, "get16", 
+c$.get16 = Clazz_defineMethod (c$, "get16",
  function (b, off) {
 return (b[off] & 0xff) | ((b[off + 1] & 0xff) << 8);
 }, "~A,~N");
-c$.get32 = Clazz_defineMethod (c$, "get32", 
+c$.get32 = Clazz_defineMethod (c$, "get32",
  function (b, off) {
 return (java.util.zip.ZipInputStream.get16 (b, off) | (java.util.zip.ZipInputStream.get16 (b, off + 2) << 16)) & 0xffffffff;
 }, "~A,~N");
-c$.get64 = Clazz_defineMethod (c$, "get64", 
+c$.get64 = Clazz_defineMethod (c$, "get64",
  function (b, off) {
 return java.util.zip.ZipInputStream.get32 (b, off) | (java.util.zip.ZipInputStream.get32 (b, off + 4) << 32);
 }, "~A,~N");
@@ -773,7 +773,7 @@ c$ = Clazz_decorateAsClass (function () {
 this.inf = null;
 Clazz_instantialize (this, arguments);
 }, java.util.zip, "InflaterInputStream", JU.InflaterInputStream);
-Clazz_makeConstructor (c$, 
+Clazz_makeConstructor (c$,
 function ($in, inflater, size) {
 Clazz_superConstructor (this, java.util.zip.InflaterInputStream, [$in, inflater, size, true]);
 this.inf = inflater;
@@ -792,17 +792,17 @@ Clazz_prepareFields (c$, function () {
 this.crc =  new java.util.zip.CRC32 ();
 this.tmpbuf =  Clazz_newByteArray (128, 0);
 });
-Clazz_defineMethod (c$, "ensureOpen", 
+Clazz_defineMethod (c$, "ensureOpen",
  function () {
 if (this.$closed) {
 throw  new java.io.IOException ("Stream closed");
 }});
-Clazz_makeConstructor (c$, 
+Clazz_makeConstructor (c$,
 function ($in, size) {
 Clazz_superConstructor (this, java.util.zip.GZIPInputStream, [$in,  new java.util.zip.Inflater ().init (0, true), size]);
 this.readHeader ($in);
 }, "java.io.InputStream,~N");
-Clazz_defineMethod (c$, "read", 
+Clazz_defineMethod (c$, "read",
 function (buf, off, len) {
 this.ensureOpen ();
 if (this.eos) {
@@ -815,14 +815,14 @@ if (this.readTrailer ()) this.eos = true;
 this.crc.update (buf, off, n);
 }return n;
 }, "~A,~N,~N");
-Clazz_defineMethod (c$, "close", 
+Clazz_defineMethod (c$, "close",
 function () {
 if (!this.$closed) {
 Clazz_superCall (this, java.util.zip.GZIPInputStream, "close", []);
 this.eos = true;
 this.$closed = true;
 }});
-Clazz_defineMethod (c$, "readHeader", 
+Clazz_defineMethod (c$, "readHeader",
  function (this_in) {
 var $in =  new java.util.zip.CheckedInputStream (this_in).set (this.crc);
 this.crc.reset ();
@@ -853,16 +853,16 @@ throw  new java.util.zip.ZipException ("Corrupt GZIP header");
 }this.crc.reset ();
 return n;
 }, "java.io.InputStream");
-Clazz_defineMethod (c$, "readTrailer", 
+Clazz_defineMethod (c$, "readTrailer",
  function () {
 return true;
 });
-Clazz_defineMethod (c$, "readUShort", 
+Clazz_defineMethod (c$, "readUShort",
  function ($in) {
 var b = this.readUByte ($in);
 return (this.readUByte ($in) << 8) | b;
 }, "java.io.InputStream");
-Clazz_defineMethod (c$, "readUByte", 
+Clazz_defineMethod (c$, "readUByte",
  function ($in) {
 var b = $in.readByteAsInt ();
 if (b == -1) {
@@ -871,7 +871,7 @@ throw  new java.io.EOFException ();
 throw  new java.io.IOException (this.$in.getClass ().getName () + ".read() returned value out of range -1..255: " + b);
 }return b;
 }, "java.io.InputStream");
-Clazz_defineMethod (c$, "skipBytes", 
+Clazz_defineMethod (c$, "skipBytes",
  function ($in, n) {
 while (n > 0) {
 var len = $in.read (this.tmpbuf, 0, n < this.tmpbuf.length ? n : this.tmpbuf.length);
@@ -894,21 +894,21 @@ c$ = Clazz_declareType (javajs.api, "GenericZipInputStream", java.util.zip.ZipIn
 Clazz_declarePackage ("JU");
 Clazz_load (["javajs.api.GenericZipTools"], "JU.ZipTools", ["java.io.BufferedInputStream", "$.IOException", "java.lang.Boolean", "java.util.zip.CRC32", "$.GZIPInputStream", "$.ZipEntry", "$.ZipInputStream", "javajs.api.GenericZipInputStream", "$.Interface", "$.ZInputStream", "JU.BArray", "$.Lst", "$.Rdr", "$.SB"], function () {
 c$ = Clazz_declareType (JU, "ZipTools", null, javajs.api.GenericZipTools);
-Clazz_makeConstructor (c$, 
+Clazz_makeConstructor (c$,
 function () {
 });
-Clazz_overrideMethod (c$, "newZipInputStream", 
+Clazz_overrideMethod (c$, "newZipInputStream",
 function (is) {
 return JU.ZipTools.newZIS (is);
 }, "java.io.InputStream");
-c$.newZIS = Clazz_defineMethod (c$, "newZIS", 
+c$.newZIS = Clazz_defineMethod (c$, "newZIS",
  function (is) {
 return (Clazz_instanceOf (is, javajs.api.ZInputStream) ? is : Clazz_instanceOf (is, java.io.BufferedInputStream) ?  new javajs.api.GenericZipInputStream (is) :  new javajs.api.GenericZipInputStream ( new java.io.BufferedInputStream (is)));
 }, "java.io.InputStream");
-Clazz_overrideMethod (c$, "getAllZipData", 
+Clazz_overrideMethod (c$, "getAllZipData",
 function (is, subfileList, name0, binaryFileList, exclude, fileData) {
 }, "java.io.InputStream,~A,~S,~S,~S,java.util.Map");
-Clazz_overrideMethod (c$, "getZipFileDirectory", 
+Clazz_overrideMethod (c$, "getZipFileDirectory",
 function (bis, list, listPtr, asBufferedInputStream) {
 var ret;
 var justDir = (list == null || listPtr >= list.length);
@@ -955,7 +955,7 @@ throw e;
 }
 }
 }, "java.io.BufferedInputStream,~A,~N,~B");
-c$.getTarFileDirectory = Clazz_defineMethod (c$, "getTarFileDirectory", 
+c$.getTarFileDirectory = Clazz_defineMethod (c$, "getTarFileDirectory",
  function (bis, fileName, asBufferedInputStream) {
 var ret;
 try {
@@ -977,7 +977,7 @@ throw e;
 }
 }
 }, "java.io.BufferedInputStream,~S,~B");
-Clazz_overrideMethod (c$, "getZipFileContentsAsBytes", 
+Clazz_overrideMethod (c$, "getZipFileContentsAsBytes",
 function (bis, list, listPtr) {
 var ret =  Clazz_newByteArray (0, 0);
 var fileName = list[listPtr];
@@ -1000,7 +1000,7 @@ throw e;
 }
 return ret;
 }, "java.io.BufferedInputStream,~A,~N");
-c$.getTarContents = Clazz_defineMethod (c$, "getTarContents", 
+c$.getTarContents = Clazz_defineMethod (c$, "getTarContents",
  function (bis, fileName, sb) {
 if (JU.ZipTools.b512 == null) JU.ZipTools.b512 =  Clazz_newByteArray (512, 0);
 var len = fileName.length;
@@ -1010,7 +1010,7 @@ if (bytes != null) return bytes;
 }
 return null;
 }, "java.io.BufferedInputStream,~S,JU.SB");
-c$.getTarFile = Clazz_defineMethod (c$, "getTarFile", 
+c$.getTarFile = Clazz_defineMethod (c$, "getTarFile",
  function (bis, fileName, len, sb, cache, oneFile) {
 var j = 124;
 while (JU.ZipTools.b512[j] == 48) j++;
@@ -1042,7 +1042,7 @@ cache.put (name,  new JU.BArray (bytes));
 bis.read (JU.ZipTools.b512, 0, nul);
 }return bytes;
 }, "java.io.BufferedInputStream,~S,~N,JU.SB,java.util.Map,~B");
-Clazz_overrideMethod (c$, "getZipDirectoryAsStringAndClose", 
+Clazz_overrideMethod (c$, "getZipDirectoryAsStringAndClose",
 function (bis) {
 var sb =  new JU.SB ();
 var s =  new Array (0);
@@ -1051,7 +1051,7 @@ s = this.getZipDirectoryOrErrorAndClose (bis, null);
 bis.close ();
 } catch (e) {
 if (Clazz_exceptionOf (e, Exception)) {
-System.out.println (e.toString ());
+Zystem.out.println (e.toString ());
 } else {
 throw e;
 }
@@ -1060,7 +1060,7 @@ for (var i = 0; i < s.length; i++) sb.append (s[i]).appendC ('\n');
 
 return sb.toString ();
 }, "java.io.BufferedInputStream");
-Clazz_overrideMethod (c$, "getZipDirectoryAndClose", 
+Clazz_overrideMethod (c$, "getZipDirectoryAndClose",
 function (bis, manifestID) {
 var s =  new Array (0);
 try {
@@ -1068,14 +1068,14 @@ s = this.getZipDirectoryOrErrorAndClose (bis, manifestID);
 bis.close ();
 } catch (e) {
 if (Clazz_exceptionOf (e, Exception)) {
-System.out.println (e.toString ());
+Zystem.out.println (e.toString ());
 } else {
 throw e;
 }
 }
 return s;
 }, "java.io.BufferedInputStream,~S");
-Clazz_defineMethod (c$, "getZipDirectoryOrErrorAndClose", 
+Clazz_defineMethod (c$, "getZipDirectoryOrErrorAndClose",
  function (bis, manifestID) {
 bis = JU.Rdr.getPngZipStream (bis, true);
 var v =  new JU.Lst ();
@@ -1091,19 +1091,19 @@ zis.close ();
 if (manifestID != null) v.add (0, manifest == null ? "" : manifest + "\n############\n");
 return v.toArray ( new Array (v.size ()));
 }, "java.io.BufferedInputStream,~S");
-c$.getStreamAsString = Clazz_defineMethod (c$, "getStreamAsString", 
+c$.getStreamAsString = Clazz_defineMethod (c$, "getStreamAsString",
 function (is) {
 return JU.Rdr.fixUTF (JU.Rdr.getLimitedStreamBytes (is, -1));
 }, "java.io.InputStream");
-Clazz_overrideMethod (c$, "newGZIPInputStream", 
+Clazz_overrideMethod (c$, "newGZIPInputStream",
 function (is) {
 return  new java.io.BufferedInputStream ( new java.util.zip.GZIPInputStream (is, 512));
 }, "java.io.InputStream");
-Clazz_overrideMethod (c$, "newBZip2InputStream", 
+Clazz_overrideMethod (c$, "newBZip2InputStream",
 function (is) {
 return  new java.io.BufferedInputStream ((javajs.api.Interface.getInterface ("org.apache.tools.bzip2.CBZip2InputStreamFactory")).getStream (is));
 }, "java.io.InputStream");
-Clazz_overrideMethod (c$, "getUnGzippedInputStream", 
+Clazz_overrideMethod (c$, "getUnGzippedInputStream",
 function (bytes) {
 try {
 return JU.Rdr.getUnzippedInputStream (this, JU.Rdr.getBIS (bytes));
@@ -1115,31 +1115,31 @@ throw e;
 }
 }
 }, "~A");
-Clazz_overrideMethod (c$, "addZipEntry", 
+Clazz_overrideMethod (c$, "addZipEntry",
 function (zos, fileName) {
 (zos).putNextEntry ( new java.util.zip.ZipEntry (fileName));
 }, "~O,~S");
-Clazz_overrideMethod (c$, "closeZipEntry", 
+Clazz_overrideMethod (c$, "closeZipEntry",
 function (zos) {
 (zos).closeEntry ();
 }, "~O");
-Clazz_overrideMethod (c$, "getZipOutputStream", 
+Clazz_overrideMethod (c$, "getZipOutputStream",
 function (bos) {
 {
 return javajs.api.Interface.getInterface(
 "java.util.zip.ZipOutputStream").setZOS(bos);
 }}, "~O");
-Clazz_overrideMethod (c$, "getCrcValue", 
+Clazz_overrideMethod (c$, "getCrcValue",
 function (bytes) {
 var crc =  new java.util.zip.CRC32 ();
 crc.update (bytes, 0, bytes.length);
 return crc.getValue ();
 }, "~A");
-Clazz_overrideMethod (c$, "readFileAsMap", 
+Clazz_overrideMethod (c$, "readFileAsMap",
 function (bis, bdata, name) {
 JU.ZipTools.readFileAsMapStatic (bis, bdata, name);
 }, "java.io.BufferedInputStream,java.util.Map,~S");
-c$.readFileAsMapStatic = Clazz_defineMethod (c$, "readFileAsMapStatic", 
+c$.readFileAsMapStatic = Clazz_defineMethod (c$, "readFileAsMapStatic",
  function (bis, bdata, name) {
 var pt = (name == null ? -1 : name.indexOf ("|"));
 name = (pt >= 0 ? name.substring (pt + 1) : null);
@@ -1168,7 +1168,7 @@ throw e;
 }
 }
 }, "java.io.BufferedInputStream,java.util.Map,~S");
-c$.cacheTarContentsStatic = Clazz_defineMethod (c$, "cacheTarContentsStatic", 
+c$.cacheTarContentsStatic = Clazz_defineMethod (c$, "cacheTarContentsStatic",
  function (bis, fileName, cache) {
 var listing =  new JU.SB ();
 var n = 0;
@@ -1200,14 +1200,14 @@ throw e;
 }
 }
 if (n == 0 || fileName == null) return null;
-System.out.println ("ZipTools cached " + n + " bytes from " + fileName);
+Zystem.out.println ("ZipTools cached " + n + " bytes from " + fileName);
 return listing.toString ();
 }, "java.io.BufferedInputStream,~S,java.util.Map");
-Clazz_overrideMethod (c$, "cacheZipContents", 
+Clazz_overrideMethod (c$, "cacheZipContents",
 function (bis, fileName, cache, asByteArray) {
 return JU.ZipTools.cacheZipContentsStatic (bis, fileName, cache, asByteArray);
 }, "java.io.BufferedInputStream,~S,java.util.Map,~B");
-c$.cacheZipContentsStatic = Clazz_defineMethod (c$, "cacheZipContentsStatic", 
+c$.cacheZipContentsStatic = Clazz_defineMethod (c$, "cacheZipContentsStatic",
  function (bis, fileName, cache, asByteArray) {
 var zis = JU.ZipTools.newZIS (bis);
 var ze;
@@ -1257,10 +1257,10 @@ throw e;
 }
 }
 if (n == 0 || fileName == null) return null;
-System.out.println ("ZipTools cached " + n + " bytes from " + fileName);
+Zystem.out.println ("ZipTools cached " + n + " bytes from " + fileName);
 return listing.toString ();
 }, "java.io.BufferedInputStream,~S,java.util.Map,~B");
-c$.getPngImageBytes = Clazz_defineMethod (c$, "getPngImageBytes", 
+c$.getPngImageBytes = Clazz_defineMethod (c$, "getPngImageBytes",
  function (bis) {
 try {
 if (JU.Rdr.isPngZipStream (bis)) {
@@ -1276,7 +1276,7 @@ throw e;
 }
 }
 }, "java.io.BufferedInputStream");
-c$.deActivatePngZipB = Clazz_defineMethod (c$, "deActivatePngZipB", 
+c$.deActivatePngZipB = Clazz_defineMethod (c$, "deActivatePngZipB",
  function (bytes) {
 if (JU.Rdr.isPngZipB (bytes)) bytes[51] = 32;
 return bytes;
@@ -1296,26 +1296,26 @@ Clazz_instantialize (this, arguments);
 Clazz_prepareFields (c$, function () {
 this.b1 =  Clazz_newByteArray (1, 0);
 });
-Clazz_overrideMethod (c$, "update", 
+Clazz_overrideMethod (c$, "update",
 function (buf, index, len) {
 var c = ~this.crc;
 while (--len >= 0) c = JU.CRC32.crc_table[(c ^ buf[index++]) & 0xff] ^ (c >>> 8);
 
 this.crc = ~c;
 }, "~A,~N,~N");
-Clazz_overrideMethod (c$, "reset", 
+Clazz_overrideMethod (c$, "reset",
 function () {
 this.crc = 0;
 });
-Clazz_overrideMethod (c$, "resetLong", 
+Clazz_overrideMethod (c$, "resetLong",
 function (vv) {
 this.crc = (vv & 0xffffffff);
 }, "~N");
-Clazz_overrideMethod (c$, "getValue", 
+Clazz_overrideMethod (c$, "getValue",
 function () {
 return this.crc & 0xffffffff;
 });
-Clazz_overrideMethod (c$, "updateByteAsInt", 
+Clazz_overrideMethod (c$, "updateByteAsInt",
 function (b) {
 this.b1[0] = b;
 this.update (this.b1, 0, 1);
@@ -1341,24 +1341,24 @@ Clazz_prepareFields (c$, function () {
 this.byte1 =  Clazz_newByteArray (1, 0);
 this.b =  Clazz_newByteArray (512, 0);
 });
-Clazz_makeConstructor (c$, 
+Clazz_makeConstructor (c$,
 function ($in, inflater, size, close_in) {
 Clazz_superConstructor (this, JU.InflaterInputStream, [$in]);
 this.inflater = inflater;
 this.buf =  Clazz_newByteArray (size, 0);
 this.close_in = close_in;
 }, "java.io.InputStream,JU.Inflater,~N,~B");
-Clazz_overrideMethod (c$, "readByteAsInt", 
+Clazz_overrideMethod (c$, "readByteAsInt",
 function () {
 if (this.closed) {
 throw  new java.io.IOException ("Stream closed");
 }return this.read (this.byte1, 0, 1) == -1 ? -1 : this.byte1[0] & 0xff;
 });
-Clazz_defineMethod (c$, "read", 
+Clazz_defineMethod (c$, "read",
 function (b, off, len) {
 return this.readInf (b, off, len);
 }, "~A,~N,~N");
-Clazz_defineMethod (c$, "readInf", 
+Clazz_defineMethod (c$, "readInf",
 function (b, off, len) {
 if (this.closed) {
 throw  new java.io.IOException ("Stream closed");
@@ -1391,13 +1391,13 @@ if (this.inflater.avail_out == 0) break;
 }
 return n;
 }, "~A,~N,~N");
-Clazz_overrideMethod (c$, "available", 
+Clazz_overrideMethod (c$, "available",
 function () {
 if (this.closed) {
 throw  new java.io.IOException ("Stream closed");
 }return (this.eof ? 0 : 1);
 });
-Clazz_overrideMethod (c$, "skip", 
+Clazz_overrideMethod (c$, "skip",
 function (n) {
 if (n < 0) {
 throw  new IllegalArgumentException ("negative skip length");
@@ -1417,14 +1417,14 @@ break;
 }
 return total;
 }, "~N");
-Clazz_overrideMethod (c$, "close", 
+Clazz_overrideMethod (c$, "close",
 function () {
 if (!this.closed) {
 if (this.myinflater) this.inflater.end ();
 if (this.close_in) this.$in.close ();
 this.closed = true;
 }});
-Clazz_defineMethod (c$, "fill", 
+Clazz_defineMethod (c$, "fill",
 function () {
 if (this.closed) {
 throw  new java.io.IOException ("Stream closed");
@@ -1439,33 +1439,33 @@ throw  new java.io.IOException ("footer is not found");
 throw  new java.io.EOFException ("Unexpected end of ZLIB input stream");
 }}this.inflater.setInput (this.buf, 0, this.len, true);
 });
-Clazz_overrideMethod (c$, "markSupported", 
+Clazz_overrideMethod (c$, "markSupported",
 function () {
 return false;
 });
-Clazz_overrideMethod (c$, "mark", 
+Clazz_overrideMethod (c$, "mark",
 function (readlimit) {
 }, "~N");
-Clazz_overrideMethod (c$, "reset", 
+Clazz_overrideMethod (c$, "reset",
 function () {
 throw  new java.io.IOException ("mark/reset not supported");
 });
-Clazz_defineMethod (c$, "getTotalIn", 
+Clazz_defineMethod (c$, "getTotalIn",
 function () {
 return this.inflater.getTotalIn ();
 });
-Clazz_defineMethod (c$, "getTotalOut", 
+Clazz_defineMethod (c$, "getTotalOut",
 function () {
 return this.inflater.getTotalOut ();
 });
-Clazz_defineMethod (c$, "getAvailIn", 
+Clazz_defineMethod (c$, "getAvailIn",
 function () {
 if (this.inflater.avail_in <= 0) return null;
 var tmp =  Clazz_newByteArray (this.inflater.avail_in, 0);
-System.arraycopy (this.inflater.next_in, this.inflater.next_in_index, tmp, 0, this.inflater.avail_in);
+Zystem.arraycopy (this.inflater.next_in, this.inflater.next_in_index, tmp, 0, this.inflater.avail_in);
 return tmp;
 });
-Clazz_defineMethod (c$, "readHeader", 
+Clazz_defineMethod (c$, "readHeader",
 function () {
 var empty = "".getBytes ();
 this.inflater.setInput (empty, 0, 0, false);
@@ -1482,7 +1482,7 @@ err = this.inflater.inflate (0);
 if (err != 0) throw  new java.io.IOException (this.inflater.msg);
 } while (this.inflater.istate.inParsingHeader ());
 });
-Clazz_defineMethod (c$, "getInflater", 
+Clazz_defineMethod (c$, "getInflater",
 function () {
 return this.inflater;
 });
@@ -1507,27 +1507,27 @@ this.data_type = 0;
 this.checksum = null;
 Clazz_instantialize (this, arguments);
 }, JU, "ZStream");
-Clazz_defineMethod (c$, "setAdler32", 
+Clazz_defineMethod (c$, "setAdler32",
 function () {
 this.checksum =  new JU.Adler32 ();
 });
-Clazz_defineMethod (c$, "inflate", 
+Clazz_defineMethod (c$, "inflate",
 function (f) {
 if (this.istate == null) return -2;
 return this.istate.inflate (f);
 }, "~N");
-Clazz_defineMethod (c$, "deflate", 
+Clazz_defineMethod (c$, "deflate",
 function (flush) {
 if (this.dstate == null) {
 return -2;
 }return this.dstate.deflate (flush);
 }, "~N");
-Clazz_defineMethod (c$, "flush_pending", 
+Clazz_defineMethod (c$, "flush_pending",
 function () {
 var len = this.dstate.pending;
 if (len > this.avail_out) len = this.avail_out;
 if (len == 0) return;
-System.arraycopy (this.dstate.pending_buf, this.dstate.pending_out, this.next_out, this.next_out_index, len);
+Zystem.arraycopy (this.dstate.pending_buf, this.dstate.pending_out, this.next_out, this.next_out_index, len);
 this.next_out_index += len;
 this.dstate.pending_out += len;
 this.total_out += len;
@@ -1536,7 +1536,7 @@ this.dstate.pending -= len;
 if (this.dstate.pending == 0) {
 this.dstate.pending_out = 0;
 }});
-Clazz_defineMethod (c$, "read_buf", 
+Clazz_defineMethod (c$, "read_buf",
 function (buf, start, size) {
 var len = this.avail_in;
 if (len > size) len = size;
@@ -1544,34 +1544,34 @@ if (len == 0) return 0;
 this.avail_in -= len;
 if (this.dstate.wrap != 0) {
 this.checksum.update (this.next_in, this.next_in_index, len);
-}System.arraycopy (this.next_in, this.next_in_index, buf, start, len);
+}Zystem.arraycopy (this.next_in, this.next_in_index, buf, start, len);
 this.next_in_index += len;
 this.total_in += len;
 return len;
 }, "~A,~N,~N");
-Clazz_defineMethod (c$, "getAdler", 
+Clazz_defineMethod (c$, "getAdler",
 function () {
 return this.checksum.getValue ();
 });
-Clazz_defineMethod (c$, "free", 
+Clazz_defineMethod (c$, "free",
 function () {
 this.next_in = null;
 this.next_out = null;
 this.msg = null;
 });
-Clazz_defineMethod (c$, "setOutput", 
+Clazz_defineMethod (c$, "setOutput",
 function (buf, off, len) {
 this.next_out = buf;
 this.next_out_index = off;
 this.avail_out = len;
 }, "~A,~N,~N");
-Clazz_defineMethod (c$, "setInput", 
+Clazz_defineMethod (c$, "setInput",
 function (buf, off, len, append) {
 if (len <= 0 && append && this.next_in != null) return;
 if (this.avail_in > 0 && append) {
 var tmp =  Clazz_newByteArray (this.avail_in + len, 0);
-System.arraycopy (this.next_in, this.next_in_index, tmp, 0, this.avail_in);
-System.arraycopy (buf, off, tmp, this.avail_in, len);
+Zystem.arraycopy (this.next_in, this.next_in_index, tmp, 0, this.avail_in);
+Zystem.arraycopy (buf, off, tmp, this.avail_in, len);
 this.next_in = tmp;
 this.next_in_index = 0;
 this.avail_in += len;
@@ -1580,19 +1580,19 @@ this.next_in = buf;
 this.next_in_index = off;
 this.avail_in = len;
 }}, "~A,~N,~N,~B");
-Clazz_defineMethod (c$, "getAvailIn", 
+Clazz_defineMethod (c$, "getAvailIn",
 function () {
 return this.avail_in;
 });
-Clazz_defineMethod (c$, "getTotalOut", 
+Clazz_defineMethod (c$, "getTotalOut",
 function () {
 return this.total_out;
 });
-Clazz_defineMethod (c$, "getTotalIn", 
+Clazz_defineMethod (c$, "getTotalIn",
 function () {
 return this.total_in;
 });
-c$.getBytes = Clazz_defineMethod (c$, "getBytes", 
+c$.getBytes = Clazz_defineMethod (c$, "getBytes",
 function (s) {
 {
 var x = [];
@@ -1619,7 +1619,7 @@ Clazz_defineStatics (c$,
 Clazz_declarePackage ("JU");
 Clazz_load (["JU.ZStream"], "JU.Inflater", ["JU.Inflate"], function () {
 c$ = Clazz_declareType (JU, "Inflater", JU.ZStream);
-Clazz_defineMethod (c$, "init", 
+Clazz_defineMethod (c$, "init",
 function (w, nowrap) {
 this.setAdler32 ();
 if (w == 0) w = 15;
@@ -1627,38 +1627,38 @@ this.istate =  new JU.Inflate (this);
 this.istate.inflateInit (nowrap ? -w : w);
 return this;
 }, "~N,~B");
-Clazz_overrideMethod (c$, "inflate", 
+Clazz_overrideMethod (c$, "inflate",
 function (f) {
 if (this.istate == null) return -2;
 var ret = this.istate.inflate (f);
 return ret;
 }, "~N");
-Clazz_overrideMethod (c$, "end", 
+Clazz_overrideMethod (c$, "end",
 function () {
 if (this.istate == null) return -2;
 var ret = this.istate.inflateEnd ();
 return ret;
 });
-Clazz_defineMethod (c$, "sync", 
+Clazz_defineMethod (c$, "sync",
 function () {
 if (this.istate == null) return -2;
 return this.istate.inflateSync ();
 });
-Clazz_defineMethod (c$, "syncPoint", 
+Clazz_defineMethod (c$, "syncPoint",
 function () {
 if (this.istate == null) return -2;
 return this.istate.inflateSyncPoint ();
 });
-Clazz_defineMethod (c$, "setDictionary", 
+Clazz_defineMethod (c$, "setDictionary",
 function (dictionary, dictLength) {
 if (this.istate == null) return -2;
 return this.istate.inflateSetDictionary (dictionary, dictLength);
 }, "~A,~N");
-Clazz_overrideMethod (c$, "finished", 
+Clazz_overrideMethod (c$, "finished",
 function () {
 return this.istate.mode == 12;
 });
-Clazz_defineMethod (c$, "reset", 
+Clazz_defineMethod (c$, "reset",
 function () {
 this.avail_in = 0;
 if (this.istate != null) this.istate.reset ();
@@ -1679,21 +1679,21 @@ Clazz_instantialize (this, arguments);
 Clazz_prepareFields (c$, function () {
 this.b1 =  Clazz_newByteArray (1, 0);
 });
-Clazz_overrideMethod (c$, "resetLong", 
+Clazz_overrideMethod (c$, "resetLong",
 function (init) {
 this.s1 = init & 0xffff;
 this.s2 = (init >> 16) & 0xffff;
 }, "~N");
-Clazz_overrideMethod (c$, "reset", 
+Clazz_overrideMethod (c$, "reset",
 function () {
 this.s1 = 1;
 this.s2 = 0;
 });
-Clazz_overrideMethod (c$, "getValue", 
+Clazz_overrideMethod (c$, "getValue",
 function () {
 return ((this.s2 << 16) | this.s1);
 });
-Clazz_overrideMethod (c$, "update", 
+Clazz_overrideMethod (c$, "update",
 function (buf, index, len) {
 if (len == 1) {
 this.s1 += buf[index++] & 0xff;
@@ -1722,7 +1722,7 @@ this.s2 += this.s1;
 this.s1 %= 65521;
 this.s2 %= 65521;
 }, "~A,~N,~N");
-Clazz_overrideMethod (c$, "updateByteAsInt", 
+Clazz_overrideMethod (c$, "updateByteAsInt",
 function (b) {
 this.b1[0] = b;
 this.update (this.b1, 0, 1);
@@ -1738,11 +1738,11 @@ this.max_code = 0;
 this.stat_desc = null;
 Clazz_instantialize (this, arguments);
 }, JU, "Tree");
-c$.d_code = Clazz_defineMethod (c$, "d_code", 
+c$.d_code = Clazz_defineMethod (c$, "d_code",
 function (dist) {
 return ((dist) < 256 ? JU.Tree._dist_code[dist] : JU.Tree._dist_code[256 + ((dist) >>> 7)]);
 }, "~N");
-Clazz_defineMethod (c$, "gen_bitlen", 
+Clazz_defineMethod (c$, "gen_bitlen",
 function (s) {
 var tree = this.dyn_tree;
 var stree = this.stat_desc.static_tree;
@@ -1796,7 +1796,7 @@ tree[m * 2 + 1] = bits;
 }
 }
 }, "JU.Deflate");
-Clazz_defineMethod (c$, "build_tree", 
+Clazz_defineMethod (c$, "build_tree",
 function (s) {
 var tree = this.dyn_tree;
 var stree = this.stat_desc.static_tree;
@@ -1842,7 +1842,7 @@ s.heap[--s.heap_max] = s.heap[1];
 this.gen_bitlen (s);
 JU.Tree.gen_codes (tree, max_code, s.bl_count);
 }, "JU.Deflate");
-c$.gen_codes = Clazz_defineMethod (c$, "gen_codes", 
+c$.gen_codes = Clazz_defineMethod (c$, "gen_codes",
 function (tree, max_code, bl_count) {
 var code = 0;
 var bits;
@@ -1857,7 +1857,7 @@ if (len == 0) continue;
 tree[n * 2] = (JU.Tree.bi_reverse (JU.Tree.next_code[len]++, len));
 }
 }, "~A,~N,~A");
-c$.bi_reverse = Clazz_defineMethod (c$, "bi_reverse", 
+c$.bi_reverse = Clazz_defineMethod (c$, "bi_reverse",
 function (code, len) {
 var res = 0;
 do {
@@ -1899,7 +1899,7 @@ this.elems = 0;
 this.max_length = 0;
 Clazz_instantialize (this, arguments);
 }, JU, "StaticTree");
-Clazz_makeConstructor (c$, 
+Clazz_makeConstructor (c$,
  function (static_tree, extra_bits, extra_base, elems, max_length) {
 this.static_tree = static_tree;
 this.extra_bits = extra_bits;
@@ -1938,28 +1938,28 @@ this.done = false;
 this.mtime = 0;
 Clazz_instantialize (this, arguments);
 }, JU, "GZIPHeader", null, Cloneable);
-Clazz_defineMethod (c$, "setModifiedTime", 
+Clazz_defineMethod (c$, "setModifiedTime",
 function (mtime) {
 this.mtime = mtime;
 }, "~N");
-Clazz_defineMethod (c$, "getModifiedTime", 
+Clazz_defineMethod (c$, "getModifiedTime",
 function () {
 return this.mtime;
 });
-Clazz_defineMethod (c$, "setOS", 
+Clazz_defineMethod (c$, "setOS",
 function (os) {
 if ((0 <= os && os <= 13) || os == 255) this.os = os;
  else throw  new IllegalArgumentException ("os: " + os);
 }, "~N");
-Clazz_defineMethod (c$, "getOS", 
+Clazz_defineMethod (c$, "getOS",
 function () {
 return this.os;
 });
-Clazz_defineMethod (c$, "setName", 
+Clazz_defineMethod (c$, "setName",
 function (name) {
 this.name = JU.ZStream.getBytes (name);
 }, "~S");
-Clazz_defineMethod (c$, "getName", 
+Clazz_defineMethod (c$, "getName",
 function () {
 if (this.name == null) return "";
 try {
@@ -1972,11 +1972,11 @@ throw e;
 }
 }
 });
-Clazz_defineMethod (c$, "setComment", 
+Clazz_defineMethod (c$, "setComment",
 function (comment) {
 this.comment = JU.ZStream.getBytes (comment);
 }, "~S");
-Clazz_defineMethod (c$, "getComment", 
+Clazz_defineMethod (c$, "getComment",
 function () {
 if (this.comment == null) return "";
 try {
@@ -1989,15 +1989,15 @@ throw e;
 }
 }
 });
-Clazz_defineMethod (c$, "setCRC", 
+Clazz_defineMethod (c$, "setCRC",
 function (crc) {
 this.crc = crc;
 }, "~N");
-Clazz_defineMethod (c$, "getCRC", 
+Clazz_defineMethod (c$, "getCRC",
 function () {
 return this.crc;
 });
-Clazz_defineMethod (c$, "put", 
+Clazz_defineMethod (c$, "put",
 function (d) {
 var flag = 0;
 if (this.text) {
@@ -2035,21 +2035,21 @@ d.put_byteB (0);
 d.put_byte (this.comment, 0, this.comment.length);
 d.put_byteB (0);
 }}, "JU.Deflate");
-Clazz_defineMethod (c$, "clone", 
+Clazz_defineMethod (c$, "clone",
 function () {
 var gheader = Clazz_superCall (this, JU.GZIPHeader, "clone", []);
 var tmp;
 if (gheader.extra != null) {
 tmp =  Clazz_newByteArray (gheader.extra.length, 0);
-System.arraycopy (gheader.extra, 0, tmp, 0, tmp.length);
+Zystem.arraycopy (gheader.extra, 0, tmp, 0, tmp.length);
 gheader.extra = tmp;
 }if (gheader.name != null) {
 tmp =  Clazz_newByteArray (gheader.name.length, 0);
-System.arraycopy (gheader.name, 0, tmp, 0, tmp.length);
+Zystem.arraycopy (gheader.name, 0, tmp, 0, tmp.length);
 gheader.name = tmp;
 }if (gheader.comment != null) {
 tmp =  Clazz_newByteArray (gheader.comment.length, 0);
-System.arraycopy (gheader.comment, 0, tmp, 0, tmp.length);
+Zystem.arraycopy (gheader.comment, 0, tmp, 0, tmp.length);
 gheader.comment = tmp;
 }return gheader;
 });
@@ -2064,7 +2064,7 @@ Clazz_defineStatics (c$,
 "OS_TOPS20", 0x0a,
 "OS_WIN32", 0x0b,
 "OS_VMCMS", 0x04,
-"OS_ZSYSTEM", 0x08,
+"OS_ZZystem", 0x08,
 "OS_CPM", 0x09,
 "OS_QDOS", 0x0c,
 "OS_RISCOS", 0x0d,
@@ -2095,11 +2095,11 @@ Clazz_instantialize (this, arguments);
 Clazz_prepareFields (c$, function () {
 this.crcbuf =  Clazz_newByteArray (4, 0);
 });
-Clazz_defineMethod (c$, "reset", 
+Clazz_defineMethod (c$, "reset",
 function () {
 this.inflateReset ();
 });
-Clazz_defineMethod (c$, "inflateReset", 
+Clazz_defineMethod (c$, "inflateReset",
 function () {
 if (this.z == null) return -2;
 this.z.total_in = this.z.total_out = 0;
@@ -2109,17 +2109,17 @@ this.need_bytes = -1;
 this.blocks.reset ();
 return 0;
 });
-Clazz_defineMethod (c$, "inflateEnd", 
+Clazz_defineMethod (c$, "inflateEnd",
 function () {
 if (this.blocks != null) {
 this.blocks.free ();
 }return 0;
 });
-Clazz_makeConstructor (c$, 
+Clazz_makeConstructor (c$,
 function (z) {
 this.z = z;
 }, "JU.ZStream");
-Clazz_defineMethod (c$, "inflateInit", 
+Clazz_defineMethod (c$, "inflateInit",
 function (w) {
 this.z.msg = null;
 this.blocks = null;
@@ -2140,7 +2140,7 @@ this.blocks =  new JU.InfBlocks (this.z, 1 << w);
 this.inflateReset ();
 return 0;
 }, "~N");
-Clazz_defineMethod (c$, "inflate", 
+Clazz_defineMethod (c$, "inflate",
 function (f) {
 var r;
 var b;
@@ -2384,7 +2384,7 @@ if (this.gheader != null) {
 var foo = this.tmp_string.toByteArray ();
 this.tmp_string = null;
 if (foo.length == this.gheader.extra.length) {
-System.arraycopy (foo, 0, this.gheader.extra, 0, foo.length);
+Zystem.arraycopy (foo, 0, this.gheader.extra, 0, foo.length);
 } else {
 this.z.msg = "bad extra field length";
 this.mode = 13;
@@ -2459,7 +2459,7 @@ return -2;
 }
 }
 }, "~N");
-Clazz_defineMethod (c$, "inflateSetDictionary", 
+Clazz_defineMethod (c$, "inflateSetDictionary",
 function (dictionary, dictLength) {
 if (this.z == null || (this.mode != 6 && this.wrap != 0)) {
 return -2;
@@ -2479,7 +2479,7 @@ index = dictLength - length;
 this.mode = 7;
 return 0;
 }, "~A,~N");
-Clazz_defineMethod (c$, "inflateSync", 
+Clazz_defineMethod (c$, "inflateSync",
 function () {
 var n;
 var p;
@@ -2517,12 +2517,12 @@ this.z.total_out = w;
 this.mode = 7;
 return 0;
 });
-Clazz_defineMethod (c$, "inflateSyncPoint", 
+Clazz_defineMethod (c$, "inflateSyncPoint",
 function () {
 if (this.z == null || this.blocks == null) return -2;
 return this.blocks.sync_point ();
 });
-Clazz_defineMethod (c$, "readBytes", 
+Clazz_defineMethod (c$, "readBytes",
  function (n, r, f) {
 if (this.need_bytes == -1) {
 this.need_bytes = n;
@@ -2543,7 +2543,7 @@ this.need &= 0xffffffff;
 }this.need_bytes = -1;
 return r;
 }, "~N,~N,~N");
-Clazz_defineMethod (c$, "readString", 
+Clazz_defineMethod (c$, "readString",
  function (r, f) {
 if (this.tmp_string == null) {
 this.tmp_string =  new java.io.ByteArrayOutputStream ();
@@ -2561,7 +2561,7 @@ this.z.next_in_index++;
 } while (b != 0);
 return r;
 }, "~N,~N");
-Clazz_defineMethod (c$, "readBytes", 
+Clazz_defineMethod (c$, "readBytes",
  function (r, f) {
 if (this.tmp_string == null) {
 this.tmp_string =  new java.io.ByteArrayOutputStream ();
@@ -2578,7 +2578,7 @@ this.need--;
 }
 return r;
 }, "~N,~N");
-Clazz_defineMethod (c$, "checksum", 
+Clazz_defineMethod (c$, "checksum",
  function (n, v) {
 for (var i = 0; i < n; i++) {
 this.crcbuf[i] = (v & 0xff);
@@ -2586,11 +2586,11 @@ v >>= 8;
 }
 this.z.checksum.update (this.crcbuf, 0, n);
 }, "~N,~N");
-Clazz_defineMethod (c$, "getGZIPHeader", 
+Clazz_defineMethod (c$, "getGZIPHeader",
 function () {
 return this.gheader;
 });
-Clazz_defineMethod (c$, "inParsingHeader", 
+Clazz_defineMethod (c$, "inParsingHeader",
 function () {
 switch (this.mode) {
 case 14:
@@ -2618,7 +2618,7 @@ Clazz_prepareCallback (this, arguments);
 this.r = 0;
 Clazz_instantialize (this, arguments);
 }, JU.Inflate, "Return", Exception);
-Clazz_makeConstructor (c$, 
+Clazz_makeConstructor (c$,
 function (a) {
 Clazz_superConstructor (this, JU.Inflate.Return, []);
 this.r = a;
@@ -2673,7 +2673,7 @@ this.u = null;
 this.x = null;
 Clazz_instantialize (this, arguments);
 }, JU, "InfTree");
-Clazz_defineMethod (c$, "huft_build", 
+Clazz_defineMethod (c$, "huft_build",
  function (b, bindex, n, s, d, e, t, m, hp, hn, v) {
 var a;
 var f;
@@ -2771,7 +2771,7 @@ this.r[0] = j;
 this.r[1] = l;
 j = i >>> (w - l);
 this.r[2] = (q - this.u[h - 1] - j);
-System.arraycopy (this.r, 0, hp, (this.u[h - 1] + j) * 3, 3);
+Zystem.arraycopy (this.r, 0, hp, (this.u[h - 1] + j) * 3, 3);
 } else {
 t[0] = q;
 }}
@@ -2786,7 +2786,7 @@ this.r[0] = (e[v[p] - s] + 16 + 64);
 this.r[2] = d[v[p++] - s];
 }f = 1 << (k - w);
 for (j = i >>> w; j < z; j += f) {
-System.arraycopy (this.r, 0, hp, (q + j) * 3, 3);
+Zystem.arraycopy (this.r, 0, hp, (q + j) * 3, 3);
 }
 for (j = 1 << (k - 1); (i & j) != 0; j >>>= 1) {
 i ^= j;
@@ -2802,7 +2802,7 @@ mask = (1 << w) - 1;
 }
 return y != 0 && g != 1 ? -5 : 0;
 }, "~A,~N,~N,~N,~A,~A,~A,~A,~A,~A,~A");
-Clazz_defineMethod (c$, "inflate_trees_bits", 
+Clazz_defineMethod (c$, "inflate_trees_bits",
 function (c, bb, tb, hp, z) {
 var result;
 this.initWorkArea (19);
@@ -2815,7 +2815,7 @@ z.msg = "incomplete dynamic bit lengths tree";
 result = -3;
 }return result;
 }, "~A,~A,~A,~A,JU.ZStream");
-Clazz_defineMethod (c$, "inflate_trees_dynamic", 
+Clazz_defineMethod (c$, "inflate_trees_dynamic",
 function (nl, nd, c, bl, bd, tl, td, hp, z) {
 var result;
 this.initWorkArea (288);
@@ -2842,7 +2842,7 @@ result = -3;
 }return result;
 }return 0;
 }, "~N,~N,~A,~A,~A,~A,~A,~A,JU.ZStream");
-c$.inflate_trees_fixed = Clazz_defineMethod (c$, "inflate_trees_fixed", 
+c$.inflate_trees_fixed = Clazz_defineMethod (c$, "inflate_trees_fixed",
 function (bl, bd, tl, td, z) {
 bl[0] = 9;
 bd[0] = 5;
@@ -2850,7 +2850,7 @@ tl[0] = JU.InfTree.fixed_tl;
 td[0] = JU.InfTree.fixed_td;
 return 0;
 }, "~A,~A,~A,~A,JU.ZStream");
-Clazz_defineMethod (c$, "initWorkArea", 
+Clazz_defineMethod (c$, "initWorkArea",
  function (vsize) {
 if (this.hn == null) {
 this.hn =  Clazz_newIntArray (1, 0);
@@ -2870,8 +2870,8 @@ this.c[i] = 0;
 for (var i = 0; i < 3; i++) {
 this.r[i] = 0;
 }
-System.arraycopy (this.c, 0, this.u, 0, 15);
-System.arraycopy (this.c, 0, this.x, 0, 16);
+Zystem.arraycopy (this.c, 0, this.u, 0, 15);
+Zystem.arraycopy (this.c, 0, this.x, 0, 16);
 }, "~N");
 Clazz_defineStatics (c$,
 "MANY", 1440,
@@ -2927,7 +2927,7 @@ this.tli =  Clazz_newIntArray (1, 0);
 this.tdi =  Clazz_newIntArray (1, 0);
 this.inftree =  new JU.InfTree ();
 });
-Clazz_makeConstructor (c$, 
+Clazz_makeConstructor (c$,
 function (z, w) {
 this.z = z;
 this.codes =  new JU.InfCodes (this.z, this);
@@ -2941,7 +2941,7 @@ this.tl = Clazz_newArray(1, null);
 this.td = Clazz_newArray(1, null);
 }this.reset ();
 }, "JU.ZStream,~N");
-Clazz_defineMethod (c$, "reset", 
+Clazz_defineMethod (c$, "reset",
 function () {
 if (this.mode == 6) {
 this.codes.free (this.z);
@@ -2952,7 +2952,7 @@ this.read = this.write = 0;
 if (this.check) {
 this.z.checksum.reset ();
 }});
-Clazz_defineMethod (c$, "proc", 
+Clazz_defineMethod (c$, "proc",
 function (r) {
 var t;
 var b;
@@ -3094,7 +3094,7 @@ return this.inflate_flush (r);
 t = this.left;
 if (t > n) t = n;
 if (t > m) t = m;
-System.arraycopy (this.z.next_in, p, this.window, q, t);
+Zystem.arraycopy (this.z.next_in, p, this.window, q, t);
 p += t;
 n -= t;
 q += t;
@@ -3341,22 +3341,22 @@ return this.inflate_flush (r);
 }
 }
 }, "~N");
-Clazz_defineMethod (c$, "free", 
+Clazz_defineMethod (c$, "free",
 function () {
 this.reset ();
 this.window = null;
 this.hufts = null;
 });
-Clazz_defineMethod (c$, "set_dictionary", 
+Clazz_defineMethod (c$, "set_dictionary",
 function (d, start, n) {
-System.arraycopy (d, start, this.window, 0, n);
+Zystem.arraycopy (d, start, this.window, 0, n);
 this.read = this.write = n;
 }, "~A,~N,~N");
-Clazz_defineMethod (c$, "sync_point", 
+Clazz_defineMethod (c$, "sync_point",
 function () {
 return this.mode == 1 ? 1 : 0;
 });
-Clazz_defineMethod (c$, "inflate_flush", 
+Clazz_defineMethod (c$, "inflate_flush",
 function (r) {
 var n;
 var p;
@@ -3370,7 +3370,7 @@ this.z.avail_out -= n;
 this.z.total_out += n;
 if (this.check && n > 0) {
 this.z.checksum.update (this.window, q, n);
-}System.arraycopy (this.window, q, this.z.next_out, p, n);
+}Zystem.arraycopy (this.window, q, this.z.next_out, p, n);
 p += n;
 q += n;
 if (q == this.end) {
@@ -3383,7 +3383,7 @@ this.z.avail_out -= n;
 this.z.total_out += n;
 if (this.check && n > 0) {
 this.z.checksum.update (this.window, q, n);
-}System.arraycopy (this.window, q, this.z.next_out, p, n);
+}Zystem.arraycopy (this.window, q, this.z.next_out, p, n);
 p += n;
 q += n;
 }this.z.next_out_index = p;
@@ -3430,12 +3430,12 @@ this.z = null;
 this.s = null;
 Clazz_instantialize (this, arguments);
 }, JU, "InfCodes");
-Clazz_makeConstructor (c$, 
+Clazz_makeConstructor (c$,
 function (z, s) {
 this.z = z;
 this.s = s;
 }, "JU.ZStream,JU.InfBlocks");
-Clazz_defineMethod (c$, "init", 
+Clazz_defineMethod (c$, "init",
 function (bl, bd, tl, tl_index, td, td_index) {
 this.mode = 0;
 this.lbits = bl;
@@ -3446,7 +3446,7 @@ this.dtree = td;
 this.dtree_index = td_index;
 this.tree = null;
 }, "~N,~N,~A,~N,~A,~N");
-Clazz_defineMethod (c$, "proc", 
+Clazz_defineMethod (c$, "proc",
 function (r) {
 var j;
 var tindex;
@@ -3723,10 +3723,10 @@ return this.s.inflate_flush (r);
 }
 }
 }, "~N");
-Clazz_defineMethod (c$, "free", 
+Clazz_defineMethod (c$, "free",
 function (z) {
 }, "JU.ZStream");
-Clazz_defineMethod (c$, "inflate_fast", 
+Clazz_defineMethod (c$, "inflate_fast",
 function (bl, bd, tl, tl_index, td, td_index, s, z) {
 var t;
 var tp;
@@ -3807,7 +3807,7 @@ s.window[q++] = s.window[r++];
 s.window[q++] = s.window[r++];
 c -= 2;
 } else {
-System.arraycopy (s.window, r, s.window, q, 2);
+Zystem.arraycopy (s.window, r, s.window, q, 2);
 q += 2;
 r += 2;
 c -= 2;
@@ -3824,7 +3824,7 @@ do {
 s.window[q++] = s.window[r++];
 } while (--e != 0);
 } else {
-System.arraycopy (s.window, r, s.window, q, e);
+Zystem.arraycopy (s.window, r, s.window, q, e);
 q += e;
 r += e;
 e = 0;
@@ -3834,7 +3834,7 @@ do {
 s.window[q++] = s.window[r++];
 } while (--c != 0);
 } else {
-System.arraycopy (s.window, r, s.window, q, c);
+Zystem.arraycopy (s.window, r, s.window, q, c);
 q += c;
 r += c;
 c = 0;
@@ -3931,10 +3931,10 @@ Clazz_defineStatics (c$,
 Clazz_declarePackage ("J.io");
 Clazz_load (null, "J.io.JmolUtil", ["java.io.BufferedInputStream", "$.BufferedReader", "java.net.URL", "java.util.Hashtable", "JU.AU", "$.Lst", "$.OC", "$.PT", "$.Rdr", "J.adapter.smarter.AtomSetCollection", "J.api.Interface", "JU.Logger", "JV.FileManager", "$.Viewer"], function () {
 c$ = Clazz_declareType (J.io, "JmolUtil");
-Clazz_makeConstructor (c$, 
+Clazz_makeConstructor (c$,
 function () {
 });
-Clazz_defineMethod (c$, "getImage", 
+Clazz_defineMethod (c$, "getImage",
 function (vwr, fullPathNameOrBytes, echoName, forceSync) {
 var image = null;
 var info = null;
@@ -3970,7 +3970,7 @@ createImage = true;
 {
 return image;
 }}, "JV.Viewer,~O,~S,~B");
-Clazz_defineMethod (c$, "getAtomSetCollectionOrBufferedReaderFromZip", 
+Clazz_defineMethod (c$, "getAtomSetCollectionOrBufferedReaderFromZip",
 function (vwr, is, fileName, zipDirectory, htParams, subFilePtr, asBufferedReader) {
 var adapter = vwr.getModelAdapter ();
 var doCombine = (subFilePtr == 1);
@@ -4113,7 +4113,7 @@ throw e$$;
 }
 }
 }, "JV.Viewer,java.io.InputStream,~S,~A,java.util.Map,~N,~B");
-Clazz_defineMethod (c$, "getCachedPngjBytes", 
+Clazz_defineMethod (c$, "getCachedPngjBytes",
 function (fm, pathName) {
 if (pathName.startsWith ("file:///")) pathName = "file:" + pathName.substring (7);
 JU.Logger.info ("JmolUtil checking PNGJ cache for " + pathName);
@@ -4132,7 +4132,7 @@ return fm.pngjCache.get (shortName);
 JU.Logger.info ("FileManager using memory cache " + shortName);
 return cache.get (shortName);
 }, "JV.FileManager,~S");
-Clazz_defineMethod (c$, "clearAndCachePngjFile", 
+Clazz_defineMethod (c$, "clearAndCachePngjFile",
  function (fm, data) {
 fm.pngjCache =  new java.util.Hashtable ();
 if (data == null || data[0] == null) return false;
@@ -4157,7 +4157,7 @@ bytes = cache.remove (shortName + "|state.spt");
 if (bytes != null) cache.put (this.shortSceneFilename (data[0] + "|state.spt"), bytes);
 }return true;
 }, "JV.FileManager,~A");
-Clazz_defineMethod (c$, "shortSceneFilename", 
+Clazz_defineMethod (c$, "shortSceneFilename",
  function (pathName) {
 var pt = pathName.indexOf ("_scene_") + 7;
 if (pt < 7) return pathName;
@@ -4169,12 +4169,12 @@ s = pathName.substring (pt, pt1);
 }var pt2 = pathName.lastIndexOf ("|");
 return pathName.substring (0, pt) + s + (pt2 > 0 ? pathName.substring (pt2) : "");
 }, "~S");
-Clazz_defineMethod (c$, "getSpartanSubfiles", 
+Clazz_defineMethod (c$, "getSpartanSubfiles",
  function (zipDirectory) {
 var name = (zipDirectory.length < 2 ? null : zipDirectory[1]);
 return (name == null || zipDirectory.length != 2 || !name.endsWith (".spardir/") ? null :  Clazz_newArray (-1, ["", JU.PT.trim (name, "/")]));
 }, "~A");
-Clazz_defineMethod (c$, "isSpartanZip", 
+Clazz_defineMethod (c$, "isSpartanZip",
  function (zipDirectory) {
 for (var i = 1; i < zipDirectory.length; i++) if (zipDirectory[i].endsWith (".spardir/") || zipDirectory[i].indexOf ("_spartandir") >= 0) return true;
 

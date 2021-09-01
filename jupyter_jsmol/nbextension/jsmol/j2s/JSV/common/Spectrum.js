@@ -20,25 +20,25 @@ Clazz.instantialize (this, arguments);
 Clazz.prepareFields (c$, function () {
 this.peakList =  new JU.Lst ();
 });
-Clazz.defineMethod (c$, "dispose", 
+Clazz.defineMethod (c$, "dispose",
 function () {
 });
-Clazz.defineMethod (c$, "isForcedSubset", 
+Clazz.defineMethod (c$, "isForcedSubset",
 function () {
 return this.$isForcedSubset;
 });
-Clazz.defineMethod (c$, "setId", 
+Clazz.defineMethod (c$, "setId",
 function (id) {
 this.id = id;
 }, "~S");
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function () {
 Clazz.superConstructor (this, JSV.common.Spectrum, []);
 this.headerTable =  new JU.Lst ();
 this.xyCoords =  new Array (0);
 this.parent = this;
 });
-Clazz.defineMethod (c$, "copy", 
+Clazz.defineMethod (c$, "copy",
 function () {
 var newSpectrum =  new JSV.common.Spectrum ();
 this.copyTo (newSpectrum);
@@ -46,15 +46,15 @@ newSpectrum.setPeakList (this.peakList, this.peakXLabel, null);
 newSpectrum.fillColor = this.fillColor;
 return newSpectrum;
 });
-Clazz.defineMethod (c$, "getXYCoords", 
+Clazz.defineMethod (c$, "getXYCoords",
 function () {
 return this.getCurrentSubSpectrum ().xyCoords;
 });
-Clazz.defineMethod (c$, "getPeakList", 
+Clazz.defineMethod (c$, "getPeakList",
 function () {
 return this.peakList;
 });
-Clazz.defineMethod (c$, "setPeakList", 
+Clazz.defineMethod (c$, "setPeakList",
 function (list, peakXLabel, peakYLabel) {
 this.peakList = list;
 this.peakXLabel = peakXLabel;
@@ -64,53 +64,53 @@ for (var i = list.size (); --i >= 0; ) this.peakList.get (i).spectrum = this;
 if (JU.Logger.debugging) JU.Logger.info ("Spectrum " + this.getTitle () + " peaks: " + list.size ());
 return list.size ();
 }, "JU.Lst,~S,~S");
-Clazz.defineMethod (c$, "selectPeakByFileIndex", 
+Clazz.defineMethod (c$, "selectPeakByFileIndex",
 function (filePath, index, atomKey) {
 if (this.peakList != null && this.peakList.size () > 0 && (atomKey == null || this.sourceID.equals (index))) for (var i = 0; i < this.peakList.size (); i++) if (this.peakList.get (i).checkFileIndex (filePath, index, atomKey)) {
-System.out.println ("selecting peak by FileIndex " + this + " " + this.peakList.get (i));
+Zystem.out.println ("selecting peak by FileIndex " + this + " " + this.peakList.get (i));
 return (this.selectedPeak = this.peakList.get (i));
 }
 return null;
 }, "~S,~S,~S");
-Clazz.defineMethod (c$, "selectPeakByFilePathTypeModel", 
+Clazz.defineMethod (c$, "selectPeakByFilePathTypeModel",
 function (filePath, type, model) {
 if (this.peakList != null && this.peakList.size () > 0) for (var i = 0; i < this.peakList.size (); i++) if (this.peakList.get (i).checkFileTypeModel (filePath, type, model)) {
-System.out.println ("selecting peak byFilePathTypeModel " + this + " " + this.peakList.get (i));
+Zystem.out.println ("selecting peak byFilePathTypeModel " + this + " " + this.peakList.get (i));
 return (this.selectedPeak = this.peakList.get (i));
 }
 return null;
 }, "~S,~S,~S");
-Clazz.defineMethod (c$, "matchesPeakTypeModel", 
+Clazz.defineMethod (c$, "matchesPeakTypeModel",
 function (type, model) {
 if (type.equals ("ID")) return (this.sourceID.equalsIgnoreCase (model));
 if (this.peakList != null && this.peakList.size () > 0) for (var i = 0; i < this.peakList.size (); i++) if (this.peakList.get (i).checkTypeModel (type, model)) return true;
 
 return false;
 }, "~S,~S");
-Clazz.defineMethod (c$, "setSelectedPeak", 
+Clazz.defineMethod (c$, "setSelectedPeak",
 function (peak) {
 this.selectedPeak = peak;
 }, "JSV.common.PeakInfo");
-Clazz.defineMethod (c$, "setHighlightedPeak", 
+Clazz.defineMethod (c$, "setHighlightedPeak",
 function (peak) {
 this.highlightedPeak = peak;
 }, "JSV.common.PeakInfo");
-Clazz.defineMethod (c$, "getSelectedPeak", 
+Clazz.defineMethod (c$, "getSelectedPeak",
 function () {
 return this.selectedPeak;
 });
-Clazz.defineMethod (c$, "getModelPeakInfoForAutoSelectOnLoad", 
+Clazz.defineMethod (c$, "getModelPeakInfoForAutoSelectOnLoad",
 function () {
 if (this.peakList != null) for (var i = 0; i < this.peakList.size (); i++) if (this.peakList.get (i).autoSelectOnLoad ()) return this.peakList.get (i);
 
 return null;
 });
-Clazz.defineMethod (c$, "getAssociatedPeakInfo", 
+Clazz.defineMethod (c$, "getAssociatedPeakInfo",
 function (xPixel, coord) {
 this.selectedPeak = this.findPeakByCoord (xPixel, coord);
 return (this.selectedPeak == null ? this.getBasePeakInfo () : this.selectedPeak);
 }, "~N,JSV.common.Coordinate");
-Clazz.defineMethod (c$, "findPeakByCoord", 
+Clazz.defineMethod (c$, "findPeakByCoord",
 function (xPixel, coord) {
 if (coord != null && this.peakList != null && this.peakList.size () > 0) {
 var xVal = coord.getXVal ();
@@ -125,11 +125,11 @@ iBest = i;
 if (iBest >= 0) return this.peakList.get (iBest);
 }return null;
 }, "~N,JSV.common.Coordinate");
-Clazz.defineMethod (c$, "getPeakTitle", 
+Clazz.defineMethod (c$, "getPeakTitle",
 function () {
 return (this.selectedPeak != null ? this.selectedPeak.getTitle () : this.highlightedPeak != null ? this.highlightedPeak.getTitle () : this.getTitleLabel ());
 });
-Clazz.defineMethod (c$, "getTitleLabel", 
+Clazz.defineMethod (c$, "getTitleLabel",
 function () {
 var type = (this.peakList == null || this.peakList.size () == 0 ? this.getQualifiedDataType () : this.peakList.get (0).getType ());
 if (type != null && type.startsWith ("NMR")) {
@@ -139,7 +139,7 @@ type = "2D" + type;
 type = this.nucleusX + type;
 }}return (type != null && type.length > 0 ? type + " " : "") + this.getTitle ();
 });
-Clazz.defineMethod (c$, "setNextPeak", 
+Clazz.defineMethod (c$, "setNextPeak",
 function (coord, istep) {
 if (this.peakList == null || this.peakList.size () == 0) return -1;
 var x0 = coord.getXVal () + istep * 0.000001;
@@ -169,32 +169,32 @@ if (ipt2 < 0) return -1;
 ipt1 = ipt2;
 }return ipt1;
 }, "JSV.common.Coordinate,~N");
-Clazz.defineMethod (c$, "getPercentYValueAt", 
+Clazz.defineMethod (c$, "getPercentYValueAt",
 function (x) {
 if (!this.isContinuous ()) return NaN;
 return this.getYValueAt (x);
 }, "~N");
-Clazz.defineMethod (c$, "getYValueAt", 
+Clazz.defineMethod (c$, "getYValueAt",
 function (x) {
 return JSV.common.Coordinate.getYValueAt (this.xyCoords, x);
 }, "~N");
-Clazz.defineMethod (c$, "setUserYFactor", 
+Clazz.defineMethod (c$, "setUserYFactor",
 function (userYFactor) {
 this.userYFactor = userYFactor;
 }, "~N");
-Clazz.defineMethod (c$, "getUserYFactor", 
+Clazz.defineMethod (c$, "getUserYFactor",
 function () {
 return this.userYFactor;
 });
-Clazz.defineMethod (c$, "getConvertedSpectrum", 
+Clazz.defineMethod (c$, "getConvertedSpectrum",
 function () {
 return this.convertedSpectrum;
 });
-Clazz.defineMethod (c$, "setConvertedSpectrum", 
+Clazz.defineMethod (c$, "setConvertedSpectrum",
 function (spectrum) {
 this.convertedSpectrum = spectrum;
 }, "JSV.common.Spectrum");
-c$.taConvert = Clazz.defineMethod (c$, "taConvert", 
+c$.taConvert = Clazz.defineMethod (c$, "taConvert",
 function (spectrum, mode) {
 if (!spectrum.isContinuous ()) return spectrum;
 switch (mode) {
@@ -212,7 +212,7 @@ break;
 var spec = spectrum.getConvertedSpectrum ();
 return (spec != null ? spec : spectrum.isAbsorbance () ? JSV.common.Spectrum.toT (spectrum) : JSV.common.Spectrum.toA (spectrum));
 }, "JSV.common.Spectrum,JSV.common.Spectrum.IRMode");
-c$.toT = Clazz.defineMethod (c$, "toT", 
+c$.toT = Clazz.defineMethod (c$, "toT",
  function (spectrum) {
 if (!spectrum.isAbsorbance ()) return null;
 var xyCoords = spectrum.getXYCoords ();
@@ -222,7 +222,7 @@ for (var i = 0; i < xyCoords.length; i++) newXYCoords[i] =  new JSV.common.Coord
 
 return JSV.common.Spectrum.newSpectrum (spectrum, newXYCoords, "TRANSMITTANCE");
 }, "JSV.common.Spectrum");
-c$.toA = Clazz.defineMethod (c$, "toA", 
+c$.toA = Clazz.defineMethod (c$, "toA",
  function (spectrum) {
 if (!spectrum.isTransmittance ()) return null;
 var xyCoords = spectrum.getXYCoords ();
@@ -232,7 +232,7 @@ for (var i = 0; i < xyCoords.length; i++) newXYCoords[i] =  new JSV.common.Coord
 
 return JSV.common.Spectrum.newSpectrum (spectrum, newXYCoords, "ABSORBANCE");
 }, "JSV.common.Spectrum");
-c$.newSpectrum = Clazz.defineMethod (c$, "newSpectrum", 
+c$.newSpectrum = Clazz.defineMethod (c$, "newSpectrum",
 function (spectrum, newXYCoords, units) {
 var specNew = spectrum.copy ();
 specNew.setOrigin ("JSpecView Converted");
@@ -243,41 +243,41 @@ spectrum.setConvertedSpectrum (specNew);
 specNew.setConvertedSpectrum (spectrum);
 return specNew;
 }, "JSV.common.Spectrum,~A,~S");
-c$.toAbsorbance = Clazz.defineMethod (c$, "toAbsorbance", 
+c$.toAbsorbance = Clazz.defineMethod (c$, "toAbsorbance",
  function (x, isPercent) {
 return (Math.min (4.0, isPercent ? 2 - JSV.common.Spectrum.log10 (x) : -JSV.common.Spectrum.log10 (x)));
 }, "~N,~B");
-c$.toTransmittance = Clazz.defineMethod (c$, "toTransmittance", 
+c$.toTransmittance = Clazz.defineMethod (c$, "toTransmittance",
  function (x) {
 return (x <= 0 ? 1 : Math.pow (10, -x));
 }, "~N");
-c$.log10 = Clazz.defineMethod (c$, "log10", 
+c$.log10 = Clazz.defineMethod (c$, "log10",
  function (value) {
 return Math.log (value) / Math.log (10);
 }, "~N");
-c$.process = Clazz.defineMethod (c$, "process", 
+c$.process = Clazz.defineMethod (c$, "process",
 function (specs, irMode) {
 if (irMode === JSV.common.Spectrum.IRMode.TO_ABS || irMode === JSV.common.Spectrum.IRMode.TO_TRANS) for (var i = 0; i < specs.size (); i++) specs.set (i, JSV.common.Spectrum.taConvert (specs.get (i), irMode));
 
 return true;
 }, "JU.Lst,JSV.common.Spectrum.IRMode");
-Clazz.defineMethod (c$, "getSubSpectra", 
+Clazz.defineMethod (c$, "getSubSpectra",
 function () {
 return this.subSpectra;
 });
-Clazz.defineMethod (c$, "getCurrentSubSpectrum", 
+Clazz.defineMethod (c$, "getCurrentSubSpectrum",
 function () {
 return (this.subSpectra == null ? this : this.subSpectra.get (this.currentSubSpectrumIndex));
 });
-Clazz.defineMethod (c$, "advanceSubSpectrum", 
+Clazz.defineMethod (c$, "advanceSubSpectrum",
 function (dir) {
 return this.setCurrentSubSpectrum (this.currentSubSpectrumIndex + dir);
 }, "~N");
-Clazz.defineMethod (c$, "setCurrentSubSpectrum", 
+Clazz.defineMethod (c$, "setCurrentSubSpectrum",
 function (n) {
 return (this.currentSubSpectrumIndex = JSV.common.Coordinate.intoRange (n, 0, this.subSpectra.size () - 1));
 }, "~N");
-Clazz.defineMethod (c$, "addSubSpectrum", 
+Clazz.defineMethod (c$, "addSubSpectrum",
 function (spectrum, forceSub) {
 if (!forceSub && (this.is1D () || this.blockID != spectrum.blockID) || !JSV.common.Spectrum.allowSubSpec (this, spectrum)) return false;
 this.$isForcedSubset = forceSub;
@@ -288,19 +288,19 @@ this.addSubSpectrum (this, true);
 spectrum.parent = this;
 return true;
 }, "JSV.common.Spectrum,~B");
-Clazz.defineMethod (c$, "getSubIndex", 
+Clazz.defineMethod (c$, "getSubIndex",
 function () {
 return (this.subSpectra == null ? -1 : this.currentSubSpectrumIndex);
 });
-Clazz.defineMethod (c$, "setExportXAxisDirection", 
+Clazz.defineMethod (c$, "setExportXAxisDirection",
 function (leftToRight) {
 this.exportXAxisLeftToRight = leftToRight;
 }, "~B");
-Clazz.defineMethod (c$, "isExportXAxisLeftToRight", 
+Clazz.defineMethod (c$, "isExportXAxisLeftToRight",
 function () {
 return this.exportXAxisLeftToRight;
 });
-Clazz.defineMethod (c$, "getInfo", 
+Clazz.defineMethod (c$, "getInfo",
 function (key) {
 var info =  new java.util.Hashtable ();
 if ("id".equalsIgnoreCase (key)) {
@@ -348,7 +348,7 @@ JSV.common.Parameters.putInfo (key, info, "subSpectrumCount", Integer.$valueOf (
 }}if (keys != null) info.put ("KEYS", keys);
 return info;
 }, "~S");
-c$.fixInfoValue = Clazz.defineMethod (c$, "fixInfoValue", 
+c$.fixInfoValue = Clazz.defineMethod (c$, "fixInfoValue",
  function (info) {
 try {
 return (Integer.$valueOf (info));
@@ -368,28 +368,28 @@ throw e;
 }
 return info;
 }, "~S");
-Clazz.defineMethod (c$, "findMatchingPeakInfo", 
+Clazz.defineMethod (c$, "findMatchingPeakInfo",
 function (pi) {
 for (var i = 0; i < this.peakList.size (); i++) if (this.peakList.get (i).checkTypeMatch (pi)) return this.peakList.get (i);
 
 return null;
 }, "JSV.common.PeakInfo");
-Clazz.defineMethod (c$, "getBasePeakInfo", 
+Clazz.defineMethod (c$, "getBasePeakInfo",
 function () {
 return (this.peakList.size () == 0 ?  new JSV.common.PeakInfo () :  new JSV.common.PeakInfo (" baseModel=\"\" " + this.peakList.get (0)));
 });
-Clazz.defineMethod (c$, "getAxisLabel", 
+Clazz.defineMethod (c$, "getAxisLabel",
 function (isX) {
 var label = (isX ? this.peakXLabel : this.peakYLabel);
 if (label == null) label = (isX ? this.xLabel : this.yLabel);
 if (label == null) label = (isX ? this.xUnits : this.yUnits);
 return (label == null ? "" : label.equalsIgnoreCase ("WAVENUMBERS") ? "1/cm" : label.equalsIgnoreCase ("nanometers") ? "nm" : label);
 }, "~B");
-Clazz.defineMethod (c$, "findXForPeakNearest", 
+Clazz.defineMethod (c$, "findXForPeakNearest",
 function (x) {
 return JSV.common.Coordinate.findXForPeakNearest (this.xyCoords, x, this.isInverted ());
 }, "~N");
-Clazz.defineMethod (c$, "addSpecShift", 
+Clazz.defineMethod (c$, "addSpecShift",
 function (dx) {
 if (dx != 0) {
 this.specShift += dx;
@@ -400,11 +400,11 @@ if (spec !== this && spec !== this.parent) spec.addSpecShift (dx);
 }
 }return this.specShift;
 }, "~N");
-c$.allowSubSpec = Clazz.defineMethod (c$, "allowSubSpec", 
+c$.allowSubSpec = Clazz.defineMethod (c$, "allowSubSpec",
 function (s1, s2) {
 return (s1.is1D () == s2.is1D () && s1.xUnits.equalsIgnoreCase (s2.xUnits) && s1.isHNMR () == s2.isHNMR ());
 }, "JSV.common.Spectrum,JSV.common.Spectrum");
-c$.areXScalesCompatible = Clazz.defineMethod (c$, "areXScalesCompatible", 
+c$.areXScalesCompatible = Clazz.defineMethod (c$, "areXScalesCompatible",
 function (s1, s2, isSubspecCheck, isLinkCheck) {
 var isNMR1 = s1.isNMR ();
 if (isNMR1 != s2.isNMR () || s1.isContinuous () != s2.isContinuous () || !isLinkCheck && !JSV.common.Spectrum.areUnitsCompatible (s1.xUnits, s2.xUnits)) return false;
@@ -416,27 +416,27 @@ if (!isNMR1) return true;
 return false;
 }return (!isNMR1 || s2.is1D () && s1.parent.nucleusX.equals (s2.parent.nucleusX));
 }, "JSV.common.Spectrum,JSV.common.Spectrum,~B,~B");
-c$.areUnitsCompatible = Clazz.defineMethod (c$, "areUnitsCompatible", 
+c$.areUnitsCompatible = Clazz.defineMethod (c$, "areUnitsCompatible",
  function (u1, u2) {
 if (u1.equalsIgnoreCase (u2)) return true;
 u1 = u1.toUpperCase ();
 u2 = u2.toUpperCase ();
 return (u1.equals ("HZ") && u2.equals ("PPM") || u1.equals ("PPM") && u2.equals ("HZ"));
 }, "~S,~S");
-c$.areLinkableX = Clazz.defineMethod (c$, "areLinkableX", 
+c$.areLinkableX = Clazz.defineMethod (c$, "areLinkableX",
 function (s1, s2) {
 return (s1.isNMR () && s2.isNMR () && s1.nucleusX.equals (s2.nucleusX));
 }, "JSV.common.Spectrum,JSV.common.Spectrum");
-c$.areLinkableY = Clazz.defineMethod (c$, "areLinkableY", 
+c$.areLinkableY = Clazz.defineMethod (c$, "areLinkableY",
 function (s1, s2) {
 return (s1.isNMR () && s2.isNMR () && s1.nucleusX.equals (s2.nucleusY));
 }, "JSV.common.Spectrum,JSV.common.Spectrum");
-Clazz.defineMethod (c$, "getPeakWidth", 
+Clazz.defineMethod (c$, "getPeakWidth",
 function () {
 var w = this.getLastX () - this.getFirstX ();
 return (w / 100);
 });
-Clazz.defineMethod (c$, "setSimulated", 
+Clazz.defineMethod (c$, "setSimulated",
 function (filePath) {
 this.isSimulation = true;
 var s = this.sourceID;
@@ -444,18 +444,18 @@ if (s.length == 0) s = JU.PT.rep (filePath, "http://SIMULATION/", "");
 if (s.indexOf ("MOL=") >= 0) s = "";
 this.title = "SIMULATED " + JU.PT.rep (s, "$", "");
 }, "~S");
-Clazz.defineMethod (c$, "setFillColor", 
+Clazz.defineMethod (c$, "setFillColor",
 function (color) {
 this.fillColor = color;
 if (this.convertedSpectrum != null) this.convertedSpectrum.fillColor = color;
 }, "javajs.api.GenericColor");
-Clazz.overrideMethod (c$, "toString", 
+Clazz.overrideMethod (c$, "toString",
 function () {
 return this.getTitleLabel () + (this.xyCoords == null ? "" : " xyCoords.length=" + this.xyCoords.length);
 });
 Clazz.pu$h(self.c$);
 c$ = Clazz.declareType (JSV.common.Spectrum, "IRMode", Enum);
-c$.getMode = Clazz.defineMethod (c$, "getMode", 
+c$.getMode = Clazz.defineMethod (c$, "getMode",
 function (a) {
 switch (a == null ? 'I' : a.toUpperCase ().charAt (0)) {
 case 'A':

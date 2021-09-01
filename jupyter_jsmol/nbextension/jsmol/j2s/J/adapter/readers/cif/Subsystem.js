@@ -1,5 +1,5 @@
 Clazz.declarePackage ("J.adapter.readers.cif");
-Clazz.load (null, "J.adapter.readers.cif.Subsystem", ["JU.Lst", "$.Matrix", "$.V3", "JU.Logger", "$.SimpleUnitCell"], function () {
+Clazz.load (null, "J.adapter.readers.cif.SubZystem", ["JU.Lst", "$.Matrix", "$.V3", "JU.Logger", "$.SimpleUnitCell"], function () {
 c$ = Clazz.decorateAsClass (function () {
 this.msRdr = null;
 this.code = null;
@@ -9,28 +9,28 @@ this.symmetry = null;
 this.modMatrices = null;
 this.isFinalized = false;
 Clazz.instantialize (this, arguments);
-}, J.adapter.readers.cif, "Subsystem");
-Clazz.makeConstructor (c$, 
+}, J.adapter.readers.cif, "SubZystem");
+Clazz.makeConstructor (c$,
 function (msRdr, code, w) {
 this.msRdr = msRdr;
 this.code = code;
 this.w = w;
 this.d = w.getArray ().length - 3;
 }, "J.adapter.readers.cif.MSRdr,~S,JU.Matrix");
-Clazz.defineMethod (c$, "getSymmetry", 
+Clazz.defineMethod (c$, "getSymmetry",
 function () {
 if (!this.isFinalized) this.setSymmetry (true);
 return this.symmetry;
 });
-Clazz.defineMethod (c$, "getModMatrices", 
+Clazz.defineMethod (c$, "getModMatrices",
 function () {
 if (!this.isFinalized) this.setSymmetry (true);
 return this.modMatrices;
 });
-Clazz.defineMethod (c$, "setSymmetry", 
+Clazz.defineMethod (c$, "setSymmetry",
  function (setOperators) {
 var a;
-JU.Logger.info ("[subsystem " + this.code + "]");
+JU.Logger.info ("[subZystem " + this.code + "]");
 var winv = this.w.inverse ();
 JU.Logger.info ("w=" + this.w);
 JU.Logger.info ("w_inv=" + winv);
@@ -66,7 +66,7 @@ this.modMatrices =  Clazz.newArray (-1, [sigma_nu, tFactor]);
 if (!setOperators) return;
 this.isFinalized = true;
 JU.Logger.info ("unit cell parameters: " + this.symmetry.getUnitCellInfo ());
-this.symmetry.createSpaceGroup (-1, "[subsystem " + this.code + "]",  new JU.Lst (), this.d);
+this.symmetry.createSpaceGroup (-1, "[subZystem " + this.code + "]",  new JU.Lst (), this.d);
 var nOps = s0.getSpaceGroupOperationCount ();
 for (var iop = 0; iop < nOps; iop++) {
 var rv = s0.getOperationRsVs (iop);
@@ -76,7 +76,7 @@ var r = this.w.mul (r0).mul (winv);
 var v = this.w.mul (v0);
 var code = this.code;
 if (this.isMixed (r)) {
-for (var e, $e = this.msRdr.htSubsystems.entrySet ().iterator (); $e.hasNext () && ((e = $e.next ()) || true);) {
+for (var e, $e = this.msRdr.htSubZystems.entrySet ().iterator (); $e.hasNext () && ((e = $e.next ()) || true);) {
 var ss = e.getValue ();
 if (ss === this) continue;
 var rj = ss.w.mul (r0).mul (winv);
@@ -90,7 +90,7 @@ break;
 JU.Logger.info (this.code + "." + (iop + 1) + (this.code.equals (code) ? "   " : ">" + code + " ") + jf);
 }
 }, "~B");
-Clazz.defineMethod (c$, "isMixed", 
+Clazz.defineMethod (c$, "isMixed",
  function (r) {
 var a = r.getArray ();
 for (var i = 3; --i >= 0; ) for (var j = 3 + this.d; --j >= 3; ) if (a[i][j] != 0) return true;
@@ -98,8 +98,8 @@ for (var i = 3; --i >= 0; ) for (var j = 3 + this.d; --j >= 3; ) if (a[i][j] != 
 
 return false;
 }, "JU.Matrix");
-Clazz.overrideMethod (c$, "toString", 
+Clazz.overrideMethod (c$, "toString",
 function () {
-return "Subsystem " + this.code + "\n" + this.w;
+return "SubZystem " + this.code + "\n" + this.w;
 });
 });

@@ -13,15 +13,15 @@ Clazz.instantialize (this, arguments);
 Clazz.prepareFields (c$, function () {
 this.typeData =  Clazz.newIntArray (4, 0);
 });
-Clazz.defineMethod (c$, "getAtomTypeDescriptions", 
+Clazz.defineMethod (c$, "getAtomTypeDescriptions",
 function () {
 return JM.FF.ForceFieldMMFF.getAtomTypeDescs (this.rawAtomTypes);
 });
-Clazz.defineMethod (c$, "getPartialCharges", 
+Clazz.defineMethod (c$, "getPartialCharges",
 function () {
 return this.rawMMFF94Charges;
 });
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function (m, isQuick) {
 Clazz.superConstructor (this, JM.FF.ForceFieldMMFF, []);
 this.minimizer = m;
@@ -34,10 +34,10 @@ this.name = "MMFF";
 this.ffParams = JM.FF.ForceFieldMMFF.mmffParams;
 if (this.ffParams == null) JM.FF.ForceFieldMMFF.mmffParams = this.ffParams = this.getParameters (false);
 }}, "JM.Minimizer,~B");
-Clazz.overrideMethod (c$, "clear", 
+Clazz.overrideMethod (c$, "clear",
 function () {
 });
-Clazz.overrideMethod (c$, "setModel", 
+Clazz.overrideMethod (c$, "setModel",
 function (bsElements, elemnoMax) {
 var m = this.minimizer;
 if (!this.setArrays (m.atoms, m.bsAtoms, m.bonds, m.rawBondCount, false, false)) return false;
@@ -47,7 +47,7 @@ this.calc =  new JM.FF.CalculationsMMFF (this, this.ffParams, this.minAtoms, thi
 this.calc.setLoggingEnabled (true);
 return this.calc.setupCalculations ();
 }, "JU.BS,~N");
-Clazz.defineMethod (c$, "setArrays", 
+Clazz.defineMethod (c$, "setArrays",
 function (atoms, bsAtoms, bonds, rawBondCount, doRound, allowUnknowns) {
 var m = this.minimizer;
 this.vRings = JU.AU.createArrayOfArrayList (4);
@@ -57,7 +57,7 @@ this.rawBondTypes = this.setBondTypes (bonds, rawBondCount, bsAtoms);
 this.rawMMFF94Charges = this.calculatePartialCharges (bonds, this.rawBondTypes, atoms, this.rawAtomTypes, bsAtoms, doRound);
 return true;
 }, "~A,JU.BS,~A,~N,~B,~B");
-Clazz.defineMethod (c$, "getParameters", 
+Clazz.defineMethod (c$, "getParameters",
 function (isQuick) {
 this.getAtomTypes ();
 var resourceName = (isQuick ? "mmff94.par.txt" : "mmff94_2d.par.txt");
@@ -85,7 +85,7 @@ throw  new JV.JmolAsyncException (e.getFileName ());
 } else if (Clazz.exceptionOf (e$$, Exception)) {
 var e = e$$;
 {
-System.err.println ("Exception " + e.toString () + " in getResource " + resourceName + " line=" + line);
+Zystem.err.println ("Exception " + e.toString () + " in getResource " + resourceName + " line=" + line);
 }
 } else {
 throw e$$;
@@ -102,7 +102,7 @@ throw e;
 }
 return data;
 }, "~B");
-Clazz.defineMethod (c$, "readParams", 
+Clazz.defineMethod (c$, "readParams",
  function (br, dataType, data) {
 var value = null;
 var a1 = 0;
@@ -223,19 +223,19 @@ data.put (key, value);
 if (JU.Logger.debugging) JU.Logger.debug (JM.MinObject.decodeKey (key) + " " + (Clazz.instanceOf (value, Float) ? value : JU.Escape.eAD (value)));
 } while (!(this.line = br.readLine ()).startsWith ("$"));
 }, "java.io.BufferedReader,~N,java.util.Map");
-Clazz.defineMethod (c$, "ival", 
+Clazz.defineMethod (c$, "ival",
  function (i, j) {
 return JU.PT.parseInt (this.line.substring (i, j).trim ());
 }, "~N,~N");
-Clazz.defineMethod (c$, "fval", 
+Clazz.defineMethod (c$, "fval",
  function (i, j) {
 return Float.$valueOf (this.line.substring (i, j).trim ()).floatValue ();
 }, "~N,~N");
-Clazz.defineMethod (c$, "dval", 
+Clazz.defineMethod (c$, "dval",
  function (i, j) {
 return Double.$valueOf (this.line.substring (i, j).trim ()).doubleValue ();
 }, "~N,~N");
-Clazz.defineMethod (c$, "getAtomTypes", 
+Clazz.defineMethod (c$, "getAtomTypes",
  function () {
 var resourceName = "MMFF94-smarts.txt";
 var types =  new JU.Lst ();
@@ -265,7 +265,7 @@ throw  new JV.JmolAsyncException (e.getFileName ());
 } else if (Clazz.exceptionOf (e$$, Exception)) {
 var e = e$$;
 {
-System.err.println ("Exception " + e.toString () + " in getResource " + resourceName + " line=" + this.line);
+Zystem.err.println ("Exception " + e.toString () + " in getResource " + resourceName + " line=" + this.line);
 }
 } else {
 throw e$$;
@@ -274,7 +274,7 @@ throw e$$;
 JU.Logger.info ((types.size () - 1) + " SMARTS-based atom types read");
 JM.FF.ForceFieldMMFF.atomTypes = types;
 });
-c$.setFlags = Clazz.defineMethod (c$, "setFlags", 
+c$.setFlags = Clazz.defineMethod (c$, "setFlags",
  function (at) {
 switch (at.mmType) {
 case 32:
@@ -401,7 +401,7 @@ at.mltb = 3;
 break;
 }
 }, "JM.FF.AtomType");
-Clazz.defineMethod (c$, "calculatePartialCharges", 
+Clazz.defineMethod (c$, "calculatePartialCharges",
 function (bonds, bTypes, atoms, aTypes, bsAtoms, doRound) {
 var partialCharges =  Clazz.newFloatArray (atoms.length, 0);
 for (var i = bsAtoms.nextSetBit (0); i >= 0; i = bsAtoms.nextSetBit (i + 1)) partialCharges[i] = JM.FF.ForceFieldMMFF.atomTypes.get (Math.max (0, aTypes[i])).formalCharge;
@@ -458,15 +458,15 @@ if (abscharge == 0 && a1 != null) {
 partialCharges[a1.i] = -0.0;
 }}return partialCharges;
 }, "~A,~A,~A,~A,JU.BS,~B");
-c$.isSpecialBondType = Clazz.defineMethod (c$, "isSpecialBondType", 
+c$.isSpecialBondType = Clazz.defineMethod (c$, "isSpecialBondType",
  function (at1, at2) {
 return at1.sbmb && at2.sbmb || at1.arom && at2.arom;
 }, "JM.FF.AtomType,JM.FF.AtomType");
-Clazz.defineMethod (c$, "getBondType", 
+Clazz.defineMethod (c$, "getBondType",
  function (bond, at1, at2, index1, index2) {
 return (JM.FF.ForceFieldMMFF.isSpecialBondType (at1, at2) && bond.getCovalentOrder () == 1 && !this.isAromaticBond (index1, index2) ? 1 : 0);
 }, "JM.Bond,JM.FF.AtomType,JM.FF.AtomType,~N,~N");
-Clazz.defineMethod (c$, "isAromaticBond", 
+Clazz.defineMethod (c$, "isAromaticBond",
  function (a1, a2) {
 if (this.vRings[3] != null) for (var i = this.vRings[3].size (); --i >= 0; ) {
 var bsRing = this.vRings[3].get (i);
@@ -474,7 +474,7 @@ if (bsRing.get (a1) && bsRing.get (a2)) return true;
 }
 return false;
 }, "~N,~N");
-c$.getAtomTypeDescs = Clazz.defineMethod (c$, "getAtomTypeDescs", 
+c$.getAtomTypeDescs = Clazz.defineMethod (c$, "getAtomTypeDescs",
 function (types) {
 var stypes =  new Array (types.length);
 for (var i = types.length; --i >= 0; ) {
@@ -482,7 +482,7 @@ stypes[i] = String.valueOf (types[i] < 0 ? -types[i] : JM.FF.ForceFieldMMFF.atom
 }
 return stypes;
 }, "~A");
-c$.setAtomTypes = Clazz.defineMethod (c$, "setAtomTypes", 
+c$.setAtomTypes = Clazz.defineMethod (c$, "setAtomTypes",
  function (atoms, bsAtoms, smartsMatcher, vRings, allowUnknowns) {
 var bitSets =  new JU.Lst ();
 var smarts =  new Array (JM.FF.ForceFieldMMFF.atomTypes.size ());
@@ -544,7 +544,7 @@ if (JU.Logger.debugging) for (var i = bsConnected.nextSetBit (0); i >= 0; i = bs
 if (!allowUnknowns && bsDone.cardinality () != bsConnected.cardinality ()) return null;
 return types;
 }, "~A,JU.BS,J.api.SmilesMatcherInterface,~A,~B");
-Clazz.defineMethod (c$, "setBondTypes", 
+Clazz.defineMethod (c$, "setBondTypes",
  function (bonds, bondCount, bsAtoms) {
 var bTypes =  Clazz.newIntArray (bondCount, 0);
 for (var i = bondCount; --i >= 0; ) {
@@ -561,7 +561,7 @@ bTypes[i] = this.getBondType (bonds[i], at1, at2, a1.i, a2.i);
 }
 return bTypes;
 }, "~A,~N,JU.BS");
-Clazz.defineMethod (c$, "fixTypes", 
+Clazz.defineMethod (c$, "fixTypes",
  function () {
 for (var i = this.minAtomCount; --i >= 0; ) {
 var a = this.minAtoms[i];
@@ -590,7 +590,7 @@ torsion.key = this.getKey (torsion, torsion.type, 9);
 }
 return true;
 });
-Clazz.defineMethod (c$, "setAngleType", 
+Clazz.defineMethod (c$, "setAngleType",
  function (angle) {
 angle.type = this.minBonds[angle.data[3]].type + this.minBonds[angle.data[4]].type;
 if (this.checkRings (this.vRings[0], angle.data, 3)) {
@@ -607,7 +607,7 @@ break;
 }
 return angle.type;
 }, "JM.MinAngle");
-Clazz.defineMethod (c$, "setTorsionType", 
+Clazz.defineMethod (c$, "setTorsionType",
  function (t) {
 if (this.checkRings (this.vRings[1], t.data, 4)) return (t.type = 4);
 t.type = (this.minBonds[t.data[5]].type == 1 ? 1 : this.minBonds[t.data[4]].type == 0 && this.minBonds[t.data[6]].type == 0 ? 0 : 2);
@@ -615,11 +615,11 @@ if (t.type == 0 && this.checkRings (this.vRings[2], t.data, 4)) {
 t.type = 5;
 }return t.type;
 }, "JM.MinTorsion");
-Clazz.defineMethod (c$, "typeOf", 
+Clazz.defineMethod (c$, "typeOf",
  function (iAtom) {
 return this.minAtoms[iAtom].ffType;
 }, "~N");
-Clazz.defineMethod (c$, "checkRings", 
+Clazz.defineMethod (c$, "checkRings",
  function (v, minlist, n) {
 if (v != null) for (var i = v.size (); --i >= 0; ) {
 var bs = v.get (i);
@@ -627,7 +627,7 @@ if (bs.get (this.minAtoms[minlist[0]].atom.i) && bs.get (this.minAtoms[minlist[1
 }
 return false;
 }, "JU.Lst,~A,~N");
-Clazz.defineMethod (c$, "getKey", 
+Clazz.defineMethod (c$, "getKey",
  function (obj, type, ktype) {
 var o = (Clazz.instanceOf (obj, JM.MinObject) ? obj : null);
 var data = (o == null ? obj : o.data);
@@ -728,11 +728,11 @@ return (ddata != null && ddata[0] != 0 ? key : this.applyEmpiricalRules (o, ddat
 }
 return key;
 }, "~O,~N,~N");
-Clazz.defineMethod (c$, "getTorsionKey", 
+Clazz.defineMethod (c$, "getTorsionKey",
  function (type, i, j) {
 return JM.MinObject.getKey (type, JM.FF.ForceFieldMMFF.getEquivalentType (this.typeData[0], i), this.typeData[1], this.typeData[2], JM.FF.ForceFieldMMFF.getEquivalentType (this.typeData[3], j));
 }, "~N,~N,~N");
-Clazz.defineMethod (c$, "applyEmpiricalRules", 
+Clazz.defineMethod (c$, "applyEmpiricalRules",
  function (o, ddata, ktype) {
 var rr;
 var rr2;
@@ -908,50 +908,50 @@ default:
 return null;
 }
 }, "JM.MinObject,~A,~N");
-Clazz.defineMethod (c$, "getR0", 
+Clazz.defineMethod (c$, "getR0",
  function (b) {
 return (b.ddata == null ? (this.ffParams.get (b.key)) : b.ddata)[1];
 }, "JM.MinBond");
-Clazz.defineMethod (c$, "getRowFor", 
+Clazz.defineMethod (c$, "getRowFor",
  function (i) {
 var elemno = this.minAtoms[i].atom.getElementNumber ();
 return (elemno < 3 ? 0 : elemno < 11 ? 1 : elemno < 19 ? 2 : elemno < 37 ? 3 : 4);
 }, "~N");
-Clazz.defineMethod (c$, "getOutOfPlaneParameter", 
+Clazz.defineMethod (c$, "getOutOfPlaneParameter",
 function (data) {
 var ddata = this.ffParams.get (this.getKey (data, 6, 13));
 return (ddata == null ? 0 : ddata[0]);
 }, "~A");
-c$.sortOop = Clazz.defineMethod (c$, "sortOop", 
+c$.sortOop = Clazz.defineMethod (c$, "sortOop",
  function (typeData) {
 JM.FF.ForceFieldMMFF.fixTypeOrder (typeData, 0, 2);
 JM.FF.ForceFieldMMFF.fixTypeOrder (typeData, 0, 3);
 JM.FF.ForceFieldMMFF.fixTypeOrder (typeData, 2, 3);
 }, "~A");
-c$.fixTypeOrder = Clazz.defineMethod (c$, "fixTypeOrder", 
+c$.fixTypeOrder = Clazz.defineMethod (c$, "fixTypeOrder",
  function (a, i, j) {
 if (a[i] > a[j]) {
 JM.FF.ForceFieldMMFF.swap (a, i, j);
 return true;
 }return false;
 }, "~A,~N,~N");
-Clazz.defineMethod (c$, "fixOrder", 
+Clazz.defineMethod (c$, "fixOrder",
  function (a, i, j) {
 var test = this.typeOf (a[j]) - this.typeOf (a[i]);
 if (test < 0) JM.FF.ForceFieldMMFF.swap (a, i, j);
 return (test < 0 ? -1 : test > 0 ? 1 : 0);
 }, "~A,~N,~N");
-c$.swap = Clazz.defineMethod (c$, "swap", 
+c$.swap = Clazz.defineMethod (c$, "swap",
  function (a, i, j) {
 var t = a[i];
 a[i] = a[j];
 a[j] = t;
 }, "~A,~N,~N");
-c$.getEquivalentType = Clazz.defineMethod (c$, "getEquivalentType", 
+c$.getEquivalentType = Clazz.defineMethod (c$, "getEquivalentType",
  function (type, level) {
 return (type == 0 ? 0 : type == 70 || type > 82 ? type : level == 2 ? 0 : JM.FF.ForceFieldMMFF.equivalentTypes[((type - 1) << 1) + level]);
 }, "~N,~N");
-c$.getZParam = Clazz.defineMethod (c$, "getZParam", 
+c$.getZParam = Clazz.defineMethod (c$, "getZParam",
  function (elemno) {
 switch (elemno) {
 case 1:
@@ -979,7 +979,7 @@ return 3.086;
 }
 return 0.0;
 }, "~N");
-c$.getCParam = Clazz.defineMethod (c$, "getCParam", 
+c$.getCParam = Clazz.defineMethod (c$, "getCParam",
  function (elemno) {
 switch (elemno) {
 case 5:
@@ -1003,7 +1003,7 @@ return 0.825;
 }
 return 0.0;
 }, "~N");
-c$.getUParam = Clazz.defineMethod (c$, "getUParam", 
+c$.getUParam = Clazz.defineMethod (c$, "getUParam",
  function (elemno) {
 switch (elemno) {
 case 6:
@@ -1017,7 +1017,7 @@ return 1.25;
 }
 return 0.0;
 }, "~N");
-c$.getVParam = Clazz.defineMethod (c$, "getVParam", 
+c$.getVParam = Clazz.defineMethod (c$, "getVParam",
  function (elemno) {
 switch (elemno) {
 case 6:
@@ -1035,7 +1035,7 @@ return 0.49;
 }
 return 0.0;
 }, "~N");
-c$.getCovalentRadius = Clazz.defineMethod (c$, "getCovalentRadius", 
+c$.getCovalentRadius = Clazz.defineMethod (c$, "getCovalentRadius",
  function (elemno) {
 switch (elemno) {
 case 1:
@@ -1090,7 +1090,7 @@ default:
 return JU.Elements.getBondingRadius (elemno, 0);
 }
 }, "~N");
-c$.getRuleBondLength = Clazz.defineMethod (c$, "getRuleBondLength", 
+c$.getRuleBondLength = Clazz.defineMethod (c$, "getRuleBondLength",
  function (a, b, boAB, isAromatic) {
 switch (boAB) {
 case 1:

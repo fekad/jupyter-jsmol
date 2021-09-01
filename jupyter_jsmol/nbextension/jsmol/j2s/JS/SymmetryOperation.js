@@ -14,7 +14,7 @@ this.rsvs = null;
 this.isBio = false;
 this.sigma = null;
 this.index = 0;
-this.subsystemCode = null;
+this.subZystemCode = null;
 this.timeReversal = 0;
 this.unCentered = false;
 this.isCenteringOp = false;
@@ -22,12 +22,12 @@ this.magOp = 3.4028235E38;
 this.info = null;
 Clazz.instantialize (this, arguments);
 }, JS, "SymmetryOperation", JU.M4);
-Clazz.defineMethod (c$, "setSigma", 
-function (subsystemCode, sigma) {
-this.subsystemCode = subsystemCode;
+Clazz.defineMethod (c$, "setSigma",
+function (subZystemCode, sigma) {
+this.subZystemCode = subZystemCode;
 this.sigma = sigma;
 }, "~S,JU.Matrix");
-Clazz.overrideConstructor (c$, 
+Clazz.overrideConstructor (c$,
 function (op, atoms, atomIndex, countOrId, doNormalize) {
 this.doNormalize = doNormalize;
 if (op == null) {
@@ -41,13 +41,13 @@ this.myLabels = op.myLabels;
 this.index = op.index;
 this.linearRotTrans = op.linearRotTrans;
 this.sigma = op.sigma;
-this.subsystemCode = op.subsystemCode;
+this.subZystemCode = op.subZystemCode;
 this.timeReversal = op.timeReversal;
 this.setMatrix (false);
 if (!op.isFinalized) this.doFinalize ();
 if (doNormalize && this.sigma == null) JS.SymmetryOperation.setOffset (this, atoms, atomIndex, countOrId);
 }, "JS.SymmetryOperation,~A,~N,~N,~B");
-Clazz.defineMethod (c$, "setGamma", 
+Clazz.defineMethod (c$, "setGamma",
  function (isReverse) {
 var n = 3 + this.modDim;
 var a = (this.rsvs =  new JU.Matrix (null, n + 1, n + 1)).getArray ();
@@ -68,7 +68,7 @@ for (var i = 0; i < 3; i++) for (var j = 0; j < 4; j++) this.setElement (i, j, (
 
 this.setElement (3, 3, 1);
 }, "~B");
-Clazz.defineMethod (c$, "doFinalize", 
+Clazz.defineMethod (c$, "doFinalize",
 function () {
 JS.SymmetryOperation.div12 (this);
 if (this.modDim > 0) {
@@ -77,27 +77,27 @@ for (var i = a.length - 1; --i >= 0; ) a[i][3 + this.modDim] /= 12;
 
 }this.isFinalized = true;
 });
-c$.div12 = Clazz.defineMethod (c$, "div12", 
+c$.div12 = Clazz.defineMethod (c$, "div12",
  function (op) {
 op.m03 /= 12;
 op.m13 /= 12;
 op.m23 /= 12;
 return op;
 }, "JU.M4");
-Clazz.defineMethod (c$, "getXyz", 
+Clazz.defineMethod (c$, "getXyz",
 function (normalized) {
 return (normalized && this.modDim == 0 || this.xyzOriginal == null ? this.xyz : this.xyzOriginal);
 }, "~B");
-c$.newPoint = Clazz.defineMethod (c$, "newPoint", 
+c$.newPoint = Clazz.defineMethod (c$, "newPoint",
 function (m, atom1, atom2, x, y, z) {
 m.rotTrans2 (atom1, atom2);
 atom2.add3 (x, y, z);
 }, "JU.M4,JU.P3,JU.P3,~N,~N,~N");
-Clazz.defineMethod (c$, "dumpInfo", 
+Clazz.defineMethod (c$, "dumpInfo",
 function () {
 return "\n" + this.xyz + "\ninternal matrix representation:\n" + this.toString ();
 });
-c$.dumpSeitz = Clazz.defineMethod (c$, "dumpSeitz", 
+c$.dumpSeitz = Clazz.defineMethod (c$, "dumpSeitz",
 function (s, isCanonical) {
 var sb =  new JU.SB ();
 var r =  Clazz.newFloatArray (4, 0);
@@ -112,7 +112,7 @@ sb.append (JS.SymmetryOperation.twelfthsOf (isCanonical ? (Clazz.floatToInt (tra
 }
 return sb.toString ();
 }, "JU.M4,~B");
-Clazz.defineMethod (c$, "setMatrixFromXYZ", 
+Clazz.defineMethod (c$, "setMatrixFromXYZ",
 function (xyz, modDim, allowScaling) {
 if (xyz == null) return false;
 this.xyzOriginal = xyz;
@@ -160,14 +160,14 @@ if (this.timeReversal != 0) this.xyz += (this.timeReversal == 1 ? ",m" : ",-m");
 if (JU.Logger.debugging) JU.Logger.debug ("" + this);
 return true;
 }, "~S,~N,~B");
-Clazz.defineMethod (c$, "setModDim", 
+Clazz.defineMethod (c$, "setModDim",
  function (dim) {
 var n = (dim + 4) * (dim + 4);
 this.modDim = dim;
 if (dim > 0) this.myLabels = JS.SymmetryOperation.labelsXn;
 this.linearRotTrans =  Clazz.newFloatArray (n, 0);
 }, "~N");
-Clazz.defineMethod (c$, "setMatrix", 
+Clazz.defineMethod (c$, "setMatrix",
  function (isReverse) {
 if (this.linearRotTrans.length > 16) {
 this.setGamma (isReverse);
@@ -180,7 +180,7 @@ this.rotate (p3);
 p3.scale (-1);
 this.setTranslation (p3);
 }}}, "~B");
-Clazz.defineMethod (c$, "setFromMatrix", 
+Clazz.defineMethod (c$, "setFromMatrix",
 function (offset, isReverse) {
 var v = 0;
 var pt = 0;
@@ -206,13 +206,13 @@ this.isFinalized = (offset == null);
 this.xyz = JS.SymmetryOperation.getXYZFromMatrix (this, true, false, false);
 return true;
 }, "~A,~B");
-c$.getMatrixFromXYZ = Clazz.defineMethod (c$, "getMatrixFromXYZ", 
+c$.getMatrixFromXYZ = Clazz.defineMethod (c$, "getMatrixFromXYZ",
 function (xyz) {
 var linearRotTrans =  Clazz.newFloatArray (16, 0);
 xyz = JS.SymmetryOperation.getMatrixFromString (null, xyz, linearRotTrans, false);
 return (xyz == null ? null : JS.SymmetryOperation.div12 (JU.M4.newA16 (linearRotTrans)));
 }, "~S");
-c$.getMatrixFromString = Clazz.defineMethod (c$, "getMatrixFromString", 
+c$.getMatrixFromString = Clazz.defineMethod (c$, "getMatrixFromString",
 function (op, xyz, linearRotTrans, allowScaling) {
 var isDenominator = false;
 var isDecimal = false;
@@ -340,13 +340,13 @@ isDecimal = isDenominator = isNegative = false;
 }
 return null;
 }, "JS.SymmetryOperation,~S,~A,~B");
-c$.replaceXn = Clazz.defineMethod (c$, "replaceXn", 
+c$.replaceXn = Clazz.defineMethod (c$, "replaceXn",
 function (xyz, n) {
 for (var i = n; --i >= 0; ) xyz = JU.PT.rep (xyz, JS.SymmetryOperation.labelsXn[i], JS.SymmetryOperation.labelsXnSub[i]);
 
 return xyz;
 }, "~S,~N");
-c$.xyzFraction12 = Clazz.defineMethod (c$, "xyzFraction12", 
+c$.xyzFraction12 = Clazz.defineMethod (c$, "xyzFraction12",
  function (n12ths, allPositive, halfOrLess) {
 var n = n12ths;
 if (allPositive) {
@@ -360,7 +360,7 @@ while (n < -6.0) n += 12;
 }var s = JS.SymmetryOperation.twelfthsOf (n);
 return (s.charAt (0) == '0' ? "" : n > 0 ? "+" + s : s);
 }, "~N,~B,~B");
-c$.twelfthsOf = Clazz.defineMethod (c$, "twelfthsOf", 
+c$.twelfthsOf = Clazz.defineMethod (c$, "twelfthsOf",
 function (n12ths) {
 var str = "";
 if (n12ths < 0) {
@@ -404,7 +404,7 @@ break;
 n = (Clazz.doubleToInt (n * m / 12));
 }return str + n + "/" + m;
 }, "~N");
-c$.fortyEighthsOf = Clazz.defineMethod (c$, "fortyEighthsOf", 
+c$.fortyEighthsOf = Clazz.defineMethod (c$, "fortyEighthsOf",
 function (n48ths) {
 var str = "";
 if (n48ths < 0) {
@@ -448,11 +448,11 @@ break;
 n = (Clazz.doubleToInt (n * m / 12));
 }return str + n + "/" + m;
 }, "~N");
-c$.plusMinus = Clazz.defineMethod (c$, "plusMinus", 
+c$.plusMinus = Clazz.defineMethod (c$, "plusMinus",
  function (strT, x, sx) {
 return (x == 0 ? "" : (x < 0 ? "-" : strT.length == 0 ? "" : "+") + (x == 1 || x == -1 ? "" : "" + Clazz.floatToInt (Math.abs (x))) + sx);
 }, "~S,~N,~S");
-c$.normalizeTwelfths = Clazz.defineMethod (c$, "normalizeTwelfths", 
+c$.normalizeTwelfths = Clazz.defineMethod (c$, "normalizeTwelfths",
  function (iValue, doNormalize) {
 iValue *= 12;
 if (doNormalize) {
@@ -462,7 +462,7 @@ while (iValue <= -6) iValue += 12;
 
 }return iValue;
 }, "~N,~B");
-c$.getXYZFromMatrix = Clazz.defineMethod (c$, "getXYZFromMatrix", 
+c$.getXYZFromMatrix = Clazz.defineMethod (c$, "getXYZFromMatrix",
 function (mat, is12ths, allPositive, halfOrLess) {
 var str = "";
 var op = (Clazz.instanceOf (mat, JS.SymmetryOperation) ? mat : null);
@@ -479,7 +479,7 @@ str += "," + term;
 }
 return str.substring (1);
 }, "JU.M4,~B,~B,~B");
-c$.setOffset = Clazz.defineMethod (c$, "setOffset", 
+c$.setOffset = Clazz.defineMethod (c$, "setOffset",
 function (m, atoms, atomIndex, count) {
 if (count == 0) return;
 var x = 0;
@@ -508,7 +508,7 @@ m.m23 += (z < 0 ? 1 : -1);
 z += (z < 0 ? 1 : -1);
 }
 }, "JU.M4,~A,~N,~N");
-Clazz.defineMethod (c$, "rotateAxes", 
+Clazz.defineMethod (c$, "rotateAxes",
 function (vectors, unitcell, ptTemp, mTemp) {
 var vRot =  new Array (3);
 this.getRotationScale (mTemp);
@@ -521,11 +521,11 @@ vRot[i] = JU.V3.newV (ptTemp);
 }
 return vRot;
 }, "~A,JS.UnitCell,JU.P3,JU.M3");
-c$.fcoord = Clazz.defineMethod (c$, "fcoord", 
+c$.fcoord = Clazz.defineMethod (c$, "fcoord",
 function (p) {
 return JS.SymmetryOperation.fc (p.x) + " " + JS.SymmetryOperation.fc (p.y) + " " + JS.SymmetryOperation.fc (p.z);
 }, "JU.T3");
-c$.fc = Clazz.defineMethod (c$, "fc", 
+c$.fc = Clazz.defineMethod (c$, "fc",
  function (x) {
 var xabs = Math.abs (x);
 var m = (x < 0 ? "-" : "");
@@ -534,11 +534,11 @@ if (x24 / 24 == Clazz.floatToInt (x24 / 24)) return m + (Clazz.doubleToInt (x24 
 if (x24 % 8 != 0) return m + JS.SymmetryOperation.twelfthsOf (x24 >> 1);
 return (x24 == 0 ? "0" : x24 == 24 ? m + "1" : m + (Clazz.doubleToInt (x24 / 8)) + "/3");
 }, "~N");
-c$.approxF = Clazz.defineMethod (c$, "approxF", 
+c$.approxF = Clazz.defineMethod (c$, "approxF",
 function (f) {
 return JU.PT.approx (f, 100);
 }, "~N");
-c$.getXYZFromRsVs = Clazz.defineMethod (c$, "getXYZFromRsVs", 
+c$.getXYZFromRsVs = Clazz.defineMethod (c$, "getXYZFromRsVs",
 function (rs, vs, is12ths) {
 var ra = rs.getArray ();
 var va = vs.getArray ();
@@ -555,22 +555,22 @@ s += JS.SymmetryOperation.xyzFraction12 (Clazz.doubleToInt (va[i][0] * (is12ths 
 }
 return JU.PT.rep (s.substring (1), ",+", ",");
 }, "JU.Matrix,JU.Matrix,~B");
-Clazz.defineMethod (c$, "toString", 
+Clazz.defineMethod (c$, "toString",
 function () {
 return (this.rsvs == null ? Clazz.superCall (this, JS.SymmetryOperation, "toString", []) : Clazz.superCall (this, JS.SymmetryOperation, "toString", []) + " " + this.rsvs.toString ());
 });
-Clazz.defineMethod (c$, "getMagneticOp", 
+Clazz.defineMethod (c$, "getMagneticOp",
 function () {
 return (this.magOp == 3.4028235E38 ? this.magOp = this.determinant3 () * this.timeReversal : this.magOp);
 });
-Clazz.defineMethod (c$, "setTimeReversal", 
+Clazz.defineMethod (c$, "setTimeReversal",
 function (magRev) {
 this.timeReversal = magRev;
 if (this.xyz.indexOf ("m") >= 0) this.xyz = this.xyz.substring (0, this.xyz.indexOf ("m"));
 if (magRev != 0) {
 this.xyz += (magRev == 1 ? ",m" : ",-m");
 }}, "~N");
-Clazz.defineMethod (c$, "getCentering", 
+Clazz.defineMethod (c$, "getCentering",
 function () {
 if (!this.isFinalized) this.doFinalize ();
 if (this.centering == null && !this.unCentered) {
@@ -582,7 +582,7 @@ this.unCentered = true;
 this.centering = null;
 }}return this.centering;
 });
-Clazz.defineMethod (c$, "fixMagneticXYZ", 
+Clazz.defineMethod (c$, "fixMagneticXYZ",
 function (m, xyz, addMag) {
 if (this.timeReversal == 0) return xyz;
 var pt = xyz.indexOf ("m");
@@ -595,7 +595,7 @@ if (this.getMagneticOp () < 0) m2.scale (-1);
 xyz += "(" + JU.PT.rep (JU.PT.rep (JU.PT.rep (JS.SymmetryOperation.getXYZFromMatrix (m2, false, false, false), "x", "mx"), "y", "my"), "z", "mz") + ")";
 return xyz;
 }, "JU.M4,~S,~B");
-Clazz.defineMethod (c$, "getInfo", 
+Clazz.defineMethod (c$, "getInfo",
 function () {
 if (this.info == null) {
 this.info =  new java.util.Hashtable ();

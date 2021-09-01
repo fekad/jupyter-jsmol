@@ -4,21 +4,21 @@
 
 // BH 12/3/2017 8:56:35 PM two JSME applets on a page fail.
 // BH 2/16/2017 2:09:40 PM uses show chemical jme not show chemical/file=jme
-// BH 4/24/2016 10:51:22 PM adds getjsmeh Jmol script to derive jsme with H atoms from NCI mrv 
+// BH 4/24/2016 10:51:22 PM adds getjsmeh Jmol script to derive jsme with H atoms from NCI mrv
 // BH 9/15/2015 18:10:25 jmolAtoms no var
 // BH 6/19/2015 5:36:23 PM fix for Jmol mouse hook t.x.baseVal not implemented fully on iOS
 // BH 3/26/2015 6:13:01 PM  SMILES fix for stereochem in rings losing H atoms
 // BH 9/13/2014 2:24:29 PM SMILES fix again
 // BH 9/2/2014 6:56:42 PM  SMILES fix for quaternary carbon with stereochemistry
 // BH 3/1/2014 4:31:18 PM fix for evaluate returning atom sets as arrays
-// BH 1/27/2014 8:37:06 AM adding Info.viewSet  
+// BH 1/27/2014 8:37:06 AM adding Info.viewSet
 // BH 12/4/2013 7:44:26 PM fix for JME independent search box
 // BH 5/25/2017 5:11:17 AM removing Jmol changes to JSME SMILES. Problem is with incomplete assignment of H stereochemistry, as in CC[C@@H](C)[H]
 /*
 
 	Only HTML5 version (JSME) is supported.
 
-	JME 2D option -- use 
+	JME 2D option -- use
 
 		Jmol.getJMEApplet(id, Info)
 		Jmol.getJMEApplet(id, Info, linkedApplet)
@@ -26,7 +26,7 @@
 	no option for getJMEAppletHtml(), but instead we indicate the
 	target div using Info.divId.
 
-	linkedApplet puts JME into INFO block for that applet; 
+	linkedApplet puts JME into INFO block for that applet;
 	use Jmol.showInfo(jme,true/false) to show/hide JME applet with id "jme"
 
 	JME licensing: http://www.molinspiration.com/jme/doc/index.html
@@ -34,7 +34,7 @@
 
 	API includes:
 
-	Jmol.jmeSmiles = function(jme, withStereoChemistry); 
+	Jmol.jmeSmiles = function(jme, withStereoChemistry);
 
 		// returns SMILES string
 
@@ -42,7 +42,7 @@
 
 		// retrieves structure as JME or MOL data
 
-	Jmol.jmeReadMolecule = function(jme, jmeOrMolData); 
+	Jmol.jmeReadMolecule = function(jme, jmeOrMolData);
 
 		// loads JME or MOL data into the app
 		// JME data is recognized as a single line with no line ending
@@ -54,7 +54,7 @@
 
 	Jmol.jmeOptions = function(jme, options);
 
-			 
+
 	All other methods are private to JSmolJME.js
 
 
@@ -89,7 +89,7 @@
 		var jmol = this._linkedApplet = linkedApplet;
 		this._hasOptions = Info.addSelectionOptions;
 		this._readyFunction = Info.readyFunction;
-		this._ready = false; 
+		this._ready = false;
  		this._jarPath = Info.jarPath;
 		this._jarFile = Info.jarFile;
 		if (jmol)
@@ -146,10 +146,10 @@
 			// multipart - possibility to enter multipart structures
 			// number - possibility to number (mark) atoms
 			// depict - the applet will appear without editing butons,this is used for structure display only
-		};		
+		};
 		Jmol._addDefaultInfo(Info, DefaultInfo);
 		var applet = new Jmol._JMEApplet(id, Info, linkedApplet, checkOnly);
-		return (checkOnly ? applet : Jmol._registerApplet(id, applet));  
+		return (checkOnly ? applet : Jmol._registerApplet(id, applet));
 	}
 
 	jsmeOnLoad = Jmol._JMEApplet.onload = function() {
@@ -171,7 +171,7 @@
 //						m += "()";
 //					f = "(function(a,b,c,d){"+m.replace(/\(\)/, "(" + app._id +",a,b,c,d)") + "})";
 				}
-				if (f) 
+				if (f)
 	          app._applet.setAfterStructureModifiedCallback(f);
 //				app._applet.setNotifyStructuralChangeJSfunction(f);
 				app._ready = true;
@@ -181,7 +181,7 @@
 				//app._setSVG();
 			}
 		}
-	}   
+	}
 
 ;(function(proto){
 
@@ -190,21 +190,21 @@
 		if (this._isJava) {
 			var w = (this._linkedApplet ? "2px" : this._containerWidth);
 			var h = (this._linkedApplet ? "2px" : this._containerHeight);
-			s = '<applet code="JME.class" id="' + this._id + '_object" name="' + this._id 
+			s = '<applet code="JME.class" id="' + this._id + '_object" name="' + this._id
 				+ '_object" archive="' + this._jarFile + '" codebase="' + this._jarPath + '" width="'+w+'" height="'+h+'">'
-				+ '<param name="options" value="' + this._options + '" />'	
+				+ '<param name="options" value="' + this._options + '" />'
 				+ '</applet>';
 		} else if (this._isEmbedded) {
 			return this._code = "";
-		}    
+		}
 		if (this._hasOptions)
-			s += Jmol._getGrabberOptions(this);      
+			s += Jmol._getGrabberOptions(this);
 		return this._code = Jmol._documentWrite(s);
 	}
 
 	proto._checkDeferred = function(script) {
 		return false;
-	}	
+	}
 
 	proto._search = function(query){
 		Jmol._search(this, query);
@@ -228,12 +228,12 @@
 	}
 
 	proto.__loadModel = function(jmeOrMolData, chemID, viewID, _jme__loadModel) {
-		System.out.println("__loadModel")
+		Zystem.out.println("__loadModel")
 		if (jmeOrMolData == null)
 			return;
 		Jmol.jmeReadMolecule(this, jmeOrMolData);
 		if (this._viewSet != null)
-			Jmol.View.updateView(this, {chemID:chemID, data:jmeOrMolData, viewID: viewID});      
+			Jmol.View.updateView(this, {chemID:chemID, data:jmeOrMolData, viewID: viewID});
 	}
 
 	proto._loadModelFromView = function(view, _jme_loadModelFromView) {
@@ -269,20 +269,20 @@
 	proto._setCheck = function(b, why) {
 		this._checkEnabled = b;
 	}
-		 
+
 	proto._setEditOptions = function(o) {
 		o || (o = this._editOptions);
 		o = o.toLowerCase();
 		if (o.indexOf("edit") >= 0)
 			this._editEnabled = (o.indexOf("editdisable") < 0);
 	}
-	
+
 //	proto._setSVG = function() {
 //		var me = this;
 //		Jmol._$(this._divId).find("div").each(function(){this._applet = me})
 //		this._starPressed = false;
 //	}
-	
+
 	proto._enableEdit = function(tf) {
 	  this._editEnabled = tf;
 		//this._setSVG();
@@ -295,7 +295,7 @@
 //		var d;
 //		return (!(d = e.target) || !(d._applet || (d = Jmol.$closest(d, 'div')[0])) || !d || !d._applet ? a : d._applet.__allowEvent(a, e));
 //	}
-	
+
 //	proto.__allowEvent = function(a, e){
 //  alert("allowing event")
 //		var t;
@@ -303,7 +303,7 @@
 //			// cancel only these specific tags
 //			return a;
 //		}
-//		
+//
 //		var isKey = (e.type.indexOf("key") >= 0);
 //		if  (!this._editEnabled && isKey) {
 ///			// cancel all keyboard events
@@ -312,7 +312,7 @@
 //		if ("dblclick mousedown mouseup".indexOf(e.type) < 0) {
 //			// cancel only these specific events
 //			return a;
-//		}	
+//		}
 //    var x = 200;
 //    var y = 200;
 //    try {
@@ -324,11 +324,11 @@
 //		var isStar = (x >= 100 && x < 124 && y < 24); // fifth icon from the left on top row
 //		var isMain = (x > 25 && y > 50 || x == 0 && y == 0 && t.width.baseVal.value > 100 && t.height.baseVal.value > 100);
 //		if (isStar || this._editEnabled && !isMain)
-//			this._starPressed = isStar;			
+//			this._starPressed = isStar;
 //		var ok = (isStar || this._editEnabled || isMain && this._starPressed);
 //		return (ok ? a : 0);
 //	}
-			
+
 	proto._myEditCallback = function(me, event,_jme_myEditCallback) {
 		// direct callback from JSME applet
 		var data = this._applet.jmeFile().replace(/\:1/g,"");
@@ -369,7 +369,7 @@
 		}
 		// not a structural change
 		var data = this._applet.jmeFile();
-		if (data.indexOf(":") < 0) 
+		if (data.indexOf(":") < 0)
 			return this.__clearAtomSelection(true);
 		data = data.split(" ");
 		var n = parseInt(data[0]);
@@ -382,14 +382,14 @@
 		if (iAtom <= 0)
 			return;
 		var A = [];
-		var map = this._currentView.JME.atomMap;    
+		var map = this._currentView.JME.atomMap;
 		A.push(map == null ? iAtom : map.toJmol[iAtom]);
 
 
 		Jmol.View.updateAtomPick(this, A);
 		this._updateAtomPick(A);
 		if (this._atomPickCallback)
-			setTimeout(this._atomPickCallback+"([" + iAtom + "])",10);    
+			setTimeout(this._atomPickCallback+"([" + iAtom + "])",10);
 	}
 
 	proto.__updateAtomCorrelation = function(){
@@ -401,12 +401,12 @@
 
 	}
 	proto.__clearAtomSelection = function(andUpdate) {
-		System.out.println("clearAtomSelection");
+		Zystem.out.println("clearAtomSelection");
 		this.__atomSelection = [];
 		this._applet.jmeFile() && this._applet.resetAtomColors(1);
 		if (andUpdate)
 			Jmol.View.updateAtomPick(this, []);
-	}	
+	}
 
 	proto._updateAtomPick = function(A, _jme_updateAtomPick) {
 		this._applet.jmeFile() && this._applet.resetAtomColors(1);
@@ -414,14 +414,14 @@
 			return;
 		var B = [];
 		var C = [];
-		var j;		
-		var map = this._currentView.JME.atomMap;		
+		var j;
+		var map = this._currentView.JME.atomMap;
 		for (var i = 0; i < A.length; i++) {
-		 C[j = (map == null ? A[i] : map.fromJmol[A[i]])] = 1; 
+		 C[j = (map == null ? A[i] : map.fromJmol[A[i]])] = 1;
 		 B.push(j);
 		 B.push(this._highlightColor);
 		}
-		System.out.println("JME setting atom colors " + B.join(","))
+		Zystem.out.println("JME setting atom colors " + B.join(","))
 		this._applet.setAtomBackgroundColors(1, B.join(","));
 		this.__atomSelection = C;
 	}
@@ -455,7 +455,7 @@
 				// testing here to see that we have the same structure as in the JMOL applet
 				// feature change here --- evaluation of an atom set returns an array now, not an uninterpretable string
         // had "/noncanonical/" here - but this is not necessary. Jmol will convert this
-         
+
         var script = "{*}.find('SMILES', '" + jmeSMILES.replace(/\\/g,"\\\\")+ "')"
 				var jmolAtoms = (jmeSMILES ? jmol._evaluate(script) : []);
 				var isOK = (jmolAtoms.length > 0);
@@ -475,7 +475,7 @@
 			this._showInfo(!toJME);
 		}
 	}
-	
+
 	proto._loadFromJmol = function(jmol, format) {
     format || (format = "jme");
     //alert("OK, loading from Jmol here" + (xxjme=jme) + " " + Clazz.getStackTrace());
@@ -506,8 +506,8 @@
 		this._editMol = this._applet.jmeFile();
 		//this._setSVG();
 	}
-  
-	proto.__showContainer = function(tf, andShow) {	
+
+	proto.__showContainer = function(tf, andShow) {
 		var jmol = this._linkedApplet;
 		var mydiv = Jmol.$(jmol, "2dappletdiv");
 		if (this._isJava) {
@@ -523,7 +523,7 @@
 
 	proto._script = function(script) {
 	 // a little scripting language for JME!
-	 // print 
+	 // print
 		var list = script.split(";");
 		for (i = 0; i < list.length; i++) {
 			switch (list[i].split(" ")[0].trim().toLowerCase()) {
@@ -555,7 +555,7 @@
 //		s = s.replace(/\[\]\//g,"[H]/")
 //		s = s.replace(/\[\]\\/g,"[H]\\")
 //    s = s.replace(/\[\]/g,"")
-//    // but change [C@][H] to [C@H] and [C@]1[H] to [C@@H]1 
+//    // but change [C@][H] to [C@H] and [C@]1[H] to [C@@H]1
 //    s = s.replace(/\@\]\(\)/g,"@H]")
 //    s = s.replace(/\@\](\d+)\(\)/g,"@@H]$1")
 //    s = s.replace(/\@\@\@/g,"@")
@@ -568,9 +568,9 @@
   }
 
   proto._getMol = function() {
-		return this._applet.molFile();   
+		return this._applet.molFile();
   }
-  
+
 })(Jmol._JMEApplet.prototype);
 
 	//////  additional API for JME /////////
@@ -591,8 +591,8 @@
     jmeOrMolData = jmeOrMolData.trim();
 		if (jmeOrMolData.indexOf("\n") < 0 && jmeOrMolData.indexOf("\r") < 0)
 			jme._applet.readMolecule(jmeOrMolData);
-		else 
-			jme._applet.readMolFile(jmeOrMolData);   
+		else
+			jme._applet.readMolFile(jmeOrMolData);
 	 jme._molData = jme._applet.molFile();
 	 jme._editMol = jme._applet.jmeFile();
 	 //jme._setSVG();
@@ -612,14 +612,14 @@
 	}
 
 // doesn't work because of the way JSME is created using frames and SVG.
-//	
+//
 //  Jmol.getJSVAppletHtml = function(applet, Info, linkedApplet) {
 //    if (Info) {
 //      var d = Jmol._document;
 //      Jmol._document = null;
 //      applet = Jmol.getJMEApplet(applet, Info, linkedApplet);
 //      Jmol._document = d;
-//    }  
+//    }
 //    return applet._code;
 //	}
 

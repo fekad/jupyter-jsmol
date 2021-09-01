@@ -6,7 +6,7 @@ this.bsAromatic = null;
 this.is2D = false;
 Clazz.instantialize (this, arguments);
 }, JM.FF, "ForceFieldUFF", JM.FF.ForceField);
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function (minimizer, isQuick) {
 Clazz.superConstructor (this, JM.FF.ForceFieldUFF, []);
 this.minimizer = minimizer;
@@ -20,11 +20,11 @@ this.name = "UFF";
 this.ffParams = JM.FF.ForceFieldUFF.uffParams;
 if (this.ffParams == null) JM.FF.ForceFieldUFF.uffParams = this.ffParams = this.getParameters ();
 }}, "JM.Minimizer,~B");
-Clazz.overrideMethod (c$, "clear", 
+Clazz.overrideMethod (c$, "clear",
 function () {
 this.bsAromatic = null;
 });
-Clazz.overrideMethod (c$, "setModel", 
+Clazz.overrideMethod (c$, "setModel",
 function (bsElements, elemnoMax) {
 this.setModelFields ();
 JU.Logger.info ("minimize: setting atom types...");
@@ -33,7 +33,7 @@ this.setAtomTypes (bsElements, elemnoMax);
 this.calc =  new JM.FF.CalculationsUFF (this, this.ffParams, this.minAtoms, this.minBonds, this.minAngles, this.minTorsions, this.minPositions, this.minimizer.constraints);
 return this.calc.setupCalculations ();
 }, "JU.BS,~N");
-Clazz.defineMethod (c$, "setAtomTypes", 
+Clazz.defineMethod (c$, "setAtomTypes",
  function (bsElements, elemnoMax) {
 var nTypes = JM.FF.ForceFieldUFF.atomTypes.size ();
 bsElements.clear (0);
@@ -49,7 +49,7 @@ this.minAtoms[pt].sType = data[1].intern ();
 }
 }
 }, "JU.BS,~N");
-Clazz.defineMethod (c$, "getSearch", 
+Clazz.defineMethod (c$, "getSearch",
  function (smarts, elemnoMax, bsElements) {
 var search = null;
 var len = smarts.length;
@@ -100,7 +100,7 @@ bs.and (this.bsAromatic);
 }if (JU.Logger.debugging && bs.nextSetBit (0) >= 0) JU.Logger.debug (smarts + " minimize atoms=" + bs);
 return bs;
 }, "~S,~N,JU.BS");
-Clazz.defineMethod (c$, "getParameters", 
+Clazz.defineMethod (c$, "getParameters",
  function () {
 var data =  new java.util.Hashtable ();
 var resourceName = (this.is2D ? "UFF_2d.txt" : "UFF.txt");
@@ -151,7 +151,7 @@ p.iVal[0] = coord.charCodeAt (0) - 48;
 br.close ();
 } catch (e) {
 if (Clazz.exceptionOf (e, Exception)) {
-System.err.println ("Exception " + e.toString () + " in getResource " + resourceName);
+Zystem.err.println ("Exception " + e.toString () + " in getResource " + resourceName);
 try {
 br.close ();
 } catch (ee) {
@@ -168,7 +168,7 @@ throw e;
 JU.Logger.info (data.size () + " atom types read from " + resourceName);
 return data;
 });
-Clazz.defineMethod (c$, "getAtomTypes", 
+Clazz.defineMethod (c$, "getAtomTypes",
  function () {
 var types =  new JU.Lst ();
 var fileName = (this.is2D ? "UFF_2d.txt" : "UFF.txt");
@@ -191,7 +191,7 @@ throw  new JV.JmolAsyncException (e.getFileName ());
 } else if (Clazz.exceptionOf (e$$, Exception)) {
 var e = e$$;
 {
-System.err.println ("Exception " + e.toString () + " in getResource " + fileName);
+Zystem.err.println ("Exception " + e.toString () + " in getResource " + fileName);
 }
 } else {
 throw e$$;

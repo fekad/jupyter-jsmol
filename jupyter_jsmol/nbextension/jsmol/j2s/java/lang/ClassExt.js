@@ -21,7 +21,7 @@ if (window["Clazz"] == null || window["Clazz"].unloadClass == null) {
  *
  * See also http://j2s.sourceforge.net/j2sclazz/
  */
- 
+
 /**
  * Clazz.MethodNotFoundException is used to notify the developer about calling
  * methods with incorrect parameters.
@@ -39,7 +39,7 @@ Clazz.MethodNotFoundException = function (obj, clazz, method, params) {
 	} else {
 		leadingStr = "Constructor";
 	}
-	this.message = leadingStr + " " + Clazz.getClassName (clazz, true) + "." 
+	this.message = leadingStr + " " + Clazz.getClassName (clazz, true) + "."
 					+ method + "(" + paramStr + ") is not found!";
 	this.toString = function () {
 		return "MethodNotFoundException:" + this.message;
@@ -54,7 +54,7 @@ Clazz.MethodNotFoundException = function (obj, clazz, method, params) {
  * @param objThis the host object for callback
  * @param args arguments object. args[0] will be classThisObj -- the "this"
  * object to be hooked
- * 
+ *
  * Attention: parameters should not be null!
  */
 /* protected */
@@ -138,19 +138,19 @@ Clazz.innerTypeInstance = function (clazzInner, objThis, finalVars) {
 	} else if (arguments.length == 5) {
 		obj = new clazzInner (objThis, arguments[3], arguments[4]);
 	} else if (arguments.length == 6) {
-		obj = new clazzInner (objThis, arguments[3], arguments[4], 
+		obj = new clazzInner (objThis, arguments[3], arguments[4],
 				arguments[5]);
 	} else if (arguments.length == 7) {
-		obj = new clazzInner (objThis, arguments[3], arguments[4], 
+		obj = new clazzInner (objThis, arguments[3], arguments[4],
 				arguments[5], arguments[6]);
 	} else if (arguments.length == 8) {
-		obj = new clazzInner (objThis, arguments[3], arguments[4], 
+		obj = new clazzInner (objThis, arguments[3], arguments[4],
 				arguments[5], arguments[6], arguments[7]);
 	} else if (arguments.length == 9) {
-		obj = new clazzInner (objThis, arguments[3], arguments[4], 
+		obj = new clazzInner (objThis, arguments[3], arguments[4],
 				arguments[5], arguments[6], arguments[7], arguments[8]);
 	} else if (arguments.length == 10) {
-		obj = new clazzInner (objThis, arguments[3], arguments[4], 
+		obj = new clazzInner (objThis, arguments[3], arguments[4],
 				arguments[5], arguments[6], arguments[7], arguments[8],
 				arguments[9]);
 	} else {
@@ -159,7 +159,7 @@ Clazz.innerTypeInstance = function (clazzInner, objThis, finalVars) {
 		 */
 		obj = new clazzInner ();
 		if (obj.construct == null) {
-			throw new String ("No support anonymous class constructor with " 
+			throw new String ("No support anonymous class constructor with "
 					+ "more than 7 parameters.");
 		}
 		var args = new Array ();
@@ -392,7 +392,7 @@ Clazz.prepareFields = function (clazz, fieldsFun) {
 };
 
 /*
- * Serialize those public or protected fields in class 
+ * Serialize those public or protected fields in class
  * net.sf.j2s.ajax.SimpleSerializable.
  */
 /* protected */
@@ -406,7 +406,7 @@ Clazz.registerSerializableFields = function (clazz) {
 		}
 	}
 	clazz.declared$Fields = newArr;
-	
+
 	if (length > 0 && length % 2 == 1) {
 		var fs = clazz.declared$Fields;
 		for (var i = 1; i <= (length - 1) / 2; i++) {
@@ -427,11 +427,11 @@ Clazz.registerSerializableFields = function (clazz) {
 };
 
 /*
- * Get the caller method for those methods that are wrapped by 
+ * Get the caller method for those methods that are wrapped by
  * Clazz.searchAndExecuteMethod.
  *
  * @param args caller method's arguments
- * @return caller method, null if there is not wrapped by 
+ * @return caller method, null if there is not wrapped by
  * Clazz.searchAndExecuteMethod or is called directly.
  */
 /* protected */
@@ -461,7 +461,7 @@ Clazz.getMixedCallerMethod = function (args) {
 /*
  * Check and return super private method.
  * In order make private methods be executed correctly, some extra javascript
- * must be inserted into the beggining of the method body of the non-private 
+ * must be inserted into the beggining of the method body of the non-private
  * methods that with the same method signature as following:
  * <code>
  *			var $private = Clazz.checkPrivateMethod (arguments);
@@ -473,7 +473,7 @@ Clazz.getMixedCallerMethod = function (args) {
  * compiler or with double checks to make sure things work correctly.
  *
  * @param args caller method's arguments
- * @return private method if there are private method fitted for the current 
+ * @return private method if there are private method fitted for the current
  * calling environment
  */
 /* public */
@@ -568,7 +568,7 @@ Clazz.p0pCalling = function () {
 
 /**
  * The first folder is considered as the primary folder.
- * And try to be compatiable with ClazzLoader system.
+ * And try to be compatiable with ClazzLoader Zystem.
  */
 /* private */
 if (window["ClazzLoader"] != null && ClazzLoader.binaryFolders != null) {
@@ -638,20 +638,20 @@ JavaObject.getName = Clazz.innerFunctions.getName;
 
 w$ = window; // Short for browser's window object
 d$ = document; // Short for browser's document object
-System = {
+Zystem = {
 	currentTimeMillis : function () {
 		return new Date ().getTime ();
 	},
 	props : null, //new java.util.Properties (),
 	getProperties : function () {
-		return System.props;
+		return Zystem.props;
 	},
 	setProperties : function (props) {
-		System.props = props;
+		Zystem.props = props;
 	},
 	getProperty : function (key, def) {
-		if (System.props != null) {
-			return System.props.getProperty (key, def);
+		if (Zystem.props != null) {
+			return Zystem.props.getProperty (key, def);
 		}
 		if (def != null) {
 			return def;
@@ -659,10 +659,10 @@ System = {
 		return key;
 	},
 	setProperty : function (key, val) {
-		if (System.props == null) {
+		if (Zystem.props == null) {
 			return ;
 		}
-		System.props.setProperty (key, val);
+		Zystem.props.setProperty (key, val);
 	},
 	currentTimeMillis : function () {
 		return new Date ().getTime ();
@@ -683,17 +683,17 @@ System = {
 		}
 	}
 };
-System.out = new Clazz._O ();
-System.out.__CLASS_NAME__ = "java.io.PrintStream";
-System.out.print = function () {};
-System.out.printf = function () {};
-System.out.println = function () {};
+Zystem.out = new Clazz._O ();
+Zystem.out.__CLASS_NAME__ = "java.io.PrintStream";
+Zystem.out.print = function () {};
+Zystem.out.printf = function () {};
+Zystem.out.println = function () {};
 
-System.err = new Clazz._O ();
-System.err.__CLASS_NAME__ = "java.io.PrintStream";
-System.err.print = function () {};
-System.err.printf = function () {};
-System.err.println = function () {};
+Zystem.err = new Clazz._O ();
+Zystem.err.__CLASS_NAME__ = "java.io.PrintStream";
+Zystem.err.print = function () {};
+Zystem.err.printf = function () {};
+Zystem.err.println = function () {};
 
 popup = assert = log = error = window.alert;
 
@@ -832,17 +832,17 @@ var reflect = Clazz.declarePackage ("java.lang.reflect");
 Clazz.declarePackage ("java.security");
 
 Clazz.innerFunctionNames = Clazz.innerFunctionNames.concat (["getSuperclass",
-		"isAssignableFrom", "getMethods", "getMethod", "getDeclaredMethods", 
+		"isAssignableFrom", "getMethods", "getMethod", "getDeclaredMethods",
 		"getDeclaredMethod", "getConstructor", "getModifiers", "isArray", "newInstance"]);
 
 Clazz.innerFunctions.getSuperclass = function () {
-	return this.superClazz;	
+	return this.superClazz;
 };
 Clazz.innerFunctions.isAssignableFrom = function (clazz) {
-	return Clazz.getInheritedLevel (clazz, this) >= 0;	
+	return Clazz.getInheritedLevel (clazz, this) >= 0;
 };
 Clazz.innerFunctions.getConstructor = function () {
-	return new java.lang.reflect.Constructor (this, [], [], 
+	return new java.lang.reflect.Constructor (this, [], [],
 			java.lang.reflect.Modifier.PUBLIC);
 };
 /**
@@ -871,7 +871,7 @@ Clazz.innerFunctions.getDeclaredMethods = Clazz.innerFunctions.getMethods = func
 Clazz.innerFunctions.getDeclaredMethod = Clazz.innerFunctions.getMethod = function (name, clazzes) {
 	var p = this.prototype;
 	for (var attr in p) {
-		if (name == attr && typeof p[attr] == "function" 
+		if (name == attr && typeof p[attr] == "function"
 				&& p[attr].__CLASS_NAME__ == null) {
 			/* there are polynormical methods. */
 			return new java.lang.reflect.Method (this, attr,
@@ -880,7 +880,7 @@ Clazz.innerFunctions.getDeclaredMethod = Clazz.innerFunctions.getMethod = functi
 	}
 	p = this;
 	for (var attr in p) {
-		if (name == attr && typeof p[attr] == "function" 
+		if (name == attr && typeof p[attr] == "function"
 				&& p[attr].__CLASS_NAME__ == null) {
 			return new java.lang.reflect.Method (this, attr,
 					[], java.lang.Void, [], java.lang.reflect.Modifier.PUBLIC
@@ -984,7 +984,7 @@ Clazz.unloadClass = function (qClazzName) {
 				}
 			}
 		}
-		
+
 		for (var m in cc) {
 			Clazz.cleanDelegateMethod (cc[m]);
 		}
@@ -995,7 +995,7 @@ Clazz.unloadClass = function (qClazzName) {
 		if (window["ClazzLoader"] != null) {
 			ClazzLoader.unloadClassExt (qClazzName);
 		}
-		
+
 		return true;
 	}
 	return false;

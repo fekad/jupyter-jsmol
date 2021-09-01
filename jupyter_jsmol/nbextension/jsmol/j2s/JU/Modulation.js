@@ -15,7 +15,7 @@ this.utens = null;
 this.delta2 = 0;
 Clazz.instantialize (this, arguments);
 }, JU, "Modulation");
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function (axis, type, params, utens, qCoefs) {
 JU.Logger.info ("MOD create " + JU.Escape.e (qCoefs) + " axis=" + axis + " type=" + type + " params=" + JU.Escape.e (params) + " utens=" + utens);
 this.axis = axis;
@@ -52,7 +52,7 @@ this.a1 = params[2] / this.delta2;
 }break;
 }
 }, "~S,~S,~A,~S,~A");
-Clazz.defineMethod (c$, "apply", 
+Clazz.defineMethod (c$, "apply",
 function (ms, t) {
 var v = 0;
 var nt = 0;
@@ -112,7 +112,7 @@ break;
 }
 if (isSpin) {
 var f = ms.axesLengths;
-if (f == null) System.out.println ("Modulation.java axis error");
+if (f == null) Zystem.out.println ("Modulation.java axis error");
 switch (this.axis) {
 case 'x':
 ms.mxyz.x += v / f[0];
@@ -143,11 +143,11 @@ if (Float.isNaN (ms.vOcc)) ms.vOcc = 0;
 ms.vOcc += v;
 }
 }}, "JU.ModulationSet,~A");
-Clazz.defineMethod (c$, "range", 
+Clazz.defineMethod (c$, "range",
  function (x4) {
 return (this.left < this.right ? this.left <= x4 && x4 <= this.right : this.left <= x4 || x4 <= this.right);
 }, "~N");
-Clazz.defineMethod (c$, "getInfo", 
+Clazz.defineMethod (c$, "getInfo",
 function () {
 var info =  new java.util.Hashtable ();
 info.put ("type", "" + this.type + this.axis);
@@ -156,7 +156,7 @@ info.put ("qCoefs", this.qCoefs);
 if (this.utens != null) info.put ("Utens", this.utens);
 return info;
 });
-Clazz.defineMethod (c$, "calcLegendre", 
+Clazz.defineMethod (c$, "calcLegendre",
 function (m) {
 var n = JU.Modulation.legendre.length;
 if (n > m) return;

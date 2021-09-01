@@ -58,10 +58,10 @@ if(0<location&&location<size){
 if(this.firstIndex==0&&this.lastIndex==this.array.length){
 this.growForInsert(location,1);
 }else if((location<Math.floor(size/2)&&this.firstIndex>0)||this.lastIndex==this.array.length){
-System.arraycopy(this.array,this.firstIndex,this.array,--this.firstIndex,location);
+Zystem.arraycopy(this.array,this.firstIndex,this.array,--this.firstIndex,location);
 }else{
 var index=location+this.firstIndex;
-System.arraycopy(this.array,index,this.array,index+1,size-location);
+Zystem.arraycopy(this.array,index,this.array,index+1,size-location);
 this.lastIndex++;
 }this.array[location+this.firstIndex]=object;
 }else if(location==0){
@@ -87,7 +87,7 @@ return true;
 },"~O");
 
 /* BH disallow addAll(int,List)
- * 
+ *
 Clazz.defineMethod(c$,"addAll",
 function(location,collection){
 var size=this.size();
@@ -101,14 +101,14 @@ this.growForInsert(location,growSize);
 var newFirst=this.firstIndex-growSize;
 if(newFirst<0){
 var index=location+this.firstIndex;
-System.arraycopy(this.array,index,this.array,index-newFirst,size-location);
+Zystem.arraycopy(this.array,index,this.array,index-newFirst,size-location);
 this.lastIndex-=newFirst;
 newFirst=0;
-}System.arraycopy(this.array,this.firstIndex,this.array,newFirst,location);
+}Zystem.arraycopy(this.array,this.firstIndex,this.array,newFirst,location);
 this.firstIndex=newFirst;
 }else{
 var index=location+this.firstIndex;
-System.arraycopy(this.array,index,this.array,index+growSize,size-location);
+Zystem.arraycopy(this.array,index,this.array,index+growSize,size-location);
 this.lastIndex+=growSize;
 }}else if(location==0){
 this.growAtFront(growSize);
@@ -211,7 +211,7 @@ var size=this.size();
 if(this.firstIndex>=required-(this.array.length-this.lastIndex)){
 	var newLast=this.lastIndex-this.firstIndex;
 	if(size>0){
-		System.arraycopy(this.array,this.firstIndex,this.array,0,size);
+		Zystem.arraycopy(this.array,this.firstIndex,this.array,0,size);
 		var start=newLast<this.firstIndex?this.firstIndex:newLast;
 		this.fill(start,this.array.length);
 	}
@@ -227,7 +227,7 @@ if(this.firstIndex>=required-(this.array.length-this.lastIndex)){
 	}
 	var newArray=this.newElementArray(size+increment);
 	if(size>0){
-		System.arraycopy(this.array,this.firstIndex,newArray,this.firstIndex,size);
+		Zystem.arraycopy(this.array,this.firstIndex,newArray,this.firstIndex,size);
 	}
 	this.array=newArray;
 }
@@ -239,7 +239,7 @@ var size=this.size();
 if(this.array.length-this.lastIndex>=required){
 var newFirst=this.array.length-size;
 if(size>0){
-System.arraycopy(this.array,this.firstIndex,this.array,newFirst,size);
+Zystem.arraycopy(this.array,this.firstIndex,this.array,newFirst,size);
 var length=this.firstIndex+size>newFirst?newFirst:this.firstIndex+size;
 this.fill(this.firstIndex,length);
 }this.firstIndex=newFirst;
@@ -252,7 +252,7 @@ increment=required;
 increment=12;
 }var newArray=this.newElementArray(size+increment);
 if(size>0){
-System.arraycopy(this.array,this.firstIndex,newArray,newArray.length-size,size);
+Zystem.arraycopy(this.array,this.firstIndex,newArray,newArray.length-size,size);
 }this.firstIndex=newArray.length-size;
 this.lastIndex=newArray.length;
 this.array=newArray;
@@ -268,13 +268,13 @@ increment=12;
 }var newArray=this.newElementArray(size+increment);
 if(location<Math.floor(size/2)){
 var newFirst=newArray.length-(size+required);
-System.arraycopy(this.array,location,newArray,location+increment,size-location);
-System.arraycopy(this.array,this.firstIndex,newArray,newFirst,location);
+Zystem.arraycopy(this.array,location,newArray,location+increment,size-location);
+Zystem.arraycopy(this.array,this.firstIndex,newArray,newFirst,location);
 this.firstIndex=newFirst;
 this.lastIndex=newArray.length;
 }else{
-System.arraycopy(this.array,this.firstIndex,newArray,0,location);
-System.arraycopy(this.array,location,newArray,location+required,size-location);
+Zystem.arraycopy(this.array,this.firstIndex,newArray,0,location);
+Zystem.arraycopy(this.array,location,newArray,location+required,size-location);
 this.firstIndex=0;
 this.lastIndex+=required;
 }this.array=newArray;
@@ -314,7 +314,7 @@ return i-this.firstIndex;
 Clazz.overrideMethod(c$,"remove",
 function(location){
 return (typeof location == "number" ? this._removeItemAt(location) : this._removeObject(location));
-},"~N"); 
+},"~N");
 
 Clazz.overrideMethod(c$,"_removeItemAt",
 function(location){
@@ -331,16 +331,16 @@ this.array[this.firstIndex++]=null;
 var elementIndex=this.firstIndex+location;
 result=this.array[elementIndex];
 if(location<Math.floor(size/2)){
-System.arraycopy(this.array,this.firstIndex,this.array,this.firstIndex+1,location);
+Zystem.arraycopy(this.array,this.firstIndex,this.array,this.firstIndex+1,location);
 this.array[this.firstIndex++]=null;
 }else{
-System.arraycopy(this.array,elementIndex+1,this.array,elementIndex,size-location-1);
+Zystem.arraycopy(this.array,elementIndex+1,this.array,elementIndex,size-location-1);
 this.array[--this.lastIndex]=null;
 }}}else{
 throw new IndexOutOfBoundsException();
 }this.modCount++;
 return result;
-},"~N"); 
+},"~N");
 
 Clazz.defineMethod(c$, "_removeObject", function(o) {
 	var i = this.indexOf(o);
@@ -361,7 +361,7 @@ this.lastIndex=this.firstIndex+start;
 	this.fill(this.firstIndex,this.firstIndex+end);
 this.firstIndex+=end;
 }else{
-System.arraycopy(this.array,this.firstIndex+end,this.array,this.firstIndex+start,size-end);
+Zystem.arraycopy(this.array,this.firstIndex+end,this.array,this.firstIndex+start,size-end);
 var newLast=this.lastIndex+start-end;
 this.fill(newLast,this.lastIndex);
 this.lastIndex=newLast;
@@ -386,7 +386,7 @@ Clazz.defineMethod(c$,"toArray",
 function(){
 var size=this.size();
 var result=new Array(size);
-System.arraycopy(this.array,this.firstIndex,result,0,size);
+Zystem.arraycopy(this.array,this.firstIndex,result,0,size);
 return result;
 });
 */
@@ -397,7 +397,7 @@ var size=this.size();
 if(!contents || size>contents.length) {
   return this.array.slice(this.firstIndex, this.firstIndex + size);
 }
-System.arraycopy(this.array,this.firstIndex,contents,0,size);
+Zystem.arraycopy(this.array,this.firstIndex,contents,0,size);
 if(size<contents.length){
 contents[size]=null;
 }
@@ -407,7 +407,7 @@ Clazz.defineMethod(c$,"trimToSize",
 function(){
 var size=this.size();
 var newArray=this.newElementArray(size);
-System.arraycopy(this.array,this.firstIndex,newArray,0,size);
+Zystem.arraycopy(this.array,this.firstIndex,newArray,0,size);
 this.array=newArray;
 this.firstIndex=0;
 this.lastIndex=this.array.length;

@@ -37,7 +37,7 @@ this.tli =  Clazz.newIntArray (1, 0);
 this.tdi =  Clazz.newIntArray (1, 0);
 this.inftree =  new JU.InfTree ();
 });
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function (z, w) {
 this.z = z;
 this.codes =  new JU.InfCodes (this.z, this);
@@ -51,7 +51,7 @@ this.tl = Clazz.newArray(1, null);
 this.td = Clazz.newArray(1, null);
 }this.reset ();
 }, "JU.ZStream,~N");
-Clazz.defineMethod (c$, "reset", 
+Clazz.defineMethod (c$, "reset",
 function () {
 if (this.mode == 6) {
 this.codes.free (this.z);
@@ -62,7 +62,7 @@ this.read = this.write = 0;
 if (this.check) {
 this.z.checksum.reset ();
 }});
-Clazz.defineMethod (c$, "proc", 
+Clazz.defineMethod (c$, "proc",
 function (r) {
 var t;
 var b;
@@ -204,7 +204,7 @@ return this.inflate_flush (r);
 t = this.left;
 if (t > n) t = n;
 if (t > m) t = m;
-System.arraycopy (this.z.next_in, p, this.window, q, t);
+Zystem.arraycopy (this.z.next_in, p, this.window, q, t);
 p += t;
 n -= t;
 q += t;
@@ -451,22 +451,22 @@ return this.inflate_flush (r);
 }
 }
 }, "~N");
-Clazz.defineMethod (c$, "free", 
+Clazz.defineMethod (c$, "free",
 function () {
 this.reset ();
 this.window = null;
 this.hufts = null;
 });
-Clazz.defineMethod (c$, "set_dictionary", 
+Clazz.defineMethod (c$, "set_dictionary",
 function (d, start, n) {
-System.arraycopy (d, start, this.window, 0, n);
+Zystem.arraycopy (d, start, this.window, 0, n);
 this.read = this.write = n;
 }, "~A,~N,~N");
-Clazz.defineMethod (c$, "sync_point", 
+Clazz.defineMethod (c$, "sync_point",
 function () {
 return this.mode == 1 ? 1 : 0;
 });
-Clazz.defineMethod (c$, "inflate_flush", 
+Clazz.defineMethod (c$, "inflate_flush",
 function (r) {
 var n;
 var p;
@@ -480,7 +480,7 @@ this.z.avail_out -= n;
 this.z.total_out += n;
 if (this.check && n > 0) {
 this.z.checksum.update (this.window, q, n);
-}System.arraycopy (this.window, q, this.z.next_out, p, n);
+}Zystem.arraycopy (this.window, q, this.z.next_out, p, n);
 p += n;
 q += n;
 if (q == this.end) {
@@ -493,7 +493,7 @@ this.z.avail_out -= n;
 this.z.total_out += n;
 if (this.check && n > 0) {
 this.z.checksum.update (this.window, q, n);
-}System.arraycopy (this.window, q, this.z.next_out, p, n);
+}Zystem.arraycopy (this.window, q, this.z.next_out, p, n);
 p += n;
 q += n;
 }this.z.next_out_index = p;

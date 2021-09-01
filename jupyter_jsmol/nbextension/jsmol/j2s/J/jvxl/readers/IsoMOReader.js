@@ -20,11 +20,11 @@ Clazz.instantialize (this, arguments);
 Clazz.prepareFields (c$, function () {
 this.vDist =  Clazz.newFloatArray (3, 0);
 });
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function () {
 Clazz.superConstructor (this, J.jvxl.readers.IsoMOReader, []);
 });
-Clazz.overrideMethod (c$, "init", 
+Clazz.overrideMethod (c$, "init",
 function (sg) {
 this.initADR (sg);
 this.isNci = (this.params.qmOrbitalType == 3);
@@ -33,7 +33,7 @@ this.isXLowToHigh = this.hasColorData = true;
 this.precalculateVoxelData = false;
 this.params.insideOut = !this.params.insideOut;
 }}, "J.jvxl.readers.SurfaceGenerator");
-Clazz.overrideMethod (c$, "setup", 
+Clazz.overrideMethod (c$, "setup",
 function (isMapData) {
 this.mos = this.params.moData.get ("mos");
 this.linearCombination = this.params.qm_moLinearCombination;
@@ -86,13 +86,13 @@ if (!this.setupCalculation ()) this.q = null;
 this.vertexDataOnly = true;
 this.random =  new java.util.Random (this.params.randomSeed);
 }}, "~B");
-Clazz.overrideMethod (c$, "readVolumeParameters", 
+Clazz.overrideMethod (c$, "readVolumeParameters",
 function (isMapData) {
 this.setup (isMapData);
 if (this.volumeData.sr == null) this.initializeVolumetricData ();
 return true;
 }, "~B");
-Clazz.defineMethod (c$, "fixTitleLine", 
+Clazz.defineMethod (c$, "fixTitleLine",
  function (iLine, mo) {
 if (this.params.title == null) return;
 var line = this.params.title[iLine];
@@ -140,7 +140,7 @@ return;
 }var isOptional = (line.indexOf ("?") == 0);
 this.params.title[iLine] = (!isOptional ? line : rep > 0 && !line.trim ().endsWith ("=") ? line.substring (1) : "");
 }, "~N,java.util.Map");
-Clazz.overrideMethod (c$, "readSurfaceData", 
+Clazz.overrideMethod (c$, "readSurfaceData",
 function (isMapData) {
 if (this.volumeData.sr != null) return;
 if (this.params.psi_monteCarloCount <= 0) {
@@ -171,10 +171,10 @@ if (++i == this.params.psi_monteCarloCount) break;
 }
 }
 }, "~B");
-Clazz.overrideMethod (c$, "postProcessVertices", 
+Clazz.overrideMethod (c$, "postProcessVertices",
 function () {
 });
-Clazz.defineMethod (c$, "getValues", 
+Clazz.defineMethod (c$, "getValues",
  function () {
 for (var j = 0; j < 1000; j++) {
 this.voxelData[j][0][0] = 0;
@@ -183,26 +183,26 @@ if (this.params.thePlane != null) JU.Measure.getPlaneProjection (this.points[j],
 }
 this.createOrbital ();
 });
-Clazz.overrideMethod (c$, "getValueAtPoint", 
+Clazz.overrideMethod (c$, "getValueAtPoint",
 function (pt, getSource) {
 return (this.q == null ? 0 : this.q.processPt (pt));
 }, "JU.T3,~B");
-Clazz.defineMethod (c$, "getRnd", 
+Clazz.defineMethod (c$, "getRnd",
  function (f) {
 return this.random.nextFloat () * f;
 }, "~N");
-Clazz.overrideMethod (c$, "generateCube", 
+Clazz.overrideMethod (c$, "generateCube",
 function () {
 if (this.params.volumeData != null) return;
 this.newVoxelDataCube ();
 this.createOrbital ();
 });
-Clazz.defineMethod (c$, "createOrbital", 
+Clazz.defineMethod (c$, "createOrbital",
 function () {
 var isMonteCarlo = (this.params.psi_monteCarloCount > 0);
 if (this.isElectronDensityCalc) {
 if (this.mos == null || isMonteCarlo) return;
-System.out.println ("createOrbital " + this.params.qm_moNumber);
+Zystem.out.println ("createOrbital " + this.params.qm_moNumber);
 for (var i = this.params.qm_moNumber; --i >= 0; ) {
 JU.Logger.info (" generating isosurface data for MO " + (i + 1));
 var mo = this.mos.get (i);
@@ -218,12 +218,12 @@ this.q.createCube ();
 this.jvxlData.integration = this.q.getIntegration ();
 if (this.mo != null) this.mo.put ("integration", Float.$valueOf (this.jvxlData.integration));
 }});
-Clazz.overrideMethod (c$, "getPlane", 
+Clazz.overrideMethod (c$, "getPlane",
 function (x) {
 if (!this.qSetupDone) this.setupCalculation ();
 return this.getPlaneSR (x);
 }, "~N");
-Clazz.defineMethod (c$, "setupCalculation", 
+Clazz.defineMethod (c$, "setupCalculation",
  function () {
 this.qSetupDone = true;
 switch (this.params.qmOrbitalType) {
@@ -237,7 +237,7 @@ return (this.q).setupCalculation (this.volumeData, this.bsMySelected, this.param
 }
 return false;
 });
-Clazz.overrideMethod (c$, "getSurfacePointAndFraction", 
+Clazz.overrideMethod (c$, "getSurfacePointAndFraction",
 function (cutoff, isCutoffAbsolute, valueA, valueB, pointA, edgeVector, x, y, z, vA, vB, fReturn, ptReturn) {
 var zero = this.getSPF (cutoff, isCutoffAbsolute, valueA, valueB, pointA, edgeVector, x, y, z, vA, vB, fReturn, ptReturn);
 if (this.q != null && !Float.isNaN (zero)) {

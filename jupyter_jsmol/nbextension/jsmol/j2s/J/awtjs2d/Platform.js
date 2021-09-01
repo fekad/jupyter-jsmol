@@ -6,7 +6,7 @@ this.vwr = null;
 this.context = null;
 Clazz.instantialize (this, arguments);
 }, J.awtjs2d, "Platform", null, J.api.GenericPlatform);
-Clazz.overrideMethod (c$, "setViewer", 
+Clazz.overrideMethod (c$, "setViewer",
 function (vwr, canvas) {
 {
 this.vwr = vwr;
@@ -24,32 +24,32 @@ java.net.URL.setURLStreamHandlerFactory ( new JU.AjaxURLStreamHandlerFactory ())
 } catch (e) {
 }
 }, "J.api.PlatformViewer,~O");
-Clazz.overrideMethod (c$, "isSingleThreaded", 
+Clazz.overrideMethod (c$, "isSingleThreaded",
 function () {
 return true;
 });
-Clazz.overrideMethod (c$, "getJsObjectInfo", 
+Clazz.overrideMethod (c$, "getJsObjectInfo",
 function (jsObject, method, args) {
 {
 return (method == null ? null : method == "localName" ? jsObject[0]["nodeName"] : args == null ? jsObject[0][method] : jsObject[0][method](args[0]));
 }}, "~A,~S,~A");
-Clazz.overrideMethod (c$, "isHeadless", 
+Clazz.overrideMethod (c$, "isHeadless",
 function () {
 return false;
 });
-Clazz.overrideMethod (c$, "getMouseManager", 
+Clazz.overrideMethod (c$, "getMouseManager",
 function (privateKey, display) {
 return  new J.awtjs2d.Mouse (privateKey, this.vwr, display);
 }, "~N,~O");
-Clazz.overrideMethod (c$, "convertPointFromScreen", 
+Clazz.overrideMethod (c$, "convertPointFromScreen",
 function (canvas, ptTemp) {
 J.awtjs2d.Display.convertPointFromScreen (canvas, ptTemp);
 }, "~O,JU.P3");
-Clazz.overrideMethod (c$, "getFullScreenDimensions", 
+Clazz.overrideMethod (c$, "getFullScreenDimensions",
 function (canvas, widthHeight) {
 J.awtjs2d.Display.getFullScreenDimensions (canvas, widthHeight);
 }, "~O,~A");
-Clazz.overrideMethod (c$, "getMenuPopup", 
+Clazz.overrideMethod (c$, "getMenuPopup",
 function (menuStructure, type) {
 var c = (type == 'j' ? "awtjs2d.JSJmolPopup" : "awtjs2d.JSModelKitPopup");
 var jmolpopup = J.api.Interface.getOption (c, this.vwr, "popup");
@@ -58,7 +58,7 @@ if (jmolpopup != null) jmolpopup.jpiInitialize (this.vwr, menuStructure);
 } catch (e) {
 if (Clazz.exceptionOf (e, Exception)) {
 c = "Exception creating " + c + ":" + e;
-System.out.println (c);
+Zystem.out.println (c);
 return null;
 } else {
 throw e;
@@ -66,41 +66,41 @@ throw e;
 }
 return jmolpopup;
 }, "~S,~S");
-Clazz.overrideMethod (c$, "hasFocus", 
+Clazz.overrideMethod (c$, "hasFocus",
 function (canvas) {
 return J.awtjs2d.Display.hasFocus (canvas);
 }, "~O");
-Clazz.overrideMethod (c$, "prompt", 
+Clazz.overrideMethod (c$, "prompt",
 function (label, data, list, asButtons) {
 return J.awtjs2d.Display.prompt (label, data, list, asButtons);
 }, "~S,~S,~A,~B");
-Clazz.overrideMethod (c$, "renderScreenImage", 
+Clazz.overrideMethod (c$, "renderScreenImage",
 function (context, size) {
 J.awtjs2d.Display.renderScreenImage (this.vwr, context, size);
 }, "~O,~O");
-Clazz.overrideMethod (c$, "drawImage", 
+Clazz.overrideMethod (c$, "drawImage",
 function (context, canvas, x, y, width, height, isDTI) {
 J.awtjs2d.Display.drawImage (context, canvas, x, y, width, height, isDTI);
 }, "~O,~O,~N,~N,~N,~N,~B");
-Clazz.overrideMethod (c$, "requestFocusInWindow", 
+Clazz.overrideMethod (c$, "requestFocusInWindow",
 function (canvas) {
 J.awtjs2d.Display.requestFocusInWindow (canvas);
 }, "~O");
-Clazz.overrideMethod (c$, "repaint", 
+Clazz.overrideMethod (c$, "repaint",
 function (canvas) {
 var jmol = null;
 {
 jmol = (self.Jmol && Jmol.repaint ? Jmol : null);
 }if (jmol != null) jmol.repaint ((this.vwr).html5Applet, true);
 }, "~O");
-Clazz.overrideMethod (c$, "setTransparentCursor", 
+Clazz.overrideMethod (c$, "setTransparentCursor",
 function (canvas) {
 }, "~O");
-Clazz.overrideMethod (c$, "setCursor", 
+Clazz.overrideMethod (c$, "setCursor",
 function (c, canvas) {
 J.awtjs2d.Platform.Jmol ().setCursor ((this.vwr).html5Applet, c);
 }, "~N,~O");
-Clazz.overrideMethod (c$, "allocateRgbImage", 
+Clazz.overrideMethod (c$, "allocateRgbImage",
 function (windowWidth, windowHeight, pBuffer, windowSize, backgroundTransparent, isImageWrite) {
 if (pBuffer == null) {
 pBuffer = this.grabPixels (null, 0, 0, null, 0, 0);
@@ -109,20 +109,20 @@ windowWidth = this.canvas.width;
 windowHeight = this.canvas.height;
 }}return J.awtjs2d.Image.allocateRgbImage (windowWidth, windowHeight, pBuffer, windowSize, backgroundTransparent, (isImageWrite ? null : this.canvas));
 }, "~N,~N,~A,~N,~B,~B");
-Clazz.overrideMethod (c$, "notifyEndOfRendering", 
+Clazz.overrideMethod (c$, "notifyEndOfRendering",
 function () {
 });
-Clazz.overrideMethod (c$, "disposeGraphics", 
+Clazz.overrideMethod (c$, "disposeGraphics",
 function (gOffscreen) {
 }, "~O");
-Clazz.overrideMethod (c$, "grabPixels", 
+Clazz.overrideMethod (c$, "grabPixels",
 function (canvas, width, height, pixels, startRow, nRows) {
 var context2d = null;
 var isWebGL = (canvas == null);
 {
 if(isWebGL) { this.canvas = canvas =
 Jmol.loadImage(this,"webgl",""
-+System.currentTimeMillis(),this
++Zystem.currentTimeMillis(),this
 .vwr.html5Applet._canvas.toDataURL(),null,null); width =
 canvas.imageWidth; height = canvas.imageHeight;
 canvas.imageWidth = 0; }
@@ -137,47 +137,47 @@ canvas.buf32 = buf;
 
 return buf;
 }, "~O,~N,~N,~A,~N,~N");
-Clazz.overrideMethod (c$, "drawImageToBuffer", 
+Clazz.overrideMethod (c$, "drawImageToBuffer",
 function (gOffscreen, imageOffscreen, canvas, width, height, bgcolor) {
 return this.grabPixels (canvas, width, height, null, 0, 0);
 }, "~O,~O,~O,~N,~N,~N");
-Clazz.overrideMethod (c$, "getTextPixels", 
+Clazz.overrideMethod (c$, "getTextPixels",
 function (text, font3d, context, image, width, height, ascent) {
 return J.awtjs2d.Image.getTextPixels (text, font3d, context, width, height, ascent);
 }, "~S,JU.Font,~O,~O,~N,~N,~N");
-Clazz.overrideMethod (c$, "flushImage", 
+Clazz.overrideMethod (c$, "flushImage",
 function (imagePixelBuffer) {
 }, "~O");
-Clazz.overrideMethod (c$, "getGraphics", 
+Clazz.overrideMethod (c$, "getGraphics",
 function (canvas) {
 {
 return (canvas == null ? this.context : canvas.getContext("2d"));
 }}, "~O");
-Clazz.overrideMethod (c$, "getImageHeight", 
+Clazz.overrideMethod (c$, "getImageHeight",
 function (canvas) {
 return (canvas == null ? -1 : J.awtjs2d.Image.getHeight (canvas));
 }, "~O");
-Clazz.overrideMethod (c$, "getImageWidth", 
+Clazz.overrideMethod (c$, "getImageWidth",
 function (canvas) {
 return (canvas == null ? -1 : J.awtjs2d.Image.getWidth (canvas));
 }, "~O");
-Clazz.overrideMethod (c$, "getStaticGraphics", 
+Clazz.overrideMethod (c$, "getStaticGraphics",
 function (image, backgroundTransparent) {
 return this.getGraphics (image);
 }, "~O,~B");
-Clazz.overrideMethod (c$, "newBufferedImage", 
+Clazz.overrideMethod (c$, "newBufferedImage",
 function (image, w, h) {
 return J.awtjs2d.Platform.Jmol ().getHiddenCanvas ((this.vwr).html5Applet, "stereoImage", w, h);
 }, "~O,~N,~N");
-Clazz.overrideMethod (c$, "newOffScreenImage", 
+Clazz.overrideMethod (c$, "newOffScreenImage",
 function (w, h) {
 return J.awtjs2d.Platform.Jmol ().getHiddenCanvas ((this.vwr).html5Applet, "textImage", w, h);
 }, "~N,~N");
-Clazz.overrideMethod (c$, "waitForDisplay", 
+Clazz.overrideMethod (c$, "waitForDisplay",
 function (echoNameAndPath, zipBytes) {
 return false;
 }, "~O,~O");
-Clazz.overrideMethod (c$, "createImage", 
+Clazz.overrideMethod (c$, "createImage",
 function (name_path_bytes) {
 var echoName = (name_path_bytes)[0];
 var path = (name_path_bytes)[1];
@@ -189,27 +189,27 @@ var f = null;
 f = function(canvas, pathOrError) { vwr.loadImageData(canvas, pathOrError, echoName, sc) };
 }return J.awtjs2d.Platform.Jmol ().loadImage (this, echoName, path, bytes, f);
 }, "~O");
-Clazz.overrideMethod (c$, "fontStringWidth", 
+Clazz.overrideMethod (c$, "fontStringWidth",
 function (font, text) {
 return J.awtjs2d.JSFont.stringWidth (font, this.context, text);
 }, "JU.Font,~S");
-Clazz.overrideMethod (c$, "getFontAscent", 
+Clazz.overrideMethod (c$, "getFontAscent",
 function (context) {
 return J.awtjs2d.JSFont.getAscent (context);
 }, "~O");
-Clazz.overrideMethod (c$, "getFontDescent", 
+Clazz.overrideMethod (c$, "getFontDescent",
 function (context) {
 return J.awtjs2d.JSFont.getDescent (context);
 }, "~O");
-Clazz.overrideMethod (c$, "getFontMetrics", 
+Clazz.overrideMethod (c$, "getFontMetrics",
 function (font, context) {
 return J.awtjs2d.JSFont.getFontMetrics (font, context == null ? this.context : context);
 }, "JU.Font,~O");
-Clazz.overrideMethod (c$, "newFont", 
+Clazz.overrideMethod (c$, "newFont",
 function (fontFace, isBold, isItalic, fontSize) {
 return J.awtjs2d.JSFont.newFont (fontFace, isBold, isItalic, fontSize, "px");
 }, "~S,~B,~B,~N");
-Clazz.overrideMethod (c$, "getDateFormat", 
+Clazz.overrideMethod (c$, "getDateFormat",
 function (isoType) {
 {
 if (isoType == null) {
@@ -231,19 +231,19 @@ return x[3] + '-' + MM + '-' + dd + 'T' + x[4]
 }
 return ("" + (new Date())).split(" (")[0];
 }}, "~S");
-Clazz.overrideMethod (c$, "newFile", 
+Clazz.overrideMethod (c$, "newFile",
 function (name) {
 return  new J.awtjs2d.JSFile (name);
 }, "~S");
-Clazz.overrideMethod (c$, "getBufferedFileInputStream", 
+Clazz.overrideMethod (c$, "getBufferedFileInputStream",
 function (name) {
 return null;
 }, "~S");
-Clazz.overrideMethod (c$, "getURLContents", 
+Clazz.overrideMethod (c$, "getURLContents",
 function (url, outputBytes, post, asString) {
 return J.awtjs2d.Platform.getURLContentsStatic (url, outputBytes, post, asString);
 }, "java.net.URL,~A,~S,~B");
-c$.getURLContentsStatic = Clazz.defineMethod (c$, "getURLContentsStatic", 
+c$.getURLContentsStatic = Clazz.defineMethod (c$, "getURLContentsStatic",
 function (url, outputBytes, post, asString) {
 var ret = J.awtjs2d.JSFile.getURLContents (url, outputBytes, post);
 try {
@@ -256,28 +256,28 @@ throw e;
 }
 }
 }, "java.net.URL,~A,~S,~B");
-Clazz.overrideMethod (c$, "getLocalUrl", 
+Clazz.overrideMethod (c$, "getLocalUrl",
 function (fileName) {
 return null;
 }, "~S");
-Clazz.overrideMethod (c$, "getImageDialog", 
+Clazz.overrideMethod (c$, "getImageDialog",
 function (title, imageMap) {
 return J.awtjs2d.Image.getImageDialog (this.vwr, title, imageMap);
 }, "~S,java.util.Map");
-c$.Jmol = Clazz.defineMethod (c$, "Jmol", 
+c$.Jmol = Clazz.defineMethod (c$, "Jmol",
 function () {
 {
 return Jmol;
 }});
-Clazz.overrideMethod (c$, "forceAsyncLoad", 
+Clazz.overrideMethod (c$, "forceAsyncLoad",
 function (filename) {
 return J.awtjs2d.Platform.Jmol ().isBinaryUrl (filename);
 }, "~S");
-Clazz.overrideMethod (c$, "getInChI", 
+Clazz.overrideMethod (c$, "getInChI",
 function () {
 return (J.awtjs2d.Platform.inchi == null ? (J.awtjs2d.Platform.inchi = J.api.Interface.getInterface ("J.inchi.InChIJS", this.vwr, "platform")) : J.awtjs2d.Platform.inchi);
 });
-Clazz.overrideMethod (c$, "confirm", 
+Clazz.overrideMethod (c$, "confirm",
 function (msg, msgNo) {
 var ok = false;
 if (ok) return 0;

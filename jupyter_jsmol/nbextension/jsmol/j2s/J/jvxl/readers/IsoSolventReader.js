@@ -49,15 +49,15 @@ this.ptTemp2 =  new JU.P3 ();
 this.vTemp2 =  new JU.V3 ();
 this.p =  new JU.P3 ();
 });
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function () {
 Clazz.superConstructor (this, J.jvxl.readers.IsoSolventReader, []);
 });
-Clazz.overrideMethod (c$, "init", 
+Clazz.overrideMethod (c$, "init",
 function (sg) {
 this.initADR (sg);
 }, "J.jvxl.readers.SurfaceGenerator");
-Clazz.overrideMethod (c$, "readVolumeParameters", 
+Clazz.overrideMethod (c$, "readVolumeParameters",
 function (isMapData) {
 this.setup (isMapData);
 this.initializeVolumetricData ();
@@ -72,7 +72,7 @@ this.getAtomMinMax (null, this.bsAtomMinMax);
 this.voxelSource =  Clazz.newIntArray (this.volumeData.nPoints, 0);
 }return true;
 }, "~B");
-Clazz.overrideMethod (c$, "setup", 
+Clazz.overrideMethod (c$, "setup",
 function (isMapData) {
 this.setup2 ();
 if (this.contactPair == null) {
@@ -90,7 +90,7 @@ this.setHeader ("solvent/molecular surface", this.params.calculationType);
 if (this.havePlane || !isMapData) {
 var r = Math.max (this.params.solventExtendedAtomRadius, this.params.solventRadius);
 var minPtsPerAng = (r >= 1 ? 1.5 / r : 0);
-if (minPtsPerAng > 0) System.out.println ("IsoSolventReader.minPtsPerAng=" + minPtsPerAng);
+if (minPtsPerAng > 0) Zystem.out.println ("IsoSolventReader.minPtsPerAng=" + minPtsPerAng);
 this.setRanges (this.params.solvent_ptsPerAngstrom, this.params.solvent_gridMax, minPtsPerAng);
 this.volumeData.getYzCount ();
 this.margin = this.volumeData.maxGrid * 2.0;
@@ -105,7 +105,7 @@ this.volumeData.sr = this;
 this.isProgressive = this.isXLowToHigh = true;
 }}if (this.thisAtomSet == null) this.thisAtomSet = JU.BSUtil.setAll (this.myAtomCount);
 }, "~B");
-Clazz.overrideMethod (c$, "generateCube", 
+Clazz.overrideMethod (c$, "generateCube",
 function () {
 if (this.isCavity && this.params.theProperty != null) return;
 if (this.isCavity && this.dataType != 1207 && this.dataType != 1208) {
@@ -126,7 +126,7 @@ this.volumeData.capData (info.get (i)[0], this.params.cutoff);
 info.removeItemAt (i--);
 }
 });
-Clazz.overrideMethod (c$, "getSurfacePointAndFraction", 
+Clazz.overrideMethod (c$, "getSurfacePointAndFraction",
 function (cutoff, isCutoffAbsolute, valueA, valueB, pointA, edgeVector, x, y, z, vA0, vB0, fReturn, ptReturn) {
 var vA = this.marchingCubes.getLinearOffset (x, y, z, vA0);
 var vB = this.marchingCubes.getLinearOffset (x, y, z, vB0);
@@ -140,7 +140,7 @@ ptReturn.scaleAdd2 (fraction, edgeVector, pointA);
 var diff = valueB - valueA;
 return valueA + fraction * diff;
 }, "~N,~B,~N,~N,JU.T3,JU.V3,~N,~N,~N,~N,~N,~A,JU.T3");
-Clazz.overrideMethod (c$, "addVertexCopy", 
+Clazz.overrideMethod (c$, "addVertexCopy",
 function (vertexXYZ, value, assocVertex, asCopy) {
 var i = this.addVC (vertexXYZ, value, assocVertex, asCopy);
 if (i < 0) return i;
@@ -148,7 +148,7 @@ if (this.isSurfacePoint) this.bsSurfacePoints.set (i);
 if (this.params.vertexSource != null) this.params.vertexSource[i] = this.iAtomSurface;
 return i;
 }, "JU.T3,~N,~N,~B");
-Clazz.overrideMethod (c$, "selectPocket", 
+Clazz.overrideMethod (c$, "selectPocket",
 function (doExclude) {
 if (this.meshDataServer != null) this.meshDataServer.fillMeshData (this.meshData, 1, null);
 var v = this.meshData.vs;
@@ -179,7 +179,7 @@ if (this.meshDataServer != null) {
 this.meshDataServer.fillMeshData (this.meshData, 3, null);
 this.meshData =  new J.jvxl.data.MeshData ();
 }}, "~B");
-Clazz.overrideMethod (c$, "postProcessVertices", 
+Clazz.overrideMethod (c$, "postProcessVertices",
 function () {
 this.setVertexSource ();
 if (this.doCalculateTroughs && this.bsSurfacePoints != null) {
@@ -221,7 +221,7 @@ this.meshDataServer.fillMeshData (this.meshData, 3, null);
 this.meshData =  new J.jvxl.data.MeshData ();
 }}if (this.params.thePlane != null && this.params.slabInfo == null) this.params.addSlabInfo (JU.TempArray.getSlabWithinRange (-100, 0));
 });
-Clazz.defineMethod (c$, "generateSolventCavity", 
+Clazz.defineMethod (c$, "generateSolventCavity",
  function () {
 var bs = JU.BS.newN (this.nPointsX * this.nPointsY * this.nPointsZ);
 var i = 0;
@@ -254,7 +254,7 @@ this.thisAtomSet = JU.BSUtil.setAll (this.myAtomCount);
 this.rs = null;
 this.setRadii ();
 });
-Clazz.defineMethod (c$, "generateSolventCube", 
+Clazz.defineMethod (c$, "generateSolventCube",
  function () {
 if (this.dataType == 1207) return;
 this.params.vertexSource =  Clazz.newIntArray (this.volumeData.nPoints, 0);
@@ -290,7 +290,7 @@ this.resetVoxelData (3.4028235E38);
 this.noFaceSpheres = null;
 this.validSpheres = null;
 });
-Clazz.defineMethod (c$, "getEdges", 
+Clazz.defineMethod (c$, "getEdges",
  function () {
 for (var iatomA = 0; iatomA < this.myAtomCount; iatomA++) this.bsLocale[iatomA] =  new JU.BS ();
 
@@ -314,11 +314,11 @@ this.htEdges.put (edge.toString (), edge);
 }
 }
 });
-Clazz.defineMethod (c$, "findEdge", 
+Clazz.defineMethod (c$, "findEdge",
 function (i, j) {
 return this.htEdges.get (i < j ? i + "_" + j : j + "_" + i);
 }, "~N,~N");
-Clazz.defineMethod (c$, "getFaces", 
+Clazz.defineMethod (c$, "getFaces",
  function () {
 var bs =  new JU.BS ();
 this.params.surfaceAtoms = this.validSpheres =  new JU.BS ();
@@ -347,7 +347,7 @@ this.noFaceSpheres.clear (ic);
 }}}
 }
 });
-Clazz.defineMethod (c$, "validateFace", 
+Clazz.defineMethod (c$, "validateFace",
  function (ia, ib, ic, edge, ptS) {
 this.sg.atomDataServer.setIteratorForPoint (this.iter, this.modelIndex, ptS, this.maxRS);
 var isValid = true;
@@ -372,7 +372,7 @@ this.validSpheres.set (ib);
 this.validSpheres.set (ic);
 return f;
 }, "~N,~N,~N,J.jvxl.readers.IsoSolventReader.Edge,JU.P3");
-Clazz.defineMethod (c$, "markFaceVoxels", 
+Clazz.defineMethod (c$, "markFaceVoxels",
  function (firstPass) {
 var bsThisPass =  new JU.BS ();
 var v0 = this.volumetricVectors[0];
@@ -407,7 +407,7 @@ this.bsSurfaceVoxels.set (ipt);
 }
 }
 }, "~B");
-Clazz.defineMethod (c$, "markToroidVoxels", 
+Clazz.defineMethod (c$, "markToroidVoxels",
  function () {
 var v0 = this.volumetricVectors[0];
 var v1 = this.volumetricVectors[1];
@@ -445,7 +445,7 @@ if (this.voxelSource != null) this.voxelSource[ipt] = -1 - ia;
 }
 }
 });
-Clazz.overrideMethod (c$, "unsetVoxelData", 
+Clazz.overrideMethod (c$, "unsetVoxelData",
 function () {
 if (!this.havePlane) {
 this.unsetVoxelData2 ();
@@ -462,7 +462,7 @@ this.voxelData[x][y][z] = 0.001;
 
 
 });
-Clazz.defineMethod (c$, "getSolventPoints", 
+Clazz.defineMethod (c$, "getSolventPoints",
  function (edge, ia, ib, ic) {
 var rAS = this.rs[ia];
 var v = edge.v;
@@ -492,7 +492,7 @@ this.ptS1.add2 (this.ptTemp, vXS);
 this.ptS2.sub2 (this.ptTemp, vXS);
 return true;
 }, "J.jvxl.readers.IsoSolventReader.Edge,~N,~N,~N");
-Clazz.defineMethod (c$, "checkSpecialVoxel", 
+Clazz.defineMethod (c$, "checkSpecialVoxel",
  function (ptA, ptB, ptV) {
 var dAV = ptA.distance (ptV);
 var dAV2 = ptA.distanceSquared (ptV);
@@ -506,7 +506,7 @@ this.p.set (ptB.x + (ptV.x - ptB.x) * f, ptB.y + (ptV.y - ptB.y) * f, ptB.z + (p
 return (ptA.distanceSquared (this.p) >= this.rAS2 ? NaN : this.solventDistance (this.rBS, this.rBS2, this.rAS2, dBV, dBV * dBV, dAV2));
 }return NaN;
 }, "JU.P3,JU.P3,JU.P3");
-Clazz.defineMethod (c$, "solventDistance", 
+Clazz.defineMethod (c$, "solventDistance",
  function (rAS, rAS2, rBS2, dAV, dAV2, dBV2) {
 var angleVAB = Math.acos ((dAV2 + this.dAB2 - dBV2) / (2 * dAV * this.dAB));
 var angleSAB = Math.acos ((rAS2 + this.dAB2 - rBS2) / (2 * rAS * this.dAB));
@@ -514,11 +514,11 @@ var dVS2 = (rAS2 + dAV2 - 2 * rAS * dAV * Math.cos (angleSAB - angleVAB));
 var dVS = Math.sqrt (dVS2);
 return (this.ecosASB2 < (rAS2 + dVS2 - dAV * dAV) / (dVS * rAS) ? dVS : NaN);
 }, "~N,~N,~N,~N,~N,~N");
-Clazz.defineMethod (c$, "dumpLine", 
+Clazz.defineMethod (c$, "dumpLine",
 function (pt1, pt2, label, color) {
 this.sg.log ("draw ID \"x" + label + (this.nTest++) + "\" " + JU.P3.newP (pt1) + " " + JU.P3.newP (pt2) + " color " + color);
 }, "JU.P3,JU.T3,~S,~S");
-Clazz.defineMethod (c$, "dumpLine2", 
+Clazz.defineMethod (c$, "dumpLine2",
 function (pt1, pt2, label, d, color1, color2) {
 var pt =  new JU.V3 ();
 pt.setT (pt2);
@@ -529,11 +529,11 @@ pt.add (pt1);
 this.sg.log ("draw ID \"" + label + (this.nTest++) + "\" " + JU.P3.newP (pt1) + " " + JU.P3.newP (pt) + " color " + color1);
 this.sg.log ("draw ID \"" + label + (this.nTest++) + "\"" + JU.P3.newP (pt) + " " + JU.P3.newP (pt2) + " color " + color2 + "\"" + label + "\"");
 }, "JU.P3,JU.P3,~S,~N,~S,~S");
-Clazz.defineMethod (c$, "dumpPoint", 
+Clazz.defineMethod (c$, "dumpPoint",
 function (pt, label, color) {
 this.sg.log ("draw ID \"" + label + (this.nTest++) + "\"" + JU.P3.newP (pt) + " color " + color);
 }, "JU.P3,~S,~S");
-Clazz.overrideMethod (c$, "getValueAtPoint", 
+Clazz.overrideMethod (c$, "getValueAtPoint",
 function (pt, getSource) {
 if (this.contactPair != null) return pt.distance (this.contactPair.myAtoms[1]) - this.contactPair.radii[1];
 var value = 3.4028235E38;
@@ -543,13 +543,13 @@ if (r < value) value = r;
 }
 return (value == 3.4028235E38 ? NaN : value);
 }, "JU.T3,~B");
-Clazz.overrideMethod (c$, "discardTempData", 
+Clazz.overrideMethod (c$, "discardTempData",
 function (discardAll) {
 this.rs = null;
 this.rs2 = null;
 this.discardTempDataSR (discardAll);
 }, "~B");
-Clazz.overrideMethod (c$, "getPlane", 
+Clazz.overrideMethod (c$, "getPlane",
 function (x) {
 if (this.yzCount == 0) {
 this.initPlanes ();
@@ -579,7 +579,7 @@ this.cosASB2 = 0;
 this.v = null;
 Clazz.instantialize (this, arguments);
 }, J.jvxl.readers.IsoSolventReader, "Edge", JU.P3);
-Clazz.overrideConstructor (c$, 
+Clazz.overrideConstructor (c$,
 function (a, b, c, d) {
 this.ia = Math.min (b, c);
 this.ib = Math.max (b, c);
@@ -591,18 +591,18 @@ this.cosASB2 = (a.rs2[b] + a.rs2[c] - this.d2) / (a.rs[c] * a.rs[b]);
 this.v = JU.V3.newVsub (a.atomXyzTruncated[c], a.atomXyzTruncated[b]);
 this.v.normalize ();
 }, "J.jvxl.readers.IsoSolventReader,~N,~N,~N");
-Clazz.defineMethod (c$, "addFace", 
+Clazz.defineMethod (c$, "addFace",
 function (a) {
 this.nFaces++;
 if (a == null) {
 this.nInvalid++;
 return;
 }}, "J.jvxl.readers.IsoSolventReader.Face");
-Clazz.defineMethod (c$, "isValid", 
+Clazz.defineMethod (c$, "isValid",
 function () {
 return (this.nFaces == 0 || this.nInvalid != this.nFaces);
 });
-Clazz.overrideMethod (c$, "toString", 
+Clazz.overrideMethod (c$, "toString",
 function () {
 return this.ia + "_" + this.ib;
 });
@@ -618,14 +618,14 @@ this.ic = 0;
 this.pS = null;
 Clazz.instantialize (this, arguments);
 }, J.jvxl.readers.IsoSolventReader, "Face");
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function (a, b, c, d) {
 this.ia = a;
 this.ib = b;
 this.ic = c;
 this.pS = JU.P3.newP (d);
 }, "~N,~N,~N,JU.P3");
-Clazz.overrideMethod (c$, "toString", 
+Clazz.overrideMethod (c$, "toString",
 function () {
 return this.ia + "_" + this.ib + "_" + this.ic + "_" + this.pS;
 });

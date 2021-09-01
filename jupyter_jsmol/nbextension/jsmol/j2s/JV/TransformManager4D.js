@@ -19,16 +19,16 @@ this.m4 =  new JU.M4 ();
 this.p4 =  new JU.P4 ();
 this.zero =  new JU.V3 ();
 });
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function () {
 Clazz.superConstructor (this, JV.TransformManager4D, []);
 });
-Clazz.overrideMethod (c$, "resetRotation", 
+Clazz.overrideMethod (c$, "resetRotation",
 function () {
 if (this.m2_rotate != null) this.m2_rotate.setIdentity ();
 this.matrixRotate.setScale (1);
 });
-Clazz.overrideMethod (c$, "rotateXYBy", 
+Clazz.overrideMethod (c$, "rotateXYBy",
 function (xDelta, yDelta, bsAtoms) {
 this.rotate3DBall (xDelta, yDelta, bsAtoms);
 switch (this.is4D && bsAtoms == null ? this.mouseMode : 0) {
@@ -49,13 +49,13 @@ this.rotate4DBall (xDelta, yDelta, 0);
 break;
 }
 }, "~N,~N,JU.BS");
-Clazz.defineMethod (c$, "rotate4DBall", 
+Clazz.defineMethod (c$, "rotate4DBall",
 function (xDelta, yDelta, zDelta) {
 var scale = 50;
 this.setAsBallRotation (this.m4, scale, xDelta, yDelta, zDelta);
 this.m2_rotate.mul2 (this.m4, this.m2_rotate);
 }, "~N,~N,~N");
-Clazz.defineMethod (c$, "setAsBallRotation", 
+Clazz.defineMethod (c$, "setAsBallRotation",
 function (m, scale, dx, dy, dz) {
 var dxyz2 = dx * dx + dy * dy + dz * dz;
 var sxyz = Math.sqrt (dxyz2);
@@ -77,11 +77,11 @@ m.m30 = -(m.m03 = s * nx);
 m.m31 = -(m.m13 = s * ny);
 m.m32 = -(m.m23 = s * nz);
 }, "JU.M4,~N,~N,~N,~N");
-Clazz.defineMethod (c$, "checkM2", 
+Clazz.defineMethod (c$, "checkM2",
  function () {
 if (this.m2_rotate == null) this.m2_rotate = JU.M4.newMV (this.matrixRotate, this.zero);
 });
-Clazz.defineMethod (c$, "calcTransformMatrix", 
+Clazz.defineMethod (c$, "calcTransformMatrix",
 function () {
 Clazz.superCall (this, JV.TransformManager4D, "calcTransformMatrix", []);
 this.doTransform4D = (this.is4D && !this.stereoFrame && this.mode != 1);
@@ -91,10 +91,10 @@ this.checkM2 ();
 this.m3_toScreen.setIdentity ();
 this.m3_toScreen.m00 = this.m3_toScreen.m11 = this.m3_toScreen.m22 = this.scalePixelsPerAngstrom;
 this.m3_toScreen.m11 = this.m3_toScreen.m22 = -this.scalePixelsPerAngstrom;
-System.out.println (this.m2_rotate);
+Zystem.out.println (this.m2_rotate);
 this.zOffset = this.modelCenterOffset;
 });
-Clazz.overrideMethod (c$, "getScreenTemp", 
+Clazz.overrideMethod (c$, "getScreenTemp",
 function (ptXYZ) {
 if (this.doTransform4D && Clazz.instanceOf (ptXYZ, JU.T4)) {
 this.p4.add2 (ptXYZ, this.v1);

@@ -1,7 +1,7 @@
 Clazz.declarePackage ("J.adapter.readers.xml");
 Clazz.load (["J.adapter.readers.xml.XmlMOReader"], "J.adapter.readers.xml.XmlMolproReader", ["JU.PT"], function () {
 c$ = Clazz.declareType (J.adapter.readers.xml, "XmlMolproReader", J.adapter.readers.xml.XmlMOReader);
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function () {
 Clazz.superConstructor (this, J.adapter.readers.xml.XmlMolproReader, []);
 this.dslist = "d0 d2- d1+ d2+ d1-";
@@ -9,7 +9,7 @@ this.fclist = "XXX YYY ZZZ XXY XXZ XYY YYZ XZZ YZZ XYZ";
 this.fslist = "f1+ f1- f0 f3+ f2- f3- f2+";
 this.iHaveCoefMaps = true;
 });
-Clazz.overrideMethod (c$, "processStartElement", 
+Clazz.overrideMethod (c$, "processStartElement",
 function (localName, nodeName) {
 if (!this.processing) return;
 this.processStart2 (localName);
@@ -21,7 +21,7 @@ try {
 this.asc.cloneLastAtomSet ();
 } catch (e) {
 if (Clazz.exceptionOf (e, Exception)) {
-System.out.println ("" + e);
+Zystem.out.println ("" + e);
 this.asc.errorMessage = "Error processing normalCoordinate: " + e.getMessage ();
 this.vibrationNumber = 0;
 return;
@@ -42,7 +42,7 @@ this.setKeepChars (true);
 this.vibrationNumber = 0;
 return;
 }}}, "~S,~S");
-Clazz.overrideMethod (c$, "processEndElement", 
+Clazz.overrideMethod (c$, "processEndElement",
 function (localName) {
 if (!this.processEndMO (localName)) {
 if (localName.equals ("normalcoordinate")) {

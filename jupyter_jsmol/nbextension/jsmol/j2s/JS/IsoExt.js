@@ -1,11 +1,11 @@
 Clazz.declarePackage ("JS");
 Clazz.load (["JS.ScriptExt"], "JS.IsoExt", ["java.lang.Boolean", "$.Float", "$.Short", "JU.AU", "$.BS", "$.Lst", "$.M4", "$.P3", "$.PT", "$.Quat", "$.SB", "$.V3", "J.api.Interface", "J.atomdata.RadiusData", "J.c.VDW", "JS.SV", "$.ScriptEval", "$.ScriptInterruption", "$.T", "JU.BSUtil", "$.BoxInfo", "$.C", "$.Escape", "$.Logger", "$.Parser", "$.TempArray", "$.Triangulator", "JV.JC"], function () {
 c$ = Clazz.declareType (JS, "IsoExt", JS.ScriptExt);
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function () {
 Clazz.superConstructor (this, JS.IsoExt, []);
 });
-Clazz.overrideMethod (c$, "dispatch", 
+Clazz.overrideMethod (c$, "dispatch",
 function (iTok, b, st) {
 this.chk = this.e.chk;
 this.slen = this.e.slen;
@@ -38,7 +38,7 @@ break;
 }
 return null;
 }, "~N,~B,~A");
-Clazz.defineMethod (c$, "dipole", 
+Clazz.defineMethod (c$, "dipole",
  function () {
 var eval = this.e;
 var propertyName = null;
@@ -161,7 +161,7 @@ getCharges = false;
 }
 if (iHaveCoord || iHaveAtoms) this.setShapeProperty (17, "set", null);
 });
-Clazz.defineMethod (c$, "draw", 
+Clazz.defineMethod (c$, "draw",
  function () {
 var eval = this.e;
 eval.sm.loadShape (22);
@@ -681,7 +681,7 @@ if (propertyName != null) this.setShapeProperty (22, propertyName, propertyValue
 }
 this.finalizeObject (22, colorArgb[0], translucentLevel, intScale, havePoints, connections, iptDisplayProperty, null);
 });
-Clazz.defineMethod (c$, "mo", 
+Clazz.defineMethod (c$, "mo",
  function (isInitOnly, iShape) {
 var eval = this.e;
 var offset = 2147483647;
@@ -872,7 +872,7 @@ moLabel = "" + moNumber;
 }propertyList.clear ();
 }
 }, "~B,~N");
-Clazz.defineMethod (c$, "setNBOType", 
+Clazz.defineMethod (c$, "setNBOType",
  function (moData, type) {
 var nboNumber = -1;
 var name = null;
@@ -908,14 +908,14 @@ break;
 if (nboNumber < 0) this.error (27);
 }return nboNumber;
 }, "java.util.Map,~S");
-Clazz.defineMethod (c$, "moCombo", 
+Clazz.defineMethod (c$, "moCombo",
  function (propertyList) {
 if (this.tokAt (this.e.iToken + 1) != 1073742156) return null;
 this.addShapeProperty (propertyList, "squareLinear", Boolean.TRUE);
 this.e.iToken++;
 return  Clazz.newFloatArray (0, 0);
 }, "JU.Lst");
-Clazz.defineMethod (c$, "moOffset", 
+Clazz.defineMethod (c$, "moOffset",
  function (index) {
 var isHomo = (this.getToken (index).tok == 1073741973);
 var offset = (isHomo ? 0 : 1);
@@ -925,7 +925,7 @@ if (tok == 2 && (this.e.st[index].value).charAt (0) == '-') offset += this.intPa
  else if (tok == 268435616) offset -= this.intParameter (++index);
 return offset;
 }, "~N");
-Clazz.defineMethod (c$, "setMoData", 
+Clazz.defineMethod (c$, "setMoData",
  function (propertyList, moNumber, lc, offset, isNegOffset, modelIndex, title, nboType, isBeta) {
 var eval = this.e;
 if (modelIndex < 0) {
@@ -1013,7 +1013,7 @@ if (title != null) this.addShapeProperty (propertyList, "title", title);
 this.addShapeProperty (propertyList, "molecularOrbital", lc != null ? lc : Integer.$valueOf (Math.abs (moNumber)));
 this.addShapeProperty (propertyList, "clear", null);
 }, "JU.Lst,~N,~A,~N,~B,~N,~S,~S,~B");
-Clazz.defineMethod (c$, "isosurface", 
+Clazz.defineMethod (c$, "isosurface",
  function (iShape) {
 var eval = this.e;
 eval.sm.loadShape (iShape);
@@ -1572,7 +1572,7 @@ if (linearCombination == null) linearCombination =  Clazz.newFloatArray (0, 0);
 } else if (this.tokAt (i + 1) == 134217751) {
 ++i;
 var monteCarloCount = this.intParameter (++i);
-var seed = (this.tokAt (i + 1) == 2 ? this.intParameter (++i) : (-System.currentTimeMillis ()) % 10000);
+var seed = (this.tokAt (i + 1) == 2 ? this.intParameter (++i) : (-Zystem.currentTimeMillis ()) % 10000);
 this.addShapeProperty (propertyList, "monteCarloCount", Integer.$valueOf (monteCarloCount));
 this.addShapeProperty (propertyList, "randomSeed", Integer.$valueOf (seed));
 sbCommand.append (" points ").appendI (monteCarloCount).appendC (' ').appendI (seed);
@@ -1672,7 +1672,7 @@ if (this.tokAt (i + 1) == 134217751) {
 i += 2;
 nlmZprs[4] = this.intParameter (i);
 nlmZprs[5] = (this.tokAt (i + 1) == 3 ? this.floatParameter (++i) : 0);
-nlmZprs[6] = (this.tokAt (i + 1) == 2 ? this.intParameter (++i) : (-System.currentTimeMillis ()) % 10000);
+nlmZprs[6] = (this.tokAt (i + 1) == 2 ? this.intParameter (++i) : (-Zystem.currentTimeMillis ()) % 10000);
 sbCommand.append (" points ").appendI (Clazz.floatToInt (nlmZprs[4])).appendC (' ').appendF (nlmZprs[5]).appendC (' ').appendI (Clazz.floatToInt (nlmZprs[6]));
 }propertyName = "hydrogenOrbital";
 propertyValue = nlmZprs;
@@ -2348,7 +2348,7 @@ this.setShapeProperty (iShape, "clear", null);
 if (toCache) this.setShapeProperty (iShape, "cache", null);
 if (!isSilent && !isDisplay && !haveSlab && eval.theTok != 12291) this.listIsosurface (iShape);
 }, "~N");
-Clazz.defineMethod (c$, "lcaoCartoon", 
+Clazz.defineMethod (c$, "lcaoCartoon",
  function () {
 var eval = this.e;
 eval.sm.loadShape (26);
@@ -2486,7 +2486,7 @@ this.setShapeProperty (26, propertyName, propertyValue);
 }
 this.setShapeProperty (26, "clear", null);
 });
-Clazz.defineMethod (c$, "contact", 
+Clazz.defineMethod (c$, "contact",
  function () {
 var eval = this.e;
 eval.sm.loadShape (25);
@@ -2692,7 +2692,7 @@ if (v != 0) s += ", with " + (isFull ? "approx " : "net ") + "volume " + v + " A
 this.showString (s);
 }}return true;
 });
-Clazz.defineMethod (c$, "cgo", 
+Clazz.defineMethod (c$, "cgo",
  function () {
 var eval = this.e;
 eval.sm.loadShape (23);
@@ -2777,7 +2777,7 @@ intScale = 0;
 this.finalizeObject (23, colorArgb[0], translucentLevel, intScale, data != null, data, iptDisplayProperty, null);
 return true;
 });
-Clazz.defineMethod (c$, "getAtomicPotentials", 
+Clazz.defineMethod (c$, "getAtomicPotentials",
  function (bsSelected, bsIgnore, fileName) {
 var potentials =  Clazz.newFloatArray (this.vwr.ms.ac, 0);
 var m = J.api.Interface.getOption ("quantum.MlpCalculation", this.vwr, "script");
@@ -2793,7 +2793,7 @@ throw e;
 }
 return potentials;
 }, "JU.BS,JU.BS,~S");
-Clazz.defineMethod (c$, "getCapSlabObject", 
+Clazz.defineMethod (c$, "getCapSlabObject",
  function (i, isLcaoCartoon) {
 if (i < 0) {
 return JU.TempArray.getSlabWithinRange (i, 0);
@@ -2927,7 +2927,7 @@ tok = 134217750;
 var colorData = (slabMeshType == null ? null :  Clazz.newArray (-1, [slabMeshType, slabColix]));
 return JU.TempArray.getSlabObjectType (tok, data, !isSlab, colorData);
 }, "~N,~B");
-Clazz.defineMethod (c$, "setColorOptions", 
+Clazz.defineMethod (c$, "setColorOptions",
  function (sb, index, iShape, nAllowed) {
 var eval = this.e;
 this.getToken (index);
@@ -2959,7 +2959,7 @@ break;
 }}
 return translucency;
 }, "JU.SB,~N,~N,~N");
-Clazz.defineMethod (c$, "createFunction", 
+Clazz.defineMethod (c$, "createFunction",
  function (fname, xyz, ret) {
 var e = ( new JS.ScriptEval ()).setViewer (this.vwr);
 try {
@@ -2976,7 +2976,7 @@ throw ex;
 }
 }
 }, "~S,~S,~S");
-Clazz.defineMethod (c$, "getWithinDistanceVector", 
+Clazz.defineMethod (c$, "getWithinDistanceVector",
  function (propertyList, distance, ptc, bs, isShow) {
 var v =  new JU.Lst ();
 var pts =  new Array (2);
@@ -2999,12 +2999,12 @@ this.addShapeProperty (propertyList, "withinPoint", v.get (0));
 }this.addShapeProperty (propertyList, (isShow ? "displayWithin" : "withinPoints"),  Clazz.newArray (-1, [Float.$valueOf (distance), pts, bs, v]));
 return pts;
 }, "JU.Lst,~N,JU.P3,JU.BS,~B");
-Clazz.defineMethod (c$, "addShapeProperty", 
+Clazz.defineMethod (c$, "addShapeProperty",
  function (propertyList, key, value) {
 if (this.chk) return;
 propertyList.addLast ( Clazz.newArray (-1, [key, value]));
 }, "JU.Lst,~S,~O");
-Clazz.defineMethod (c$, "floatArraySetXYZ", 
+Clazz.defineMethod (c$, "floatArraySetXYZ",
  function (i, nX, nY, nZ) {
 var eval = this.e;
 var tok = this.tokAt (i++);
@@ -3033,7 +3033,7 @@ this.invArg ();
 }
 return fparams;
 }, "~N,~N,~N,~N");
-Clazz.defineMethod (c$, "floatArraySet", 
+Clazz.defineMethod (c$, "floatArraySet",
  function (i, nX, nY) {
 var tok = this.tokAt (i++);
 if (tok == 1073742195) tok = this.tokAt (i++);
@@ -3067,7 +3067,7 @@ this.invArg ();
 }
 return fparams;
 }, "~N,~N,~N");
-Clazz.defineMethod (c$, "initIsosurface", 
+Clazz.defineMethod (c$, "initIsosurface",
  function (iShape) {
 var eval = this.e;
 this.setShapeProperty (iShape, "init", eval.fullCommand);
@@ -3091,13 +3091,13 @@ eval.iToken++;
 return id;
 }}return null;
 }, "~N");
-Clazz.defineMethod (c$, "listIsosurface", 
+Clazz.defineMethod (c$, "listIsosurface",
  function (iShape) {
 var s = (this.slen > 3 ? "0" : this.tokAt (2) == 0 ? "" : " " + this.getToken (2).value);
 if (!this.chk) this.showString (this.getShapeProperty (iShape, "list" + s));
 return true;
 }, "~N");
-Clazz.defineMethod (c$, "getPlaneIntersection", 
+Clazz.defineMethod (c$, "getPlaneIntersection",
  function (type, plane, uc, scale, flags) {
 var pts = null;
 switch (type) {

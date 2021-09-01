@@ -20,11 +20,11 @@ this.uniqueID16 =  Clazz.newByteArray (16, 0);
 this.userflags4 =  Clazz.newByteArray (4, 0);
 this.unused =  Clazz.newByteArray (8, 0);
 });
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function (compoundDocument) {
 this.cd = compoundDocument;
 }, "JU.CompoundDocument");
-Clazz.defineMethod (c$, "readData", 
+Clazz.defineMethod (c$, "readData",
 function () {
 try {
 this.cd.readByteArray (this.unicodeName64, 0, 64);
@@ -43,7 +43,7 @@ this.lenStream = this.cd.readInt ();
 this.cd.readByteArray (this.unused, 0, 4);
 } catch (e) {
 if (Clazz.exceptionOf (e, Exception)) {
-System.out.println (e.toString ());
+Zystem.out.println (e.toString ());
 return false;
 } else {
 throw e;
@@ -56,7 +56,7 @@ this.isStandard = (this.entryType == 5 || this.lenStream >= this.cd.header.minBy
 this.isEmpty = (this.entryType == 0 || this.lenStream <= 0);
 return true;
 });
-Clazz.overrideMethod (c$, "toString", 
+Clazz.overrideMethod (c$, "toString",
 function () {
 return this.entryName + " " + this.lenStream;
 });

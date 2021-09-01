@@ -46,13 +46,13 @@ this.vAB =  new JU.V3 ();
 this.vAC =  new JU.V3 ();
 this.vBC =  new JU.V3 ();
 });
-Clazz.overrideMethod (c$, "compare", 
+Clazz.overrideMethod (c$, "compare",
 function (a, b) {
 var da = (a[0] == null ? 3.4028235E38 : (a[0]).floatValue ());
 var db = (b[0] == null ? 3.4028235E38 : (b[0]).floatValue ());
 return (da < db ? -1 : da > db ? 1 : 0);
 }, "~A,~A");
-Clazz.overrideMethod (c$, "setProperty", 
+Clazz.overrideMethod (c$, "setProperty",
 function (propertyName, value, bs) {
 if (this.thisID != null) bs =  new JU.BS ();
 if ("init" === propertyName) {
@@ -230,7 +230,7 @@ this.polyhedrons = JU.AU.deleteElements (this.polyhedrons, i, 1);
 }}
 }this.setPropAS (propertyName, value, bs);
 }, "~S,~O,JU.BS");
-Clazz.defineMethod (c$, "setDefinedFaces", 
+Clazz.defineMethod (c$, "setDefinedFaces",
  function (points, faces) {
 var bsUsed =  new JU.BS ();
 for (var i = faces.length; --i >= 0; ) {
@@ -269,36 +269,36 @@ for (var i = 0; i < n; i++) this.center.add (this.otherAtoms[i] = points[i]);
 this.center.scale (1 / n);
 }this.explicitFaces = faces;
 }, "~A,~A");
-Clazz.defineMethod (c$, "pointsPolyhedra", 
+Clazz.defineMethod (c$, "pointsPolyhedra",
  function (bs, pointScale) {
 bs = this.findPolyBS (this.thisID == null ? bs : null);
 for (var i = bs.nextSetBit (0); i >= 0; i = bs.nextSetBit (i + 1)) this.polyhedrons[i].pointScale = pointScale;
 
 }, "JU.BS,~N");
-Clazz.defineMethod (c$, "scalePolyhedra", 
+Clazz.defineMethod (c$, "scalePolyhedra",
  function (scale) {
 var bs = this.findPolyBS (null);
 for (var i = bs.nextSetBit (0); i >= 0; i = bs.nextSetBit (i + 1)) this.polyhedrons[i].scale = scale;
 
 }, "~N");
-Clazz.defineMethod (c$, "offsetPolyhedra", 
+Clazz.defineMethod (c$, "offsetPolyhedra",
  function (value) {
 var bs = this.findPolyBS (null);
 for (var i = bs.nextSetBit (0); i >= 0; i = bs.nextSetBit (i + 1)) this.polyhedrons[i].setOffset (JU.P3.newP (value));
 
 }, "JU.P3");
-Clazz.overrideMethod (c$, "getIndexFromName", 
+Clazz.overrideMethod (c$, "getIndexFromName",
 function (id) {
 if (id != null) for (var i = this.polyhedronCount; --i >= 0; ) if (id.equalsIgnoreCase (this.polyhedrons[i].id)) return i;
 
 return -1;
 }, "~S");
-Clazz.overrideMethod (c$, "getProperty", 
+Clazz.overrideMethod (c$, "getProperty",
 function (property, i) {
 var info = this.polyhedrons[i].getInfo (this.vwr, property);
 return (property.equalsIgnoreCase ("info") ? info : info.get (property));
 }, "~S,~N");
-Clazz.overrideMethod (c$, "getPropertyData", 
+Clazz.overrideMethod (c$, "getPropertyData",
 function (property, data) {
 var iatom = (Clazz.instanceOf (data[0], Integer) ? (data[0]).intValue () : -2147483648);
 var id = (Clazz.instanceOf (data[0], String) ? data[0] : null);
@@ -381,7 +381,7 @@ data[1] = info;
 return true;
 }return this.getPropShape (property, data);
 }, "~S,~A");
-Clazz.defineMethod (c$, "getAtomsWithin", 
+Clazz.defineMethod (c$, "getAtomsWithin",
  function (p, offset) {
 var faces = p.faces;
 var vertices = p.vertices;
@@ -403,7 +403,7 @@ var bsAtoms = JU.BSUtil.copy (this.vwr.getAtomsNearPt (maxDistance + offset, cen
 var atoms = this.vwr.ms.at;
 for (var i = bsAtoms.nextSetBit (0); i >= 0; i = bsAtoms.nextSetBit (i + 1)) {
 for (var f = faces.length; --f >= 0; ) {
-System.out.println (JU.Measure.distanceToPlane (p.planes[f], atoms[i]));
+Zystem.out.println (JU.Measure.distanceToPlane (p.planes[f], atoms[i]));
 if (JU.Measure.distanceToPlane (p.planes[f], atoms[i]) > offset + 0.001) {
 bsAtoms.clear (i);
 break;
@@ -411,12 +411,12 @@ break;
 }
 return bsAtoms;
 }, "J.shapespecial.Polyhedron,~N");
-Clazz.defineMethod (c$, "checkID", 
+Clazz.defineMethod (c$, "checkID",
  function (thisID) {
 this.thisID = thisID;
 return (this.findPolyBS (null).cardinality () > 0);
 }, "~S");
-Clazz.defineMethod (c$, "findPoly", 
+Clazz.defineMethod (c$, "findPoly",
  function (id, iatom, allowCollapsed) {
 for (var i = this.polyhedronCount; --i >= 0; ) {
 var p = this.polyhedrons[i];
@@ -424,7 +424,7 @@ if (p.id == null ? p.centralAtom.i == iatom : p.id.equalsIgnoreCase (id)) return
 }
 return null;
 }, "~S,~N,~B");
-Clazz.defineMethod (c$, "findPolyBS", 
+Clazz.defineMethod (c$, "findPolyBS",
  function (bsCenters) {
 var bs = this.bsPolys;
 bs.clearAll ();
@@ -435,18 +435,18 @@ if (p.id == null ? bsCenters != null && bsCenters.get (p.centralAtom.i) : this.i
 }
 return bs;
 }, "JU.BS");
-Clazz.defineMethod (c$, "isMatch", 
+Clazz.defineMethod (c$, "isMatch",
  function (id) {
 return this.thisID != null && JU.PT.isMatch (id.toLowerCase (), this.thisID.toLowerCase (), true, true);
 }, "~S");
-Clazz.overrideMethod (c$, "getShapeDetail", 
+Clazz.overrideMethod (c$, "getShapeDetail",
 function () {
 var lst =  new JU.Lst ();
 for (var i = 0; i < this.polyhedronCount; i++) lst.addLast (this.polyhedrons[i].getInfo (this.vwr, "info"));
 
 return lst;
 });
-Clazz.defineMethod (c$, "andBitSet", 
+Clazz.defineMethod (c$, "andBitSet",
  function (bs) {
 var bsCenters =  new JU.BS ();
 for (var i = this.polyhedronCount; --i >= 0; ) {
@@ -456,7 +456,7 @@ if (p.id == null) bsCenters.set (p.centralAtom.i);
 bsCenters.and (bs);
 return bsCenters;
 }, "JU.BS");
-Clazz.defineMethod (c$, "deletePolyhedra", 
+Clazz.defineMethod (c$, "deletePolyhedra",
  function () {
 var newCount = 0;
 var pid = J.c.PAL.pidOf (null);
@@ -472,7 +472,7 @@ for (var i = newCount; i < this.polyhedronCount; ++i) this.polyhedrons[i] = null
 
 this.polyhedronCount = newCount;
 });
-Clazz.defineMethod (c$, "setVisible", 
+Clazz.defineMethod (c$, "setVisible",
  function (visible) {
 var bs = this.findPolyBS (this.centers);
 for (var i = bs.nextSetBit (0); i >= 0; i = bs.nextSetBit (i + 1)) {
@@ -481,7 +481,7 @@ p.visible = visible;
 if (p.centralAtom != null) this.atoms[p.centralAtom.i].setShapeVisibility (this.vf, visible);
 }
 }, "~B");
-Clazz.defineMethod (c$, "buildPolyhedra", 
+Clazz.defineMethod (c$, "buildPolyhedra",
  function () {
 var p = null;
 if (this.thisID != null) {
@@ -528,17 +528,17 @@ if (this.haveBitSetVertices) break;
 }
 if (iter != null) iter.release ();
 });
-Clazz.defineMethod (c$, "setPointsFromBitset", 
+Clazz.defineMethod (c$, "setPointsFromBitset",
  function () {
 if (this.bsVertices != null) for (var i = this.bsVertices.nextSetBit (0); i >= 0 && this.nPoints < 250; i = this.bsVertices.nextSetBit (i + 1)) this.otherAtoms[this.nPoints++] = this.atoms[i];
 
 });
-Clazz.defineMethod (c$, "addPolyhedron", 
+Clazz.defineMethod (c$, "addPolyhedron",
  function (p) {
 if (this.polyhedronCount == this.polyhedrons.length) this.polyhedrons = JU.AU.doubleLength (this.polyhedrons);
 this.polyhedrons[this.polyhedronCount++] = p;
 }, "J.shapespecial.Polyhedron");
-Clazz.defineMethod (c$, "constructBondsPolyhedron", 
+Clazz.defineMethod (c$, "constructBondsPolyhedron",
  function (atom, otherAtomCount) {
 this.distanceRef = 0;
 if (otherAtomCount == 0) {
@@ -558,7 +558,7 @@ if (otherAtomCount >= 250) return null;
 }if (this.isAuto) otherAtomCount = this.setGap (atom, otherAtomCount);
 return (otherAtomCount < 3 || this.nVertices > 0 && !this.bsVertexCount.get (otherAtomCount) ? null : this.validatePolyhedron (atom, otherAtomCount));
 }, "JM.Atom,~N");
-Clazz.defineMethod (c$, "constructUnitCellPolygon", 
+Clazz.defineMethod (c$, "constructUnitCellPolygon",
  function (atom, useBondAlgorithm) {
 var unitcell = this.vwr.ms.getUnitCellForAtom (atom.i);
 if (unitcell == null) return null;
@@ -586,7 +586,7 @@ if (otherAtomCount >= 250) return null;
 }
 return this.constructBondsPolyhedron (atom, otherAtomCount);
 }, "JM.Atom,~B");
-Clazz.defineMethod (c$, "constructBitSetPolyhedron", 
+Clazz.defineMethod (c$, "constructBitSetPolyhedron",
  function (atom) {
 this.bsVertices.clear (atom.i);
 if (this.bsVertices.cardinality () >= 250) return null;
@@ -596,7 +596,7 @@ for (var i = this.bsVertices.nextSetBit (0); i >= 0; i = this.bsVertices.nextSet
 
 return this.validatePolyhedron (atom, otherAtomCount);
 }, "JM.Atom");
-Clazz.defineMethod (c$, "constructRadiusPolyhedron", 
+Clazz.defineMethod (c$, "constructRadiusPolyhedron",
  function (atom, iter) {
 var otherAtomCount = 0;
 this.distanceRef = this.radius;
@@ -618,7 +618,7 @@ this.otherAtoms[otherAtomCount++] = pt;
 if (this.isAuto) otherAtomCount = this.setGap (atom, otherAtomCount);
 return (otherAtomCount < 3 || this.nVertices > 0 && !this.bsVertexCount.get (otherAtomCount) ? null : this.validatePolyhedron (atom, otherAtomCount));
 }, "JM.Atom,J.api.AtomIndexIterator");
-Clazz.defineMethod (c$, "setGap", 
+Clazz.defineMethod (c$, "setGap",
  function (atom, otherAtomCount) {
 if (otherAtomCount < 4) return otherAtomCount;
 var dist =  Clazz.newArray (250, 2, null);
@@ -643,7 +643,7 @@ iMax = i;
 }
 return (iMax == 0 ? otherAtomCount : iMax);
 }, "JU.P3,~N");
-Clazz.defineMethod (c$, "validatePolyhedron", 
+Clazz.defineMethod (c$, "validatePolyhedron",
  function (atomOrPt, vertexCount) {
 var points = this.otherAtoms;
 var faces = this.explicitFaces;
@@ -735,7 +735,7 @@ for (var i = 0; i < triangleCount; i++) JU.Logger.info ("Polyhedron " + JU.PT.to
 faceTriangles = this.getFaceTriangles (faces.length, htNormMap, triangleCount);
 }return  new J.shapespecial.Polyhedron ().set (this.thisID, this.modelIndex, atomOrPt, points, this.nPoints, vertexCount, triangles, triangleCount, faces, faceTriangles, normals, bsCenterPlanes, collapsed, this.distanceRef, this.pointScale);
 }, "JU.P3,~N");
-Clazz.defineMethod (c$, "fixExplicitFaceWinding", 
+Clazz.defineMethod (c$, "fixExplicitFaceWinding",
  function (face, ipt, points, normals) {
 var n = face.length;
 for (var i = 0, nlast = n - 2; i < nlast; i++) {
@@ -748,7 +748,7 @@ break;
 }}
 return face;
 }, "~A,~N,~A,~A");
-Clazz.defineMethod (c$, "getFaceTriangles", 
+Clazz.defineMethod (c$, "getFaceTriangles",
  function (n, htNormMap, triangleCount) {
 var faceTriangles = JU.AU.newInt2 (n);
 if (triangleCount == n) {
@@ -768,7 +768,7 @@ faceTriangles[i++] = a;
 }
 return faceTriangles;
 }, "~N,java.util.Map,~N");
-Clazz.defineMethod (c$, "addFacet", 
+Clazz.defineMethod (c$, "addFacet",
  function (i, j, k, ptRef, points, normals, faces, planeCount, nRef, isWindingOK, vTemp) {
 var normal =  new JU.V3 ();
 var ii = isWindingOK ? i : j;
@@ -777,7 +777,7 @@ JU.Measure.getNormalFromCenter (points[k], ptRef, points[ii], points[jj], false,
 normals[planeCount] = normal;
 faces[planeCount] =  Clazz.newIntArray (-1, [nRef, ii, jj, -2]);
 }, "~N,~N,~N,JU.P3,~A,~A,~A,~N,~N,~B,JU.V3");
-Clazz.defineMethod (c$, "checkFacet", 
+Clazz.defineMethod (c$, "checkFacet",
  function (points, nPoints, t, index, norm, pTemp, vNorm, vAC, htNormMap, htEdgeMap, planarParam, bsTemp, edgeTest) {
 var i0 = t[0];
 JU.Measure.getPlaneThroughPoints (points[i0], points[t[1]], points[t[2]], vNorm, vAC, pTemp);
@@ -819,7 +819,7 @@ htEdgeMap.put (oe[3], oe);
 faceTriList.addLast (Integer.$valueOf (index));
 return 0;
 }, "~A,~N,~A,~N,JU.V3,JU.P4,JU.V3,JU.V3,java.util.Map,java.util.Map,~N,JU.BS,~A");
-Clazz.defineMethod (c$, "addEdge", 
+Clazz.defineMethod (c$, "addEdge",
  function (faceEdgeList, htEdgeMap, normix, p1, i, points) {
 var pt = p1[i];
 var pt1 = p1[(i + 1) % 3];
@@ -857,7 +857,7 @@ htEdgeMap.put (edge,  Clazz.newArray (-1, [null]));
 htEdgeMap.put (edge0,  Clazz.newArray (-1, [null]));
 return Boolean.TRUE;
 }, "JU.Lst,java.util.Map,Integer,~A,~N,~A");
-Clazz.defineMethod (c$, "testDiff", 
+Clazz.defineMethod (c$, "testDiff",
  function (a1, b1, a2, b2) {
 this.vAB.sub2 (b1, a1);
 this.vAC.sub2 (a2, a1);
@@ -866,14 +866,14 @@ this.vBC.sub2 (b2, a1);
 this.vBC.cross (this.vBC, this.vAB);
 return (this.vBC.dot (this.vAC) < 0);
 }, "JU.P3,JU.P3,JU.P3,JU.P3");
-Clazz.defineMethod (c$, "isPlanar", 
+Clazz.defineMethod (c$, "isPlanar",
  function (pt1, pt2, pt3, ptX) {
 var norm =  new JU.V3 ();
 var w = JU.Measure.getNormalThroughPoints (pt1, pt2, pt3, norm, this.vAB);
 var d = JU.Measure.distanceToPlaneV (norm, w, ptX);
 return (Math.abs (d) < J.shapespecial.Polyhedra.MAX_DISTANCE_TO_PLANE);
 }, "JU.P3,JU.P3,JU.P3,JU.P3");
-Clazz.defineMethod (c$, "getFaces", 
+Clazz.defineMethod (c$, "getFaces",
  function (triangles, triangleCount, htNormMap) {
 var n = 0;
 for (var e, $e = htNormMap.entrySet ().iterator (); $e.hasNext () && ((e = $e.next ()) || true);) {
@@ -919,7 +919,7 @@ break;
 }
 return faces;
 }, "~A,~N,java.util.Map");
-Clazz.overrideMethod (c$, "setModelVisibilityFlags", 
+Clazz.overrideMethod (c$, "setModelVisibilityFlags",
 function (bsModels) {
 for (var i = this.polyhedronCount; --i >= 0; ) {
 var p = this.polyhedrons[i];
@@ -932,7 +932,7 @@ this.atoms[ia].setShapeVisibility (this.vf, p.visibilityFlags != 0);
 p.visibilityFlags = (p.visible && (p.modelIndex < 0 || bsModels.get (p.modelIndex)) ? this.vf : 0);
 }}
 }, "JU.BS");
-Clazz.overrideMethod (c$, "getShapeState", 
+Clazz.overrideMethod (c$, "getShapeState",
 function () {
 if (this.polyhedronCount == 0) return "";
 var s =  new JU.SB ();

@@ -19,7 +19,7 @@ Clazz.instantialize (this, arguments);
 Clazz.prepareFields (c$, function () {
 this.namedSets =  new JU.BS ();
 });
-Clazz.defineMethod (c$, "initializeReader", 
+Clazz.defineMethod (c$, "initializeReader",
 function () {
 this.allowHighPrecision = !this.checkAndRemoveFilterKey ("NOHP");
 this.orientation = (this.checkFilterKey ("ORIENTATION:INPUT") ? "Input" : this.checkFilterKey ("ORIENTATION:STANDARD") ? "Standard" : null);
@@ -28,7 +28,7 @@ this.appendLoadNote ("Orientation:" + (this.orientation == null ? "ALL" : this.o
 if (this.orientation != null) this.orientation += " orientation:";
 Clazz.superCall (this, J.adapter.readers.quantum.GaussianReader, "initializeReader", []);
 });
-Clazz.overrideMethod (c$, "checkLine", 
+Clazz.overrideMethod (c$, "checkLine",
 function () {
 if (this.line.startsWith (" Step number")) {
 this.equivalentAtomSets = 0;
@@ -95,14 +95,14 @@ this.getSpinDensities (21);
 return true;
 }return this.checkNboLine ();
 });
-Clazz.overrideMethod (c$, "finalizeSubclassReader", 
+Clazz.overrideMethod (c$, "finalizeSubclassReader",
 function () {
 if (this.orientation == null) {
 this.appendLoadNote ("\nUse filter 'orientation:xxx' where 'xxx' is one of: input (includes z-matrix), standard, or ALL");
 } else {
 this.appendLoadNote ("\nfilter: " + this.filter);
 }});
-Clazz.defineMethod (c$, "getSpinDensities", 
+Clazz.defineMethod (c$, "getSpinDensities",
  function (pt) {
 this.rd ();
 var data =  Clazz.newFloatArray (this.asc.getLastAtomSetAtomCount (), 0);
@@ -111,7 +111,7 @@ for (var i = 0; i < data.length; i++) data[i] = this.parseFloatStr (this.rd ().s
 this.asc.setAtomProperties ("spin", data, -1, false);
 this.appendLoadNote (data.length + " spin densities loaded into model " + (this.asc.iSet + 1));
 }, "~N");
-Clazz.defineMethod (c$, "readSCFDone", 
+Clazz.defineMethod (c$, "readSCFDone",
  function () {
 var tokens = JU.PT.getTokensAt (this.line, 11);
 if (tokens.length < 4) return;
@@ -127,17 +127,17 @@ if (tokens.length > 5) this.setProps (tokens[3], tokens[5], this.equivalentAtomS
 tokens = JU.PT.getTokens (this.rd ());
 }if (tokens.length > 2) this.setProps (tokens[0], tokens[2], this.equivalentAtomSets);
 });
-Clazz.defineMethod (c$, "setProps", 
+Clazz.defineMethod (c$, "setProps",
  function (key, value, n) {
 for (var i = this.asc.iSet; --n >= 0 && i >= 0; --i) this.asc.setAtomSetModelPropertyForSet (key, value, i);
 
 }, "~S,~S,~N");
-Clazz.defineMethod (c$, "setNames", 
+Clazz.defineMethod (c$, "setNames",
  function (atomSetName, namedSets, n) {
 for (var i = this.asc.iSet; --n >= 0 && i >= 0; --i) if (namedSets == null || !namedSets.get (i)) this.asc.setModelInfoForSet ("name", atomSetName, i);
 
 }, "~S,JU.BS,~N");
-Clazz.defineMethod (c$, "setEnergy", 
+Clazz.defineMethod (c$, "setEnergy",
  function () {
 var tokens = this.getTokens ();
 this.energyKey = "Energy";
@@ -145,7 +145,7 @@ this.energyString = tokens[1];
 this.setNames ("Energy = " + tokens[1], this.namedSets, this.equivalentAtomSets);
 this.asc.setAtomSetEnergy (this.energyString, this.parseFloatStr (this.energyString));
 });
-Clazz.defineMethod (c$, "readAtoms", 
+Clazz.defineMethod (c$, "readAtoms",
 function () {
 this.asc.newAtomSet ();
 this.haveHighPrecision = false;
@@ -163,7 +163,7 @@ this.setAtomCoordTokens (atom, tokens, tokens.length - 3);
 }
 this.asc.setAtomSetModelProperty (".PATH", "Calculation " + this.calculationNumber + (this.scanPoint >= 0 ? (J.adapter.smarter.SmarterJmolAdapter.PATH_SEPARATOR + "Scan Point " + this.scanPoint) : "") + J.adapter.smarter.SmarterJmolAdapter.PATH_SEPARATOR + path);
 });
-Clazz.defineMethod (c$, "readBasis", 
+Clazz.defineMethod (c$, "readBasis",
 function () {
 this.shells =  new JU.Lst ();
 var gdata =  new JU.Lst ();
@@ -239,7 +239,7 @@ for (var j = 0; j < tokens.length; j++) this.gaussians[i][j] = this.parseFloatSt
 JU.Logger.info (this.shellCount + " slater shells read");
 JU.Logger.info (this.gaussianCount + " gaussian primitives read");
 });
-Clazz.defineMethod (c$, "readMolecularOrbitals", 
+Clazz.defineMethod (c$, "readMolecularOrbitals",
 function () {
 if (this.shells == null) return;
 var mos = JU.AU.createArrayOfHashtable (5);
@@ -306,7 +306,7 @@ this.addMOData (nThisLine, data, mos);
 this.setMOData (this.moModelSet != this.asc.atomSetCount);
 this.moModelSet = this.asc.atomSetCount;
 });
-Clazz.defineMethod (c$, "readFrequencies", 
+Clazz.defineMethod (c$, "readFrequencies",
 function (key, mustHave) {
 this.discardLinesUntilContains2 (key, ":");
 if (this.line == null && mustHave) throw ( new Exception ("No frequencies encountered"));
@@ -362,7 +362,7 @@ data[nLines++] = temp[0];
 this.fillFrequencyData (iAtom0, nLines, ac, ignore, true, 0, 0, atomIndices, 0, data);
 }}
 }, "~S,~B");
-Clazz.defineMethod (c$, "readDipoleMoment", 
+Clazz.defineMethod (c$, "readDipoleMoment",
 function () {
 var tokens = JU.PT.getTokens (this.rd ());
 if (tokens.length != 8) return;
@@ -370,7 +370,7 @@ var dipole = JU.V3.new3 (this.parseFloatStr (tokens[1]), this.parseFloatStr (tok
 JU.Logger.info ("Molecular dipole for model " + this.asc.atomSetCount + " = " + dipole);
 this.asc.setCurrentModelInfo ("dipole", dipole);
 });
-Clazz.defineMethod (c$, "readPartialCharges", 
+Clazz.defineMethod (c$, "readPartialCharges",
 function () {
 this.rd ();
 var ac = this.asc.ac;
@@ -384,7 +384,7 @@ atoms[i].partialCharge = charge;
 }
 JU.Logger.info ("Mulliken charges found for Model " + this.asc.atomSetCount);
 });
-Clazz.defineMethod (c$, "readCSATensors", 
+Clazz.defineMethod (c$, "readCSATensors",
  function () {
 this.rd ();
 while (this.rd () != null && this.line.indexOf ("Isotropic") >= 0) {
@@ -394,7 +394,7 @@ this.addTensor (iatom, data);
 }
 this.appendLoadNote ("NMR shift tensors are available for model=" + (this.asc.iSet + 1) + "\n using \"ellipsoids set 'csa'.");
 });
-Clazz.defineMethod (c$, "addTensor", 
+Clazz.defineMethod (c$, "addTensor",
  function (iatom, data) {
 var i0 = this.asc.getLastAtomSetAtomIndex ();
 var a =  Clazz.newDoubleArray (3, 3, 0);
@@ -405,9 +405,9 @@ a[i][j] = this.parseFloatStr (data[p]);
 }
 var t =  new JU.Tensor ().setFromAsymmetricTensor (a, "csa", "csa" + iatom);
 this.asc.atoms[i0 + iatom - 1].addTensor (t, "csa", false);
-System.out.println ("calc Tensor " + t + "calc isotropy=" + t.getInfo ("isotropy") + " anisotropy=" + t.getInfo ("anisotropy") + "\n");
+Zystem.out.println ("calc Tensor " + t + "calc isotropy=" + t.getInfo ("isotropy") + " anisotropy=" + t.getInfo ("anisotropy") + "\n");
 }, "~N,~A");
-Clazz.defineMethod (c$, "readCouplings", 
+Clazz.defineMethod (c$, "readCouplings",
  function () {
 var type = (this.line.indexOf (" K ") >= 0 ? "K" : "J");
 var i0 = this.asc.getLastAtomSetAtomIndex ();
@@ -427,7 +427,7 @@ data[i][k0 + j - 1] = data[k0 + j - 1][i] = v;
 k0 += 5;
 if (k0 >= n) break;
 }
-System.out.println (data);
+Zystem.out.println (data);
 this.asc.setModelInfoForSet ("NMR_" + type + "_couplings", data, this.asc.iSet);
 if (type === "J") {
 this.asc.setAtomProperties ("J", data, this.asc.iSet, false);

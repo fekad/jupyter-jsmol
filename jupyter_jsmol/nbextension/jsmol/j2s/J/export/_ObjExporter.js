@@ -26,21 +26,21 @@ Clazz.prepareFields (c$, function () {
 this.textures =  new java.util.HashSet ();
 this.ptTemp =  new JU.P3 ();
 });
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function () {
 Clazz.superConstructor (this, J["export"]._ObjExporter, []);
 this.debugPrint ("_WavefrontObjExporter CTOR");
 this.commentChar = "# ";
 });
-Clazz.defineMethod (c$, "debugPrint", 
+Clazz.defineMethod (c$, "debugPrint",
 function (string) {
 if (false) {
 JU.Logger.debug (string);
 }}, "~S");
-Clazz.overrideMethod (c$, "outputFace", 
+Clazz.overrideMethod (c$, "outputFace",
 function (face, map, faceVertexMax) {
 }, "~A,~A,~N");
-Clazz.overrideMethod (c$, "outputCircle", 
+Clazz.overrideMethod (c$, "outputCircle",
 function (pt1, pt2, radius, colix, doFill) {
 this.debugPrint ("outputCircle");
 if (this.surfacesOnly) {
@@ -49,7 +49,7 @@ return;
 }if (doFill) {
 this.outputCircle1 (pt1, pt2, colix, radius);
 }}, "JU.P3,JU.P3,~N,~N,~B");
-Clazz.overrideMethod (c$, "outputCone", 
+Clazz.overrideMethod (c$, "outputCone",
 function (ptBase, ptTip, radius, colix) {
 this.debugPrint ("outputCone");
 if (this.surfacesOnly) {
@@ -57,7 +57,7 @@ this.debugPrint ("  Not done owing to surfacesOnly");
 return;
 }this.outputCone1 (ptBase, ptTip, radius, colix);
 }, "JU.P3,JU.P3,~N,~N");
-Clazz.overrideMethod (c$, "outputCylinder", 
+Clazz.overrideMethod (c$, "outputCylinder",
 function (ptCenter, pt1, pt2, colix, endcaps, radius, ptX, ptY, checkRadius) {
 if (false) {
 this.debugPrint ("outputCylinder: colix=" + String.format ("%04x", [Short.$valueOf (colix)]));
@@ -86,7 +86,7 @@ this.outputCircle1 (pt2, pt1, colix, radius);
 }this.outputCylinder1 (ptCenter, pt1, pt2, colix, endcaps, radius, ptX, ptY);
 return true;
 }, "JU.P3,JU.P3,JU.P3,~N,~N,~N,JU.P3,JU.P3,~B");
-Clazz.overrideMethod (c$, "outputEllipsoid", 
+Clazz.overrideMethod (c$, "outputEllipsoid",
 function (center, points, colix) {
 if (false) {
 this.debugPrint ("outputEllipsoid: colix=" + String.format ("%04x", [Short.$valueOf (colix)]));
@@ -103,7 +103,7 @@ var sy = points[3].distance (center);
 var sz = points[5].distance (center);
 this.outputEllipsoid1 (center, sx, sy, sz, a, colix);
 }, "JU.P3,~A,~N");
-Clazz.overrideMethod (c$, "outputSphere", 
+Clazz.overrideMethod (c$, "outputSphere",
 function (center, radius, colix, checkRadius) {
 if (false) {
 this.debugPrint ("outputSphere: colix=" + String.format ("%04x", [Short.$valueOf (colix)]));
@@ -118,25 +118,25 @@ this.debugPrint ("  Not done owing to surfacesOnly");
 return;
 }this.outputEllipsoid1 (center, radius, radius, radius, null, colix);
 }, "JU.P3,~N,~N,~B");
-Clazz.overrideMethod (c$, "outputTextPixel", 
+Clazz.overrideMethod (c$, "outputTextPixel",
 function (pt, argb) {
 }, "JU.P3,~N");
-Clazz.overrideMethod (c$, "outputTriangle", 
+Clazz.overrideMethod (c$, "outputTriangle",
 function (pt1, pt2, pt3, colix) {
 if (this.surfacesOnly) {
 return;
 }this.outputTriangle1 (pt1, pt2, pt3, colix);
 }, "JU.T3,JU.T3,JU.T3,~N");
-Clazz.overrideMethod (c$, "outputHeader", 
+Clazz.overrideMethod (c$, "outputHeader",
 function () {
 this.debugPrint ("outputHeader");
 this.output ("#obj Created by Jmol " + JV.Viewer.getJmolVersion () + "\n");
 });
-Clazz.defineMethod (c$, "output", 
+Clazz.defineMethod (c$, "output",
 function (pt) {
 this.debugPrint ("output");
 }, "JU.T3");
-Clazz.overrideMethod (c$, "drawSurface", 
+Clazz.overrideMethod (c$, "drawSurface",
 function (meshSurface, colix) {
 if (JU.Logger.debugging) {
 this.debugPrint ("outputSurface");
@@ -188,7 +188,7 @@ height++;
 this.debugPrint ("  width=" + width + " height=" + height + " size = " + (width * height));
 var file = this.createTextureFile (name, data, dim);
 if (file == null || file.getByteCount () == 0) {
-System.out.println ("Error creating texture file: " + name);
+Zystem.out.println ("Error creating texture file: " + name);
 this.textureFiles.addLast ("Error creating texture file: " + name);
 return;
 }this.textureFiles.addLast (file.getByteCount () + " (" + width + "x" + height + ") " + name);
@@ -200,7 +200,7 @@ matrix.setTranslation (JU.V3.newV (meshSurface.offset));
 var bsValid =  new JU.BS ();
 this.addMesh (name, data, matrix, null, colix, dim, bsValid);
 }, "JU.MeshSurface,~N");
-Clazz.overrideMethod (c$, "initializeOutput", 
+Clazz.overrideMethod (c$, "initializeOutput",
 function (vwr, privateKey, gdata, params) {
 this.debugPrint ("initializeOutput: + output");
 var retVal = this.initOutput (vwr, privateKey, gdata, params);
@@ -229,7 +229,7 @@ this.textureFiles =  new JU.Lst ();
 this.debugPrint ("End initializeOutput:");
 return true;
 }, "JV.Viewer,~N,JU.GData,java.util.Map");
-Clazz.overrideMethod (c$, "finalizeOutput", 
+Clazz.overrideMethod (c$, "finalizeOutput",
 function () {
 this.debugPrint ("finalizeOutput");
 var retVal = this.finalizeOutput2 ();
@@ -247,16 +247,16 @@ this.debugPrint (retVal);
 this.debugPrint ("End finalizeOutput:");
 return retVal;
 });
-Clazz.defineMethod (c$, "outputMtl", 
+Clazz.defineMethod (c$, "outputMtl",
  function (data) {
 this.nMtlBytes += data.length;
 this.mtlout.append (data);
 }, "~S");
-Clazz.defineMethod (c$, "getTextureName", 
+Clazz.defineMethod (c$, "getTextureName",
  function (colix) {
 return "k" + JU.Escape.getHexColorFromRGB (this.gdata.getColorArgbOrGray (colix));
 }, "~N");
-Clazz.defineMethod (c$, "outputCircle1", 
+Clazz.defineMethod (c$, "outputCircle1",
  function (ptCenter, ptPerp, colix, radius) {
 var data = J["export"].MeshData.getCircleData ();
 var matrix =  new JU.M4 ();
@@ -269,7 +269,7 @@ matrix.m23 = ptCenter.z;
 matrix.m33 = 1;
 this.addMesh (name, data, matrix, matrix, colix, null, null);
 }, "JU.P3,JU.P3,~N,~N");
-Clazz.defineMethod (c$, "outputCone1", 
+Clazz.defineMethod (c$, "outputCone1",
  function (ptBase, ptTip, radius, colix) {
 var data = J["export"].MeshData.getConeData ();
 var matrix =  new JU.M4 ();
@@ -282,7 +282,7 @@ matrix.m23 = ptBase.z;
 matrix.m33 = 1;
 this.addMesh (name, data, matrix, matrix, colix, null, null);
 }, "JU.P3,JU.P3,~N,~N");
-Clazz.defineMethod (c$, "outputEllipse1", 
+Clazz.defineMethod (c$, "outputEllipse1",
  function (ptCenter, ptZ, ptX, ptY, colix) {
 var data = J["export"].MeshData.getCircleData ();
 var matrix =  new JU.M4 ();
@@ -296,7 +296,7 @@ matrix.m33 = 1;
 this.addMesh (name, data, matrix, matrix, colix, null, null);
 return true;
 }, "JU.P3,JU.P3,JU.P3,JU.P3,~N");
-Clazz.defineMethod (c$, "outputEllipsoid1", 
+Clazz.defineMethod (c$, "outputEllipsoid1",
  function (center, rx, ry, rz, a, colix) {
 var data = JU.MeshSurface.getSphereData (3);
 this.addTexture (colix, null);
@@ -311,7 +311,7 @@ name = "Ellipsoid" + this.ellipsoidNum++;
 }this.setSphereMatrix (center, rx, ry, rz, a, this.sphereMatrix);
 this.addMesh (name, data, this.sphereMatrix, this.sphereMatrix, colix, null, null);
 }, "JU.T3,~N,~N,~N,JU.A4,~N");
-Clazz.defineMethod (c$, "outputCylinder1", 
+Clazz.defineMethod (c$, "outputCylinder1",
  function (ptCenter, pt1, pt2, colix, endcaps, radius, ptX, ptY) {
 var data = J["export"].MeshData.getCylinderData (false);
 var matrix =  new JU.M4 ();
@@ -328,7 +328,7 @@ matrix.m33 = 1;
 }
 this.addMesh (name, data, matrix, matrix, colix, null, null);
 }, "JU.P3,JU.P3,JU.P3,~N,~N,~N,JU.P3,JU.P3");
-Clazz.defineMethod (c$, "outputTriangle1", 
+Clazz.defineMethod (c$, "outputTriangle1",
  function (pt1, pt2, pt3, colix) {
 var data = J["export"].MeshData.getTriangleData (pt1, pt2, pt3);
 this.addTexture (colix, null);
@@ -336,7 +336,7 @@ var name = "Triangle" + this.triangleNum++;
 var matrix = JU.M4.newM4 (null);
 this.addMesh (name, data, matrix, matrix, colix, null, null);
 }, "JU.T3,JU.T3,JU.T3,~N");
-Clazz.defineMethod (c$, "addTexture", 
+Clazz.defineMethod (c$, "addTexture",
  function (colix, name) {
 var scolix = Short.$valueOf (colix);
 if (name == null && this.textures.contains (scolix)) {
@@ -353,7 +353,7 @@ sb.append (" Kd " + this.rgbFractionalFromColix (colix) + "\n");
 sb.append (" Ks 0.25 0.25 0.25\n");
 this.outputMtl (sb.toString ());
 }, "~N,~S");
-Clazz.defineMethod (c$, "addMesh", 
+Clazz.defineMethod (c$, "addMesh",
  function (name, data, matrix, matrix1, colix, dim, bsValid) {
 if (this.surfacesOnly) {
 if (name == null || !name.startsWith ("Surface")) {
@@ -410,7 +410,7 @@ if (dim != null) this.currentTextureOrigin += nFaces;
 this.currentVertexOrigin += nVertices;
 this.currentNormalOrigin += nNormals;
 }, "~S,JU.MeshSurface,JU.M4,JU.M4,~N,~A,JU.BS");
-Clazz.defineMethod (c$, "outputList", 
+Clazz.defineMethod (c$, "outputList",
  function (pts, nPts, m, prefix, bsValid) {
 for (var i = 0; i < nPts; i++) {
 if (bsValid != null && !bsValid.get (i)) continue;
@@ -419,14 +419,14 @@ if (m != null) m.rotTrans (this.ptTemp);
 this.output (prefix + this.ptTemp.x + " " + this.ptTemp.y + " " + this.ptTemp.z + "\n");
 }
 }, "~A,~N,JU.M4,~S,JU.BS");
-Clazz.defineMethod (c$, "outputFace1", 
+Clazz.defineMethod (c$, "outputFace1",
  function (face, map, map2) {
 this.output ("f");
 for (var i, $i = 0, $$i = face; $i < $$i.length && ((i = $$i[$i]) || true); $i++) this.output (" " + ((map == null ? i : map[i]) + this.currentVertexOrigin) + "//" + ((map2 == null ? i : map2[i]) + this.currentNormalOrigin));
 
 this.output ("\n");
 }, "~A,~A,~A");
-Clazz.defineMethod (c$, "outputFace2", 
+Clazz.defineMethod (c$, "outputFace2",
  function (face, vt, map, map2) {
 this.output ("f");
 for (var i, $i = 0, $$i = face; $i < $$i.length && ((i = $$i[$i]) || true); $i++) {
@@ -434,7 +434,7 @@ this.output (" " + ((map == null ? i : map[i]) + this.currentVertexOrigin) + "/"
 }
 this.output ("\n");
 }, "~A,~N,~A,~A");
-Clazz.defineMethod (c$, "createTextureFile", 
+Clazz.defineMethod (c$, "createTextureFile",
  function (name, data, dim) {
 this.debugPrint ("createTextureFile: " + name);
 var colixes = (data.pcs == null ? data.vcs : data.pcs);

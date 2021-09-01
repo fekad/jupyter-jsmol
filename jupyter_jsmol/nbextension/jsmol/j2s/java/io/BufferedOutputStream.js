@@ -36,7 +36,7 @@ return;
 if(length<available){
 available=length;
 }if(available>0){
-System.arraycopy(buffer,offset,this.buf,this.count,available);
+Zystem.arraycopy(buffer,offset,this.buf,this.count,available);
 this.count+=available;
 }if(this.count==this.buf.length){
 this.out.write(this.buf,0,this.buf.length);
@@ -47,7 +47,7 @@ available=length-available;
 if(available>=this.buf.length){
 this.out.write(buffer,offset,available);
 }else{
-System.arraycopy(buffer,offset,this.buf,this.count,available);
+Zystem.arraycopy(buffer,offset,this.buf,this.count,available);
 this.count+=available;
 }}}},"~A,~N,~N");
 Clazz.defineMethod(c$,"write",

@@ -12,18 +12,18 @@ this.aaT = null;
 this.matrixT = null;
 Clazz.instantialize (this, arguments);
 }, J.render, "MeasuresRenderer", J.render.LabelsRenderer);
-Clazz.overrideMethod (c$, "initRenderer", 
+Clazz.overrideMethod (c$, "initRenderer",
 function () {
 this.mpts =  new java.util.Hashtable ();
 this.p =  new Array (4);
 });
-Clazz.overrideMethod (c$, "render", 
+Clazz.overrideMethod (c$, "render",
 function () {
 if (!this.g3d.checkTranslucent (false)) return false;
 if (this.atomPt == null) this.atomPt =  new JU.Point3fi ();
 var measures = this.shape;
 if (measures.ms !== this.ms) {
-System.out.println ("!measure wrong modelset!");
+Zystem.out.println ("!measure wrong modelset!");
 measures.clear ();
 return false;
 }this.doJustify = this.vwr.getBoolean (603979870);
@@ -52,7 +52,7 @@ this.renderMeasurement (showMeasurementLabels);
 }
 return false;
 });
-Clazz.defineMethod (c$, "getPoints", 
+Clazz.defineMethod (c$, "getPoints",
  function () {
 for (var j = this.count; --j >= 0; ) {
 var i = this.m.getAtomIndex (j + 1);
@@ -66,7 +66,7 @@ pt.sZ = this.pt0i.z;
 }
 if (this.modulating) this.m.refresh (this.p);
 });
-Clazz.defineMethod (c$, "getModAtom", 
+Clazz.defineMethod (c$, "getModAtom",
  function (i) {
 var ii = Integer.$valueOf (i);
 var pt = this.mpts.get (ii);
@@ -82,7 +82,7 @@ pt.sD = -1;
 }if (ii != null) this.mpts.put (ii, pt);
 return pt;
 }, "~N");
-Clazz.defineMethod (c$, "renderMeasurement", 
+Clazz.defineMethod (c$, "renderMeasurement",
  function (renderLabel) {
 var s = (renderLabel ? this.m.getString () : null);
 if (s != null) {
@@ -114,7 +114,7 @@ break;
 }
 this.p[0] = this.p[1] = this.p[2] = this.p[3] = null;
 }, "~B");
-Clazz.defineMethod (c$, "renderDistance", 
+Clazz.defineMethod (c$, "renderDistance",
 function (s, a, b) {
 if ((this.tickInfo = this.m.tickInfo) != null) {
 this.drawLine (a.sX, a.sY, a.sZ, b.sX, b.sY, b.sZ, this.mad);
@@ -145,7 +145,7 @@ this.atomPt.sX = Clazz.doubleToInt ((a.sX + b.sX) / 2);
 this.atomPt.sY = Clazz.doubleToInt ((a.sY + b.sY) / 2);
 this.renderLabelOrMeasure (this.m.text, s);
 }}, "~S,JU.Point3fi,JU.Point3fi");
-Clazz.defineMethod (c$, "renderAngle", 
+Clazz.defineMethod (c$, "renderAngle",
  function (s, a, b, c) {
 var zOffset = b.sD + 10;
 var zA = a.sZ - a.sD - 10;
@@ -202,7 +202,7 @@ this.atomPt.setT (this.pointT);
 this.renderLabelOrMeasure (this.m.text, s);
 }}
 }, "~S,JU.Point3fi,JU.Point3fi,JU.Point3fi");
-Clazz.defineMethod (c$, "renderTorsion", 
+Clazz.defineMethod (c$, "renderTorsion",
  function (s, a, b, c, d) {
 var zA = a.sZ - a.sD - 10;
 var zB = b.sZ - b.sD - 10;
@@ -224,7 +224,7 @@ this.atomPt.add (d);
 this.atomPt.scale (0.25);
 this.renderLabelOrMeasure (this.m.text, s);
 }}, "~S,JU.Point3fi,JU.Point3fi,JU.Point3fi,JU.Point3fi");
-Clazz.defineMethod (c$, "renderPendingMeasurement", 
+Clazz.defineMethod (c$, "renderPendingMeasurement",
  function () {
 try {
 this.getPoints ();
@@ -251,7 +251,7 @@ x <<= 1;
 y <<= 1;
 }this.drawLine (atomLast.sX, atomLast.sY, lastZ, x, y, lastZ, this.mad);
 });
-Clazz.overrideMethod (c$, "drawLine", 
+Clazz.overrideMethod (c$, "drawLine",
 function (x1, y1, z1, x2, y2, z2, mad) {
 var diameter = Clazz.floatToInt (mad >= 20 && this.exportType != 1 ? this.vwr.tm.scaleToScreen (Clazz.doubleToInt ((z1 + z2) / 2), mad) : mad);
 if (this.dotsOrDashes && (this.dashDots == null || this.dashDots === J.render.FontLineShapeRenderer.ndots)) this.width = diameter;

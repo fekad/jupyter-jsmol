@@ -14,18 +14,18 @@ this.fonts = null;
 this.images = null;
 Clazz.instantialize (this, arguments);
 }, javajs["export"], "PDFCreator");
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function () {
 });
-Clazz.defineMethod (c$, "setOutputStream", 
+Clazz.defineMethod (c$, "setOutputStream",
 function (os) {
 this.os = os;
 }, "java.io.OutputStream");
-Clazz.defineMethod (c$, "newDocument", 
+Clazz.defineMethod (c$, "newDocument",
 function (paperWidth, paperHeight, isLandscape) {
 this.width = (isLandscape ? paperHeight : paperWidth);
 this.height = (isLandscape ? paperWidth : paperHeight);
-System.out.println ("Creating PDF with width=" + this.width + " and height=" + this.height);
+Zystem.out.println ("Creating PDF with width=" + this.width + " and height=" + this.height);
 this.fonts =  new java.util.Hashtable ();
 this.indirectObjects =  new JU.Lst ();
 this.root = this.newObject ("Catalog");
@@ -53,11 +53,11 @@ page.addResource ("XObject", this.graphics.getID (), this.graphics.getRef ());
 this.g ("q 1 w 1 J 1 j 10 M []0 d q ");
 this.clip (0, 0, this.width, this.height);
 }, "~N,~N,~B");
-Clazz.defineMethod (c$, "addProcSet", 
+Clazz.defineMethod (c$, "addProcSet",
  function (o) {
 o.addResource (null, "ProcSet", "[/PDF /Text /ImageB /ImageC /ImageI]");
 }, "javajs.export.PDFObject");
-Clazz.defineMethod (c$, "clip", 
+Clazz.defineMethod (c$, "clip",
  function (x1, y1, x2, y2) {
 this.moveto (x1, y1);
 this.lineto (x2, y1);
@@ -65,22 +65,22 @@ this.lineto (x2, y2);
 this.lineto (x1, y2);
 this.g ("h W n");
 }, "~N,~N,~N,~N");
-Clazz.defineMethod (c$, "moveto", 
+Clazz.defineMethod (c$, "moveto",
 function (x, y) {
 this.g (x + " " + y + " m");
 }, "~N,~N");
-Clazz.defineMethod (c$, "lineto", 
+Clazz.defineMethod (c$, "lineto",
 function (x, y) {
 this.g (x + " " + y + " l");
 }, "~N,~N");
-Clazz.defineMethod (c$, "newObject", 
+Clazz.defineMethod (c$, "newObject",
  function (type) {
 var o =  new javajs["export"].PDFObject (++this.count);
 if (type != null) o.addDef ("Type", "/" + type);
 this.indirectObjects.addLast (o);
 return o;
 }, "~S");
-Clazz.defineMethod (c$, "addInfo", 
+Clazz.defineMethod (c$, "addInfo",
 function (data) {
 var info =  new java.util.Hashtable ();
 for (var e, $e = data.entrySet ().iterator (); $e.hasNext () && ((e = $e.next ()) || true);) {
@@ -89,7 +89,7 @@ info.put (e.getKey (), value);
 }
 this.root.addDef ("Info", info);
 }, "java.util.Map");
-Clazz.defineMethod (c$, "addFontResource", 
+Clazz.defineMethod (c$, "addFontResource",
  function (fname) {
 var f = this.newObject ("Font");
 this.fonts.put (fname, f);
@@ -99,7 +99,7 @@ f.addDef ("Subtype", "/Type1");
 this.graphics.addResource ("Font", f.getID (), f.getRef ());
 return f;
 }, "~S");
-Clazz.defineMethod (c$, "addImageResource", 
+Clazz.defineMethod (c$, "addImageResource",
 function (newImage, width, height, buffer, isRGB) {
 var imageObj = this.newObject ("XObject");
 if (this.images == null) this.images =  new java.util.Hashtable ();
@@ -125,17 +125,17 @@ for (var i = 0; i < n; i++) stream[i] = buffer[i];
 }imageObj.setStream (stream);
 this.graphics.addResource ("XObject", imageObj.getID (), imageObj.getRef ());
 }, "~O,~N,~N,~A,~B");
-Clazz.defineMethod (c$, "g", 
+Clazz.defineMethod (c$, "g",
 function (cmd) {
 this.graphics.append (cmd).appendC ('\n');
 }, "~S");
-Clazz.defineMethod (c$, "output", 
+Clazz.defineMethod (c$, "output",
  function (s) {
 var b = s.getBytes ();
 this.os.write (b, 0, b.length);
 this.pt += b.length;
 }, "~S");
-Clazz.defineMethod (c$, "closeDocument", 
+Clazz.defineMethod (c$, "closeDocument",
 function () {
 this.g ("Q Q");
 this.outputHeader ();
@@ -145,7 +145,7 @@ this.writeTrailer ();
 this.os.flush ();
 this.os.close ();
 });
-Clazz.defineMethod (c$, "outputHeader", 
+Clazz.defineMethod (c$, "outputHeader",
  function () {
 this.output ("%PDF-1.3\n%");
 var b =  Clazz.newByteArray (-1, [-1, -1, -1, -1]);
@@ -153,7 +153,7 @@ this.os.write (b, 0, b.length);
 this.pt += 4;
 this.output ("\n");
 });
-Clazz.defineMethod (c$, "writeTrailer", 
+Clazz.defineMethod (c$, "writeTrailer",
  function () {
 var trailer =  new javajs["export"].PDFObject (-2);
 this.output ("trailer");
@@ -164,7 +164,7 @@ this.output ("startxref\n");
 this.output ("" + this.xrefPt + "\n");
 this.output ("%%EOF\n");
 });
-Clazz.defineMethod (c$, "writeObjects", 
+Clazz.defineMethod (c$, "writeObjects",
  function () {
 var nObj = this.indirectObjects.size ();
 for (var i = 0; i < nObj; i++) {
@@ -180,7 +180,7 @@ o.pt = this.pt;
 this.pt += o.output (this.os);
 }
 });
-Clazz.defineMethod (c$, "writeXRefTable", 
+Clazz.defineMethod (c$, "writeXRefTable",
  function () {
 this.xrefPt = this.pt;
 var nObj = this.indirectObjects.size ();
@@ -194,19 +194,19 @@ sb.append (" 00000 n\r\n");
 }
 this.output (sb.toString ());
 });
-Clazz.defineMethod (c$, "canDoLineTo", 
+Clazz.defineMethod (c$, "canDoLineTo",
 function () {
 return true;
 });
-Clazz.defineMethod (c$, "fill", 
+Clazz.defineMethod (c$, "fill",
 function () {
 this.g ("f");
 });
-Clazz.defineMethod (c$, "stroke", 
+Clazz.defineMethod (c$, "stroke",
 function () {
 this.g ("S");
 });
-Clazz.defineMethod (c$, "doCircle", 
+Clazz.defineMethod (c$, "doCircle",
 function (x, y, r, doFill) {
 var d = r * 4 * (Math.sqrt (2) - 1) / 3;
 var dx = x;
@@ -218,18 +218,18 @@ this.g ((dx - r) + " " + (dy - d) + " " + (dx - d) + " " + (dy - r) + " " + (dx)
 this.g ((dx + d) + " " + (dy - r) + " " + (dx + r) + " " + (dy - d) + " " + (dx + r) + " " + (dy) + " c");
 this.g (doFill ? "f" : "s");
 }, "~N,~N,~N,~B");
-Clazz.defineMethod (c$, "doPolygon", 
+Clazz.defineMethod (c$, "doPolygon",
 function (axPoints, ayPoints, nPoints, doFill) {
 this.moveto (axPoints[0], ayPoints[0]);
 for (var i = 1; i < nPoints; i++) this.lineto (axPoints[i], ayPoints[i]);
 
 this.g (doFill ? "f" : "s");
 }, "~A,~A,~N,~B");
-Clazz.defineMethod (c$, "doRect", 
+Clazz.defineMethod (c$, "doRect",
 function (x, y, width, height, doFill) {
 this.g (x + " " + y + " " + width + " " + height + " re " + (doFill ? "f" : "s"));
 }, "~N,~N,~N,~N,~B");
-Clazz.defineMethod (c$, "drawImage", 
+Clazz.defineMethod (c$, "drawImage",
 function (image, destX0, destY0, destX1, destY1, srcX0, srcY0, srcX1, srcY1) {
 var imageObj = this.images.get (image);
 if (imageObj == null) return;
@@ -249,11 +249,11 @@ this.g (scaleX * iw + " 0 0 " + -scaleY * ih + " " + transX + " " + transY + " c
 this.g ("/" + imageObj.getID () + " Do");
 this.g ("Q");
 }, "~O,~N,~N,~N,~N,~N,~N,~N,~N");
-Clazz.defineMethod (c$, "drawStringRotated", 
+Clazz.defineMethod (c$, "drawStringRotated",
 function (s, x, y, angle) {
 this.g ("q " + this.getRotation (angle) + " " + x + " " + y + " cm BT(" + s + ")Tj ET Q");
 }, "~S,~N,~N,~N");
-Clazz.defineMethod (c$, "getRotation", 
+Clazz.defineMethod (c$, "getRotation",
 function (angle) {
 var cos = 0;
 var sin = 0;
@@ -279,21 +279,21 @@ if (Math.abs (sin) < 0.0001) sin = 0;
 }
 return cos + " " + sin + " " + sin + " " + -cos;
 }, "~N");
-Clazz.defineMethod (c$, "setColor", 
+Clazz.defineMethod (c$, "setColor",
 function (rgb, isFill) {
 this.g (rgb[0] + " " + rgb[1] + " " + rgb[2] + (isFill ? " rg" : " RG"));
 }, "~A,~B");
-Clazz.defineMethod (c$, "setFont", 
+Clazz.defineMethod (c$, "setFont",
 function (fname, size) {
 var f = this.fonts.get (fname);
 if (f == null) f = this.addFontResource (fname);
 this.g ("/" + f.getID () + " " + size + " Tf");
 }, "~S,~N");
-Clazz.defineMethod (c$, "setLineWidth", 
+Clazz.defineMethod (c$, "setLineWidth",
 function (width) {
 this.g (width + " w");
 }, "~N");
-Clazz.defineMethod (c$, "translateScale", 
+Clazz.defineMethod (c$, "translateScale",
 function (x, y, scale) {
 this.g (scale + " 0 0 " + scale + " " + x + " " + y + " cm");
 }, "~N,~N,~N");

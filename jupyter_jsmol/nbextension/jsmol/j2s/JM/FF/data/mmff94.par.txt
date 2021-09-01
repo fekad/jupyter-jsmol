@@ -1,8 +1,8 @@
-15. MMFFPBCI.PAR: This file supplies "partial-bond-charge-increment" 
+15. MMFFPBCI.PAR: This file supplies "partial-bond-charge-increment"
                   parameters used in the empirical rule employed to assign
                   missing bond-charge-increment parameters.  It also specifies
                   the "formal-charge-sharing" parameters used to assemble the
-                  MMFF94 partiial atomic charges for systems or groups 
+                  MMFF94 partiial atomic charges for Zystems or groups
                   that have a negative formal charge.
 *
 *         Copyright (c) Merck and Co., Inc., 1994, 1995, 1996
@@ -119,7 +119,7 @@ $
 *
 * MMFF BOND-CHARGE INCREMENTS - Rev: 26-OCT-94  Source: MMFF94
 * C94  - CORE MMFF94 parameter, obtained from fit to dipole moments
-* #C94 - CORE MMFF94 parameter, either fixed or adjusted to fit 
+* #C94 - CORE MMFF94 parameter, either fixed or adjusted to fit
 *        HF/6-31G* interaction energies
 * X94  - EXTD MMFF94 parameter, obtained from fit to dipole moments
 * #X94 - EXTD MMFF94 parameter, fixed in the fit to dipole moments
@@ -2980,7 +2980,7 @@ $
 0  59   82   64     1.563   105.660   E94
 0  64   82   65     1.281   112.955   E94
 $
-6. MMFFBNDK.PAR: This file supplies parameters employed in the empirical 
+6. MMFFBNDK.PAR: This file supplies parameters employed in the empirical
                  rule used for bond-stretching force constants.
 *
 *          Copyright (c) Merck and Co., Inc., 1994, 1995, 1996
@@ -3050,7 +3050,7 @@ $
    35   35   2.28    2.4      E94
    53   53   2.67    1.6      E94
 $
-6. MMFFBOND.PAR: This file supplies parameters for bond-stretching 
+6. MMFFBOND.PAR: This file supplies parameters for bond-stretching
                  interactions.
 *
 *           Copyright (c) Merck and Co., Inc., 1994, 1995, 1996
@@ -3559,7 +3559,7 @@ $
 0  79   81     4.305     1.356   E94
 0  80   81     8.237     1.335   C94
 $
-11. MMFFOOP.PAR: This file supplies parameters for out-of-plane bending 
+11. MMFFOOP.PAR: This file supplies parameters for out-of-plane bending
                  interactions.
 *
 *          Copyright (c) Merck and Co., Inc., 1994, 1995, 1996
@@ -3981,15 +3981,15 @@ $
 0  36   81   80     0.018     0.422   C94
 0  78   81   80     0.366     0.419   C94
 $
-10. MMFFDFSB.PAR: This file supplies default parameters for stretch-bend 
+10. MMFFDFSB.PAR: This file supplies default parameters for stretch-bend
                   interactions.
 *
 *          Copyright (c) Merck and Co., Inc., 1994, 1995, 1996
 *                         All Rights Reserved
 *
 * MMFF Default Stretch-Bend Parameters
-*     Row in 
-*  Periodic Table         
+*     Row in
+*  Periodic Table
 *   IR   JR   KR   F(I_J,K)  F(K_J,I)
     0    1    0      0.15      0.15
     0    1    1      0.10      0.30
@@ -4966,15 +4966,15 @@ $
 *          Copyright (c) Merck and Co., Inc., 1994, 1995, 1996
 *                         All Rights Reserved
 *
-* E94  - From empirical rule (JACS 1992, 114, 7827) 
+* E94  - From empirical rule (JACS 1992, 114, 7827)
 * C94  - Adjusted in fit to HF/6-31G* dimer energies and geometries
-* X94  - Chosen in the extension of the paratererization for MMFF94 
+* X94  - Chosen in the extension of the paratererization for MMFF94
 *        by analogy to other, similar atom types or, for ions, by
 *        fitting to atomic radii (and sometimes to association energies
 *        for hydrates)
 *
 *  power      B       Beta     DARAD      DAEPS
-*<added by Bob Hanson  0.25      0.2       12.       0.8        0.5      
+*<added by Bob Hanson  0.25      0.2       12.       0.8        0.5
 *
 *  type  alpha-i     N-i       A-i       G-i DA Symb   Origin
 *------------------------------------------------------------

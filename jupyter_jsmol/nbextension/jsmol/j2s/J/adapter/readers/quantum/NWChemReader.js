@@ -19,11 +19,11 @@ Clazz.instantialize (this, arguments);
 Clazz.prepareFields (c$, function () {
 this.htMOs =  new java.util.Hashtable ();
 });
-Clazz.overrideMethod (c$, "initializeReader", 
+Clazz.overrideMethod (c$, "initializeReader",
 function () {
 this.calculationType = "(NWCHEM)";
 });
-Clazz.overrideMethod (c$, "checkLine", 
+Clazz.overrideMethod (c$, "checkLine",
 function () {
 if (this.line.trim ().startsWith ("NWChem")) {
 this.inInput = (this.line.indexOf ("NWChem Input Module") >= 0);
@@ -73,12 +73,12 @@ if (this.equivalentAtomSets != 0) this.readMOs ();
 return true;
 }return true;
 });
-Clazz.overrideMethod (c$, "finalizeSubclassReader", 
+Clazz.overrideMethod (c$, "finalizeSubclassReader",
 function () {
 this.checkMOs ();
 this.finalizeReaderASCR ();
 });
-Clazz.defineMethod (c$, "init", 
+Clazz.defineMethod (c$, "init",
  function () {
 this.haveEnergy = false;
 this.haveAt = false;
@@ -86,7 +86,7 @@ this.converged = false;
 this.inInput = false;
 this.equivalentAtomSets = 0;
 });
-Clazz.defineMethod (c$, "setEnergies", 
+Clazz.defineMethod (c$, "setEnergies",
  function (key, value, nAtomSets) {
 this.energyKey = key;
 this.energyValue = value;
@@ -95,7 +95,7 @@ this.setNames (this.energyKey + " = " + this.energyValue, null, this.equivalentA
 this.asc.setAtomSetEnergy (value, this.parseFloatStr (value));
 this.haveEnergy = true;
 }, "~S,~S,~N");
-Clazz.defineMethod (c$, "setEnergy", 
+Clazz.defineMethod (c$, "setEnergy",
  function (key, value) {
 this.energyKey = key;
 this.energyValue = value;
@@ -103,12 +103,12 @@ this.asc.setAtomSetModelProperty (this.energyKey, this.energyValue);
 this.asc.setAtomSetName (this.energyKey + " = " + this.energyValue);
 this.haveEnergy = true;
 }, "~S,~S");
-Clazz.defineMethod (c$, "readSymmetry", 
+Clazz.defineMethod (c$, "readSymmetry",
  function () {
 var tokens = JU.PT.getTokens (this.readLines (3));
 this.setProps ("Symmetry group name", tokens[tokens.length - 1], this.equivalentAtomSets);
 });
-Clazz.defineMethod (c$, "readTotal", 
+Clazz.defineMethod (c$, "readTotal",
  function () {
 var tokens = this.getTokens ();
 try {
@@ -121,7 +121,7 @@ throw e;
 }
 }
 });
-Clazz.defineMethod (c$, "readAtSign", 
+Clazz.defineMethod (c$, "readAtSign",
  function () {
 if (this.line.charAt (2) == 'S') {
 if (this.readLines (2) == null) return;
@@ -133,17 +133,17 @@ this.setEnergies (this.energyKey, this.energyValue, this.equivalentAtomSets);
 }this.setProps ("Step", tokens[1], this.equivalentAtomSets);
 this.haveAt = true;
 });
-Clazz.defineMethod (c$, "setProps", 
+Clazz.defineMethod (c$, "setProps",
  function (key, value, n) {
 for (var i = this.asc.iSet; --n >= 0 && i >= 0; --i) this.asc.setAtomSetModelPropertyForSet (key, value, i);
 
 }, "~S,~S,~N");
-Clazz.defineMethod (c$, "setNames", 
+Clazz.defineMethod (c$, "setNames",
  function (atomSetName, namedSets, n) {
 for (var i = this.asc.iSet; --n >= 0 && i >= 0; --i) if (namedSets == null || !namedSets.get (i)) this.asc.setModelInfoForSet ("name", atomSetName, i);
 
 }, "~S,JU.BS,~N");
-Clazz.defineMethod (c$, "readAtoms", 
+Clazz.defineMethod (c$, "readAtoms",
  function (thisLine) {
 var scale = (thisLine.indexOf ("angstroms") < 0 ? 0.5291772 : 1);
 this.readLines (3);
@@ -165,7 +165,7 @@ this.asc.setAtomSetModelProperty ("Step", "converged");
 } else if (this.inInput) {
 this.asc.setAtomSetName ("Input");
 }}, "~S");
-Clazz.defineMethod (c$, "readFrequencies", 
+Clazz.defineMethod (c$, "readFrequencies",
  function () {
 var firstFrequencyAtomSetIndex = this.asc.atomSetCount;
 var firstVibrationNumber = this.vibrationNumber;
@@ -217,13 +217,13 @@ this.asc.iSet = iset;
 }
 } catch (e) {
 if (Clazz.exceptionOf (e, Exception)) {
-System.out.println ("nwchem infra red issue" + e);
+Zystem.out.println ("nwchem infra red issue" + e);
 } else {
 throw e;
 }
 }
 });
-Clazz.defineMethod (c$, "readPartialCharges", 
+Clazz.defineMethod (c$, "readPartialCharges",
 function () {
 var tokens;
 this.readLines (4);
@@ -240,13 +240,13 @@ tokens = this.getTokens ();
 atoms[i].partialCharge = this.parseIntStr (tokens[2]) - this.parseFloatStr (tokens[3]);
 }
 });
-Clazz.defineMethod (c$, "fixTag", 
+Clazz.defineMethod (c$, "fixTag",
  function (tag) {
 if (tag.equalsIgnoreCase ("bq")) return "X";
 if (tag.toLowerCase ().startsWith ("bq")) tag = tag.substring (2) + "-Bq";
 return "" + Character.toUpperCase (tag.charAt (0)) + (tag.length == 1 ? "" : "" + Character.toLowerCase (tag.charAt (1)));
 }, "~S");
-Clazz.defineMethod (c$, "readBasis", 
+Clazz.defineMethod (c$, "readBasis",
  function () {
 this.gaussianCount = 0;
 this.shellCount = 0;
@@ -329,7 +329,7 @@ for (var i = 0; i < this.gaussianCount; i++) this.gaussians[i] = gdata.get (i);
 JU.Logger.info (this.gaussianCount + " Gaussians read");
 return true;
 });
-Clazz.defineMethod (c$, "readMOs", 
+Clazz.defineMethod (c$, "readMOs",
  function () {
 var lines =  new JU.Lst ();
 this.htMOs.put (this.line, lines);
@@ -342,7 +342,7 @@ if (this.line.length < 2) nblank++;
 }
 return true;
 });
-Clazz.defineMethod (c$, "checkMOs", 
+Clazz.defineMethod (c$, "checkMOs",
  function () {
 if (this.shells == null) return;
 for (var entry, $entry = this.htMOs.entrySet ().iterator (); $entry.hasNext () && ((entry = $entry.next ()) || true);) {
@@ -384,7 +384,7 @@ this.energyUnits = "a.u.";
 this.setMOData (true);
 this.htMOs.clear ();
 });
-Clazz.overrideMethod (c$, "rd", 
+Clazz.overrideMethod (c$, "rd",
 function () {
 this.RL ();
 if (!this.purging && this.line != null && this.line.startsWith ("--")) {

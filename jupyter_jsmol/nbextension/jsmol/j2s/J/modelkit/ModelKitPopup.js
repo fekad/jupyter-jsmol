@@ -47,20 +47,20 @@ this.bsHighlight =  new JU.BS ();
 this.screenXY =  Clazz.newIntArray (2, 0);
 this.mkdata =  new java.util.Hashtable ();
 });
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function () {
 Clazz.superConstructor (this, J.modelkit.ModelKitPopup, []);
 });
-Clazz.defineMethod (c$, "initialize", 
+Clazz.defineMethod (c$, "initialize",
 function (vwr, bundle, title) {
 Clazz.superCall (this, J.modelkit.ModelKitPopup, "initialize", [vwr, bundle, title]);
 this.initializeForModel ();
 }, "JV.Viewer,J.popup.PopupResource,~S");
-Clazz.overrideMethod (c$, "getBundle", 
+Clazz.overrideMethod (c$, "getBundle",
 function (menu) {
 return J.modelkit.ModelKitPopup.bundle;
 }, "~S");
-Clazz.defineMethod (c$, "initializeForModel", 
+Clazz.defineMethod (c$, "initializeForModel",
 function () {
 this.resetBondFields ("init");
 this.allOperators = null;
@@ -72,7 +72,7 @@ this.hasUnitCell = (this.vwr.getCurrentUnitCell () != null);
 this.symop = null;
 this.setDefaultState (this.hasUnitCell ? 1 : 0);
 });
-Clazz.overrideMethod (c$, "jpiUpdateComputedMenus", 
+Clazz.overrideMethod (c$, "jpiUpdateComputedMenus",
 function () {
 this.hasUnitCell = (this.vwr.getCurrentUnitCell () != null);
 this.htMenus.get ("xtalMenu").setEnabled (this.hasUnitCell);
@@ -89,11 +89,11 @@ this.allOperators = null;
 this.updateOperatorMenu ();
 }this.updateAllXtalMenuOptions ();
 });
-Clazz.overrideMethod (c$, "appUpdateForShow", 
+Clazz.overrideMethod (c$, "appUpdateForShow",
 function () {
 this.jpiUpdateComputedMenus ();
 });
-Clazz.defineMethod (c$, "updateOperatorMenu", 
+Clazz.defineMethod (c$, "updateOperatorMenu",
 function () {
 if (this.allOperators != null) return;
 var data = this.runScriptBuffered ("show symop");
@@ -101,7 +101,7 @@ this.allOperators = JU.PT.split (data.trim ().$replace ('\t', ' '), "\n");
 var menu = this.htMenus.get ("xtalOp!PersistMenu");
 if (menu != null) this.addAllCheckboxItems (menu, this.allOperators);
 });
-Clazz.defineMethod (c$, "addAllCheckboxItems", 
+Clazz.defineMethod (c$, "addAllCheckboxItems",
  function (menu, labels) {
 this.menuRemoveAll (menu, 0);
 var subMenu = menu;
@@ -118,7 +118,7 @@ var sym = labels[i];
 this.menuEnable (this.menuCreateItem (subMenu, sym, sym, subMenu.getName () + "." + "mkop_" + (i + 1)), true);
 }
 }, "J.api.SC,~A");
-Clazz.defineMethod (c$, "updateAllXtalMenuOptions", 
+Clazz.defineMethod (c$, "updateAllXtalMenuOptions",
 function () {
 var text = "";
 switch (this.getMKState ()) {
@@ -162,15 +162,15 @@ break;
 }
 this.setLabel ("xtalPackingPersistMenu", "Packing: " + text);
 });
-Clazz.defineMethod (c$, "setLabel", 
+Clazz.defineMethod (c$, "setLabel",
  function (key, label) {
 this.menuSetLabel (this.htMenus.get (key), label);
 }, "~S,~S");
-Clazz.defineMethod (c$, "getActiveMenu", 
+Clazz.defineMethod (c$, "getActiveMenu",
 function () {
 return this.activeMenu;
 });
-Clazz.defineMethod (c$, "setActiveMenu", 
+Clazz.defineMethod (c$, "setActiveMenu",
 function (name) {
 var active = (name.indexOf ("xtalMenu") >= 0 ? "xtalMenu" : name.indexOf ("atomMenu") >= 0 ? "atomMenu" : name.indexOf ("bondMenu") >= 0 ? "bondMenu" : null);
 if (active != null) {
@@ -179,7 +179,7 @@ if ((active === "xtalMenu") == (this.getMKState () == 0)) this.setMKState (activ
 this.vwr.refresh (1, "modelkit");
 }return active;
 }, "~S");
-Clazz.overrideMethod (c$, "appUpdateSpecialCheckBoxValue", 
+Clazz.overrideMethod (c$, "appUpdateSpecialCheckBoxValue",
 function (source, actionCommand, selected) {
 var name = source.getName ();
 if (!this.updatingForShow && this.setActiveMenu (name) != null) {
@@ -189,53 +189,53 @@ this.bondHoverLabel = text;
 } else if (name.indexOf ("assignAtom") >= 0) this.atomHoverLabel = text;
  else if (this.activeMenu === "xtalMenu") this.xtalHoverLabel = this.atomHoverLabel = text;
 }}, "J.api.SC,~S,~B");
-Clazz.defineMethod (c$, "isXtalState", 
+Clazz.defineMethod (c$, "isXtalState",
  function () {
 return ((this.state & 3) != 0);
 });
-Clazz.defineMethod (c$, "setMKState", 
+Clazz.defineMethod (c$, "setMKState",
  function (bits) {
 this.state = (this.state & -4) | (this.hasUnitCell ? bits : 0);
 }, "~N");
-Clazz.defineMethod (c$, "getMKState", 
+Clazz.defineMethod (c$, "getMKState",
  function () {
 return this.state & 3;
 });
-Clazz.defineMethod (c$, "setSymEdit", 
+Clazz.defineMethod (c$, "setSymEdit",
  function (bits) {
 this.state = (this.state & -225) | bits;
 }, "~N");
-Clazz.defineMethod (c$, "getSymEditState", 
+Clazz.defineMethod (c$, "getSymEditState",
  function () {
 return this.state & 224;
 });
-Clazz.defineMethod (c$, "setSymViewState", 
+Clazz.defineMethod (c$, "setSymViewState",
  function (bits) {
 this.state = (this.state & -29) | bits;
 }, "~N");
-Clazz.defineMethod (c$, "getSymViewState", 
+Clazz.defineMethod (c$, "getSymViewState",
  function () {
 return this.state & 28;
 });
-Clazz.defineMethod (c$, "setUnitCell", 
+Clazz.defineMethod (c$, "setUnitCell",
  function (bits) {
 this.state = (this.state & -1793) | bits;
 }, "~N");
-Clazz.defineMethod (c$, "getUnitCellState", 
+Clazz.defineMethod (c$, "getUnitCellState",
  function () {
 return this.state & 1792;
 });
-Clazz.defineMethod (c$, "isPickAtomAssignCharge", 
+Clazz.defineMethod (c$, "isPickAtomAssignCharge",
 function () {
 return this.$isPickAtomAssignCharge;
 });
-Clazz.defineMethod (c$, "getProperty", 
+Clazz.defineMethod (c$, "getProperty",
 function (data) {
 var key = (Clazz.instanceOf (data, String) ? data : (data)[0]).toString ();
 var value = (Clazz.instanceOf (data, String) ? null : (data)[1]);
 return this.setProperty (key, value);
 }, "~O");
-Clazz.defineMethod (c$, "setProperty", 
+Clazz.defineMethod (c$, "setProperty",
 function (name, value) {
 name = name.toLowerCase ().intern ();
 if (name === "ismolecular") {
@@ -364,14 +364,14 @@ J.modelkit.ModelKitPopup.notImplemented ("setProperty: addConstraint");
 J.modelkit.ModelKitPopup.notImplemented ("setProperty: removeConstraint");
 }if (name === "removeallconstraints") {
 J.modelkit.ModelKitPopup.notImplemented ("setProperty: removeAllConstraints");
-}System.err.println ("ModelKitPopup.setProperty? " + name + " " + value);
+}Zystem.err.println ("ModelKitPopup.setProperty? " + name + " " + value);
 return null;
 }, "~S,~O");
-c$.isTrue = Clazz.defineMethod (c$, "isTrue", 
+c$.isTrue = Clazz.defineMethod (c$, "isTrue",
  function (value) {
 return (Boolean.$valueOf (value.toString ()) === Boolean.TRUE);
 }, "~O");
-Clazz.defineMethod (c$, "getData", 
+Clazz.defineMethod (c$, "getData",
  function (key) {
 this.addData ("centerPoint", this.centerPoint);
 this.addData ("centerAtomIndex", Integer.$valueOf (this.centerAtomIndex));
@@ -382,11 +382,11 @@ this.addData ("drawData", this.drawData);
 this.addData ("drawScript", this.drawScript);
 return this.mkdata;
 }, "~S");
-Clazz.defineMethod (c$, "addData", 
+Clazz.defineMethod (c$, "addData",
  function (key, value) {
 this.mkdata.put (key, value == null ? "null" : value);
 }, "~S,~O");
-Clazz.defineMethod (c$, "processAtomClick", 
+Clazz.defineMethod (c$, "processAtomClick",
  function (atomIndex) {
 switch (this.getMKState ()) {
 case 0:
@@ -404,7 +404,7 @@ return false;
 J.modelkit.ModelKitPopup.notImplemented ("atom click unknown XTAL state");
 return false;
 }, "~N");
-Clazz.defineMethod (c$, "getHoverLabel", 
+Clazz.defineMethod (c$, "getHoverLabel",
  function (atomIndex) {
 var state = this.getMKState ();
 if (state != 1 && atomIndex >= 0 && !this.vwr.ms.isAtomInLastModel (atomIndex)) {
@@ -450,7 +450,7 @@ break;
 }
 return msg;
 }, "~N");
-Clazz.defineMethod (c$, "setDefaultState", 
+Clazz.defineMethod (c$, "setDefaultState",
  function (mode) {
 if (!this.hasUnitCell) mode = 0;
 if (!this.hasUnitCell || this.isXtalState () != this.hasUnitCell) {
@@ -465,13 +465,13 @@ case 2:
 break;
 }
 }}, "~N");
-Clazz.overrideMethod (c$, "appGetBooleanProperty", 
+Clazz.overrideMethod (c$, "appGetBooleanProperty",
 function (name) {
 if (name.startsWith ("mk")) {
 return (this.getProperty (name.substring (2))).booleanValue ();
 }return this.vwr.getBooleanProperty (name);
 }, "~S");
-Clazz.overrideMethod (c$, "getUnknownCheckBoxScriptToRun", 
+Clazz.overrideMethod (c$, "getUnknownCheckBoxScriptToRun",
 function (item, name, what, TF) {
 if (name.startsWith ("mk")) {
 this.processMKPropertyItem (name, TF);
@@ -483,7 +483,7 @@ item.setActionCommand ("assignAtom_" + element + "P!:??");
 this.atomHoverLabel = "Click or click+drag for " + element;
 return "set picking assignAtom_" + element;
 }, "J.api.SC,~S,~S,~B");
-Clazz.defineMethod (c$, "processMKPropertyItem", 
+Clazz.defineMethod (c$, "processMKPropertyItem",
  function (name, TF) {
 name = name.substring (2);
 var pt = name.indexOf ("_");
@@ -492,7 +492,7 @@ this.setProperty (name.substring (0, pt), name.substring (pt + 1));
 } else {
 this.setProperty (name, Boolean.$valueOf (TF));
 }}, "~S,~B");
-Clazz.defineMethod (c$, "showXtalSymmetry", 
+Clazz.defineMethod (c$, "showXtalSymmetry",
  function () {
 var script = null;
 switch (this.getSymViewState ()) {
@@ -516,7 +516,7 @@ this.appRunScript (";refresh;set echo top right;echo " + this.drawData.$replace 
 break;
 }
 });
-Clazz.defineMethod (c$, "assignAtom", 
+Clazz.defineMethod (c$, "assignAtom",
  function (atomIndex, type, autoBond, addHsAndBond) {
 this.vwr.ms.clearDB (atomIndex);
 if (type == null) type = "C";
@@ -566,7 +566,7 @@ bs.andNot (this.vwr.ms.getAtomBitsMDa (1612709900, null,  new JU.BS ()));
 this.vwr.ms.makeConnections2 (0.1, 1.8, 1, 1073741904, bsA, bs, null, false, false, 0);
 }if (this.addXtalHydrogens) this.vwr.addHydrogens (bsA, 1);
 }, "~N,~S,~B,~B");
-Clazz.defineMethod (c$, "assignBond", 
+Clazz.defineMethod (c$, "assignBond",
  function (bondIndex, type) {
 var bondOrder = type.charCodeAt (0) - 48;
 var bond = this.vwr.ms.bo[bondIndex];
@@ -613,20 +613,20 @@ throw e;
 if (type != '0' && this.addXtalHydrogens) this.vwr.addHydrogens (bsAtoms, 1);
 return bsAtoms;
 }, "~N,~S");
-Clazz.defineMethod (c$, "isVwrRotateBond", 
+Clazz.defineMethod (c$, "isVwrRotateBond",
  function () {
 return (this.vwr.acm.getBondPickingMode () == 34);
 });
-Clazz.defineMethod (c$, "getRotateBondIndex", 
+Clazz.defineMethod (c$, "getRotateBondIndex",
 function () {
 return (this.getMKState () == 0 && this.isRotateBond ? this.bondIndex : -1);
 });
-Clazz.defineMethod (c$, "resetBondFields", 
+Clazz.defineMethod (c$, "resetBondFields",
  function (where) {
 this.bsRotateBranch = null;
 this.branchAtomIndex = this.bondAtomIndex1 = this.bondAtomIndex2 = -1;
 }, "~S");
-Clazz.defineMethod (c$, "setBondIndex", 
+Clazz.defineMethod (c$, "setBondIndex",
  function (index, isRotate) {
 if (!isRotate && this.isVwrRotateBond ()) {
 this.vwr.setModelKitRotateBondIndex (index);
@@ -644,7 +644,7 @@ this.bondAtomIndex1 = this.vwr.ms.bo[index].getAtomIndex1 ();
 this.bondAtomIndex2 = this.vwr.ms.bo[index].getAtomIndex2 ();
 this.setActiveMenu ("bondMenu");
 }, "~N,~B");
-Clazz.defineMethod (c$, "actionRotateBond", 
+Clazz.defineMethod (c$, "actionRotateBond",
 function (deltaX, deltaY, x, y, forceFull) {
 if (this.bondIndex < 0) return;
 var bsBranch = this.bsRotateBranch;
@@ -681,15 +681,15 @@ var bs = JU.BSUtil.copy (bsBranch);
 bs.andNot (this.vwr.slm.getMotionFixedAtoms ());
 this.vwr.rotateAboutPointsInternal (null, atomFix, atomMove, 0, degrees, false, bs, null, null, null, null);
 }, "~N,~N,~N,~N,~B");
-Clazz.overrideMethod (c$, "menuFocusCallback", 
+Clazz.overrideMethod (c$, "menuFocusCallback",
 function (name, actionCommand, gained) {
 if (gained && !this.processSymop (name, true)) this.setActiveMenu (name);
 }, "~S,~S,~B");
-Clazz.overrideMethod (c$, "menuClickCallback", 
+Clazz.overrideMethod (c$, "menuClickCallback",
 function (source, script) {
 this.doMenuClickCallbackMK (source, script);
 }, "J.api.SC,~S");
-Clazz.defineMethod (c$, "doMenuClickCallbackMK", 
+Clazz.defineMethod (c$, "doMenuClickCallbackMK",
 function (source, script) {
 if (this.processSymop (source.getName (), false)) return;
 if (script.equals ("clearQPersist")) {
@@ -703,14 +703,14 @@ this.appRunScript ("set picking assignAtom_C");
 return;
 }this.doMenuClickCallback (source, script);
 }, "J.api.SC,~S");
-Clazz.overrideMethod (c$, "getScriptForCallback", 
+Clazz.overrideMethod (c$, "getScriptForCallback",
 function (source, id, script) {
 if (script.startsWith ("mk")) {
 this.processXtalClick (id, script);
 script = null;
 }return script;
 }, "J.api.SC,~S,~S");
-Clazz.defineMethod (c$, "processXtalClick", 
+Clazz.defineMethod (c$, "processXtalClick",
  function (id, action) {
 if (this.processSymop (id, false)) return;
 action = action.intern ();
@@ -732,7 +732,7 @@ this.processUCClick (action);
 J.modelkit.ModelKitPopup.notImplemented ("XTAL click " + action);
 }this.updateAllXtalMenuOptions ();
 }, "~S,~S");
-Clazz.defineMethod (c$, "processSelOpClick", 
+Clazz.defineMethod (c$, "processSelOpClick",
  function (action) {
 this.secondAtomIndex = -1;
 if (action === "mkselop_addoffset") {
@@ -750,7 +750,7 @@ this.setProperty ("offset", p);
 }} else if (action === "mkselop_atom2") {
 J.modelkit.ModelKitPopup.notImplemented (action);
 }}, "~S");
-Clazz.defineMethod (c$, "processSymop", 
+Clazz.defineMethod (c$, "processSymop",
  function (id, isFocus) {
 var pt = id.indexOf (".mkop_");
 if (pt >= 0) {
@@ -761,17 +761,17 @@ if (isFocus) this.symop = op;
 return true;
 }return false;
 }, "~S,~B");
-Clazz.defineMethod (c$, "showSymop", 
+Clazz.defineMethod (c$, "showSymop",
  function (symop) {
 this.secondAtomIndex = -1;
 this.symop = symop;
 this.showXtalSymmetry ();
 }, "~O");
-Clazz.defineMethod (c$, "processModeClick", 
+Clazz.defineMethod (c$, "processModeClick",
  function (action) {
 this.processMKPropertyItem (action, false);
 }, "~S");
-Clazz.defineMethod (c$, "processSelClick", 
+Clazz.defineMethod (c$, "processSelClick",
  function (action) {
 if (action === "mksel_atom") {
 this.centerPoint = null;
@@ -789,19 +789,19 @@ return;
 this.centerPoint = p;
 this.showXtalSymmetry ();
 }}, "~S");
-Clazz.defineMethod (c$, "processSymClick", 
+Clazz.defineMethod (c$, "processSymClick",
  function (action) {
 if (action === "mksymmetry_none") {
 this.setSymEdit (0);
 } else {
 this.processMKPropertyItem (action, false);
 }}, "~S");
-Clazz.defineMethod (c$, "processUCClick", 
+Clazz.defineMethod (c$, "processUCClick",
  function (action) {
 this.processMKPropertyItem (action, false);
 this.showXtalSymmetry ();
 }, "~S");
-Clazz.defineMethod (c$, "handleDragAtom", 
+Clazz.defineMethod (c$, "handleDragAtom",
 function (pressed, dragged, countPlusIndices) {
 switch (this.getMKState ()) {
 case 0:
@@ -827,20 +827,20 @@ return true;
 }
 return true;
 }, "JV.MouseState,JV.MouseState,~A");
-c$.pointFromTriad = Clazz.defineMethod (c$, "pointFromTriad", 
+c$.pointFromTriad = Clazz.defineMethod (c$, "pointFromTriad",
  function (pos) {
 var a = JU.PT.parseFloatArray (JU.PT.replaceAllCharacters (pos, "{,}", " "));
 return (a.length == 3 && !Float.isNaN (a[2]) ? JU.P3.new3 (a[0], a[1], a[2]) : null);
 }, "~S");
-c$.notImplemented = Clazz.defineMethod (c$, "notImplemented", 
+c$.notImplemented = Clazz.defineMethod (c$, "notImplemented",
  function (action) {
-System.err.println ("ModelKitPopup.notImplemented(" + action + ")");
+Zystem.err.println ("ModelKitPopup.notImplemented(" + action + ")");
 }, "~S");
-Clazz.defineMethod (c$, "promptUser", 
+Clazz.defineMethod (c$, "promptUser",
  function (msg, def) {
 return this.vwr.prompt (msg, def, null, false);
 }, "~S,~S");
-Clazz.defineMethod (c$, "runScriptBuffered", 
+Clazz.defineMethod (c$, "runScriptBuffered",
  function (script) {
 var sb =  new JU.SB ();
 try {
@@ -854,7 +854,7 @@ throw e;
 }
 return sb.toString ();
 }, "~S");
-Clazz.defineMethod (c$, "handleAssignNew", 
+Clazz.defineMethod (c$, "handleAssignNew",
 function (pressed, dragged, mp, dragAtomIndex) {
 var inRange = pressed.inRange (10, dragged.x, dragged.y);
 if (inRange) {

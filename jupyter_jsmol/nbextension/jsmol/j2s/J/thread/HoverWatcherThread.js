@@ -7,7 +7,7 @@ this.moved = null;
 this.hoverDelay = 0;
 Clazz.instantialize (this, arguments);
 }, J.thread, "HoverWatcherThread", J.thread.JmolThread);
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function (actionManager, current, moved, vwr) {
 this.setViewer (vwr, "HoverWatcher");
 this.actionManager = actionManager;
@@ -15,7 +15,7 @@ this.current = current;
 this.moved = moved;
 this.start ();
 }, "JV.ActionManager,JV.MouseState,JV.MouseState,JV.Viewer");
-Clazz.overrideMethod (c$, "run1", 
+Clazz.overrideMethod (c$, "run1",
 function (mode) {
 while (true) switch (mode) {
 case -1:
@@ -29,7 +29,7 @@ mode = 1;
 break;
 case 1:
 if (this.moved.is (this.current)) {
-this.currentTime = System.currentTimeMillis ();
+this.currentTime = Zystem.currentTimeMillis ();
 var howLong = (this.currentTime - this.moved.time);
 if (howLong > (this.vwr.acm.zoomTrigger ? 100 : this.hoverDelay) && !this.stopped) {
 this.actionManager.checkHover ();

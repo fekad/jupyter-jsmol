@@ -10,15 +10,15 @@
 // BH 3/28/2015 6:18:33 AM refactoring to generalize for non-Jmol-related SwingJS applications
 // BH 9/6/2014 5:42:32 PM  two-point gestures broken
 // BH 5/8/2014 11:16:40 AM j2sPath starting with "/" fails to add idiom
-// BH 1/16/2014 8:44:03 PM   __execDelayMS = 100; // FF bug when loading into a tab that is not 
-//                           immediately focused and not using jQuery for adding the applet and having  
+// BH 1/16/2014 8:44:03 PM   __execDelayMS = 100; // FF bug when loading into a tab that is not
+//                           immediately focused and not using jQuery for adding the applet and having
 //                           multiple applets.
 // BH 12/6/2013 10:12:30 AM adding corejmoljsv.z.js
-// BH 9/17/2013 10:18:40 AM  file transfer functions moved to JSmolCore 
+// BH 9/17/2013 10:18:40 AM  file transfer functions moved to JSmolCore
 // BH 3/5/2013 9:54:16 PM added support for a cover image: Info.coverImage, coverScript, coverTitle, deferApplet, deferUncover
 // BH 1/3/2013 4:54:01 AM mouse binding should return false -- see d.bind(...), and d.bind("contextmenu") is not necessary
 
-// This library requires prior inclusion of 
+// This library requires prior inclusion of
 
 //  jQuery 9 or higher
 //	JSmoljQueryExt.js
@@ -31,14 +31,14 @@
 //  JSmolApi.js
 //  JSmolThree.js
 //  JSmolGLmol.js
-//  
-//  are optional 
+//
+//  are optional
 
 ;(function (Jmol) {
 
 	Jmol._isAsync = false; // testing only
 	Jmol._asyncCallbacks = {};
-	
+
 	Jmol._coreFiles = []; // required for package.js
 
 
@@ -71,12 +71,12 @@
 		}
 		e.push("done");
 		var s = "JSmol exec " + e[0]._id + " " + e[3] + " " + e[2];
-		if (self.System)
-			System.out.println(s);
+		if (self.Zystem)
+			Zystem.out.println(s);
 			//alert(s)
 		if (self.console)console.log(s + " -- OK")
 		__execLog.push(s);
-		e[1](e[0],e[2]);	
+		e[1](e[0],e[2]);
 	};
 
 	var __loadClazz = function(applet) {
@@ -88,7 +88,7 @@
 				Clazz._LoaderProgressMonitor.showStatus = function() {}
 			LoadClazz = null;
       if (applet.__Info.uncompressed)
-        Clazz.loadClass(); // for now; allows for no compression 
+        Clazz.loadClass(); // for now; allows for no compression
 			Clazz._Loader.onGlobalLoaded = function (file) {
 			 // not really.... just nothing more yet to do yet
 				Clazz._LoaderProgressMonitor.showStatus("Application loaded.", true);
@@ -108,33 +108,33 @@
 		Clazz._Loader.loadClass(javaClass, function() {__nextExecution()});
 	};
 
-	Jmol.showExecLog = function() { return __execLog.join("\n") }; 
+	Jmol.showExecLog = function() { return __execLog.join("\n") };
 
 	Jmol._addExec = function(e) {
     e[1] || (e[1] = __loadClass);
 		var s = "JSmol load " + e[0]._id + " " + e[3];
 		if (self.console)console.log(s + "...")
-		__execLog.push(s);   
+		__execLog.push(s);
 		__execStack.push(e);
 	}
 
 	Jmol._addCoreFile = function(type, path, more) {
-  
-    // BH 3/15: idea here is that when both Jmol and JSV are present, 
+
+    // BH 3/15: idea here is that when both Jmol and JSV are present,
     // we want to load a common core file -- jmoljsv.z.js --
     // instead of just one. Otherwise we do a lot of duplication.
     // It is not clear how this would play with other concurrent
     // apps. So this will take some thinking. But the basic idea is that
-    // core file to load is 
-     
-    type = type.toLowerCase().split(".")[0]; // package name only 
+    // core file to load is
 
-    // return if type is already part of the set.    
+    type = type.toLowerCase().split(".")[0]; // package name only
+
+    // return if type is already part of the set.
 		if (__coreSet.join("").indexOf(type) >= 0) return;
-    
+
     // create a concatenated lower-case name for a core file that includes
     // all Java applets on the page
-    
+
 		__coreSet.push(type);
 		__coreSet.sort();
 		Jmol._coreFiles = [path + "/core/core" + __coreSet.join("") + ".z.js" ];
@@ -144,7 +144,7 @@
 					__coreMore.push(path + "/core/core" + more[i] + ".z.js")
 		for (var i = 0; i < __coreMore.length; i++)
 			Jmol._coreFiles.push(__coreMore[i]);
-	}      		
+	}
 
 	Jmol._Canvas2D = function(id, Info, type, checkOnly){
 		// type: Jmol or JSV
@@ -156,7 +156,7 @@
     this._isLayered = Info._isLayered || false;
     this._isSwing = Info._isSwing || false;
     this._isJSV = Info._isJSV || false;
-    this._isAstex = Info._isAstex || false;            
+    this._isAstex = Info._isAstex || false;
     this._platform = Info._platform || "";
 		if (checkOnly)
 			return this;
@@ -178,12 +178,12 @@
 				else
 					params[i] = Info[i];
 			}
-	}     
-	 
+	}
+
 	Jmol._jsSetPrototype = function(proto) {
 		proto._init = function() {
 	 		this._setupJS();
-			this._showInfo(true); 
+			this._showInfo(true);
 			if (this._disableInitialConsole)
 				this._showInfo(false);
 		};
@@ -194,12 +194,12 @@
 				this._GLmol = glmol;
 		 		this._GLmol.applet = this;
 				this._GLmol.id = this._id;
-			}      
+			}
 			var t = Jmol._getWrapper(this, true);
 			if (this._deferApplet) {
 			} else if (Jmol._document) {
 				Jmol._documentWrite(t);
-				this._newCanvas(false);				        
+				this._newCanvas(false);
 				t = "";
 			} else {
 				this._deferApplet = true;
@@ -220,19 +220,19 @@
 				this._GLmol.create();
 		};
 
-//////// swingjs.api.HTML5Applet interface    
-    proto._getHtml5Canvas = function() { return this._canvas }; 
-    proto._getWidth = function() { return this._canvas.width }; 
+//////// swingjs.api.HTML5Applet interface
+    proto._getHtml5Canvas = function() { return this._canvas };
+    proto._getWidth = function() { return this._canvas.width };
     proto._getHeight = function() { return this._canvas.height };
     proto._getContentLayer = function() { return Jmol.$(this, "contentLayer")[0] };
-    proto._repaintNow = function() { Jmol.repaint(this, false) }; 
+    proto._repaintNow = function() { Jmol.repaint(this, false) };
 ////////
 
 
 		proto._createCanvas2d = function(doReplace) {
 			var container = Jmol.$(this, "appletdiv");
 			//if (doReplace) {
-      
+
 			try {
 			container[0].removeChild(this._canvas);
 			if (this._canvas.frontLayer)
@@ -274,13 +274,13 @@
   				this._mouseInterface = this._getLayer("front", container, w, h, false);
         }
 				//this._getLayer("rear", container, w, h, true);
-				//Jmol._$(canvas.id).css({background:"rgb(0,0,0,0.001)", "z-index":Jmol._z.main}); 
+				//Jmol._$(canvas.id).css({background:"rgb(0,0,0,0.001)", "z-index":Jmol._z.main});
 			} else {
 				this._mouseInterface = canvas;
 			}
 			Jmol._jsSetMouse(this._mouseInterface);
 		}
-    
+
     proto._getLayer = function(name, container, w, h, isOpaque) {
   		var c = document.createElement("canvas");
 			this._canvas[name + "Layer"] = c;
@@ -292,10 +292,10 @@
 			container.append(c);
 			c.applet = this;
 			Jmol._$(c.id).css({background:(isOpaque ? "rgb(0,0,0,1)" : "rgb(0,0,0,0.001)"), "z-index": Jmol._getZ(this,name),position:"absolute",left:"0px",top:"0px",overflow:"hidden"});
-			return c;	
+			return c;
     }
-    
-    
+
+
 		proto._setupJS = function() {
 			window["j2s.lib"] = {
 				base : this._j2sPath + "/",
@@ -309,7 +309,7 @@
       this._addCoreFiles();
 			Jmol._addExec([this, this.__startAppletJS, null, "start applet"])
 			this._isSigned = true; // access all files via URL hook
-			this._ready = false; 
+			this._ready = false;
 			this._applet = null;
 			this._canScript = function(script) {return true;};
 			this._savedOrientations = [];
@@ -328,7 +328,7 @@
 			viewerOptions.put("syncId", Jmol._syncId);
 			if (Jmol._isAsync)
 				viewerOptions.put("async", true);
-			if (applet._color) 
+			if (applet._color)
 				viewerOptions.put("bgcolor", applet._color);
 			if (applet._startupScript)
 				viewerOptions.put("script", applet._startupScript)
@@ -342,7 +342,7 @@
 			// viewerOptions.put("repaintManager", "J.render");
 			viewerOptions.put("documentBase", document.location.href);
 			var codePath = applet._j2sPath + "/";
-      
+
 			if (codePath.indexOf("://") < 0) {
 				var base = document.location.href.split("#")[0].split("?")[0].split("/");
 				if (codePath.indexOf("/") == 0)
@@ -357,10 +357,10 @@
 			try {
 				applet._newApplet(viewerOptions);
 			} catch (e) {
-				System.out.println((Jmol._isAsync ? "normal async abort from " : "") + e);
+				Zystem.out.println((Jmol._isAsync ? "normal async abort from " : "") + e);
 				return;
 			}
-      
+
 			applet._jsSetScreenDimensions();
 			__nextExecution();
 		};
@@ -369,7 +369,7 @@
 	   	proto._restoreState = function(clazzName, state) {
         // applet-dependent
 		  }
-	
+
 		proto._jsSetScreenDimensions = function() {
 				if (!this._appletPanel)return
 				// strangely, if CTRL+/CTRL- are used repeatedly, then the
@@ -388,7 +388,7 @@
 		proto._canScript = function(script) {return true};
 		proto.equals = function(a) { return this == a };
 		proto.clone = function() { return this };
-		proto.hashCode = function() { return parseInt(this._uniqueId) };  
+		proto.hashCode = function() { return parseInt(this._uniqueId) };
 
 
 		proto._processGesture = function(touches) {
@@ -396,7 +396,7 @@
 		}
 
 		proto._processEvent = function(type, xym) {
-			this._appletPanel.processMouseEvent(type,xym[0],xym[1],xym[2],System.currentTimeMillis());
+			this._appletPanel.processMouseEvent(type,xym[0],xym[1],xym[2],Zystem.currentTimeMillis());
 		}
 
 		proto._resize = function() {
@@ -412,7 +412,7 @@
 	};
 
 	Jmol.repaint = function(applet, asNewThread) {
-    // JmolObjectInterface 
+    // JmolObjectInterface
 		// asNewThread: true is from RepaintManager.repaintNow()
 		// false is from Repaintmanager.requestRepaintAndWait()
 		// called from apiPlatform Display.repaint()
@@ -440,21 +440,21 @@
 		} else {
       f();
 		}
-		// System.out.println(applet._appletPanel.getFullName())
+		// Zystem.out.println(applet._appletPanel.getFullName())
 	}
 
   /**
-   * loadImage is called for asynchronous image loading.   
+   * loadImage is called for asynchronous image loading.
    * If bytes are not null, they are from a ZIP file. They are processed sychronously
    * here using an image data URI. Can all browsers handle MB of data in data URI?
    *
-   */        
+   */
 	Jmol.loadImage = function(platform, echoName, path, bytes, fOnload, image) {
-    // JmolObjectInterface  
+    // JmolObjectInterface
 		var id = "echo_" + echoName + path + (bytes ? "_" + bytes.length : "");
 		var canvas = Jmol.getHiddenCanvas(platform.vwr.html5Applet, id, 0, 0, false, true);
-//    System.out.println(["JSmol.js loadImage ",id,path,canvas,image])
-    if (canvas == null) { 
+//    Zystem.out.println(["JSmol.js loadImage ",id,path,canvas,image])
+    if (canvas == null) {
   		if (image == null) {
   			image = new Image();
         if (bytes == null) {
@@ -462,8 +462,8 @@
     			image.src = path;
           return null;
         }
-        System.out.println("Jsmol.js Jmol.loadImage using data URI for " + id) 
-        image.src = (typeof bytes == "string" ? bytes : 
+        Zystem.out.println("Jsmol.js Jmol.loadImage using data URI for " + id)
+        image.src = (typeof bytes == "string" ? bytes :
           "data:" + JU.Rdr.guessMimeTypeForBytes(bytes) + ";base64," + JU.Base64.getBase64(bytes));
       }
   		var width = image.width;
@@ -471,8 +471,8 @@
       if (echoName == "webgl") {
        // will be antialiased
        width /= 2;
-       height /= 2; 
-      } 
+       height /= 2;
+      }
 		  canvas = Jmol.getHiddenCanvas(platform.vwr.html5Applet, id, width, height, true, false);
   		canvas.imageWidth = width;
   		canvas.imageHeight = height;
@@ -481,7 +481,7 @@
   		Jmol.setCanvasImage(canvas, width, height);
 		// return a null canvas and the error in path if there is a problem
     } else {
-      System.out.println("Jsmol.js Jmol.loadImage reading cached image for " + id) 
+      Zystem.out.println("Jsmol.js Jmol.loadImage reading cached image for " + id)
     }
     return (bytes == null? fOnload(canvas,path) : canvas);
 	};
@@ -492,7 +492,7 @@ Jmol._canvasCache = {};
 		id = applet._id + "_" + id;
     var d = Jmol._canvasCache[id];
     if (checkOnly)
-      return d; 
+      return d;
     if (forceNew || !d || d.width != width || d.height != height) {
       d = document.createElement( 'canvas' );
   			// for some reason both these need to be set, or maybe just d.width?
@@ -500,9 +500,9 @@ Jmol._canvasCache = {};
   		d.height = d.style.height = height;
   		d.id = id;
       Jmol._canvasCache[id] = d;
-      //System.out.println("JSmol.js loadImage setting cache" + id + " to " + d)
+      //Zystem.out.println("JSmol.js loadImage setting cache" + id + " to " + d)
     }
-    
+
 		return d;
    	}
 
@@ -513,10 +513,10 @@ Jmol._canvasCache = {};
 		canvas.height = height;
 		canvas.getContext("2d").drawImage(canvas.image, 0, 0, canvas.image.width, canvas.image.height, 0, 0, width, height);
 	};
-  
+
   Jmol.applyFunc = function(f,a) {
     // JmolObjectInterface
     return f(a);
   }
-  
+
 })(Jmol);

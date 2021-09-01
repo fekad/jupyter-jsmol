@@ -7,10 +7,10 @@ this.len = 0;
 this.asHashTable = false;
 Clazz.instantialize (this, arguments);
 }, JU, "JSJSONParser");
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function () {
 });
-Clazz.defineMethod (c$, "parseMap", 
+Clazz.defineMethod (c$, "parseMap",
 function (str, asHashTable) {
 this.index = 0;
 this.asHashTable = asHashTable;
@@ -20,7 +20,7 @@ if (this.getChar () != '{') return null;
 this.returnChar ();
 return this.getValue (false);
 }, "~S,~B");
-Clazz.defineMethod (c$, "parse", 
+Clazz.defineMethod (c$, "parse",
 function (str, asHashTable) {
 this.index = 0;
 this.asHashTable = asHashTable;
@@ -28,15 +28,15 @@ this.str = str;
 this.len = str.length;
 return this.getValue (false);
 }, "~S,~B");
-Clazz.defineMethod (c$, "next", 
+Clazz.defineMethod (c$, "next",
  function () {
 return (this.index < this.len ? this.str.charAt (this.index++) : '\0');
 });
-Clazz.defineMethod (c$, "returnChar", 
+Clazz.defineMethod (c$, "returnChar",
  function () {
 this.index--;
 });
-Clazz.defineMethod (c$, "getChar", 
+Clazz.defineMethod (c$, "getChar",
  function () {
 for (; ; ) {
 var c = this.next ();
@@ -44,7 +44,7 @@ if (c.charCodeAt (0) == 0 || c > ' ') {
 return c;
 }}
 });
-Clazz.defineMethod (c$, "getValue", 
+Clazz.defineMethod (c$, "getValue",
  function (isKey) {
 var i = this.index;
 var c = this.getChar ();
@@ -90,10 +90,10 @@ if (Clazz.exceptionOf (e, Exception)) {
 throw e;
 }
 }
-System.out.println ("JSON parser cannot parse " + string);
+Zystem.out.println ("JSON parser cannot parse " + string);
 throw  new JU.JSONException ("invalid value");
 }, "~B");
-Clazz.defineMethod (c$, "getString", 
+Clazz.defineMethod (c$, "getString",
  function (quote) {
 var c;
 var sb = null;
@@ -155,7 +155,7 @@ sb.append (this.str.substring (i0, i1));
 }}if (sb != null) sb.appendC (c);
 }
 }, "~S");
-Clazz.defineMethod (c$, "getObject", 
+Clazz.defineMethod (c$, "getObject",
  function () {
 var map = (this.asHashTable ?  new java.util.Hashtable () :  new java.util.HashMap ());
 var key = null;
@@ -183,7 +183,7 @@ throw this.syntaxError ("Expected ',' or ':' or '}'");
 }
 }
 });
-Clazz.defineMethod (c$, "getArray", 
+Clazz.defineMethod (c$, "getArray",
  function () {
 var l =  new JU.Lst ();
 switch (this.getChar ()) {
@@ -218,7 +218,7 @@ throw this.syntaxError ("Expected ',' or ']'");
 }
 }
 });
-Clazz.defineMethod (c$, "syntaxError", 
+Clazz.defineMethod (c$, "syntaxError",
 function (message) {
 return  new JU.JSONException (message + " for " + this.str.substring (0, Math.min (this.index, this.len)));
 }, "~S");

@@ -16,7 +16,7 @@ this.nboParser = null;
 this.addBetaSet = false;
 Clazz.instantialize (this, arguments);
 }, J.adapter.readers.quantum, "GenNBOReader", J.adapter.readers.quantum.MOReader);
-Clazz.defineMethod (c$, "initializeReader", 
+Clazz.defineMethod (c$, "initializeReader",
 function () {
 var line1 = this.rd ().trim ().toUpperCase ();
 this.is47File = (line1.indexOf ("$GENNBO") >= 0 || line1.indexOf ("$NBO") >= 0);
@@ -48,13 +48,13 @@ if (this.isOutputFile) return;
 if (isOK) this.readMOs ();
 this.continuing = false;
 });
-Clazz.overrideMethod (c$, "finalizeSubclassReader", 
+Clazz.overrideMethod (c$, "finalizeSubclassReader",
 function () {
 this.appendLoadNote ("NBO type " + this.nboType);
 if (this.isOpenShell) this.asc.setCurrentModelInfo ("isOpenShell", Boolean.TRUE);
 this.finalizeReaderASCR ();
 });
-Clazz.overrideMethod (c$, "checkLine", 
+Clazz.overrideMethod (c$, "checkLine",
 function () {
 if (this.line.indexOf ("SECOND ORDER PERTURBATION THEORY ANALYSIS") >= 0 && !this.orbitalsRead) {
 this.nboType = "NBO";
@@ -86,7 +86,7 @@ this.getStructures ("CHOOSE");
 return true;
 }return this.checkNboLine ();
 });
-Clazz.defineMethod (c$, "getStructures", 
+Clazz.defineMethod (c$, "getStructures",
  function (type) {
 if (this.nboParser == null) this.nboParser =  new J.adapter.readers.quantum.NBOParser ();
 var structures = this.getStructureList ();
@@ -96,13 +96,13 @@ while (!this.rd ().trim ().equals ("$END")) sb.append (this.line).append ("\n");
 this.nStructures = this.nboParser.getStructures (sb.toString (), type, structures);
 this.appendLoadNote (this.nStructures + " NBO " + type + " resonance structures");
 }, "~S");
-Clazz.defineMethod (c$, "getStructureList", 
+Clazz.defineMethod (c$, "getStructureList",
  function () {
 var structures = this.asc.getAtomSetAuxiliaryInfo (this.asc.iSet).get ("nboStructures");
 if (structures == null) this.asc.setCurrentModelInfo ("nboStructures", structures =  new JU.Lst ());
 return structures;
 });
-Clazz.defineMethod (c$, "getFileData", 
+Clazz.defineMethod (c$, "getFileData",
  function (ext) {
 var fileName = this.htParams.get ("fullPathName");
 var pt = fileName.lastIndexOf (".");
@@ -122,7 +122,7 @@ if (data.length == 0 || isError && this.nboType !== "AO") throw  new Exception (
 if (!isError) J.adapter.readers.quantum.GenNBOReader.addAuxFile (this.moData, fileName, this.htParams);
 return (isError ? null : data);
 }, "~S");
-Clazz.defineMethod (c$, "getFile31", 
+Clazz.defineMethod (c$, "getFile31",
  function () {
 try {
 var data = this.getFileData (".31");
@@ -138,7 +138,7 @@ throw e;
 }
 }
 });
-Clazz.defineMethod (c$, "getFile46", 
+Clazz.defineMethod (c$, "getFile46",
  function () {
 this.nNOs = this.nAOs = this.nOrbitals;
 var labelKey = J.adapter.readers.quantum.GenNBOReader.getLabelKey (this.nboType);
@@ -168,7 +168,7 @@ throw e;
 this.setMap (map, labelKey, this.nNOs, true);
 this.reader = readerSave;
 });
-Clazz.defineMethod (c$, "readOutputProperties", 
+Clazz.defineMethod (c$, "readOutputProperties",
  function (data) {
 var map =  new java.util.Hashtable ();
 var lines = data.$plit ("\n");
@@ -183,7 +183,7 @@ this.setLabels (map, "NBO", line);
 }}
 return map;
 }, "~S");
-Clazz.defineMethod (c$, "setLabels", 
+Clazz.defineMethod (c$, "setLabels",
  function (map, key, line) {
 var tokens = JU.PT.split (line, ":");
 for (var i = tokens.length; --i >= 0; ) {
@@ -192,7 +192,7 @@ tokens[i] = (s.indexOf ("%") >= 0 ? s.substring (0, s.indexOf (" ")) : JU.PT.rep
 }
 map.put (key, tokens);
 }, "java.util.Map,~S,~S");
-Clazz.defineMethod (c$, "readData47", 
+Clazz.defineMethod (c$, "readData47",
  function () {
 this.allowNoOrbitals = true;
 this.discardLinesUntilContains ("$COORD");
@@ -235,7 +235,7 @@ this.nboType = "AO";
 this.readMOs ();
 this.continuing = false;
 });
-Clazz.defineMethod (c$, "getIntData", 
+Clazz.defineMethod (c$, "getIntData",
  function () {
 while (this.line.indexOf ("=") < 0) this.rd ();
 
@@ -249,7 +249,7 @@ for (var i = f.length; --i >= 0; ) f[i] = this.parseIntStr (tokens[i]);
 
 return f;
 });
-Clazz.defineMethod (c$, "fillSlater", 
+Clazz.defineMethod (c$, "fillSlater",
  function (slater, n, pt, ng) {
 this.nOrbitals += n;
 switch (n) {
@@ -313,12 +313,12 @@ slater[3] = ng;
 this.shells.addLast (slater);
 return true;
 }, "~A,~N,~N,~N");
-Clazz.defineMethod (c$, "resetDF", 
+Clazz.defineMethod (c$, "resetDF",
  function () {
 this.dfCoefMaps[1][0] = 0;
 return true;
 });
-Clazz.defineMethod (c$, "getAlphasAndExponents", 
+Clazz.defineMethod (c$, "getAlphasAndExponents",
  function () {
 for (var j = 0; j < 5; j++) {
 if (this.line.indexOf ("=") < 0) this.rd ();
@@ -337,7 +337,7 @@ if (this.debugging) {
 JU.Logger.debug (this.shells.size () + " slater shells read");
 JU.Logger.debug (this.gaussians.length + " gaussian primitives read");
 }});
-Clazz.defineMethod (c$, "readData31", 
+Clazz.defineMethod (c$, "readData31",
  function (line1) {
 if (line1 == null) {
 line1 = this.rd ();
@@ -383,7 +383,7 @@ this.rd ();
 this.getAlphasAndExponents ();
 return true;
 }, "~S");
-Clazz.defineMethod (c$, "readData46", 
+Clazz.defineMethod (c$, "readData46",
  function (labelKey) {
 var map =  new java.util.Hashtable ();
 var tokens =  new Array (0);
@@ -410,7 +410,7 @@ map.put (key, tokens);
 }
 return map;
 }, "~S");
-Clazz.defineMethod (c$, "setMap", 
+Clazz.defineMethod (c$, "setMap",
  function (map, labelKey, nNOs, doAll) {
 var tokens = map.get ((this.betaOnly ? "beta_" : "") + labelKey);
 this.moData.put ("nboLabelMap", map);
@@ -434,14 +434,14 @@ J.adapter.readers.quantum.GenNBOReader.setNboLabels (map.get ("beta_" + labelKey
 J.adapter.readers.quantum.NBOParser.getStructures46 (map.get ("NBO"), "alpha", structures, this.asc.ac);
 J.adapter.readers.quantum.NBOParser.getStructures46 (map.get ("beta_NBO"), "beta", structures, this.asc.ac);
 }, "java.util.Map,~S,~N,~B");
-c$.getLabelKey = Clazz.defineMethod (c$, "getLabelKey", 
+c$.getLabelKey = Clazz.defineMethod (c$, "getLabelKey",
  function (labelKey) {
 if (labelKey.startsWith ("P")) labelKey = labelKey.substring (1);
 if (labelKey.equals ("NLMO")) labelKey = "NBO";
 if (labelKey.equals ("MO")) labelKey = "NO";
 return labelKey;
 }, "~S");
-c$.readNBOCoefficients = Clazz.defineMethod (c$, "readNBOCoefficients", 
+c$.readNBOCoefficients = Clazz.defineMethod (c$, "readNBOCoefficients",
 function (moData, nboType, vwr) {
 var ext = JV.JC.getNBOTypeFromName (nboType);
 var isAO = nboType.equals ("AO");
@@ -501,7 +501,7 @@ coefs = orbitals.get (i % nAOs).get ("coefficients");
 } else {
 for (var j = 0; j < nAOs; j++) {
 coefs[j] = JU.PT.parseFloatChecked (data, len, next, false);
-if (Float.isNaN (coefs[j])) System.out.println ("oops = IsoExt ");
+if (Float.isNaN (coefs[j])) Zystem.out.println ("oops = IsoExt ");
 }
 }mo.put ("coefficients", coefs);
 }
@@ -520,14 +520,14 @@ throw e;
 }
 return true;
 }, "java.util.Map,~S,JV.Viewer");
-c$.addAuxFile = Clazz.defineMethod (c$, "addAuxFile", 
+c$.addAuxFile = Clazz.defineMethod (c$, "addAuxFile",
  function (moData, fileName, htParams) {
 var auxFiles = moData.get ("auxFiles");
 if (auxFiles == null) moData.put ("auxFiles", auxFiles =  new JU.Lst ());
 auxFiles.addLast (fileName);
 if (htParams != null) htParams.put ("auxFiles", auxFiles);
 }, "java.util.Map,~S,java.util.Map");
-c$.getNBOOccupanciesStatic = Clazz.defineMethod (c$, "getNBOOccupanciesStatic", 
+c$.getNBOOccupanciesStatic = Clazz.defineMethod (c$, "getNBOOccupanciesStatic",
  function (orbitals, nAOs, pt, data, len, next) {
 var occupancies =  Clazz.newFloatArray (nAOs, 0);
 for (var j = 0; j < nAOs; j++) occupancies[j] = JU.PT.parseFloatChecked (data, len, next, false);
@@ -537,7 +537,7 @@ var mo = orbitals.get (pt + i);
 mo.put ("occupancy", Float.$valueOf (occupancies[i]));
 }
 }, "JU.Lst,~N,~N,~S,~N,~A");
-Clazz.defineMethod (c$, "readMOs", 
+Clazz.defineMethod (c$, "readMOs",
  function () {
 var isAO = this.nboType.equals ("AO");
 var isNBO = this.nboType.equals ("NBO");
@@ -580,7 +580,7 @@ this.setMOData (false);
 this.moData.put ("nboType", this.nboType);
 JU.Logger.info ((this.orbitals.size () - this.nOrbitals0) + " orbitals read");
 });
-Clazz.defineMethod (c$, "readNBO37Occupancies", 
+Clazz.defineMethod (c$, "readNBO37Occupancies",
  function (pt) {
 var occupancies =  Clazz.newFloatArray (this.nNOs, 0);
 this.fillFloatArray (null, 0, occupancies);
@@ -589,7 +589,7 @@ var mo = this.orbitals.get (this.nOrbitals0 + pt - this.nNOs + i);
 mo.put ("occupancy", Float.$valueOf (occupancies[i]));
 }
 }, "~N");
-c$.setNboLabels = Clazz.defineMethod (c$, "setNboLabels", 
+c$.setNboLabels = Clazz.defineMethod (c$, "setNboLabels",
 function (tokens, nLabels, orbitals, nOrbitals0, moType) {
 var alphaBeta = (orbitals.size () == nLabels * 2);
 var addOccupancy = !JU.PT.isOneOf (moType, ";AO;NAO;PNAO;MO;NO;");

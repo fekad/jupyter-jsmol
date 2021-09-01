@@ -17,10 +17,10 @@ this.capper = null;
 this.wPlane = 0;
 Clazz.instantialize (this, arguments);
 }, JU, "MeshSlicer");
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function () {
 });
-Clazz.defineMethod (c$, "set", 
+Clazz.defineMethod (c$, "set",
 function (meshSurface) {
 this.m = meshSurface;
 this.values =  Clazz.newFloatArray (2, 0);
@@ -28,7 +28,7 @@ this.fracs =  Clazz.newFloatArray (2, 0);
 this.sources =  Clazz.newIntArray (3, 0);
 return this;
 }, "JU.MeshSurface");
-Clazz.defineMethod (c$, "slabPolygons", 
+Clazz.defineMethod (c$, "slabPolygons",
 function (slabObject, allowCap) {
 if (this.m.polygonCount0 < 0) return false;
 var m = this.m;
@@ -132,7 +132,7 @@ if (m.slabOptions == null) m.slabOptions =  new JU.SB ();
 if (m.slabOptions.indexOf (newOptions) < 0) m.slabOptions.append (m.slabOptions.length () > 0 ? "; " : "").append (m.meshType).append (newOptions);
 return true;
 }, "~A,~B");
-Clazz.defineMethod (c$, "getBoxFacesFromOABC", 
+Clazz.defineMethod (c$, "getBoxFacesFromOABC",
  function (oabc) {
 var faces =  new Array (6);
 var vNorm =  new JU.V3 ();
@@ -149,7 +149,7 @@ faces[i] = JU.Measure.getPlaneThroughPoints (pta, ptb, ptc, vNorm, vAB,  new JU.
 }
 return faces;
 }, "~A");
-Clazz.defineMethod (c$, "getIntersection", 
+Clazz.defineMethod (c$, "getIntersection",
 function (distance, plane, ptCenters, vData, fData, bsSource, meshSurface, andCap, doClean, tokType, isGhost) {
 var m = this.m;
 var isSlab = (vData == null);
@@ -168,7 +168,7 @@ if (m.vertexSource == null) return;
 fData =  Clazz.newFloatArray (m.vc, 0);
 for (var i = 0; i < m.vc; i++) {
 fData[i] = m.vertexSource[i];
-if (fData[i] == -1) System.out.println ("meshsurface hmm");
+if (fData[i] == -1) Zystem.out.println ("meshsurface hmm");
 }
 } else {
 fData = m.vvs;
@@ -352,7 +352,7 @@ m.vc = n;
 m.pis = pTemp;
 m.pc = nPoly;
 }}, "~N,JU.P4,~A,JU.Lst,~A,JU.BS,JU.MeshSurface,~B,~B,~N,~B");
-Clazz.defineMethod (c$, "getDE", 
+Clazz.defineMethod (c$, "getDE",
  function (fracs, fD, i1, i2, i3, toss23) {
 this.iD = JU.MeshSlicer.setPoint (fracs, fD, i1, i2);
 this.iE = JU.MeshSlicer.setPoint (fracs, 1 - fD, i1, i3);
@@ -373,11 +373,11 @@ this.iE = (toss23 ? i3 : i2);
 }this.doGhost = false;
 return true;
 }, "~A,~N,~N,~N,~N,~B");
-c$.setPoint = Clazz.defineMethod (c$, "setPoint", 
+c$.setPoint = Clazz.defineMethod (c$, "setPoint",
  function (fracs, i, i0, i1) {
 return (fracs[i] == 0 ? i0 : fracs[i] == 1 ? i1 : -1);
 }, "~A,~N,~N,~N");
-Clazz.defineMethod (c$, "checkSlab", 
+Clazz.defineMethod (c$, "checkSlab",
  function (tokType, v, val, distance, bs) {
 var d;
 switch (tokType) {
@@ -403,15 +403,15 @@ break;
 }
 return (Math.abs (d) < 0.0001 ? 0 : d);
 }, "~N,JU.T3,~N,~N,JU.BS");
-Clazz.defineMethod (c$, "interpolateSphere", 
+Clazz.defineMethod (c$, "interpolateSphere",
  function (v1, v2, d1, d2, absD, val1, val2, i) {
 return this.interpolateFraction (v1, v2, JU.MeshSurface.getSphericalInterpolationFraction (absD, d1, d2, v1.distance (v2)), val1, val2, i);
 }, "JU.T3,JU.T3,~N,~N,~N,~N,~N,~N");
-Clazz.defineMethod (c$, "interpolatePoint", 
+Clazz.defineMethod (c$, "interpolatePoint",
  function (v1, v2, d1, d2, val1, val2, i) {
 return this.interpolateFraction (v1, v2, d1 / (d1 + d2), val1, val2, i);
 }, "JU.T3,JU.T3,~N,~N,~N,~N,~N");
-Clazz.defineMethod (c$, "interpolateFraction", 
+Clazz.defineMethod (c$, "interpolateFraction",
  function (v1, v2, f, val1, val2, i) {
 if (f < 0.0001) f = 0;
  else if (f > 0.9999) f = 1;
@@ -419,7 +419,7 @@ this.fracs[i] = f;
 this.values[i] = (val2 - val1) * f + val1;
 return JU.P3.new3 (v1.x + (v2.x - v1.x) * f, v1.y + (v2.y - v1.y) * f, v1.z + (v2.z - v1.z) * f);
 }, "JU.T3,JU.T3,~N,~N,~N,~N");
-Clazz.defineMethod (c$, "slabBrillouin", 
+Clazz.defineMethod (c$, "slabBrillouin",
 function (unitCellPoints) {
 var m = this.m;
 var vectors = (unitCellPoints == null ? m.oabc : unitCellPoints);
@@ -482,7 +482,7 @@ bsDone.set (f[j]);
 }
 }m.setBoundingBox (bi.getBoundBoxPoints (false));
 }, "~A");
-Clazz.defineMethod (c$, "addIntersectionVertex", 
+Clazz.defineMethod (c$, "addIntersectionVertex",
 function (vertex, value, source, set, mapEdge, i1, i2) {
 var key = this.getKey (i1, i2);
 if (key.length > 0) {
@@ -498,11 +498,11 @@ this.m.vertexSets[this.m.vc] = set;
 if (key.length > 0) mapEdge.put (key, Integer.$valueOf (i));
 return i;
 }, "JU.T3,~N,~N,~N,java.util.Map,~N,~N");
-Clazz.defineMethod (c$, "getKey", 
+Clazz.defineMethod (c$, "getKey",
 function (i1, i2) {
 return (i1 < 0 ? "" : i1 > i2 ? i2 + "_" + i1 : i1 + "_" + i2);
 }, "~N,~N");
-Clazz.defineMethod (c$, "addTriangle", 
+Clazz.defineMethod (c$, "addTriangle",
 function (ipt1, ipt2, ipt3) {
 this.m.addPolygonV3 (ipt1, ipt2, ipt3, 0, 0, 0, this.m.bsSlabDisplay);
 }, "~N,~N,~N");

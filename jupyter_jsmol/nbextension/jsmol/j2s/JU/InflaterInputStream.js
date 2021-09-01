@@ -16,24 +16,24 @@ Clazz.prepareFields (c$, function () {
 this.byte1 =  Clazz.newByteArray (1, 0);
 this.b =  Clazz.newByteArray (512, 0);
 });
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function ($in, inflater, size, close_in) {
 Clazz.superConstructor (this, JU.InflaterInputStream, [$in]);
 this.inflater = inflater;
 this.buf =  Clazz.newByteArray (size, 0);
 this.close_in = close_in;
 }, "java.io.InputStream,JU.Inflater,~N,~B");
-Clazz.overrideMethod (c$, "readByteAsInt", 
+Clazz.overrideMethod (c$, "readByteAsInt",
 function () {
 if (this.closed) {
 throw  new java.io.IOException ("Stream closed");
 }return this.read (this.byte1, 0, 1) == -1 ? -1 : this.byte1[0] & 0xff;
 });
-Clazz.defineMethod (c$, "read", 
+Clazz.defineMethod (c$, "read",
 function (b, off, len) {
 return this.readInf (b, off, len);
 }, "~A,~N,~N");
-Clazz.defineMethod (c$, "readInf", 
+Clazz.defineMethod (c$, "readInf",
 function (b, off, len) {
 if (this.closed) {
 throw  new java.io.IOException ("Stream closed");
@@ -66,13 +66,13 @@ if (this.inflater.avail_out == 0) break;
 }
 return n;
 }, "~A,~N,~N");
-Clazz.overrideMethod (c$, "available", 
+Clazz.overrideMethod (c$, "available",
 function () {
 if (this.closed) {
 throw  new java.io.IOException ("Stream closed");
 }return (this.eof ? 0 : 1);
 });
-Clazz.overrideMethod (c$, "skip", 
+Clazz.overrideMethod (c$, "skip",
 function (n) {
 if (n < 0) {
 throw  new IllegalArgumentException ("negative skip length");
@@ -92,14 +92,14 @@ break;
 }
 return total;
 }, "~N");
-Clazz.overrideMethod (c$, "close", 
+Clazz.overrideMethod (c$, "close",
 function () {
 if (!this.closed) {
 if (this.myinflater) this.inflater.end ();
 if (this.close_in) this.$in.close ();
 this.closed = true;
 }});
-Clazz.defineMethod (c$, "fill", 
+Clazz.defineMethod (c$, "fill",
 function () {
 if (this.closed) {
 throw  new java.io.IOException ("Stream closed");
@@ -114,33 +114,33 @@ throw  new java.io.IOException ("footer is not found");
 throw  new java.io.EOFException ("Unexpected end of ZLIB input stream");
 }}this.inflater.setInput (this.buf, 0, this.len, true);
 });
-Clazz.overrideMethod (c$, "markSupported", 
+Clazz.overrideMethod (c$, "markSupported",
 function () {
 return false;
 });
-Clazz.overrideMethod (c$, "mark", 
+Clazz.overrideMethod (c$, "mark",
 function (readlimit) {
 }, "~N");
-Clazz.overrideMethod (c$, "reset", 
+Clazz.overrideMethod (c$, "reset",
 function () {
 throw  new java.io.IOException ("mark/reset not supported");
 });
-Clazz.defineMethod (c$, "getTotalIn", 
+Clazz.defineMethod (c$, "getTotalIn",
 function () {
 return this.inflater.getTotalIn ();
 });
-Clazz.defineMethod (c$, "getTotalOut", 
+Clazz.defineMethod (c$, "getTotalOut",
 function () {
 return this.inflater.getTotalOut ();
 });
-Clazz.defineMethod (c$, "getAvailIn", 
+Clazz.defineMethod (c$, "getAvailIn",
 function () {
 if (this.inflater.avail_in <= 0) return null;
 var tmp =  Clazz.newByteArray (this.inflater.avail_in, 0);
-System.arraycopy (this.inflater.next_in, this.inflater.next_in_index, tmp, 0, this.inflater.avail_in);
+Zystem.arraycopy (this.inflater.next_in, this.inflater.next_in_index, tmp, 0, this.inflater.avail_in);
 return tmp;
 });
-Clazz.defineMethod (c$, "readHeader", 
+Clazz.defineMethod (c$, "readHeader",
 function () {
 var empty = "".getBytes ();
 this.inflater.setInput (empty, 0, 0, false);
@@ -157,7 +157,7 @@ err = this.inflater.inflate (0);
 if (err != 0) throw  new java.io.IOException (this.inflater.msg);
 } while (this.inflater.istate.inParsingHeader ());
 });
-Clazz.defineMethod (c$, "getInflater", 
+Clazz.defineMethod (c$, "getInflater",
 function () {
 return this.inflater;
 });

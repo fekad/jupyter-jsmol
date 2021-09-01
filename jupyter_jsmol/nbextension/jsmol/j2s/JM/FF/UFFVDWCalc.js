@@ -1,7 +1,7 @@
 Clazz.declarePackage ("JM.FF");
 Clazz.load (["JM.FF.Calculation"], "JM.FF.UFFVDWCalc", null, function () {
 c$ = Clazz.declareType (JM.FF, "UFFVDWCalc", JM.FF.Calculation);
-Clazz.overrideMethod (c$, "setData", 
+Clazz.overrideMethod (c$, "setData",
 function (calc, ia, ib, dd) {
 this.a = this.calcs.minAtoms[ia];
 this.b = this.calcs.minAtoms[ib];
@@ -9,14 +9,14 @@ var parA = this.calcs.getParameter (this.a.sType);
 var parB = this.calcs.getParameter (this.b.sType);
 var Xa = parA.dVal[2];
 var Da = parA.dVal[3];
-if (parB == null || parB.dVal == null) System.out.println ("OHOH");
+if (parB == null || parB.dVal == null) Zystem.out.println ("OHOH");
 var Xb = parB.dVal[2];
 var Db = parB.dVal[3];
 var Dab = 4.1868 * Math.sqrt (Da * Db);
 var Xab = Math.sqrt (Xa * Xb);
 calc.addLast ( Clazz.newArray (-1, [ Clazz.newIntArray (-1, [ia, ib]),  Clazz.newDoubleArray (-1, [Xab, Dab])]));
 }, "JU.Lst,~N,~N,~N");
-Clazz.overrideMethod (c$, "compute", 
+Clazz.overrideMethod (c$, "compute",
 function (dataIn) {
 this.getPointers (dataIn);
 var Xab = this.dData[0];

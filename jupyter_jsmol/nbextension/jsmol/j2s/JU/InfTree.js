@@ -8,7 +8,7 @@ this.u = null;
 this.x = null;
 Clazz.instantialize (this, arguments);
 }, JU, "InfTree");
-Clazz.defineMethod (c$, "huft_build", 
+Clazz.defineMethod (c$, "huft_build",
  function (b, bindex, n, s, d, e, t, m, hp, hn, v) {
 var a;
 var f;
@@ -106,7 +106,7 @@ this.r[0] = j;
 this.r[1] = l;
 j = i >>> (w - l);
 this.r[2] = (q - this.u[h - 1] - j);
-System.arraycopy (this.r, 0, hp, (this.u[h - 1] + j) * 3, 3);
+Zystem.arraycopy (this.r, 0, hp, (this.u[h - 1] + j) * 3, 3);
 } else {
 t[0] = q;
 }}
@@ -121,7 +121,7 @@ this.r[0] = (e[v[p] - s] + 16 + 64);
 this.r[2] = d[v[p++] - s];
 }f = 1 << (k - w);
 for (j = i >>> w; j < z; j += f) {
-System.arraycopy (this.r, 0, hp, (q + j) * 3, 3);
+Zystem.arraycopy (this.r, 0, hp, (q + j) * 3, 3);
 }
 for (j = 1 << (k - 1); (i & j) != 0; j >>>= 1) {
 i ^= j;
@@ -137,7 +137,7 @@ mask = (1 << w) - 1;
 }
 return y != 0 && g != 1 ? -5 : 0;
 }, "~A,~N,~N,~N,~A,~A,~A,~A,~A,~A,~A");
-Clazz.defineMethod (c$, "inflate_trees_bits", 
+Clazz.defineMethod (c$, "inflate_trees_bits",
 function (c, bb, tb, hp, z) {
 var result;
 this.initWorkArea (19);
@@ -150,7 +150,7 @@ z.msg = "incomplete dynamic bit lengths tree";
 result = -3;
 }return result;
 }, "~A,~A,~A,~A,JU.ZStream");
-Clazz.defineMethod (c$, "inflate_trees_dynamic", 
+Clazz.defineMethod (c$, "inflate_trees_dynamic",
 function (nl, nd, c, bl, bd, tl, td, hp, z) {
 var result;
 this.initWorkArea (288);
@@ -177,7 +177,7 @@ result = -3;
 }return result;
 }return 0;
 }, "~N,~N,~A,~A,~A,~A,~A,~A,JU.ZStream");
-c$.inflate_trees_fixed = Clazz.defineMethod (c$, "inflate_trees_fixed", 
+c$.inflate_trees_fixed = Clazz.defineMethod (c$, "inflate_trees_fixed",
 function (bl, bd, tl, td, z) {
 bl[0] = 9;
 bd[0] = 5;
@@ -185,7 +185,7 @@ tl[0] = JU.InfTree.fixed_tl;
 td[0] = JU.InfTree.fixed_td;
 return 0;
 }, "~A,~A,~A,~A,JU.ZStream");
-Clazz.defineMethod (c$, "initWorkArea", 
+Clazz.defineMethod (c$, "initWorkArea",
  function (vsize) {
 if (this.hn == null) {
 this.hn =  Clazz.newIntArray (1, 0);
@@ -205,8 +205,8 @@ this.c[i] = 0;
 for (var i = 0; i < 3; i++) {
 this.r[i] = 0;
 }
-System.arraycopy (this.c, 0, this.u, 0, 15);
-System.arraycopy (this.c, 0, this.x, 0, 16);
+Zystem.arraycopy (this.c, 0, this.u, 0, 15);
+Zystem.arraycopy (this.c, 0, this.x, 0, 16);
 }, "~N");
 Clazz.defineStatics (c$,
 "MANY", 1440,

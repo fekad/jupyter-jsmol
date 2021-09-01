@@ -38,7 +38,7 @@ this.oStack =  new Array (8);
 this.xStack =  new Array (8);
 this.ifStack =  Clazz.newCharArray (8, '\0');
 });
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function (eval, isSpecialAssignment, isArrayItem, asVector, asBitSet, allowUnderflow, key) {
 this.eval = eval;
 this.isSpecialAssignment = this.assignLeft = isSpecialAssignment;
@@ -53,12 +53,12 @@ this.allowUnderflow = allowUnderflow;
 this.wasX = isArrayItem;
 if (this.debugHigh) JU.Logger.debug ("initialize RPN");
 }, "JS.ScriptExpr,~B,~B,~B,~B,~B,~S");
-Clazz.defineMethod (c$, "endAssignment", 
+Clazz.defineMethod (c$, "endAssignment",
 function () {
 this.assignLeft = false;
 return (this.doSelections = false);
 });
-Clazz.defineMethod (c$, "getResult", 
+Clazz.defineMethod (c$, "getResult",
 function () {
 var isOK = true;
 while (isOK && this.oPt >= 0 && this.oStack[this.oPt] != null) isOK = this.operate ();
@@ -85,7 +85,7 @@ return x;
 }}if (!this.allowUnderflow && (this.xPt >= 0 || this.oPt >= 0)) this.eval.invArg ();
 return null;
 });
-Clazz.defineMethod (c$, "putX", 
+Clazz.defineMethod (c$, "putX",
  function (x) {
 if (this.skipping) return;
 if (this.wasX) {
@@ -98,13 +98,13 @@ throw e;
 }
 }
 }if (++this.xPt == this.xStack.length) this.xStack = JU.AU.doubleLength (this.xStack);
-if (this.xPt < 0) System.out.println ("testing scriptemaafe");
+if (this.xPt < 0) Zystem.out.println ("testing scriptemaafe");
 this.xStack[this.xPt] = x;
 this.ptx = ++this.ptid;
 if (this.debugHigh) {
 JU.Logger.debug ("\nputx= " + x + " ptx=" + this.ptid);
 }}, "JS.SV");
-Clazz.defineMethod (c$, "putOp", 
+Clazz.defineMethod (c$, "putOp",
  function (op) {
 if (++this.oPt >= this.oStack.length) this.oStack = JU.AU.doubleLength (this.oStack);
 this.oStack[this.oPt] = op;
@@ -112,12 +112,12 @@ this.pto = ++this.ptid;
 if (this.debugHigh) {
 JU.Logger.debug ("\nputop=" + op + " pto=" + this.ptid);
 }}, "JS.T");
-Clazz.defineMethod (c$, "putIf", 
+Clazz.defineMethod (c$, "putIf",
  function (c) {
 if (++this.ifPt >= this.ifStack.length) this.ifStack = JU.AU.doubleLength (this.ifStack);
 this.ifStack[this.ifPt] = c;
 }, "~S");
-Clazz.defineMethod (c$, "addXCopy", 
+Clazz.defineMethod (c$, "addXCopy",
 function (x) {
 switch (x.tok) {
 case 2:
@@ -129,75 +129,75 @@ break;
 }
 return this.addX (x);
 }, "JS.SV");
-Clazz.defineMethod (c$, "addX", 
+Clazz.defineMethod (c$, "addX",
 function (x) {
 this.putX (x);
 return this.wasX = true;
 }, "JS.SV");
-Clazz.defineMethod (c$, "addXObj", 
+Clazz.defineMethod (c$, "addXObj",
 function (x) {
 var v = JS.SV.getVariable (x);
 if (v == null) return false;
 this.putX (v);
 return this.wasX = true;
 }, "~O");
-Clazz.defineMethod (c$, "addXStr", 
+Clazz.defineMethod (c$, "addXStr",
 function (x) {
 this.putX (JS.SV.newS (x));
 return this.wasX = true;
 }, "~S");
-Clazz.defineMethod (c$, "addXBool", 
+Clazz.defineMethod (c$, "addXBool",
 function (x) {
 this.putX (JS.SV.getBoolean (x));
 return this.wasX = true;
 }, "~B");
-Clazz.defineMethod (c$, "addXInt", 
+Clazz.defineMethod (c$, "addXInt",
 function (x) {
 this.putX (JS.SV.newI (x));
 return this.wasX = true;
 }, "~N");
-Clazz.defineMethod (c$, "addXList", 
+Clazz.defineMethod (c$, "addXList",
 function (x) {
 this.putX (JS.SV.getVariableList (x));
 return this.wasX = true;
 }, "JU.Lst");
-Clazz.defineMethod (c$, "addXMap", 
+Clazz.defineMethod (c$, "addXMap",
 function (x) {
 this.putX (JS.SV.getVariableMap (x));
 return this.wasX = true;
 }, "java.util.Map");
-Clazz.defineMethod (c$, "addXM3", 
+Clazz.defineMethod (c$, "addXM3",
 function (x) {
 this.putX (JS.SV.newV (11, x));
 return this.wasX = true;
 }, "JU.M3");
-Clazz.defineMethod (c$, "addXM4", 
+Clazz.defineMethod (c$, "addXM4",
 function (x) {
 this.putX (JS.SV.newV (12, x));
 return this.wasX = true;
 }, "JU.M4");
-Clazz.defineMethod (c$, "addXFloat", 
+Clazz.defineMethod (c$, "addXFloat",
 function (x) {
 if (Float.isNaN (x)) return this.addXStr ("NaN");
 this.putX (JS.SV.newF (x));
 return this.wasX = true;
 }, "~N");
-Clazz.defineMethod (c$, "addXBs", 
+Clazz.defineMethod (c$, "addXBs",
 function (bs) {
 this.putX (JS.SV.newV (10, bs));
 return this.wasX = true;
 }, "JU.BS");
-Clazz.defineMethod (c$, "addXPt", 
+Clazz.defineMethod (c$, "addXPt",
 function (pt) {
 this.putX (JS.SV.newV (8, pt));
 return this.wasX = true;
 }, "JU.P3");
-Clazz.defineMethod (c$, "addXPt4", 
+Clazz.defineMethod (c$, "addXPt4",
 function (pt) {
 this.putX (JS.SV.newV (9, pt));
 return this.wasX = true;
 }, "JU.P4");
-Clazz.defineMethod (c$, "addXNum", 
+Clazz.defineMethod (c$, "addXNum",
 function (x) {
 var v;
 if (Clazz.instanceOf (x, JS.SV)) {
@@ -224,50 +224,50 @@ break;
 }this.putX (v);
 return this.wasX = true;
 }, "JS.T");
-Clazz.defineMethod (c$, "addXAV", 
+Clazz.defineMethod (c$, "addXAV",
 function (x) {
 this.putX (JS.SV.getVariableAV (x));
 return this.wasX = true;
 }, "~A");
-Clazz.defineMethod (c$, "addXAD", 
+Clazz.defineMethod (c$, "addXAD",
 function (x) {
 this.putX (JS.SV.getVariableAD (x));
 return this.wasX = true;
 }, "~A");
-Clazz.defineMethod (c$, "addXAS", 
+Clazz.defineMethod (c$, "addXAS",
 function (x) {
 this.putX (JS.SV.getVariableAS (x));
 return this.wasX = true;
 }, "~A");
-Clazz.defineMethod (c$, "addXAI", 
+Clazz.defineMethod (c$, "addXAI",
 function (x) {
 this.putX (JS.SV.getVariableAI (x));
 return this.wasX = true;
 }, "~A");
-Clazz.defineMethod (c$, "addXAII", 
+Clazz.defineMethod (c$, "addXAII",
 function (x) {
 this.putX (JS.SV.getVariableAII (x));
 return this.wasX = true;
 }, "~A");
-Clazz.defineMethod (c$, "addXAF", 
+Clazz.defineMethod (c$, "addXAF",
 function (x) {
 this.putX (JS.SV.getVariableAF (x));
 return this.wasX = true;
 }, "~A");
-Clazz.defineMethod (c$, "addXAFF", 
+Clazz.defineMethod (c$, "addXAFF",
 function (x) {
 this.putX (JS.SV.getVariableAFF (x));
 return this.wasX = true;
 }, "~A");
-c$.isOpFunc = Clazz.defineMethod (c$, "isOpFunc", 
+c$.isOpFunc = Clazz.defineMethod (c$, "isOpFunc",
  function (op) {
 return (op != null && (JS.T.tokAttr (op.tok, 134217728) && op !== JS.T.tokenArraySquare || op.tok == 268435665 && JS.T.tokAttr (op.intValue, 134217728)));
 }, "JS.T");
-Clazz.defineMethod (c$, "addOp", 
+Clazz.defineMethod (c$, "addOp",
 function (op) {
 return this.addOpAllowMath (op, true, 0);
 }, "JS.T");
-Clazz.defineMethod (c$, "addOpAllowMath", 
+Clazz.defineMethod (c$, "addOpAllowMath",
 function (op, allowMathFunc, tokNext) {
 if (this.debugHigh) {
 this.dumpStacks ("adding " + op + " wasx=" + this.wasX);
@@ -449,7 +449,7 @@ return (this.wasX ? this.operate () : true);
 }
 return true;
 }, "JS.T,~B,~N");
-Clazz.defineMethod (c$, "checkSkip", 
+Clazz.defineMethod (c$, "checkSkip",
  function (op, tok0) {
 switch (op.tok) {
 case 268435472:
@@ -476,7 +476,7 @@ break;
 }
 return true;
 }, "JS.T,~N");
-Clazz.defineMethod (c$, "doSelection", 
+Clazz.defineMethod (c$, "doSelection",
  function () {
 if (this.xPt < 0 || this.xPt == 0 && !this.isArrayItem) {
 return false;
@@ -513,7 +513,7 @@ break;
 }
 return true;
 });
-Clazz.defineMethod (c$, "dumpStacks", 
+Clazz.defineMethod (c$, "dumpStacks",
 function (message) {
 JU.Logger.debug ("\n\n------------------\nRPN stacks: " + message + "\n");
 for (var i = 0; i <= this.xPt; i++) JU.Logger.debug ("x[" + i + "]: " + this.xStack[i]);
@@ -523,7 +523,7 @@ for (var i = 0; i <= this.oPt; i++) JU.Logger.debug ("o[" + i + "]: " + this.oSt
 
 JU.Logger.debug (" ifStack = " + ( String.instantialize (this.ifStack)).substring (0, this.ifPt + 1));
 }, "~S");
-Clazz.defineMethod (c$, "getX", 
+Clazz.defineMethod (c$, "getX",
 function () {
 if (this.xPt < 0) this.eval.error (13);
 var v = JS.SV.selectItemVar (this.xStack[this.xPt]);
@@ -531,11 +531,11 @@ this.xStack[this.xPt--] = null;
 this.wasX = false;
 return v;
 });
-Clazz.defineMethod (c$, "getXTok", 
+Clazz.defineMethod (c$, "getXTok",
 function () {
 return (this.xPt < 0 ? 0 : this.xStack[this.xPt].tok);
 });
-Clazz.defineMethod (c$, "evaluateFunction", 
+Clazz.defineMethod (c$, "evaluateFunction",
  function (tok) {
 var op = this.oStack[this.oPt--];
 if (tok == 0) tok = (op.tok == 268435665 ? op.intValue & -481 : op.tok);
@@ -563,7 +563,7 @@ return this.addXBs ( new JU.BS ());
 }
 return this.addXBool (true);
 }, "~N");
-Clazz.defineMethod (c$, "operate", 
+Clazz.defineMethod (c$, "operate",
  function () {
 var op = this.oStack[this.oPt--];
 var pt;
@@ -720,7 +720,7 @@ if (op === JS.T.tokenAndFALSE || op === JS.T.tokenOrTRUE) this.chk = false;
 return this.addX (JS.SV.newT (x1));
 }return this.binaryOp (op, x1, x2);
 });
-Clazz.defineMethod (c$, "binaryOp", 
+Clazz.defineMethod (c$, "binaryOp",
 function (op, x1, x2) {
 var pt;
 var pt4;
@@ -1093,12 +1093,12 @@ return this.addXInt (n == 0 ? x1.asInt () : x1.asInt () % n);
 }
 return true;
 }, "JS.T,JS.SV,JS.SV");
-Clazz.defineMethod (c$, "isDecimal", 
+Clazz.defineMethod (c$, "isDecimal",
  function (x) {
 var s;
 return (x.tok == 3 || x.tok == 4 && ((s = JS.SV.sValue (x).trim ()).indexOf (".") >= 0 || s.indexOf ("+") > 0 || s.lastIndexOf ("-") > 0));
 }, "JS.SV");
-Clazz.defineMethod (c$, "ptValue", 
+Clazz.defineMethod (c$, "ptValue",
 function (x, bsRestrict) {
 var pt;
 switch (x.tok) {
@@ -1122,7 +1122,7 @@ break;
 }
 return null;
 }, "JS.SV,JU.BS");
-c$.planeValue = Clazz.defineMethod (c$, "planeValue", 
+c$.planeValue = Clazz.defineMethod (c$, "planeValue",
 function (x) {
 var pt;
 switch (x.tok) {
@@ -1161,7 +1161,7 @@ return null;
 pt = JU.Escape.uP (JS.SV.sValue (x));
 return (Clazz.instanceOf (pt, JU.P4) ? pt : null);
 }, "JS.T");
-c$.typeOf = Clazz.defineMethod (c$, "typeOf", 
+c$.typeOf = Clazz.defineMethod (c$, "typeOf",
  function (x) {
 var tok = (x == null ? 0 : x.tok);
 switch (tok) {
@@ -1185,7 +1185,7 @@ return JS.T.astrType[tok];
 }
 return "?";
 }, "JS.SV");
-Clazz.defineMethod (c$, "getAllProperties", 
+Clazz.defineMethod (c$, "getAllProperties",
  function (x2, abbr) {
 var bs = x2.value;
 var tokens;
@@ -1207,11 +1207,11 @@ ht.put (t.value, JS.SV.getVariable (this.eval.getBitsetProperty (bs, null, tok, 
 }
 return this.addXMap (ht);
 }, "JS.SV,~S");
-c$.getMatrix4f = Clazz.defineMethod (c$, "getMatrix4f", 
+c$.getMatrix4f = Clazz.defineMethod (c$, "getMatrix4f",
 function (matRotate, vTranslate) {
 return JU.M4.newMV (matRotate, vTranslate == null ?  new JU.V3 () : JU.V3.newV (vTranslate));
 }, "JU.M3,JU.T3");
-Clazz.defineMethod (c$, "getBoundBox", 
+Clazz.defineMethod (c$, "getBoundBox",
  function (x2) {
 if (x2.tok != 10) return false;
 var b = this.vwr.ms.getBoxInfo (x2.value, 1);
@@ -1221,7 +1221,7 @@ for (var i = 0; i < 4; i++) list.addLast (pts[i]);
 
 return this.addXList (list);
 }, "JS.SV");
-Clazz.defineMethod (c$, "getPointOrBitsetOperation", 
+Clazz.defineMethod (c$, "getPointOrBitsetOperation",
  function (op, x2) {
 switch (x2.tok) {
 case 7:

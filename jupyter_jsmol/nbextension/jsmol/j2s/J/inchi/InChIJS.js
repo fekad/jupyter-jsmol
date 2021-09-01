@@ -1,10 +1,10 @@
 Clazz.declarePackage ("J.inchi");
 Clazz.load (["J.api.JmolInChI"], "J.inchi.InChIJS", ["JU.PT"], function () {
 c$ = Clazz.declareType (J.inchi, "InChIJS", null, J.api.JmolInChI);
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function () {
 });
-Clazz.overrideMethod (c$, "getInchi", 
+Clazz.overrideMethod (c$, "getInchi",
 function (vwr, atoms, molData, options) {
 if (atoms == null ? molData == null : atoms.cardinality () == 0) return "";
 var ret = "";
@@ -25,7 +25,7 @@ ret = (Jmol.molfileToInChI ? Jmol.molfileToInChI(molData, options) : "");
 }}} catch (e) {
 {
 e = (e.getMessage$ ? e.getMessage$() : e);
-}System.err.println ("InChIJS exception: " + e);
+}Zystem.err.println ("InChIJS exception: " + e);
 }
 return ret;
 }, "JV.Viewer,JU.BS,~S,~S");

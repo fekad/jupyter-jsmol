@@ -14,7 +14,7 @@ this.atropType = null;
 this.isChain = false;
 Clazz.instantialize (this, arguments);
 }, JS, "SmilesBond", JU.Edge);
-c$.getBondOrderString = Clazz.defineMethod (c$, "getBondOrderString", 
+c$.getBondOrderString = Clazz.defineMethod (c$, "getBondOrderString",
 function (order) {
 switch (order) {
 case 2:
@@ -27,7 +27,7 @@ default:
 return "";
 }
 }, "~N");
-c$.getBondTypeFromCode = Clazz.defineMethod (c$, "getBondTypeFromCode", 
+c$.getBondTypeFromCode = Clazz.defineMethod (c$, "getBondTypeFromCode",
 function (code) {
 switch (code) {
 case '.':
@@ -59,11 +59,11 @@ return 96;
 }
 return -1;
 }, "~S");
-Clazz.defineMethod (c$, "getAtom1", 
+Clazz.defineMethod (c$, "getAtom1",
 function () {
 return this.atom1;
 });
-Clazz.defineMethod (c$, "set", 
+Clazz.defineMethod (c$, "set",
 function (bond) {
 this.order = bond.order;
 this.isNot = bond.isNot;
@@ -73,11 +73,11 @@ this.bondsOr = bond.bondsOr;
 this.nBondsOr = bond.nBondsOr;
 this.atropType = bond.atropType;
 }, "JS.SmilesBond");
-Clazz.defineMethod (c$, "setAtropType", 
+Clazz.defineMethod (c$, "setAtropType",
 function (nn) {
 this.atropType =  Clazz.newIntArray (-1, [Clazz.doubleToInt (nn / 10) - 1, nn % 10 - 1]);
 }, "~N");
-Clazz.defineMethod (c$, "setPrimitive", 
+Clazz.defineMethod (c$, "setPrimitive",
 function (i) {
 var p = this.primitives[i];
 this.order = p.order;
@@ -85,46 +85,46 @@ this.isNot = p.isNot;
 this.atropType = p.atropType;
 return p;
 }, "~N");
-Clazz.defineMethod (c$, "addBondOr", 
+Clazz.defineMethod (c$, "addBondOr",
 function () {
 if (this.bondsOr == null) this.bondsOr =  new Array (2);
 if (this.nBondsOr >= this.bondsOr.length) {
 var tmp =  new Array (this.bondsOr.length * 2);
-System.arraycopy (this.bondsOr, 0, tmp, 0, this.bondsOr.length);
+Zystem.arraycopy (this.bondsOr, 0, tmp, 0, this.bondsOr.length);
 this.bondsOr = tmp;
 }var sBond =  new JS.SmilesBond (null, null, -1, false);
 this.bondsOr[this.nBondsOr] = sBond;
 this.nBondsOr++;
 return sBond;
 });
-Clazz.defineMethod (c$, "addPrimitive", 
+Clazz.defineMethod (c$, "addPrimitive",
 function () {
 if (this.primitives == null) this.primitives =  new Array (2);
 if (this.nPrimitives >= this.primitives.length) {
 var tmp =  new Array (this.primitives.length * 2);
-System.arraycopy (this.primitives, 0, tmp, 0, this.primitives.length);
+Zystem.arraycopy (this.primitives, 0, tmp, 0, this.primitives.length);
 this.primitives = tmp;
 }var sBond =  new JS.SmilesBond (null, null, -1, false);
 this.primitives[this.nPrimitives] = sBond;
 this.nPrimitives++;
 return sBond;
 });
-Clazz.overrideMethod (c$, "toString", 
+Clazz.overrideMethod (c$, "toString",
 function () {
 return this.atom1 + " -" + (this.isNot ? "!" : "") + this.order + "- " + this.atom2;
 });
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function (atom1, atom2, bondType, isNot) {
 Clazz.superConstructor (this, JS.SmilesBond, []);
 this.set2 (bondType, isNot);
 this.set2a (atom1, atom2);
 }, "JS.SmilesAtom,JS.SmilesAtom,~N,~B");
-Clazz.defineMethod (c$, "set2", 
+Clazz.defineMethod (c$, "set2",
 function (bondType, isNot) {
 this.order = bondType;
 this.isNot = isNot;
 }, "~N,~B");
-Clazz.defineMethod (c$, "set2a", 
+Clazz.defineMethod (c$, "set2a",
 function (a1, a2) {
 if (a1 != null) {
 this.atom1 = a1;
@@ -135,18 +135,18 @@ if (a2.isBioAtomWild && this.atom1.isBioAtomWild) this.order = 96;
 a2.isFirst = false;
 a2.addBond (this);
 }}, "JS.SmilesAtom,JS.SmilesAtom");
-Clazz.defineMethod (c$, "setAtom2", 
+Clazz.defineMethod (c$, "setAtom2",
 function (atom, molecule) {
 this.atom2 = atom;
 if (this.atom2 != null) {
 atom.addBond (this);
 this.isConnection = true;
 }}, "JS.SmilesAtom,JS.SmilesSearch");
-Clazz.defineMethod (c$, "isFromPreviousTo", 
+Clazz.defineMethod (c$, "isFromPreviousTo",
 function (atom) {
 return (!this.isConnection && this.atom2 === atom);
 }, "JS.SmilesAtom");
-c$.isBondType = Clazz.defineMethod (c$, "isBondType", 
+c$.isBondType = Clazz.defineMethod (c$, "isBondType",
 function (ch, isSearch, isBioSequence) {
 if (ch == '>') return 1;
 if ("-=#$:/\\.~^`+!,&;@".indexOf (ch) < 0) return 0;
@@ -161,39 +161,39 @@ default:
 return 1;
 }
 }, "~S,~B,~B");
-Clazz.defineMethod (c$, "getValence", 
+Clazz.defineMethod (c$, "getValence",
 function () {
 return (this.order & 7);
 });
-Clazz.defineMethod (c$, "getOtherAtom", 
+Clazz.defineMethod (c$, "getOtherAtom",
 function (a) {
 return (this.atom1 === a ? this.atom2 : this.atom1);
 }, "JS.SmilesAtom");
-Clazz.overrideMethod (c$, "getAtomIndex1", 
+Clazz.overrideMethod (c$, "getAtomIndex1",
 function () {
 return this.atom1.index;
 });
-Clazz.overrideMethod (c$, "getAtomIndex2", 
+Clazz.overrideMethod (c$, "getAtomIndex2",
 function () {
 return this.atom2.index;
 });
-Clazz.overrideMethod (c$, "getCovalentOrder", 
+Clazz.overrideMethod (c$, "getCovalentOrder",
 function () {
 return this.order;
 });
-Clazz.overrideMethod (c$, "getOtherNode", 
+Clazz.overrideMethod (c$, "getOtherNode",
 function (atom) {
 return (atom === this.atom1 ? this.atom2 : atom === this.atom2 || atom == null ? this.atom1 : null);
 }, "JU.SimpleNode");
-Clazz.overrideMethod (c$, "isCovalent", 
+Clazz.overrideMethod (c$, "isCovalent",
 function () {
 return this.order != 112;
 });
-Clazz.overrideMethod (c$, "isHydrogen", 
+Clazz.overrideMethod (c$, "isHydrogen",
 function () {
 return this.order == 112;
 });
-Clazz.defineMethod (c$, "switchAtoms", 
+Clazz.defineMethod (c$, "switchAtoms",
 function () {
 var a = this.atom1;
 this.atom1 = this.atom2;
@@ -213,7 +213,7 @@ this.order = 1025;
 break;
 }
 });
-Clazz.defineMethod (c$, "getRealCovalentOrder", 
+Clazz.defineMethod (c$, "getRealCovalentOrder",
 function () {
 switch (this.order) {
 case 65537:
@@ -224,11 +224,11 @@ return 1;
 }
 return this.order;
 });
-Clazz.defineMethod (c$, "getMatchingBond", 
+Clazz.defineMethod (c$, "getMatchingBond",
 function () {
 return this.matchingBond == null ? this : this.matchingBond;
 });
-Clazz.overrideMethod (c$, "getAtom", 
+Clazz.overrideMethod (c$, "getAtom",
 function (i) {
 return (i == 1 ? this.atom2 : this.atom1);
 }, "~N");

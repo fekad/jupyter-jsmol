@@ -31,11 +31,11 @@ this.azE =  Clazz.newIntArray (64, 0);
 this.rgb16t1 =  new JU.Rgb16 ();
 this.rgb16t2 =  new JU.Rgb16 ();
 });
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function () {
 Clazz.superConstructor (this, J.g3d.TriangleRenderer, []);
 });
-Clazz.overrideMethod (c$, "set", 
+Clazz.overrideMethod (c$, "set",
 function (g3d, gdata) {
 try {
 this.rgb16sW =  new Array (64);
@@ -56,21 +56,21 @@ throw e;
 }
 return this;
 }, "J.api.JmolRendererInterface,JU.GData");
-Clazz.defineMethod (c$, "reallocRgb16s", 
+Clazz.defineMethod (c$, "reallocRgb16s",
  function (rgb16s, n) {
 var t =  new Array (n);
-System.arraycopy (rgb16s, 0, t, 0, rgb16s.length);
+Zystem.arraycopy (rgb16s, 0, t, 0, rgb16s.length);
 for (var i = rgb16s.length; i < n; ++i) t[i] =  new JU.Rgb16 ();
 
 return t;
 }, "~A,~N");
-Clazz.defineMethod (c$, "setGouraud", 
+Clazz.defineMethod (c$, "setGouraud",
 function (rgbA, rgbB, rgbC) {
 this.rgb16sGouraud[0].setInt (rgbA);
 this.rgb16sGouraud[1].setInt (rgbB);
 this.rgb16sGouraud[2].setInt (rgbC);
 }, "~N,~N,~N");
-Clazz.defineMethod (c$, "fillTriangle", 
+Clazz.defineMethod (c$, "fillTriangle",
 function (screenA, screenB, screenC, useGouraud) {
 this.ax[0] = screenA.x;
 this.ax[1] = screenB.x;
@@ -190,7 +190,7 @@ xW--;
 }
 }}this.g3d.setZMargin (0);
 }, "JU.P3i,JU.P3i,JU.P3i,~B");
-Clazz.defineMethod (c$, "generateRaster", 
+Clazz.defineMethod (c$, "generateRaster",
  function (dy, iN, iS, axRaster, azRaster, iRaster, gouraud) {
 var xN = this.ax[iN];
 var xS = this.ax[iS];

@@ -9,10 +9,10 @@
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:jcamp="http://www.xml-cml.org/dict/jcampDict"
    xsi:schemaLocation="http://www.xml-cml.org/dict/jcampDict dict/jcampDict.xml
-   http://www.xml-cml.org/schema schema.xsd 
-   http://www.xml-cml.org/dict/cml dict/cmlDict.xml 
-   http://www.xml-cml.org/dict/cmlDict dict/simpleCmlDict.xml 
-   http://www.xml-cml.org/units/units dict/unitsDict.xml 
+   http://www.xml-cml.org/schema schema.xsd
+   http://www.xml-cml.org/dict/cml dict/cmlDict.xml
+   http://www.xml-cml.org/dict/cmlDict dict/simpleCmlDict.xml
+   http://www.xml-cml.org/units/units dict/unitsDict.xml
    http://www.xml-cml.org/units/siUnits dict/siUnitsDict.xml">
   <spectrum id="$ident" title="$title" convention="JSpecView" type="$specinits">
     <conditionList>
@@ -25,7 +25,7 @@
     </metadataList>
     <parameterList>
 #if($model !="")
-      <parameter dictRef="jcamp:SpectrometerDataSystem" title="Spectrometer/Data System">$model</parameter>
+      <parameter dictRef="jcamp:SpectrometerDataZystem" title="Spectrometer/Data Zystem">$model</parameter>
 #end
       <parameter dictRef="jcamp:NMR_OBSERVEFREQUENCY" title="NMR.Observe Frequency">
           <scalar units="units:hz">$ObFreq</scalar>

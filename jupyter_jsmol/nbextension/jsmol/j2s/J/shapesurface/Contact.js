@@ -20,16 +20,16 @@ this.vX =  new JU.V3 ();
 this.pt1 =  new JU.P3 ();
 this.pt2 =  new JU.P3 ();
 });
-Clazz.defineMethod (c$, "initShape", 
+Clazz.defineMethod (c$, "initShape",
 function () {
 Clazz.superCall (this, J.shapesurface.Contact, "initShape", []);
 this.myType = "contact";
 });
-Clazz.overrideMethod (c$, "getProperty", 
+Clazz.overrideMethod (c$, "getProperty",
 function (property, index) {
 return this.getPropC (property, index);
 }, "~S,~N");
-Clazz.defineMethod (c$, "getPropC", 
+Clazz.defineMethod (c$, "getPropC",
 function (property, index) {
 var thisMesh = this.thisMesh;
 if (index >= 0 && (index >= this.meshCount || (thisMesh = this.isomeshes[index]) == null)) return null;
@@ -43,7 +43,7 @@ this.jvxlData.mappedDataMax = minmax[1];
 }return J.jvxl.data.JvxlCoder.jvxlGetInfo (this.jvxlData);
 }return this.getPropI (property, index);
 }, "~S,~N");
-Clazz.overrideMethod (c$, "setProperty", 
+Clazz.overrideMethod (c$, "setProperty",
 function (propertyName, value, bs) {
 if ("set" === propertyName) {
 this.setContacts (value, true);
@@ -52,7 +52,7 @@ return;
 this.translucentLevel = 0;
 }this.setPropI (propertyName, value, bs);
 }, "~S,~O,JU.BS");
-Clazz.defineMethod (c$, "setContacts", 
+Clazz.defineMethod (c$, "setContacts",
  function (value, doEditCpList) {
 var contactType = (value[0]).intValue ();
 var displayType = (value[1]).intValue ();
@@ -204,7 +204,7 @@ if (colorDensity) ce.setRange (-0.3, 0.3, false);
  else ce.setRange (-0.5, 1, false);
 }if (ce != null) this.thisMesh.remapColors (this.vwr, ce, this.translucentLevel);
 }, "~A,~B");
-Clazz.defineMethod (c$, "combineSurfaces", 
+Clazz.defineMethod (c$, "combineSurfaces",
  function (pairs, contactType, displayType, parameters, func, isColorDensity, colorByType) {
 var volumeData =  new J.jvxl.data.VolumeData ();
 var logLevel = JU.Logger.getLogLevel ();
@@ -251,20 +251,20 @@ for (var j = this.thisMesh.vc; --j >= 0; ) box.addBoundBoxPoint (this.thisMesh.v
 }
 JU.Logger.setLogLevel (logLevel);
 if (this.jvxlData.boundingBox == null) {
-System.out.println ("???");
+Zystem.out.println ("???");
 } else {
 this.jvxlData.boundingBox[0] = box.bbCorner0;
 this.jvxlData.boundingBox[1] = box.bbCorner1;
 }this.displayType = displayType;
 return volume;
 }, "JU.Lst,~N,~N,~A,~O,~B,~B");
-Clazz.defineMethod (c$, "setColorByScore", 
+Clazz.defineMethod (c$, "setColorByScore",
  function (score, nV) {
 for (var iv = this.thisMesh.vc; --iv >= nV; ) this.thisMesh.vvs[iv] = score;
 
 return this.thisMesh.vc;
 }, "~N,~N");
-Clazz.defineMethod (c$, "getPairs", 
+Clazz.defineMethod (c$, "getPairs",
  function (bsA, bsB, rd, intramolecularMode, doEditCpList) {
 var list =  new JU.Lst ();
 var ad =  new J.atomdata.AtomData ();
@@ -347,7 +347,7 @@ if (JU.Logger.debugging) for (var i = 0; i < list.size (); i++) JU.Logger.debug 
 JU.Logger.info ("Contact pairs: " + list.size ());
 return list;
 }, "JU.BS,JU.BS,J.atomdata.RadiusData,~N,~B");
-Clazz.defineMethod (c$, "isWithinFourBonds", 
+Clazz.defineMethod (c$, "isWithinFourBonds",
  function (atomA, atomB) {
 if (atomA.mi != atomB.mi) return false;
 if (atomA.isCovalentlyBonded (atomB)) return true;
@@ -361,14 +361,14 @@ for (var j = 0; j < bonds.length; j++) if (bonds[j].getOtherAtom (atomA).isCoval
 }
 return false;
 }, "JM.Atom,JM.Atom");
-c$.checkCp = Clazz.defineMethod (c$, "checkCp", 
+c$.checkCp = Clazz.defineMethod (c$, "checkCp",
  function (cp1, cp2, i1, i2) {
 if (cp1.myAtoms[i1] !== cp2.myAtoms[i2]) return 0;
 var clash1 = (cp1.pt.distance (cp2.myAtoms[1 - i2]) < cp2.radii[1 - i2]);
 var clash2 = (cp2.pt.distance (cp1.myAtoms[1 - i1]) < cp1.radii[1 - i1]);
 return (!clash1 && !clash2 ? 0 : cp1.score > cp2.score ? 1 : 2);
 }, "JU.ContactPair,JU.ContactPair,~N,~N");
-Clazz.defineMethod (c$, "newSurface", 
+Clazz.defineMethod (c$, "newSurface",
  function (displayType, cp, bs1, bs2, rd, parameters, func, isColorDensity, volumeData, sasurfaceRadius) {
 var params = this.sg.params;
 params.isSilent = true;
@@ -446,7 +446,7 @@ iSlab0 = -100;
 if (iSlab0 != iSlab1) this.thisMesh.getMeshSlicer ().slabPolygons (JU.TempArray.getSlabWithinRange (iSlab0, iSlab1), false);
 if (displayType != 2097180) this.thisMesh.setMerged (true);
 }, "~N,JU.ContactPair,JU.BS,JU.BS,J.atomdata.RadiusData,~A,~O,~B,J.jvxl.data.VolumeData,~N");
-Clazz.defineMethod (c$, "setVolumeData", 
+Clazz.defineMethod (c$, "setVolumeData",
  function (type, volumeData, cp, resolution, nPairs) {
 this.pt1.setT (cp.myAtoms[0]);
 this.pt2.setT (cp.myAtoms[1]);
@@ -480,7 +480,7 @@ volumeData.setVolumetricVector (0, this.vX.x, this.vX.y, this.vX.z);
 volumeData.setVolumetricVector (1, this.vY.x, this.vY.y, this.vY.z);
 volumeData.setVolumetricVector (2, this.vZ.x, this.vZ.y, this.vZ.z);
 }, "~N,J.jvxl.data.VolumeData,JU.ContactPair,~N,~N");
-Clazz.defineMethod (c$, "mergeMesh", 
+Clazz.defineMethod (c$, "mergeMesh",
  function (md) {
 this.thisMesh.merge (md);
 if (this.minData == 3.4028235E38) {
@@ -495,7 +495,7 @@ this.maxData = this.jvxlData.mappedDataMax;
 this.jvxlData.valueMappedToBlue = this.minData;
 this.jvxlData.valueMappedToRed = this.maxData;
 }, "J.jvxl.data.MeshData");
-Clazz.overrideMethod (c$, "addMeshInfo", 
+Clazz.overrideMethod (c$, "addMeshInfo",
 function (mesh, info) {
 if (mesh.info == null) return;
 var pairInfo =  new JU.Lst ();
@@ -516,7 +516,7 @@ cpInfo.put ("radii", cp.radii);
 cpInfo.put ("vdws", cp.vdws);
 }
 }, "J.shapesurface.IsosurfaceMesh,java.util.Map");
-c$.getVdwClashRadius = Clazz.defineMethod (c$, "getVdwClashRadius", 
+c$.getVdwClashRadius = Clazz.defineMethod (c$, "getVdwClashRadius",
  function (cp, x0, vdwA, vdwB, d) {
 var sum = vdwA + vdwB;
 var dif2 = vdwA - vdwB;

@@ -27,7 +27,7 @@ this.pt0f =  new JU.P3 ();
 this.pt0i =  new JU.P3i ();
 this.bsHandles =  new JU.BS ();
 });
-Clazz.overrideMethod (c$, "render", 
+Clazz.overrideMethod (c$, "render",
 function () {
 this.needTranslucent = false;
 this.imageFontScaling = this.vwr.imageFontScaling;
@@ -35,7 +35,7 @@ var draw = this.shape;
 for (var i = draw.meshCount; --i >= 0; ) {
 var mesh = this.dmesh = draw.meshes[i];
 if (mesh == null) {
-System.out.println ("DrawRenderer mesh is null?");
+Zystem.out.println ("DrawRenderer mesh is null?");
 return false;
 }if (mesh.connectedAtoms != null) {
 if (mesh.connectedAtoms[0] < 0) continue;
@@ -52,11 +52,11 @@ if (!this.g3d.setC (JU.C.getColixTranslucent3 (23, true, 0.5))) this.needTranslu
 }}
 return this.needTranslucent;
 });
-Clazz.overrideMethod (c$, "isPolygonDisplayable", 
+Clazz.overrideMethod (c$, "isPolygonDisplayable",
 function (i) {
 return J.shapespecial.Draw.isPolygonDisplayable (this.dmesh, i) && (this.dmesh.modelFlags == null || this.dmesh.bsMeshesVisible.get (i));
 }, "~N");
-Clazz.overrideMethod (c$, "render2", 
+Clazz.overrideMethod (c$, "render2",
 function (isExport) {
 this.drawType = this.dmesh.drawType;
 this.diameter = this.dmesh.diameter;
@@ -144,7 +144,7 @@ i0 = i;
 } else {
 this.render2b (false);
 }}, "~B");
-Clazz.defineMethod (c$, "setArc", 
+Clazz.defineMethod (c$, "setArc",
  function (v1, v2, ptRef, nDegreesOffset, theta, fractionalOffset, scale) {
 this.vTemp.sub2 (v2, v1);
 this.pt1f.scaleAdd2 (fractionalOffset, this.vTemp, v1);
@@ -177,7 +177,7 @@ mat.rotate (this.vTemp2);
 }
 return nPoints;
 }, "JU.T3,JU.T3,JU.T3,~N,~N,~N,~N");
-Clazz.defineMethod (c$, "getConnectionPoints", 
+Clazz.defineMethod (c$, "getConnectionPoints",
  function () {
 this.vertexCount = 3;
 var dmax = 3.4028235E38;
@@ -232,7 +232,7 @@ this.pt1.set (this.screens[i].x, this.screens[i].y, this.screens[i].z);
 this.tm.unTransformPoint (this.pt1, this.vertices[i]);
 }}
 });
-Clazz.defineMethod (c$, "drawLineData", 
+Clazz.defineMethod (c$, "drawLineData",
  function (lineData) {
 if (this.diameter == 0) this.diameter = 3;
 for (var i = lineData.size (); --i >= 0; ) {
@@ -242,7 +242,7 @@ this.tm.transformPtScr (pts[1], this.pt2i);
 this.drawEdge (-1, -2, true, pts[0], pts[1], this.pt1i, this.pt2i);
 }
 }, "JU.Lst");
-Clazz.defineMethod (c$, "renderXyPoint", 
+Clazz.defineMethod (c$, "renderXyPoint",
  function () {
 var f = (this.g3d.isAntialiased () ? 2 : 1);
 this.pt0.setT (this.vertices[0]);
@@ -255,7 +255,7 @@ this.diameter = Clazz.floatToInt (this.diameter * this.vwr.getScreenDim () / 100
 this.pt1i.set (Clazz.floatToInt (this.pt0.x), Clazz.floatToInt (this.vwr.tm.height - this.pt0.y), Clazz.floatToInt (this.vwr.tm.cameraDistance));
 this.g3d.fillSphereI (this.diameter, this.pt1i);
 });
-Clazz.defineMethod (c$, "renderXyArrow", 
+Clazz.defineMethod (c$, "renderXyArrow",
  function (ptXY) {
 var ptXYZ = 1 - ptXY;
 var arrowPt =  new Array (2);
@@ -272,7 +272,7 @@ if (this.diameter < 0) this.g3d.drawDashedLineBits (8, 4, this.pt0, this.pt1);
  else this.g3d.fillCylinderBits (2, this.diameter, this.pt0, this.pt1);
 this.renderArrowHead (this.pt0, this.pt1, 0, true, false, false);
 }, "~N");
-Clazz.defineMethod (c$, "renderArrowHead", 
+Clazz.defineMethod (c$, "renderArrowHead",
  function (pt1, pt2, factor2, isTransformed, withShaft, isBarb) {
 if (this.dmesh.noHead) return;
 if (this.s0f == null) {
@@ -311,14 +311,14 @@ this.diameter = Clazz.doubleToInt (headDiameter / 5);
 if (headDiameter > 2) this.g3d.fillConeScreen3f (2, headDiameter, this.s1f, this.s2f, isBarb);
 if (withShaft) this.g3d.fillCylinderScreen3I (2, this.diameter, this.s0f, this.s1f, null, null, 0);
 }, "JU.T3,JU.T3,~N,~B,~B,~B");
-Clazz.defineMethod (c$, "getArrowScale", 
+Clazz.defineMethod (c$, "getArrowScale",
  function () {
 var fScale = (this.dmesh.isScaleSet ? this.dmesh.scale : 0);
 if (fScale == 0) fScale = this.vwr.getFloat (570425352) * (this.dmesh.connectedAtoms == null ? 1 : 0.5);
 if (fScale <= 0) fScale = 0.5;
 return fScale;
 });
-Clazz.defineMethod (c$, "renderHandles", 
+Clazz.defineMethod (c$, "renderHandles",
  function () {
 var diameter = Math.round (10 * this.imageFontScaling);
 switch (this.drawType) {
@@ -342,7 +342,7 @@ this.g3d.drawFilledCircle (23, colixFill, diameter, this.screens[k].x, this.scre
 break;
 }
 });
-Clazz.defineMethod (c$, "renderInfo", 
+Clazz.defineMethod (c$, "renderInfo",
  function () {
 if (this.isExport || this.mesh.title == null || this.vwr.getDrawHover () || !this.g3d.setC (this.vwr.cm.colixBackgroundContrast)) return;
 for (var i = this.dmesh.pc; --i >= 0; ) if (this.isPolygonDisplayable (i)) {

@@ -7,10 +7,10 @@ this.spectrum = null;
 this.vwr = null;
 Clazz.instantialize (this, arguments);
 }, JSV["export"], "JDXExporter", null, JSV.api.JSVExporter);
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function () {
 });
-Clazz.overrideMethod (c$, "exportTheSpectrum", 
+Clazz.overrideMethod (c$, "exportTheSpectrum",
 function (viewer, type, out, spectrum, startIndex, endIndex, pd, asBase64) {
 this.out = out;
 this.type = type;
@@ -20,7 +20,7 @@ this.toStringAux (startIndex, endIndex);
 out.closeChannel ();
 return "OK " + out.getByteCount () + " bytes";
 }, "JSV.common.JSViewer,JSV.common.ExportType,JU.OC,JSV.common.Spectrum,~N,~N,JSV.common.PanelData,~B");
-Clazz.defineMethod (c$, "toStringAux", 
+Clazz.defineMethod (c$, "toStringAux",
  function (startIndex, endIndex) {
 var newXYCoords = this.spectrum.getXYCoords ();
 var tabDataSet = "";
@@ -83,7 +83,7 @@ this.out.append ("##" + tmpDataClass + "= " + varList + JSV["export"].JDXExporte
 this.out.append (tabDataSet);
 this.out.append ("##END=");
 }, "~N,~N");
-Clazz.defineMethod (c$, "getHeaderString", 
+Clazz.defineMethod (c$, "getHeaderString",
  function (tmpDataClass, minY, maxY, tmpXFactor, tmpYFactor, startIndex, endIndex) {
 this.out.append ("##TITLE= ").append (this.spectrum.getTitle ()).append (JSV["export"].JDXExporter.newLine);
 this.out.append ("##JCAMP-DX= 5.01").append (JSV["export"].JDXExporter.newLine);
@@ -127,7 +127,7 @@ this.out.append ("##NPOINTS= ").append ("" + (Math.abs (endIndex - startIndex) +
 this.out.append ("##MINY= ").append (JSV["export"].JDXExporter.fixExponentInt (minY)).append (JSV["export"].JDXExporter.newLine);
 this.out.append ("##MAXY= ").append (JSV["export"].JDXExporter.fixExponentInt (maxY)).append (JSV["export"].JDXExporter.newLine);
 }, "~S,~N,~N,~N,~N,~N,~N");
-c$.areIntegers = Clazz.defineMethod (c$, "areIntegers", 
+c$.areIntegers = Clazz.defineMethod (c$, "areIntegers",
  function (xyCoords, startIndex, endIndex, factor, isX) {
 for (var i = startIndex; i <= endIndex; i++) {
 var x = (isX ? xyCoords[i].getXVal () : xyCoords[i].getYVal ()) / factor;
@@ -135,15 +135,15 @@ if (JSV["export"].JDXExporter.isAlmostInteger (x)) return false;
 }
 return true;
 }, "~A,~N,~N,~N,~B");
-c$.isAlmostInteger = Clazz.defineMethod (c$, "isAlmostInteger", 
+c$.isAlmostInteger = Clazz.defineMethod (c$, "isAlmostInteger",
  function (x) {
 return (x != 0 && Math.abs (x - Math.floor (x)) / x > 1e-8);
 }, "~N");
-c$.fixExponentInt = Clazz.defineMethod (c$, "fixExponentInt", 
+c$.fixExponentInt = Clazz.defineMethod (c$, "fixExponentInt",
  function (x) {
 return (x == Math.floor (x) ? String.valueOf (Clazz.doubleToInt (x)) : JU.PT.rep (JSV["export"].JDXExporter.fixExponent (x), "E+00", ""));
 }, "~N");
-c$.fixExponent = Clazz.defineMethod (c$, "fixExponent", 
+c$.fixExponent = Clazz.defineMethod (c$, "fixExponent",
  function (x) {
 var s = JU.DF.formatDecimalDbl (x, -7);
 var pt = s.indexOf ("E");
@@ -152,7 +152,7 @@ return s;
 }if (s.length == pt + 3) s = s.substring (0, pt + 2) + "0" + s.substring (pt + 2);
 return s;
 }, "~N");
-c$.newLine = c$.prototype.newLine = System.getProperty ("line.separator");
+c$.newLine = c$.prototype.newLine = Zystem.getProperty ("line.separator");
 Clazz.defineStatics (c$,
 "FACTOR_DIVISOR", 1000000);
 });

@@ -11,11 +11,11 @@ Clazz.instantialize (this, arguments);
 Clazz.prepareFields (c$, function () {
 this.next =  Clazz.newIntArray (1, 0);
 });
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function () {
 Clazz.superConstructor (this, J.jvxl.readers.SurfaceFileReader, []);
 });
-Clazz.defineMethod (c$, "setStream", 
+Clazz.defineMethod (c$, "setStream",
 function (fileName, isBigEndian) {
 if (fileName == null) this.binarydoc.setStream (null, isBigEndian);
  else try {
@@ -25,40 +25,40 @@ stream.reset ();
 this.binarydoc.setStream (stream, true);
 }} catch (e) {
 if (Clazz.exceptionOf (e, Exception)) {
-System.out.println ("BCifDensityReader " + e);
+Zystem.out.println ("BCifDensityReader " + e);
 this.binarydoc.setStream (this.sg.atomDataServer.getBufferedInputStream (fileName), isBigEndian);
 } else {
 throw e;
 }
 }
 }, "~S,~B");
-Clazz.overrideMethod (c$, "init", 
+Clazz.overrideMethod (c$, "init",
 function (sg) {
 this.initSR (sg);
 }, "J.jvxl.readers.SurfaceGenerator");
-Clazz.defineMethod (c$, "init2", 
+Clazz.defineMethod (c$, "init2",
 function (sg, br) {
 this.init2SFR (sg, br);
 }, "J.jvxl.readers.SurfaceGenerator,java.io.BufferedReader");
-Clazz.defineMethod (c$, "init2SFR", 
+Clazz.defineMethod (c$, "init2SFR",
 function (sg, br) {
 this.br = br;
 this.init (sg);
 }, "J.jvxl.readers.SurfaceGenerator,java.io.BufferedReader");
-Clazz.defineMethod (c$, "newBinaryDocument", 
+Clazz.defineMethod (c$, "newBinaryDocument",
 function () {
 return J.api.Interface.getInterface ("JU.BinaryDocument", this.sg.atomDataServer, "file");
 });
-Clazz.overrideMethod (c$, "setOutputChannel", 
+Clazz.overrideMethod (c$, "setOutputChannel",
 function (out) {
 if (this.binarydoc == null) this.out = out;
  else this.sg.setOutputChannel (this.binarydoc, out);
 }, "JU.OC");
-Clazz.overrideMethod (c$, "closeReader", 
+Clazz.overrideMethod (c$, "closeReader",
 function () {
 this.closeReaderSFR ();
 });
-Clazz.defineMethod (c$, "closeReaderSFR", 
+Clazz.defineMethod (c$, "closeReaderSFR",
 function () {
 if (this.br != null) try {
 this.br.close ();
@@ -71,62 +71,62 @@ throw e;
 if (this.out != null) this.out.closeChannel ();
 if (this.binarydoc != null) this.binarydoc.close ();
 });
-Clazz.overrideMethod (c$, "discardTempData", 
+Clazz.overrideMethod (c$, "discardTempData",
 function (discardAll) {
 this.closeReader ();
 this.discardTempDataSR (discardAll);
 }, "~B");
-Clazz.defineMethod (c$, "getTokens", 
+Clazz.defineMethod (c$, "getTokens",
 function () {
 return JU.PT.getTokensAt (this.line, 0);
 });
-Clazz.defineMethod (c$, "parseFloat", 
+Clazz.defineMethod (c$, "parseFloat",
 function () {
 return JU.PT.parseFloatNext (this.line, this.next);
 });
-Clazz.defineMethod (c$, "parseFloatStr", 
+Clazz.defineMethod (c$, "parseFloatStr",
 function (s) {
 this.next[0] = 0;
 return JU.PT.parseFloatNext (s, this.next);
 }, "~S");
-Clazz.defineMethod (c$, "parseFloatRange", 
+Clazz.defineMethod (c$, "parseFloatRange",
 function (s, iStart, iEnd) {
 this.next[0] = iStart;
 return JU.PT.parseFloatRange (s, iEnd, this.next);
 }, "~S,~N,~N");
-Clazz.defineMethod (c$, "parseInt", 
+Clazz.defineMethod (c$, "parseInt",
 function () {
 return JU.PT.parseIntNext (this.line, this.next);
 });
-Clazz.defineMethod (c$, "parseIntStr", 
+Clazz.defineMethod (c$, "parseIntStr",
 function (s) {
 this.next[0] = 0;
 return JU.PT.parseIntNext (s, this.next);
 }, "~S");
-Clazz.defineMethod (c$, "parseIntNext", 
+Clazz.defineMethod (c$, "parseIntNext",
 function (s) {
 return JU.PT.parseIntNext (s, this.next);
 }, "~S");
-Clazz.defineMethod (c$, "parseFloatArrayStr", 
+Clazz.defineMethod (c$, "parseFloatArrayStr",
 function (s) {
 this.next[0] = 0;
 return JU.PT.parseFloatArrayNext (s, this.next, null, null, null);
 }, "~S");
-Clazz.defineMethod (c$, "parseFloatArray", 
+Clazz.defineMethod (c$, "parseFloatArray",
 function (a, strStart, strEnd) {
 return JU.PT.parseFloatArrayNext (this.line, this.next, a, strStart, strEnd);
 }, "~A,~S,~S");
-Clazz.defineMethod (c$, "getQuotedStringNext", 
+Clazz.defineMethod (c$, "getQuotedStringNext",
 function () {
 return JU.PT.getQuotedStringNext (this.line, this.next);
 });
-Clazz.defineMethod (c$, "skipTo", 
+Clazz.defineMethod (c$, "skipTo",
 function (info, what) {
 if (info != null) while (this.rd ().indexOf (info) < 0) {
 }
 if (what != null) this.next[0] = this.line.indexOf (what) + what.length + 2;
 }, "~S,~S");
-Clazz.defineMethod (c$, "rd", 
+Clazz.defineMethod (c$, "rd",
 function () {
 this.line = this.br.readLine ();
 if (this.line != null) {

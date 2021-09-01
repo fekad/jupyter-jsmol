@@ -5,11 +5,11 @@ this.field = null;
 this.comSSMat = null;
 Clazz.instantialize (this, arguments);
 }, J.adapter.readers.cif, "MSCifParser", J.adapter.readers.cif.MSRdr);
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function () {
 Clazz.superConstructor (this, J.adapter.readers.cif.MSCifParser, []);
 });
-Clazz.defineMethod (c$, "processEntry", 
+Clazz.defineMethod (c$, "processEntry",
 function () {
 var cr = this.cr;
 if (cr.key.equals ("_cell_commen_t_section_1")) {
@@ -23,11 +23,11 @@ var r = cr.parseIntStr (tokens[tokens.length - 2]);
 var c = cr.parseIntStr (tokens[tokens.length - 1]);
 if (r > 0 && c > 0) this.comSSMat.setElement (r - 1, c - 1, cr.parseFloatStr (cr.data));
 }});
-Clazz.defineMethod (c$, "processLoopBlock", 
+Clazz.defineMethod (c$, "processLoopBlock",
 function () {
 var cr = this.cr;
 var key = cr.key;
-if (key.equals ("_cell_subsystem_code")) return this.processSubsystemLoopBlock ();
+if (key.equals ("_cell_subZystem_code")) return this.processSubZystemLoopBlock ();
 if (!key.startsWith ("_cell_wave") && !key.contains ("fourier") && !key.contains ("legendre") && !key.contains ("_special_func")) {
 if (key.contains ("crenel_ortho")) cr.appendLoadNote ("WARNING: Orthogonalized non-Legendre functions not supported.\nThe following block has been ignored. Use Legendre functions instead.\n\n" + cr.cifParser.skipLoop (true) + "=================================\n");
 return 0;
@@ -262,23 +262,23 @@ this.addMod (type_id, fid, pt);
 }
 return 1;
 });
-Clazz.defineMethod (c$, "addMod", 
+Clazz.defineMethod (c$, "addMod",
  function (id, fid, params) {
 if (fid != null) id += fid;
 this.addModulation (null, id, params, -1);
 }, "~S,~S,~A");
-Clazz.defineMethod (c$, "processSubsystemLoopBlock", 
+Clazz.defineMethod (c$, "processSubZystemLoopBlock",
  function () {
 var cr = this.cr;
 cr.parseLoopParameters (null);
 while (cr.cifParser.getData ()) {
 this.fieldProperty (cr, 0);
 var id = this.field;
-this.addSubsystem (id, this.getSparseMatrix (cr, "_w_", 1, 3 + this.modDim));
+this.addSubZystem (id, this.getSparseMatrix (cr, "_w_", 1, 3 + this.modDim));
 }
 return 1;
 });
-Clazz.defineMethod (c$, "getSparseMatrix", 
+Clazz.defineMethod (c$, "getSparseMatrix",
  function (cr, term, i, dim) {
 var m =  new JU.Matrix (null, dim, dim);
 var a = m.getArray ();
@@ -294,7 +294,7 @@ if (r > 0 && c > 0) a[r - 1][c - 1] = cr.parseFloatStr (this.field);
 }
 return m;
 }, "J.adapter.readers.cif.CifReader,~S,~N,~N");
-Clazz.defineMethod (c$, "fieldProperty", 
+Clazz.defineMethod (c$, "fieldProperty",
  function (cr, i) {
 return ((this.field = cr.cifParser.getColumnData (i)).length > 0 && this.field.charAt (0) != '\0' ? cr.col2key[i] : -1);
 }, "J.adapter.readers.cif.CifReader,~N");

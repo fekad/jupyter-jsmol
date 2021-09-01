@@ -27,7 +27,7 @@ this.syncId = null;
 this.outputBuffer = null;
 Clazz.instantialize (this, arguments);
 }, JU, "GenericApplet", null, [J.api.JmolAppletInterface, J.api.JmolStatusListener]);
-Clazz.defineMethod (c$, "init", 
+Clazz.defineMethod (c$, "init",
 function (applet) {
 this.b$ =  new java.util.Hashtable ();
 if (JU.GenericApplet.htRegistry == null) JU.GenericApplet.htRegistry =  new java.util.Hashtable ();
@@ -35,16 +35,16 @@ this.appletObject = applet;
 this.htmlName = JU.PT.split ("" + this.getJmolParameter ("name"), "_object")[0];
 this.syncId = this.getJmolParameter ("syncId");
 this.fullName = this.htmlName + "__" + this.syncId + "__";
-System.out.println ("Jmol JavaScript applet " + this.fullName + " initializing");
+Zystem.out.println ("Jmol JavaScript applet " + this.fullName + " initializing");
 var iLevel = (this.getValue ("logLevel", (this.getBooleanValue ("debug", false) ? "5" : "4"))).charCodeAt (0) - 48;
-if (iLevel != 4) System.out.println ("setting logLevel=" + iLevel + " -- To change, use script \"set logLevel [0-5]\"");
+if (iLevel != 4) Zystem.out.println ("setting logLevel=" + iLevel + " -- To change, use script \"set logLevel [0-5]\"");
 JU.Logger.setLogLevel (iLevel);
 J.i18n.GT.ignoreApplicationBundle ();
 this.initOptions ();
 JU.GenericApplet.checkIn (this.fullName, this.appletObject);
 this.initApplication ();
 }, "~O");
-Clazz.defineMethod (c$, "initApplication", 
+Clazz.defineMethod (c$, "initApplication",
  function () {
 this.vwrOptions.put ("applet", Boolean.TRUE);
 if (this.getJmolParameter ("statusListener") == null) this.vwrOptions.put ("statusListener", this);
@@ -60,10 +60,10 @@ this.loading = true;
 for (var item, $item = 0, $$item = J.c.CBK.values (); $item < $$item.length && ((item = $$item[$item]) || true); $item++) this.setValue (item.name () + "Callback", null);
 
 this.loading = false;
-if (this.language != null) System.out.print ("requested language=" + this.language + "; ");
+if (this.language != null) Zystem.out.print ("requested language=" + this.language + "; ");
 this.doTranslate = (!"none".equals (this.language) && this.getBooleanValue ("doTranslate", true));
 this.language = J.i18n.GT.getLanguage ();
-System.out.println ("language=" + this.language);
+Zystem.out.println ("language=" + this.language);
 if (this.b$.get (J.c.CBK.SCRIPT) == null && this.b$.get (J.c.CBK.ERROR) == null) if (this.b$.get (J.c.CBK.MESSAGE) != null || this.statusForm != null || this.statusText != null) {
 if (this.doTranslate && (this.getValue ("doTranslate", null) == null)) {
 this.doTranslate = false;
@@ -85,25 +85,25 @@ if (loadParam != null && this.viewer.loadInline (loadParam) != null) script = ""
 if (script.length > 0) this.scriptProcessor (script, null, 1);
 this.viewer.notifyStatusReady (true);
 });
-Clazz.overrideMethod (c$, "destroy", 
+Clazz.overrideMethod (c$, "destroy",
 function () {
 this.gRight = null;
 this.viewer.notifyStatusReady (false);
 this.viewer = null;
 JU.GenericApplet.checkOut (this.fullName);
 });
-Clazz.defineMethod (c$, "getBooleanValue", 
+Clazz.defineMethod (c$, "getBooleanValue",
 function (propertyName, defaultValue) {
 var value = this.getValue (propertyName, defaultValue ? "true" : "");
 return (value.equalsIgnoreCase ("true") || value.equalsIgnoreCase ("on") || value.equalsIgnoreCase ("yes"));
 }, "~S,~B");
-Clazz.defineMethod (c$, "getValue", 
+Clazz.defineMethod (c$, "getValue",
 function (propertyName, defaultValue) {
 var s = this.getJmolParameter (propertyName);
-System.out.println ("Jmol getValue " + propertyName + " " + s);
+Zystem.out.println ("Jmol getValue " + propertyName + " " + s);
 return (s == null ? defaultValue : s);
 }, "~S,~S");
-Clazz.defineMethod (c$, "getValueLowerCase", 
+Clazz.defineMethod (c$, "getValueLowerCase",
  function (paramName, defaultValue) {
 var value = this.getValue (paramName, defaultValue);
 if (value != null) {
@@ -111,17 +111,17 @@ value = value.trim ().toLowerCase ();
 if (value.length == 0) value = null;
 }return value;
 }, "~S,~S");
-Clazz.defineMethod (c$, "setValue", 
+Clazz.defineMethod (c$, "setValue",
  function (name, defaultValue) {
 this.setStringProperty (name, this.getValue (name, defaultValue));
 }, "~S,~S");
-Clazz.defineMethod (c$, "setStringProperty", 
+Clazz.defineMethod (c$, "setStringProperty",
  function (name, value) {
 if (value == null) return;
 JU.Logger.info (name + " = \"" + value + "\"");
 this.viewer.setStringProperty (name, value);
 }, "~S,~S");
-Clazz.defineMethod (c$, "scriptProcessor", 
+Clazz.defineMethod (c$, "scriptProcessor",
  function (script, statusParams, processType) {
 if (script == null || script.length == 0) return "";
 switch (processType) {
@@ -136,52 +136,52 @@ default:
 return this.viewer.script (script);
 }
 }, "~S,~S,~N");
-Clazz.overrideMethod (c$, "register", 
+Clazz.overrideMethod (c$, "register",
 function (id, jsi) {
 JU.GenericApplet.checkIn (id, jsi);
 }, "~S,J.api.JmolSyncInterface");
-Clazz.overrideMethod (c$, "getJSpecViewProperty", 
+Clazz.overrideMethod (c$, "getJSpecViewProperty",
 function (key) {
 return null;
 }, "~S");
-Clazz.defineMethod (c$, "syncScript", 
+Clazz.defineMethod (c$, "syncScript",
 function (script) {
 this.viewer.syncScript (script, "~", 0);
 }, "~S");
-Clazz.overrideMethod (c$, "handleEvent", 
+Clazz.overrideMethod (c$, "handleEvent",
 function (e) {
 if (this.viewer == null) return false;
 return this.viewer.processMouseEvent (e.id, e.x, e.y, e.modifiers, e.when);
 }, "java.awt.Event");
-Clazz.overrideMethod (c$, "getAppletInfo", 
+Clazz.overrideMethod (c$, "getAppletInfo",
 function () {
 return J.i18n.GT.o (J.i18n.GT.$ ("Jmol Applet version {0} {1}.\n\nAn OpenScience project.\n\nSee http://www.jmol.org for more information"),  Clazz.newArray (-1, [JV.JC.version, JV.JC.date])) + "\nhtmlName = " + JU.PT.esc (this.htmlName) + "\nsyncId = " + JU.PT.esc (this.syncId) + "\ndocumentBase = " + JU.PT.esc (this.documentBase) + "\ncodeBase = " + JU.PT.esc (this.codeBase);
 });
-Clazz.overrideMethod (c$, "script", 
+Clazz.overrideMethod (c$, "script",
 function (script) {
 this.scriptNoWait (script);
 }, "~S");
-Clazz.overrideMethod (c$, "scriptCheck", 
+Clazz.overrideMethod (c$, "scriptCheck",
 function (script) {
 if (script == null || script.length == 0) return "";
 return this.scriptProcessor (script, null, 0);
 }, "~S");
-Clazz.overrideMethod (c$, "scriptNoWait", 
+Clazz.overrideMethod (c$, "scriptNoWait",
 function (script) {
 if (script == null || script.length == 0) return "";
 return this.scriptProcessor (script, null, 2);
 }, "~S");
-Clazz.defineMethod (c$, "scriptWait", 
+Clazz.defineMethod (c$, "scriptWait",
 function (script) {
 return this.scriptWait (script, null);
 }, "~S");
-Clazz.defineMethod (c$, "scriptWait", 
+Clazz.defineMethod (c$, "scriptWait",
 function (script, statusParams) {
 if (script == null || script.length == 0) return "";
 this.outputBuffer = null;
 return this.scriptProcessor (script, statusParams, 1);
 }, "~S,~S");
-Clazz.overrideMethod (c$, "scriptWaitOutput", 
+Clazz.overrideMethod (c$, "scriptWaitOutput",
 function (script) {
 if (script == null || script.length == 0) return "";
 this.outputBuffer =  new JU.SB ();
@@ -190,66 +190,66 @@ var str = (this.outputBuffer == null ? "" : this.outputBuffer.toString ());
 this.outputBuffer = null;
 return str;
 }, "~S");
-Clazz.overrideMethod (c$, "getModelIndexFromId", 
+Clazz.overrideMethod (c$, "getModelIndexFromId",
 function (id) {
 return this.viewer.getModelIndexFromId (id);
 }, "~S");
-Clazz.overrideMethod (c$, "getProperty", 
+Clazz.overrideMethod (c$, "getProperty",
 function (infoType, paramInfo) {
 {
 paramInfo || (paramInfo = "");
 }return this.viewer.getProperty (null, infoType, paramInfo);
 }, "~S,~S");
-Clazz.overrideMethod (c$, "getPropertyAsString", 
+Clazz.overrideMethod (c$, "getPropertyAsString",
 function (infoType, paramInfo) {
 {
 paramInfo || (paramInfo = "");
 }return this.viewer.getProperty ("readable", infoType, paramInfo).toString ();
 }, "~S,~S");
-Clazz.overrideMethod (c$, "getPropertyAsJSON", 
+Clazz.overrideMethod (c$, "getPropertyAsJSON",
 function (infoType, paramInfo) {
 {
 paramInfo || (paramInfo = "");
 }return this.viewer.getProperty ("JSON", infoType, paramInfo).toString ();
 }, "~S,~S");
-Clazz.overrideMethod (c$, "loadInlineString", 
+Clazz.overrideMethod (c$, "loadInlineString",
 function (strModel, script, isAppend) {
 var errMsg = this.viewer.loadInlineAppend (strModel, isAppend);
 if (errMsg == null) this.script (script);
 return errMsg;
 }, "~S,~S,~B");
-Clazz.overrideMethod (c$, "loadInlineArray", 
+Clazz.overrideMethod (c$, "loadInlineArray",
 function (strModels, script, isAppend) {
 if (strModels == null || strModels.length == 0) return null;
 var errMsg = this.viewer.loadInline (strModels, isAppend);
 if (errMsg == null) this.script (script);
 return errMsg;
 }, "~A,~S,~B");
-Clazz.overrideMethod (c$, "loadDOMNode", 
+Clazz.overrideMethod (c$, "loadDOMNode",
 function (DOMNode) {
 return this.viewer.openDOM (DOMNode);
 }, "~O");
-Clazz.defineMethod (c$, "loadInline", 
+Clazz.defineMethod (c$, "loadInline",
 function (strModel) {
 return this.loadInlineString (strModel, "", false);
 }, "~S");
-Clazz.defineMethod (c$, "loadInline", 
+Clazz.defineMethod (c$, "loadInline",
 function (strModel, script) {
 return this.loadInlineString (strModel, script, false);
 }, "~S,~S");
-Clazz.defineMethod (c$, "loadInline", 
+Clazz.defineMethod (c$, "loadInline",
 function (strModels) {
 return this.loadInlineArray (strModels, "", false);
 }, "~A");
-Clazz.defineMethod (c$, "loadInline", 
+Clazz.defineMethod (c$, "loadInline",
 function (strModels, script) {
 return this.loadInlineArray (strModels, script, false);
 }, "~A,~S");
-Clazz.defineMethod (c$, "output", 
+Clazz.defineMethod (c$, "output",
 function (s) {
 if (this.outputBuffer != null && s != null) this.outputBuffer.append (s).appendC ('\n');
 }, "~S");
-Clazz.overrideMethod (c$, "setCallbackFunction", 
+Clazz.overrideMethod (c$, "setCallbackFunction",
 function (callbackName, callbackFunction) {
 if (callbackName.equalsIgnoreCase ("modelkit")) return;
 if (callbackName.equalsIgnoreCase ("language")) {
@@ -263,11 +263,11 @@ if (callbackFunction == null) this.b$.remove (callback);
 return;
 }this.consoleMessage ("Available callbacks include: " + J.c.CBK.getNameList ().$replace (';', ' ').trim ());
 }, "~S,~S");
-Clazz.defineMethod (c$, "consoleMessage", 
+Clazz.defineMethod (c$, "consoleMessage",
  function (message) {
 this.notifyCallback (J.c.CBK.ECHO,  Clazz.newArray (-1, ["", message]));
 }, "~S");
-Clazz.overrideMethod (c$, "notifyEnabled", 
+Clazz.overrideMethod (c$, "notifyEnabled",
 function (type) {
 switch (type) {
 case J.c.CBK.SERVICE:
@@ -298,7 +298,7 @@ break;
 }
 return (this.b$.get (type) != null);
 }, "J.c.CBK");
-Clazz.defineMethod (c$, "notifyCallback", 
+Clazz.defineMethod (c$, "notifyCallback",
 function (type, data) {
 var callback = (type == null ? null : this.b$.get (type));
 var doCallback = (type == null || callback != null && (data == null || data[0] == null));
@@ -405,7 +405,7 @@ throw e;
 }
 }
 }, "J.c.CBK,~A");
-Clazz.defineMethod (c$, "sendScript", 
+Clazz.defineMethod (c$, "sendScript",
  function (script, appletName, isSync, doCallback) {
 if (doCallback) {
 script = this.notifySync (script, appletName);
@@ -443,7 +443,7 @@ throw e;
 }
 return (isSync ? "" : sb.toString ());
 }, "~S,~S,~B,~B");
-Clazz.defineMethod (c$, "notifySync", 
+Clazz.defineMethod (c$, "notifySync",
  function (info, appletName) {
 var syncCallback = this.b$.get (J.c.CBK.SYNC);
 if (!this.mayScript || syncCallback == null) return info;
@@ -460,7 +460,7 @@ throw e;
 }
 return info;
 }, "~S,~S");
-Clazz.overrideMethod (c$, "eval", 
+Clazz.overrideMethod (c$, "eval",
 function (strEval) {
 var pt = strEval.indexOf ("\1");
 if (pt >= 0) return this.sendScript (strEval.substring (pt + 1), strEval.substring (0, pt), false, false);
@@ -470,24 +470,24 @@ this.notifyCallback (J.c.CBK.EVAL,  Clazz.newArray (-1, [null, strEval]));
 return "";
 }return this.doEval (strEval);
 }, "~S");
-Clazz.overrideMethod (c$, "functionXY", 
+Clazz.overrideMethod (c$, "functionXY",
 function (functionName, nX, nY) {
 return this.doFunctionXY (functionName, nX, nY);
 }, "~S,~N,~N");
-Clazz.overrideMethod (c$, "functionXYZ", 
+Clazz.overrideMethod (c$, "functionXYZ",
 function (functionName, nX, nY, nZ) {
 return this.doFunctionXYZ (functionName, nX, nY, nZ);
 }, "~S,~N,~N,~N");
-Clazz.overrideMethod (c$, "createImage", 
+Clazz.overrideMethod (c$, "createImage",
 function (fileName, type, text_or_bytes, quality) {
 return null;
 }, "~S,~S,~O,~N");
-Clazz.overrideMethod (c$, "getRegistryInfo", 
+Clazz.overrideMethod (c$, "getRegistryInfo",
 function () {
 JU.GenericApplet.checkIn (null, null);
 return JU.GenericApplet.htRegistry;
 });
-Clazz.overrideMethod (c$, "showUrl", 
+Clazz.overrideMethod (c$, "showUrl",
 function (urlString) {
 if (JU.Logger.debugging) JU.Logger.debug ("showUrl(" + urlString + ")");
 if (urlString != null && urlString.length > 0) try {
@@ -500,11 +500,11 @@ throw mue;
 }
 }
 }, "~S");
-Clazz.overrideMethod (c$, "resizeInnerPanel", 
+Clazz.overrideMethod (c$, "resizeInnerPanel",
 function (data) {
 return  Clazz.newIntArray (-1, [this.viewer.getScreenWidth (), this.viewer.getScreenHeight ()]);
 }, "~S");
-c$.checkIn = Clazz.defineMethod (c$, "checkIn", 
+c$.checkIn = Clazz.defineMethod (c$, "checkIn",
 function (name, applet) {
 if (name != null) {
 JU.Logger.info ("AppletRegistry.checkIn(" + name + ")");
@@ -515,11 +515,11 @@ var theApplet = entry.getKey ();
 JU.Logger.debug (theApplet + " " + entry.getValue ());
 }
 }}, "~S,~O");
-c$.checkOut = Clazz.defineMethod (c$, "checkOut", 
+c$.checkOut = Clazz.defineMethod (c$, "checkOut",
 function (name) {
 JU.GenericApplet.htRegistry.remove (name);
 }, "~S");
-c$.findApplets = Clazz.defineMethod (c$, "findApplets", 
+c$.findApplets = Clazz.defineMethod (c$, "findApplets",
 function (appletName, mySyncId, excludeName, apps) {
 if (appletName != null && appletName.indexOf (",") >= 0) {
 var names = JU.PT.split (appletName, ",");
@@ -539,7 +539,7 @@ if (!JU.GenericApplet.htRegistry.containsKey (appletName)) appletName = "jmolApp
 if (!appletName.equals (excludeName) && JU.GenericApplet.htRegistry.containsKey (appletName)) {
 apps.addLast (appletName);
 }}, "~S,~S,~S,JU.Lst");
-Clazz.overrideMethod (c$, "notifyAudioEnded", 
+Clazz.overrideMethod (c$, "notifyAudioEnded",
 function (htParams) {
 this.viewer.sm.notifyAudioStatus (htParams);
 }, "~O");

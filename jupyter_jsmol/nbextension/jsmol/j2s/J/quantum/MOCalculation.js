@@ -41,11 +41,11 @@ Clazz.prepareFields (c$, function () {
 this.dataAdders =  new Array (20);
 this.dataAdderOK =  Clazz.newIntArray (20, 0);
 });
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function () {
 Clazz.superConstructor (this, J.quantum.MOCalculation, []);
 });
-Clazz.defineMethod (c$, "setupCalculation", 
+Clazz.defineMethod (c$, "setupCalculation",
 function (moData, isSlaters, volumeData, bsSelected, xyz, atoms, firstAtomOffset, dfCoefMaps, moCoefficients, linearCombination, isSquaredLinear, coefs, points) {
 var calculationType = moData.get ("calculationType");
 var shells = moData.get ("shells");
@@ -74,7 +74,7 @@ this.setupCoordinates (volumeData.getOriginFloat (), volumeData.getVolumetricVec
 this.doDebug = (JU.Logger.debugging);
 return !bsSelected.isEmpty () && (slaters != null || this.checkCalculationType ());
 }, "java.util.Map,~B,J.jvxl.data.VolumeData,JU.BS,~A,~A,~N,~A,~A,~A,~B,~A,~A");
-Clazz.defineMethod (c$, "setNormalization", 
+Clazz.defineMethod (c$, "setNormalization",
  function (nboType) {
 var type = "standard";
 this.normType = 1;
@@ -88,7 +88,7 @@ type = "NWCHEM";
 JU.Logger.info ("Normalization of contractions (NWCHEM)");
 }}JU.Logger.info ("Normalizing AOs: " + type + " slaters:" + (this.slaters != null));
 }, "~O");
-Clazz.overrideMethod (c$, "initialize", 
+Clazz.overrideMethod (c$, "initialize",
 function (nX, nY, nZ, points) {
 this.initialize0 (nX, nY, nZ, points);
 this.CX =  Clazz.newDoubleArray (this.nX, 0);
@@ -101,13 +101,13 @@ this.EX =  Clazz.newDoubleArray (this.nX, 0);
 this.EY =  Clazz.newDoubleArray (this.nY, 0);
 this.EZ =  Clazz.newDoubleArray (this.nZ, 0);
 }, "~N,~N,~N,~A");
-Clazz.overrideMethod (c$, "createCube", 
+Clazz.overrideMethod (c$, "createCube",
 function () {
 this.setXYZBohr (this.points);
 this.processPoints ();
 if (!this.isSquaredLinear && (this.doDebug || this.testing)) this.calculateElectronDensity ();
 });
-Clazz.overrideMethod (c$, "processPoints", 
+Clazz.overrideMethod (c$, "processPoints",
 function () {
 if (this.linearCombination == null) {
 this.process ();
@@ -126,7 +126,7 @@ this.process ();
 if (this.isSquaredLinear) this.addValuesSquared (1);
 }
 }});
-Clazz.overrideMethod (c$, "process", 
+Clazz.overrideMethod (c$, "process",
 function () {
 this.atomIndex = this.firstAtomOffset - 1;
 this.moCoeff = 0;
@@ -139,7 +139,7 @@ return;
 if (!this.processSlater (i)) break;
 }
 });
-Clazz.defineMethod (c$, "checkCalculationType", 
+Clazz.defineMethod (c$, "checkCalculationType",
  function () {
 if (this.calculationType == null) {
 JU.Logger.warn ("calculation type not identified -- continuing");
@@ -152,7 +152,7 @@ JU.Logger.warn ("unknown calculation type may not render correctly -- continuing
 JU.Logger.info ("calculation type: " + this.calculationType + " OK.");
 }return true;
 });
-Clazz.defineMethod (c$, "processShell", 
+Clazz.defineMethod (c$, "processShell",
  function (iShell) {
 var lastAtom = this.atomIndex;
 var shell = this.shells.get (iShell);
@@ -190,7 +190,7 @@ JU.Logger.warn (" Unsupported basis type for atomno" + key);
 }break;
 }
 }, "~N");
-Clazz.defineMethod (c$, "addHighL", 
+Clazz.defineMethod (c$, "addHighL",
  function (basisType) {
 if (basisType >= 7 && this.highLEnabled[basisType] == 0) return false;
 var adder = this.dataAdders[basisType];
@@ -207,7 +207,7 @@ this.dataAdders[basisType] = null;
 this.dataAdderOK[basisType] = -1;
 return false;
 }, "~N");
-Clazz.defineMethod (c$, "addValuesSquared", 
+Clazz.defineMethod (c$, "addValuesSquared",
  function (occupancy) {
 for (var ix = this.nX; --ix >= 0; ) {
 for (var iy = this.nY; --iy >= 0; ) {
@@ -220,7 +220,7 @@ this.voxelDataTemp[ix][iy][iz] = 0;
 }
 }
 }, "~N");
-Clazz.defineMethod (c$, "getContractionNormalization", 
+Clazz.defineMethod (c$, "getContractionNormalization",
 function (el, cpt) {
 var sum;
 var df = (el == 3 ? 15 : el == 2 ? 3 : 1);
@@ -245,7 +245,7 @@ sum += c1 * f1 * c2 * f2 / Math.pow (alpha1 + alpha2, 2 * p);
 if (JU.Logger.debuggingHigh) JU.Logger.debug ("\t\t\tnormalization for l=" + el + " nGaussians=" + this.nGaussians + " is " + sum);
 return sum;
 }, "~N,~N");
-Clazz.defineMethod (c$, "setCoeffs", 
+Clazz.defineMethod (c$, "setCoeffs",
  function (type, isProcess) {
 var isOK = false;
 this.map = this.dfCoefMaps[type];
@@ -253,14 +253,14 @@ if (isProcess && this.thisAtom == null) {
 this.moCoeff += this.map.length;
 return false;
 }for (var i = 0; i < this.map.length; i++) {
-if (this.map[i] + this.moCoeff >= this.moCoefficients.length) System.out.println ("OHOH");
+if (this.map[i] + this.moCoeff >= this.moCoefficients.length) Zystem.out.println ("OHOH");
 isOK = new Boolean (isOK | ((this.coeffs[i] = this.moCoefficients[this.map[i] + this.moCoeff++]) != 0)).valueOf ();
 }
 isOK = new Boolean (isOK & (this.coeffs[0] != -2147483648)).valueOf ();
 if (isOK && this.doDebug && isProcess) this.dumpInfo (type);
 return isOK;
 }, "~N,~B");
-Clazz.defineMethod (c$, "addDataS", 
+Clazz.defineMethod (c$, "addDataS",
  function () {
 var norm;
 var c1;
@@ -307,7 +307,7 @@ for (var iz = this.zMax; --iz >= this.zMin; ) vd[(this.havePoints ? 0 : iz)] += 
 }
 }
 });
-Clazz.defineMethod (c$, "addDataP", 
+Clazz.defineMethod (c$, "addDataP",
  function () {
 var mx = this.coeffs[0];
 var my = this.coeffs[1];
@@ -337,7 +337,7 @@ if (normalizeAlpha) a *= Math.pow (alpha, 1.25) * norm;
 this.calcSP (alpha, 0, a * mx, a * my, a * mz);
 }
 });
-Clazz.defineMethod (c$, "addDataSP", 
+Clazz.defineMethod (c$, "addDataSP",
  function () {
 var isP = (this.map.length == 3);
 var pPt = (isP ? 0 : 1);
@@ -382,7 +382,7 @@ a2 *= Math.pow (alpha, 1.25) * norm2;
 }this.calcSP (alpha, a1 * ms, a2 * mx, a2 * my, a2 * mz);
 }
 });
-Clazz.defineMethod (c$, "setCE", 
+Clazz.defineMethod (c$, "setCE",
  function (alpha, as, ax, ay, az) {
 for (var i = this.xMax; --i >= this.xMin; ) {
 this.CX[i] = as + ax * this.X[i];
@@ -397,7 +397,7 @@ this.CZ[i] = az * this.Z[i];
 this.EZ[i] = Math.exp (-this.Z2[i] * alpha);
 }
 }, "~N,~N,~N,~N,~N");
-Clazz.defineMethod (c$, "setE", 
+Clazz.defineMethod (c$, "setE",
 function (EX, alpha) {
 for (var i = this.xMax; --i >= this.xMin; ) EX[i] = Math.exp (-this.X2[i] * alpha) * this.moFactor;
 
@@ -406,7 +406,7 @@ for (var i = this.yMax; --i >= this.yMin; ) this.EY[i] = Math.exp (-this.Y2[i] *
 for (var i = this.zMax; --i >= this.zMin; ) this.EZ[i] = Math.exp (-this.Z2[i] * alpha);
 
 }, "~A,~N");
-Clazz.defineMethod (c$, "calcSP", 
+Clazz.defineMethod (c$, "calcSP",
  function (alpha, as, ax, ay, az) {
 this.setCE (alpha, as, ax, ay, az);
 for (var ix = this.xMax; --ix >= this.xMin; ) {
@@ -423,7 +423,7 @@ vd[(this.havePoints ? 0 : iz)] += (cXY + this.CZ[iz]) * eXY * this.EZ[iz];
 }
 }
 }, "~N,~N,~N,~N,~N");
-Clazz.defineMethod (c$, "addData6D", 
+Clazz.defineMethod (c$, "addData6D",
  function () {
 var mxx = this.coeffs[0];
 var myy = this.coeffs[1];
@@ -490,7 +490,7 @@ vd[(this.havePoints ? 0 : iz)] += (axx_x2__ayy_y2__axy_xy + (this.CZ[iz] + axz_x
 }
 }
 });
-Clazz.defineMethod (c$, "addData5D", 
+Clazz.defineMethod (c$, "addData5D",
  function () {
 var alpha;
 var c1;
@@ -580,7 +580,7 @@ vd[(this.havePoints ? 0 : iz)] += (ad0 * norm5 * (czz - 0.5 * (cxx + cyy)) + ad1
 }
 }
 });
-Clazz.defineMethod (c$, "processSlater", 
+Clazz.defineMethod (c$, "processSlater",
  function (slaterIndex) {
 var lastAtom = this.atomIndex;
 var slater = this.slaters[slaterIndex];
@@ -722,7 +722,7 @@ vd[(this.havePoints ? 0 : iz)] += value;
 }
 return true;
 }, "~N");
-Clazz.defineMethod (c$, "dumpInfo", 
+Clazz.defineMethod (c$, "dumpInfo",
  function (shell) {
 if (this.doShowShellType) {
 JU.Logger.debug ("\n\t\t\tprocessShell: " + shell + " type=" + J.quantum.QS.getQuantumShellTag (shell) + " nGaussians=" + this.nGaussians + " atom=" + this.atomIndex);
@@ -741,11 +741,11 @@ var c = this.coeffs[i];
 JU.Logger.debug ("MO coeff " + (so == null ? "?" : so[i]) + " " + n + "\t" + c + "\t" + this.thisAtom.atom);
 }
 }, "~N");
-c$.getShellOrder = Clazz.defineMethod (c$, "getShellOrder", 
+c$.getShellOrder = Clazz.defineMethod (c$, "getShellOrder",
  function (i) {
 return (i < 0 || i >= J.quantum.MOCalculation.shellOrder.length ? null : J.quantum.MOCalculation.shellOrder[i]);
 }, "~N");
-Clazz.defineMethod (c$, "calculateElectronDensity", 
+Clazz.defineMethod (c$, "calculateElectronDensity",
 function () {
 if (this.points != null) return;
 this.integration = 0;

@@ -18,7 +18,7 @@ this.xentries =  new JU.Lst ();
 this.names =  new java.util.Hashtable ();
 this.crc =  new java.util.zip.CRC32 ();
 });
-c$.version = Clazz.defineMethod (c$, "version", 
+c$.version = Clazz.defineMethod (c$, "version",
  function (e) {
 switch (e.method) {
 case 8:
@@ -29,37 +29,37 @@ default:
 throw  new java.util.zip.ZipException ("unsupported compression method");
 }
 }, "java.util.zip.ZipEntry");
-Clazz.defineMethod (c$, "ensureOpen", 
+Clazz.defineMethod (c$, "ensureOpen",
  function () {
 if (this.$closed) {
 throw  new java.io.IOException ("Stream closed");
 }});
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function () {
 Clazz.superConstructor (this, java.util.zip.ZipOutputStream, []);
 });
-Clazz.defineMethod (c$, "setZOS", 
+Clazz.defineMethod (c$, "setZOS",
 function (out) {
 this.setDOS (out, java.util.zip.ZipOutputStream.newDeflater ());
 return this;
 }, "java.io.OutputStream");
-c$.newDeflater = Clazz.defineMethod (c$, "newDeflater", 
+c$.newDeflater = Clazz.defineMethod (c$, "newDeflater",
  function () {
 return ( new java.util.zip.Deflater (2147483647)).init (-1, 0, true);
 });
-Clazz.defineMethod (c$, "setComment", 
+Clazz.defineMethod (c$, "setComment",
 function (comment) {
 if (comment != null) {
 this.comment = JU.ZStream.getBytes (comment);
 if (this.comment.length > 0xffff) throw  new IllegalArgumentException ("ZIP file comment too long.");
 }}, "~S");
-Clazz.defineMethod (c$, "putNextEntry", 
+Clazz.defineMethod (c$, "putNextEntry",
 function (e) {
 this.ensureOpen ();
 if (this.current != null) {
 this.closeEntry ();
 }if (e.time == -1) {
-e.setTime (System.currentTimeMillis ());
+e.setTime (Zystem.currentTimeMillis ());
 }if (e.method == -1) {
 e.method = this.method;
 }e.flag = 0;
@@ -89,7 +89,7 @@ this.current.offset = this.written;
 this.xentries.addLast (this.current);
 this.writeLOC (this.current);
 }, "java.util.zip.ZipEntry");
-Clazz.defineMethod (c$, "closeEntry", 
+Clazz.defineMethod (c$, "closeEntry",
 function () {
 this.ensureOpen ();
 if (this.current != null) {
@@ -125,7 +125,7 @@ throw  new java.util.zip.ZipException ("invalid compression method");
 this.crc.reset ();
 this.current = null;
 }});
-Clazz.defineMethod (c$, "write", 
+Clazz.defineMethod (c$, "write",
 function (b, off, len) {
 this.ensureOpen ();
 if (off < 0 || len < 0 || off > b.length - len) {
@@ -150,7 +150,7 @@ throw  new java.util.zip.ZipException ("invalid compression method");
 }
 this.crc.update (b, off, len);
 }, "~A,~N,~N");
-Clazz.defineMethod (c$, "finish", 
+Clazz.defineMethod (c$, "finish",
 function () {
 this.ensureOpen ();
 if (this.finished) {
@@ -163,13 +163,13 @@ for (var xentry, $xentry = this.xentries.iterator (); $xentry.hasNext () && ((xe
 this.writeEND (off, this.written - off);
 this.finished = true;
 });
-Clazz.defineMethod (c$, "close", 
+Clazz.defineMethod (c$, "close",
 function () {
 if (!this.$closed) {
 Clazz.superCall (this, java.util.zip.ZipOutputStream, "close", []);
 this.$closed = true;
 }});
-Clazz.defineMethod (c$, "writeLOC", 
+Clazz.defineMethod (c$, "writeLOC",
  function (entry) {
 var e = entry;
 var flag = e.flag;
@@ -214,7 +214,7 @@ this.writeLong (e.csize);
 this.writeBytes (e.extra, 0, e.extra.length);
 }this.locoff = this.written;
 }, "java.util.zip.ZipEntry");
-Clazz.defineMethod (c$, "writeEXT", 
+Clazz.defineMethod (c$, "writeEXT",
  function (e) {
 this.writeInt (134695760);
 this.writeInt (e.crc);
@@ -225,7 +225,7 @@ this.writeLong (e.size);
 this.writeInt (e.csize);
 this.writeInt (e.size);
 }}, "java.util.zip.ZipEntry");
-Clazz.defineMethod (c$, "writeCEN", 
+Clazz.defineMethod (c$, "writeCEN",
  function (entry) {
 var e = entry;
 var flag = e.flag;
@@ -289,7 +289,7 @@ this.writeBytes (e.extra, 0, e.extra.length);
 }if (commentBytes != null) {
 this.writeBytes (commentBytes, 0, Math.min (commentBytes.length, 0xffff));
 }}, "java.util.zip.ZipEntry");
-Clazz.defineMethod (c$, "writeEND", 
+Clazz.defineMethod (c$, "writeEND",
  function (off, len) {
 var hasZip64 = false;
 var xlen = len;
@@ -333,7 +333,7 @@ this.writeBytes (this.comment, 0, this.comment.length);
 } else {
 this.writeShort (0);
 }}, "~N,~N");
-Clazz.defineMethod (c$, "writeShort", 
+Clazz.defineMethod (c$, "writeShort",
  function (v) {
 var out = this.out;
 {
@@ -341,7 +341,7 @@ out.writeByteAsInt((v >>> 0) & 0xff);
 out.writeByteAsInt((v >>> 8) & 0xff);
 }this.written += 2;
 }, "~N");
-Clazz.defineMethod (c$, "writeInt", 
+Clazz.defineMethod (c$, "writeInt",
  function (v) {
 var out = this.out;
 {
@@ -351,7 +351,7 @@ out.writeByteAsInt((v >>> 16) & 0xff);
 out.writeByteAsInt((v >>> 24) & 0xff);
 }this.written += 4;
 }, "~N");
-Clazz.defineMethod (c$, "writeLong", 
+Clazz.defineMethod (c$, "writeLong",
  function (v) {
 var out = this.out;
 {
@@ -365,7 +365,7 @@ out.writeByteAsInt(0);
 out.writeByteAsInt(0);
 }this.written += 8;
 }, "~N");
-Clazz.defineMethod (c$, "writeBytes", 
+Clazz.defineMethod (c$, "writeBytes",
  function (b, off, len) {
 this.out.write (b, off, len);
 this.written += len;

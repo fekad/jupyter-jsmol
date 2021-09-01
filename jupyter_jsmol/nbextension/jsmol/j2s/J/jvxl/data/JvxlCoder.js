@@ -1,7 +1,7 @@
 Clazz.declarePackage ("J.jvxl.data");
 Clazz.load (null, "J.jvxl.data.JvxlCoder", ["java.lang.Float", "JU.BS", "$.Lst", "$.P3", "$.PT", "$.SB", "J.api.Interface", "J.jvxl.data.VolumeData", "JU.BSUtil", "$.C", "$.Escape", "$.Logger", "JV.Viewer"], function () {
 c$ = Clazz.declareType (J.jvxl.data, "JvxlCoder");
-c$.jvxlGetFile = Clazz.defineMethod (c$, "jvxlGetFile", 
+c$.jvxlGetFile = Clazz.defineMethod (c$, "jvxlGetFile",
 function (jvxlData, meshData, title, msg, includeHeader, nSurfaces, state, comment) {
 J.jvxl.data.JvxlCoder.checkHaveXMLUtil ();
 var data =  new JU.SB ();
@@ -66,13 +66,13 @@ JU.XmlUtil.closeTag (data, "jvxlSurfaceSet");
 JU.XmlUtil.closeTag (data, "jvxl");
 }return J.jvxl.data.JvxlCoder.jvxlSetCompressionRatio (data, jvxlData, len);
 }, "J.jvxl.data.JvxlData,J.jvxl.data.MeshData,~A,~S,~B,~N,~S,~S");
-c$.checkHaveXMLUtil = Clazz.defineMethod (c$, "checkHaveXMLUtil", 
+c$.checkHaveXMLUtil = Clazz.defineMethod (c$, "checkHaveXMLUtil",
  function () {
 if (!J.jvxl.data.JvxlCoder.haveXMLUtil) {
 if (JV.Viewer.isJS) J.api.Interface.getInterface ("JU.XmlUtil", null, "show");
 J.jvxl.data.JvxlCoder.haveXMLUtil = true;
 }});
-c$.appendEncodedBitSetTag = Clazz.defineMethod (c$, "appendEncodedBitSetTag", 
+c$.appendEncodedBitSetTag = Clazz.defineMethod (c$, "appendEncodedBitSetTag",
  function (sb, name, bs, count, attribs) {
 if (count < 0) count = JU.BSUtil.cardinalityOf (bs);
 if (count == 0) return;
@@ -81,17 +81,17 @@ sb1.append ("\n ");
 J.jvxl.data.JvxlCoder.jvxlEncodeBitSetBuffer (bs, -1, sb1);
 JU.XmlUtil.appendTagObj (sb, name,  Clazz.newArray (-1, [attribs, "bsEncoding", "base90+35", "count", "" + count, "len", "" + bs.length ()]), J.jvxl.data.JvxlCoder.jvxlCompressString (sb1.toString (), true));
 }, "JU.SB,~S,JU.BS,~N,~A");
-c$.jvxlSetCompressionRatio = Clazz.defineMethod (c$, "jvxlSetCompressionRatio", 
+c$.jvxlSetCompressionRatio = Clazz.defineMethod (c$, "jvxlSetCompressionRatio",
  function (data, jvxlData, len) {
 var s = data.toString ();
 var r = Clazz.floatToInt (jvxlData.nBytes > 0 ? (jvxlData.nBytes) / len : ((jvxlData.nPointsX * jvxlData.nPointsY * jvxlData.nPointsZ * 13)) / len);
 return JU.PT.rep (s, "\"not calculated\"", (r > 0 ? "\"" + r + ":1\"" : "\"?\""));
 }, "JU.SB,J.jvxl.data.JvxlData,~N");
-c$.appendXmlEdgeData = Clazz.defineMethod (c$, "appendXmlEdgeData", 
+c$.appendXmlEdgeData = Clazz.defineMethod (c$, "appendXmlEdgeData",
  function (sb, jvxlData) {
 JU.XmlUtil.appendTagObj (sb, "jvxlEdgeData",  Clazz.newArray (-1, ["count", "" + (jvxlData.jvxlEdgeData.length - 1), "encoding", "base90f1", "bsEncoding", "base90+35c", "isXLowToHigh", "" + jvxlData.isXLowToHigh, "data", J.jvxl.data.JvxlCoder.jvxlCompressString (jvxlData.jvxlEdgeData, true)]), "\n" + J.jvxl.data.JvxlCoder.jvxlCompressString (jvxlData.jvxlSurfaceData, true));
 }, "JU.SB,J.jvxl.data.JvxlData");
-c$.jvxlAppendCommandState = Clazz.defineMethod (c$, "jvxlAppendCommandState", 
+c$.jvxlAppendCommandState = Clazz.defineMethod (c$, "jvxlAppendCommandState",
  function (data, cmd, state) {
 if (cmd != null) JU.XmlUtil.appendCdata (data, "jvxlIsosurfaceCommand", null, "\n" + (cmd.indexOf ("#") < 0 ? cmd : cmd.substring (0, cmd.indexOf ("#"))) + "\n");
 if (state != null) {
@@ -101,18 +101,18 @@ JU.XmlUtil.appendTag (data, "jvxlIsosurfaceState", "\n" + state + "\n");
 } else {
 JU.XmlUtil.appendCdata (data, "jvxlIsosurfaceState", null, "\n" + state);
 }}}, "JU.SB,~S,~S");
-c$.appendXmlColorData = Clazz.defineMethod (c$, "appendXmlColorData", 
+c$.appendXmlColorData = Clazz.defineMethod (c$, "appendXmlColorData",
  function (sb, data, isEncoded, isPrecisionColor, value1, value2) {
 var n;
 if (data == null || (n = data.length - 1) < 0) return;
 if (isPrecisionColor) n /= 2;
 JU.XmlUtil.appendTagObj (sb, "jvxlColorData",  Clazz.newArray (-1, ["count", "" + n, "encoding", (isEncoded ? "base90f" + (isPrecisionColor ? "2" : "1") : "none"), "min", "" + value1, "max", "" + value2, "data", J.jvxl.data.JvxlCoder.jvxlCompressString (data, true)]), null);
 }, "JU.SB,~S,~B,~B,~N,~N");
-c$.jvxlGetInfo = Clazz.defineMethod (c$, "jvxlGetInfo", 
+c$.jvxlGetInfo = Clazz.defineMethod (c$, "jvxlGetInfo",
 function (jvxlData) {
 return J.jvxl.data.JvxlCoder.jvxlGetInfoData (jvxlData, jvxlData.vertexDataOnly);
 }, "J.jvxl.data.JvxlData");
-c$.jvxlGetInfoData = Clazz.defineMethod (c$, "jvxlGetInfoData", 
+c$.jvxlGetInfoData = Clazz.defineMethod (c$, "jvxlGetInfoData",
 function (jvxlData, vertexDataOnly) {
 if (jvxlData.jvxlSurfaceData == null) return "";
 J.jvxl.data.JvxlCoder.checkHaveXMLUtil ();
@@ -202,7 +202,7 @@ JU.XmlUtil.openTagAttr (info, "jvxlSurfaceInfo", attribs.toArray ( new Array (at
 JU.XmlUtil.closeTag (info, "jvxlSurfaceInfo");
 return info.toString ();
 }, "J.jvxl.data.JvxlData,~B");
-c$.subsetString = Clazz.defineMethod (c$, "subsetString", 
+c$.subsetString = Clazz.defineMethod (c$, "subsetString",
  function (bs) {
 var n = bs.cardinality ();
 if (n > 1) {
@@ -212,11 +212,11 @@ for (var ia = bs.nextSetBit (0); ia >= 0; ia = bs.nextSetBit (ia)) a += (++ia) +
 return a + "]";
 }return "" + (bs.nextSetBit (0) + 1);
 }, "JU.BS");
-c$.addAttrib = Clazz.defineMethod (c$, "addAttrib", 
+c$.addAttrib = Clazz.defineMethod (c$, "addAttrib",
  function (attribs, name, value) {
 attribs.addLast ( Clazz.newArray (-1, [name, value]));
 }, "JU.Lst,~S,~S");
-c$.jvxlEncodeContourData = Clazz.defineMethod (c$, "jvxlEncodeContourData", 
+c$.jvxlEncodeContourData = Clazz.defineMethod (c$, "jvxlEncodeContourData",
  function (contours, sb) {
 JU.XmlUtil.openTagAttr (sb, "jvxlContourData",  Clazz.newArray (-1, ["count", "" + contours.length]));
 for (var i = 0; i < contours.length; i++) {
@@ -231,7 +231,7 @@ JU.XmlUtil.appendTagObj (sb, "jvxlContour",  Clazz.newArray (-1, ["index", "" + 
 }
 JU.XmlUtil.closeTag (sb, "jvxlContourData");
 }, "~A,JU.SB");
-c$.set3dContourVector = Clazz.defineMethod (c$, "set3dContourVector", 
+c$.set3dContourVector = Clazz.defineMethod (c$, "set3dContourVector",
 function (v, polygonIndexes, vertices) {
 if (v.size () < 6) return;
 var fData = v.get (5);
@@ -273,20 +273,20 @@ i4 = i1;
 v.addLast (J.jvxl.data.JvxlCoder.getContourPoint (vertices, i3, i4, f2));
 }
 }, "JU.Lst,~A,~A");
-c$.getContourPoint = Clazz.defineMethod (c$, "getContourPoint", 
+c$.getContourPoint = Clazz.defineMethod (c$, "getContourPoint",
  function (vertices, i, j, f) {
 var pt =  new JU.P3 ();
 pt.sub2 (vertices[j], vertices[i]);
 pt.scaleAdd2 (f, pt, vertices[i]);
 return pt;
 }, "~A,~N,~N,~N");
-c$.appendContourTriangleIntersection = Clazz.defineMethod (c$, "appendContourTriangleIntersection", 
+c$.appendContourTriangleIntersection = Clazz.defineMethod (c$, "appendContourTriangleIntersection",
 function (type, f1, f2, fData) {
 fData.appendI (type);
 fData.appendC (J.jvxl.data.JvxlCoder.jvxlFractionAsCharacter (f1));
 fData.appendC (J.jvxl.data.JvxlCoder.jvxlFractionAsCharacter (f2));
 }, "~N,~N,~N,JU.SB");
-c$.jvxlCreateColorData = Clazz.defineMethod (c$, "jvxlCreateColorData", 
+c$.jvxlCreateColorData = Clazz.defineMethod (c$, "jvxlCreateColorData",
 function (jvxlData, vertexValues) {
 if (vertexValues == null) {
 jvxlData.jvxlColorData = "";
@@ -298,12 +298,12 @@ var colorFractionRange = jvxlData.colorFractionRange;
 var valueBlue = jvxlData.valueMappedToBlue;
 var valueRed = jvxlData.valueMappedToRed;
 var vertexCount = (jvxlData.saveVertexCount > 0 ? jvxlData.saveVertexCount : jvxlData.vertexCount);
-if (vertexCount > vertexValues.length) System.out.println ("JVXLCODER ERROR");
+if (vertexCount > vertexValues.length) Zystem.out.println ("JVXLCODER ERROR");
 var min = jvxlData.mappedDataMin;
 var max = jvxlData.mappedDataMax;
 var list1 =  new JU.SB ();
 var list2 =  new JU.SB ();
-if (vertexValues.length < vertexCount) System.out.println ("JVXLCOLOR OHOHO");
+if (vertexValues.length < vertexCount) Zystem.out.println ("JVXLCOLOR OHOHO");
 for (var i = 0; i < vertexCount; i++) {
 var value = vertexValues[i];
 if (Float.isNaN (value)) value = min;
@@ -313,12 +313,12 @@ if (writePrecisionColor) J.jvxl.data.JvxlCoder.jvxlAppendCharacter2 (value, min,
 }
 jvxlData.jvxlColorData = list1.appendSB (list2).appendC ('\n').toString ();
 }, "J.jvxl.data.JvxlData,~A");
-c$.appendXmlVertexOnlyData = Clazz.defineMethod (c$, "appendXmlVertexOnlyData", 
+c$.appendXmlVertexOnlyData = Clazz.defineMethod (c$, "appendXmlVertexOnlyData",
  function (sb, jvxlData, meshData, escapeXml) {
 var vertexIdNew =  Clazz.newIntArray (meshData.vc, 0);
 if (J.jvxl.data.JvxlCoder.appendXmlTriangleData (sb, meshData.pis, meshData.pc, meshData.bsSlabDisplay, vertexIdNew, escapeXml)) J.jvxl.data.JvxlCoder.appendXmlVertexData (sb, jvxlData, vertexIdNew, meshData.vs, meshData.vvs, meshData.vc, meshData.polygonColorData, meshData.pc, meshData.bsSlabDisplay, jvxlData.vertexColors, jvxlData.jvxlColorData.length > 0, escapeXml);
 }, "JU.SB,J.jvxl.data.JvxlData,J.jvxl.data.MeshData,~B");
-c$.appendXmlTriangleData = Clazz.defineMethod (c$, "appendXmlTriangleData", 
+c$.appendXmlTriangleData = Clazz.defineMethod (c$, "appendXmlTriangleData",
  function (sb, triangles, nData, bsSlabDisplay, vertexIdNew, escapeXml) {
 var list1 =  new JU.SB ();
 var list2 =  new JU.SB ();
@@ -363,7 +363,7 @@ JU.XmlUtil.appendTagObj (sb, "jvxlTriangleData",  Clazz.newArray (-1, ["count", 
 JU.XmlUtil.appendTagObj (sb, "jvxlTriangleEdgeData",  Clazz.newArray (-1, ["count", "" + nTri, "encoding", "jvxlsc", "data", J.jvxl.data.JvxlCoder.jvxlCompressString (list2.toString (), escapeXml)]), null);
 return true;
 }, "JU.SB,~A,~N,JU.BS,~A,~B");
-c$.appendXmlVertexData = Clazz.defineMethod (c$, "appendXmlVertexData", 
+c$.appendXmlVertexData = Clazz.defineMethod (c$, "appendXmlVertexData",
  function (sb, jvxlData, vertexIdNew, vertices, vertexValues, vertexCount, polygonColorData, polygonCount, bsSlabDisplay, vertexColors, addColorData, escapeXml) {
 var colorFractionBase = jvxlData.colorFractionBase;
 var colorFractionRange = jvxlData.colorFractionRange;
@@ -411,11 +411,11 @@ list1.append (" ");
 }
 }J.jvxl.data.JvxlCoder.appendXmlColorData (sb, list1.appendSB (list2).append ("\n").toString (), (vertexColors == null), true, jvxlData.valueMappedToRed, jvxlData.valueMappedToBlue);
 }, "JU.SB,J.jvxl.data.JvxlData,~A,~A,~A,~N,~S,~N,JU.BS,~A,~B,~B");
-c$.jvxlFractionAsCharacter = Clazz.defineMethod (c$, "jvxlFractionAsCharacter", 
+c$.jvxlFractionAsCharacter = Clazz.defineMethod (c$, "jvxlFractionAsCharacter",
 function (fraction) {
 return J.jvxl.data.JvxlCoder.jvxlFractionAsCharacterRange (fraction, 35, 90);
 }, "~N");
-c$.jvxlFractionAsCharacterRange = Clazz.defineMethod (c$, "jvxlFractionAsCharacterRange", 
+c$.jvxlFractionAsCharacterRange = Clazz.defineMethod (c$, "jvxlFractionAsCharacterRange",
 function (fraction, base, range) {
 if (fraction > 0.9999) fraction = 0.9999;
  else if (Float.isNaN (fraction)) fraction = 1.0001;
@@ -424,7 +424,7 @@ if (ich < base) return String.fromCharCode (base);
 if (ich == 92) return '!';
 return String.fromCharCode (ich);
 }, "~N,~N,~N");
-c$.jvxlAppendCharacter2 = Clazz.defineMethod (c$, "jvxlAppendCharacter2", 
+c$.jvxlAppendCharacter2 = Clazz.defineMethod (c$, "jvxlAppendCharacter2",
  function (value, min, max, base, range, list1, list2) {
 var fraction = (min == max ? value : (value - min) / (max - min));
 var ch1 = J.jvxl.data.JvxlCoder.jvxlFractionAsCharacterRange (fraction, base, range);
@@ -432,7 +432,7 @@ list1.appendC (ch1);
 fraction -= J.jvxl.data.JvxlCoder.jvxlFractionFromCharacter (ch1.charCodeAt (0), base, range, 0);
 list2.appendC (J.jvxl.data.JvxlCoder.jvxlFractionAsCharacterRange (fraction * range, base, range));
 }, "~N,~N,~N,~N,~N,JU.SB,JU.SB");
-c$.jvxlFractionFromCharacter = Clazz.defineMethod (c$, "jvxlFractionFromCharacter", 
+c$.jvxlFractionFromCharacter = Clazz.defineMethod (c$, "jvxlFractionFromCharacter",
 function (ich, base, range, fracOffset) {
 if (ich == base + range) return NaN;
 if (ich < base) ich = 92;
@@ -441,23 +441,23 @@ if (fraction < 0) return 0;
 if (fraction > 1) return 0.999999;
 return fraction;
 }, "~N,~N,~N,~N");
-c$.jvxlFractionFromCharacter2 = Clazz.defineMethod (c$, "jvxlFractionFromCharacter2", 
+c$.jvxlFractionFromCharacter2 = Clazz.defineMethod (c$, "jvxlFractionFromCharacter2",
 function (ich1, ich2, base, range) {
 var fraction = J.jvxl.data.JvxlCoder.jvxlFractionFromCharacter (ich1, base, range, 0);
 var remains = J.jvxl.data.JvxlCoder.jvxlFractionFromCharacter (ich2, base, range, 0.5);
 return fraction + remains / range;
 }, "~N,~N,~N,~N");
-c$.jvxlValueAsCharacter = Clazz.defineMethod (c$, "jvxlValueAsCharacter", 
+c$.jvxlValueAsCharacter = Clazz.defineMethod (c$, "jvxlValueAsCharacter",
 function (value, min, max, base, range) {
 var fraction = (min == max ? value : (value - min) / (max - min));
 return J.jvxl.data.JvxlCoder.jvxlFractionAsCharacterRange (fraction, base, range);
 }, "~N,~N,~N,~N,~N");
-c$.jvxlValueFromCharacter2 = Clazz.defineMethod (c$, "jvxlValueFromCharacter2", 
+c$.jvxlValueFromCharacter2 = Clazz.defineMethod (c$, "jvxlValueFromCharacter2",
 function (ich, ich2, min, max, base, range) {
 var fraction = J.jvxl.data.JvxlCoder.jvxlFractionFromCharacter2 (ich, ich2, base, range);
 return (max == min ? fraction : min + fraction * (max - min));
 }, "~N,~N,~N,~N,~N,~N");
-c$.jvxlEncodeBitSet0 = Clazz.defineMethod (c$, "jvxlEncodeBitSet0", 
+c$.jvxlEncodeBitSet0 = Clazz.defineMethod (c$, "jvxlEncodeBitSet0",
 function (bs, nPoints, sb) {
 var dataCount = 0;
 var prevCount = -1;
@@ -486,13 +486,13 @@ isset = !isset;
 sb.appendC (' ').appendI (dataCount).appendC ('\n');
 return n;
 }, "JU.BS,~N,JU.SB");
-c$.jvxlEncodeBitSet = Clazz.defineMethod (c$, "jvxlEncodeBitSet", 
+c$.jvxlEncodeBitSet = Clazz.defineMethod (c$, "jvxlEncodeBitSet",
 function (bs) {
 var sb =  new JU.SB ();
 J.jvxl.data.JvxlCoder.jvxlEncodeBitSetBuffer (bs, -1, sb);
 return sb.toString ();
 }, "JU.BS");
-c$.jvxlEncodeBitSetBuffer = Clazz.defineMethod (c$, "jvxlEncodeBitSetBuffer", 
+c$.jvxlEncodeBitSetBuffer = Clazz.defineMethod (c$, "jvxlEncodeBitSetBuffer",
 function (bs, nPoints, sb) {
 var dataCount = 0;
 var n = 0;
@@ -513,7 +513,7 @@ J.jvxl.data.JvxlCoder.jvxlAppendEncodedNumber (sb, dataCount, 35, 90);
 sb.appendC ('\n');
 return n;
 }, "JU.BS,~N,JU.SB");
-c$.jvxlAppendEncodedNumber = Clazz.defineMethod (c$, "jvxlAppendEncodedNumber", 
+c$.jvxlAppendEncodedNumber = Clazz.defineMethod (c$, "jvxlAppendEncodedNumber",
 function (sb, n, base, range) {
 var isInRange = (n < range);
 if (n == 0) sb.appendC (String.fromCharCode (base));
@@ -527,7 +527,7 @@ n = n1;
 }
 if (!isInRange) sb.append (" ");
 }, "JU.SB,~N,~N,~N");
-c$.jvxlDecodeBitSetRange = Clazz.defineMethod (c$, "jvxlDecodeBitSetRange", 
+c$.jvxlDecodeBitSetRange = Clazz.defineMethod (c$, "jvxlDecodeBitSetRange",
 function (data, base, range) {
 var bs =  new JU.BS ();
 var dataCount = 0;
@@ -541,7 +541,7 @@ isset = !isset;
 }
 return bs;
 }, "~S,~N,~N");
-c$.jvxlParseEncodedInt = Clazz.defineMethod (c$, "jvxlParseEncodedInt", 
+c$.jvxlParseEncodedInt = Clazz.defineMethod (c$, "jvxlParseEncodedInt",
 function (str, offset, base, next) {
 var digitSeen = false;
 var value = 0;
@@ -567,7 +567,7 @@ if (!digitSeen) value = -2147483648;
 next[0] = ich;
 return value;
 }, "~S,~N,~N,~A");
-c$.jvxlDecodeBitSet = Clazz.defineMethod (c$, "jvxlDecodeBitSet", 
+c$.jvxlDecodeBitSet = Clazz.defineMethod (c$, "jvxlDecodeBitSet",
 function (data) {
 if (data.startsWith ("-")) return J.jvxl.data.JvxlCoder.jvxlDecodeBitSetRange (J.jvxl.data.JvxlCoder.jvxlDecompressString (data.substring (1)), 35, 90);
 var bs =  new JU.BS ();
@@ -591,7 +591,7 @@ isset = !isset;
 }
 return bs;
 }, "~S");
-c$.jvxlCompressString = Clazz.defineMethod (c$, "jvxlCompressString", 
+c$.jvxlCompressString = Clazz.defineMethod (c$, "jvxlCompressString",
 function (data, escapeXml) {
 if (data.indexOf ("~") >= 0) return data;
 var dataOut =  new JU.SB ();
@@ -639,7 +639,7 @@ chLast = ch;
 }}
 return dataOut.toString ();
 }, "~S,~B");
-c$.jvxlDecompressString = Clazz.defineMethod (c$, "jvxlDecompressString", 
+c$.jvxlDecompressString = Clazz.defineMethod (c$, "jvxlDecompressString",
 function (data) {
 if (data.indexOf ("~") < 0) return data;
 var dataOut =  new JU.SB ();
@@ -679,11 +679,11 @@ chLast = ch;
 }
 return dataOut.toString ();
 }, "~S");
-c$.jvxlCreateHeaderWithoutTitleOrAtoms = Clazz.defineMethod (c$, "jvxlCreateHeaderWithoutTitleOrAtoms", 
+c$.jvxlCreateHeaderWithoutTitleOrAtoms = Clazz.defineMethod (c$, "jvxlCreateHeaderWithoutTitleOrAtoms",
 function (v, bs) {
 J.jvxl.data.JvxlCoder.jvxlCreateHeader (v, bs);
 }, "J.jvxl.data.VolumeData,JU.SB");
-c$.jvxlCreateHeader = Clazz.defineMethod (c$, "jvxlCreateHeader", 
+c$.jvxlCreateHeader = Clazz.defineMethod (c$, "jvxlCreateHeader",
 function (v, sb) {
 v.setVolumetricXml ();
 if (sb.length () == 0) sb.append ("Line 1\nLine 2\n");

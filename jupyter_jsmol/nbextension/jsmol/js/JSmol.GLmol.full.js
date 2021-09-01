@@ -1,4 +1,4 @@
-// _canvas as global 
+// _canvas as global
 // gl as global
 
 // Three.js - http://github.com/mrdoob/three.js
@@ -1582,7 +1582,7 @@ THREE.Matrix3.prototype = {
 		// ( based on http://code.google.com/p/webgl-mjs/ )
 
 				var me = matrix.elements;
-				
+
 		var a11 =   me[10] * me[5] - me[6] * me[9];
 		var a21 = - me[10] * me[1] + me[2] * me[9];
 		var a31 =   me[6] * me[1] - me[2] * me[5];
@@ -1615,7 +1615,7 @@ THREE.Matrix3.prototype = {
 
 	},
 
-	
+
 	transpose: function () {
 
 		var tmp, m = this.elements;
@@ -1627,7 +1627,7 @@ THREE.Matrix3.prototype = {
 		return this;
 
 	},
-	
+
 
 	transposeIntoArray: function ( r ) {
 
@@ -3289,7 +3289,7 @@ THREE.Projector = function() {
 				_projScreenobjectMatrixWorld.multiply( _projScreenMatrix, objectMatrixWorld );
 
 				vertices = object.geometry.vertices;
-				
+
 				v1 = getNextVertexInPool();
 				v1.positionScreen.copy( vertices[ 0 ] );
 				_projScreenobjectMatrixWorld.multiplyVector4( v1.positionScreen );
@@ -3945,7 +3945,7 @@ THREE.Geometry = function () {
 	this.id = THREE.GeometryCount ++;
 
 	this.vertices = [];
-	this.colors = []; // one-to-one vertex colors, used in ParticleSystem, Line and Ribbon
+	this.colors = []; // one-to-one vertex colors, used in ParticleZystem, Line and Ribbon
 
 	this.materials = [];
 
@@ -4561,7 +4561,7 @@ THREE.Geometry.prototype = {
 							u = this.faceVertexUvs[j][i];
 							if (u) u.splice(k, 1);
 						}
-						
+
 						break;
 					}
 				}
@@ -4938,7 +4938,7 @@ THREE.PerspectiveCamera.prototype.updateProjectionMatrix = function () {
  * @author mr.doob / http://mrdoob.com/
  * @author alteredq / http://alteredqualia.com/
  */
- 
+
 THREE.Light = function ( hex ) {
 
 	THREE.Object3D.call( this );
@@ -4961,7 +4961,7 @@ THREE.AmbientLight = function ( hex ) {
 };
 
 THREE.AmbientLight.prototype = new THREE.Light();
-THREE.AmbientLight.prototype.constructor = THREE.AmbientLight; 
+THREE.AmbientLight.prototype.constructor = THREE.AmbientLight;
 /**
  * @author mr.doob / http://mrdoob.com/
  * @author alteredq / http://alteredqualia.com/
@@ -5460,13 +5460,13 @@ THREE.MeshPhongMaterial.prototype.constructor = THREE.MeshPhongMaterial;
  *
  * parameters = {
  *  opacity: <float>,
- 
+
  *  blending: THREE.NormalBlending,
  *  depthTest: <bool>,
- 
+
  *  wireframe: <boolean>,
  *  wireframeLinewidth: <float>
- * } 
+ * }
  */
 
 THREE.MeshDepthMaterial = function ( parameters ) {
@@ -5489,11 +5489,11 @@ THREE.MeshDepthMaterial.prototype.constructor = THREE.MeshDepthMaterial;
  *
  * parameters = {
  *  opacity: <float>,
- 
+
  *  shading: THREE.FlatShading,
  *  blending: THREE.NormalBlending,
  *  depthTest: <bool>,
- 
+
  *  wireframe: <boolean>,
  *  wireframeLinewidth: <float>
  * }
@@ -5762,7 +5762,7 @@ THREE.Particle.prototype.constructor = THREE.Particle;
  * @author alteredq / http://alteredqualia.com/
  */
 
-THREE.ParticleSystem = function ( geometry, material ) {
+THREE.ParticleZystem = function ( geometry, material ) {
 
 	THREE.Object3D.call( this );
 
@@ -5789,8 +5789,8 @@ THREE.ParticleSystem = function ( geometry, material ) {
 
 };
 
-THREE.ParticleSystem.prototype = new THREE.Object3D();
-THREE.ParticleSystem.prototype.constructor = THREE.ParticleSystem;
+THREE.ParticleZystem.prototype = new THREE.Object3D();
+THREE.ParticleZystem.prototype.constructor = THREE.ParticleZystem;
 /**
  * @author mr.doob / http://mrdoob.com/
  */
@@ -8467,7 +8467,7 @@ THREE.WebGLRenderer = function ( parameters ) {
 
 			deleteLineBuffers( object.geometry );
 
-		} /*else if ( object instanceof THREE.ParticleSystem ) {
+		} /*else if ( object instanceof THREE.ParticleZystem ) {
 
 			deleteParticleBuffers( object.geometry );
 
@@ -11312,7 +11312,7 @@ THREE.WebGLRenderer = function ( parameters ) {
 
 		// render particles
 
-		} /*else if ( object instanceof THREE.ParticleSystem ) {
+		} /*else if ( object instanceof THREE.ParticleZystem ) {
 
 			_gl.drawArrays( _gl.POINTS, 0, geometryGroup.__webglParticleCount );
 
@@ -11518,7 +11518,7 @@ THREE.WebGLRenderer = function ( parameters ) {
 
 			if ( object.visible ) {
 
-				if ( ! ( object instanceof THREE.Mesh || object instanceof THREE.ParticleSystem ) || ! ( object.frustumCulled ) || _frustum.contains( object ) ) {
+				if ( ! ( object instanceof THREE.Mesh || object instanceof THREE.ParticleZystem ) || ! ( object.frustumCulled ) || _frustum.contains( object ) ) {
 
 					//object.matrixWorld.flattenToArray( object._objectMatrixArray );
 
@@ -12066,7 +12066,7 @@ THREE.WebGLRenderer = function ( parameters ) {
 
 				}
 
-			} else if ( object instanceof THREE.ParticleSystem ) {
+			} else if ( object instanceof THREE.ParticleZystem ) {
 
 				geometry = object.geometry;
 
@@ -12108,7 +12108,7 @@ THREE.WebGLRenderer = function ( parameters ) {
 
 			} else if ( //object instanceof THREE.Ribbon ||
 						object instanceof THREE.Line /*||
-											                                                         object instanceof THREE.ParticleSystem*/ ) {
+											                                                         object instanceof THREE.ParticleZystem*/ ) {
 
 				geometry = object.geometry;
 				addBuffer( scene.__webglObjects, geometry, object );
@@ -12248,7 +12248,7 @@ THREE.WebGLRenderer = function ( parameters ) {
 
 			material.attributes && clearCustomAttributes( material );
 
-		} else if ( object instanceof THREE.ParticleSystem ) {
+		} else if ( object instanceof THREE.ParticleZystem ) {
 
 			material = getBufferMaterial( object, geometryGroup );
 
@@ -12298,7 +12298,7 @@ THREE.WebGLRenderer = function ( parameters ) {
 	function removeObject ( object, scene ) {
 
 		if ( object instanceof THREE.Mesh  ||
-										 //	 object instanceof THREE.ParticleSystem ||
+										 //	 object instanceof THREE.ParticleZystem ||
 										 // object instanceof THREE.Ribbon ||
 			 object instanceof THREE.Line ) {
 
@@ -15923,7 +15923,7 @@ THREE.SceneUtils = {
 
 			object = new THREE.SkinnedMesh( source.geometry, source.material );
 
-											  }else*/ 
+											  }else*/
 								if ( source instanceof THREE.Mesh ) {
 
 			object = new THREE.Mesh( source.geometry, source.material );
@@ -15936,9 +15936,9 @@ THREE.SceneUtils = {
 
 			object = new THREE.Ribbon( source.geometry, source.material );
 
-		} else if ( source instanceof THREE.ParticleSystem ) {
+		} else if ( source instanceof THREE.ParticleZystem ) {
 
-			object = new THREE.ParticleSystem( source.geometry, source.material );
+			object = new THREE.ParticleZystem( source.geometry, source.material );
 			object.sortParticles = source.sortParticles;
 
 		} else if ( source instanceof THREE.Particle ) {
@@ -16882,7 +16882,7 @@ THREE.CylinderGeometry = function ( radiusTop, radiusBottom, height, segmentsRad
 			nb = this.vertices[ vertices[ 1 ][ x + 1 ] ].clone();
 
 		}
-		
+
 		na.setY( Math.sqrt( na.x * na.x + na.z * na.z ) * tanTheta ).normalize();
 		nb.setY( Math.sqrt( nb.x * nb.x + nb.z * nb.z ) * tanTheta ).normalize();
 
@@ -17199,7 +17199,7 @@ THREE.PolyhedronGeometry = function ( vertices, faces, radius, detail ) {
 			that.faces.push( face );
 
 			var azi = azimuth( face.centroid );
-			that.faceVertexUvs[ 0 ].push( [ 
+			that.faceVertexUvs[ 0 ].push( [
 				correctUV( v1.uv, v1, azi ),
 				correctUV( v2.uv, v2, azi ),
 				correctUV( v3.uv, v3, azi )
@@ -17226,7 +17226,7 @@ THREE.PolyhedronGeometry = function ( vertices, faces, radius, detail ) {
 		var mid = midpoints[ v1.index ][ v2.index ];
 		if ( mid === undefined ) {
 			// generate mean point and project to surface with prepare()
-			midpoints[ v1.index ][ v2.index ] = midpoints[ v2.index ][ v1.index ] = mid = prepare( 
+			midpoints[ v1.index ][ v2.index ] = midpoints[ v2.index ][ v1.index ] = mid = prepare(
 				new THREE.Vector3().add( v1, v2 ).divideScalar( 2 )
 			);
 		}
@@ -17319,7 +17319,7 @@ BH: added drawSphere and getMat methods
 		License: dual license of MIT or LGPL3
 
 	 This program uses
-		Three.js 
+		Three.js
 			https://github.com/mrdoob/three.js
 			Copyright (c) 2010-2012 three.js Authors. All rights reserved.
 		jQuery
@@ -17367,16 +17367,16 @@ Jmol.GLmol = function() {
 GLmol.extendApplet = function(applet) {
 
 	applet._refresh = function() {
-	
+
 		// Called by org.jmol.Viewer.viewer.refresh
-			
+
 		// pixelsPerAngstrom can be used to calculate the new camera position.
-		// modelRadius is half the distance across the screen. 
+		// modelRadius is half the distance across the screen.
 		// 100% implies that camera Z position is 3.5 * modelRadius, with a field of view of 16.24 degrees (2 * atan(1/7))
-		
+
 		if (!this._applet)
 			return
-			
+
 		var view = this._applet.getGLmolView();
 		var gl = this._GLmol;
 		var rg = gl.rotationGroup;
@@ -17389,10 +17389,10 @@ GLmol.extendApplet = function(applet) {
 		// scaled linearly by zoom
 		var sppa = view.scale;
 		rg.position.z = gl.CAMERA_Z + (view.cameraDistance+view.pixelCount*0.5)/sppa;
-		//model "position" is moved such that {0 0 0} is the fixedRotationCenter 
-		mg.position.x = -view.center.x; 
+		//model "position" is moved such that {0 0 0} is the fixedRotationCenter
+		mg.position.x = -view.center.x;
 		mg.position.y = -view.center.y;
-		mg.position.z = -view.center.z; 
+		mg.position.z = -view.center.z;
 		//there is also the fixedTranslation to worry about (from CTRL-ALT-drag)
 		if (view.perspective) {
 			gl.camera = gl.perspectiveCamera;
@@ -17414,15 +17414,15 @@ GLmol.extendApplet = function(applet) {
 GLmol.extendJSExporter = function(exporter){
 
 	// This method will be called just after org.jmol.export.JSExporter has loaded,
-	//  as one of its static calls.  
-	
+	//  as one of its static calls.
+
 	// exporter is org.jmol.export.JSExporter.protothpe
-	
+
 	// What we are doing here is overriding methods of org.jmol.export.JSExporter.
 	// These methods are called by that general class and implemened here usring
-	// GLmol and THREE.  
-	
-				
+	// GLmol and THREE.
+
+
 	exporter.jsInitExport = function(applet) {
 		applet._GLmol.initializeJmolExport();
 	}
@@ -17443,26 +17443,26 @@ GLmol.extendJSExporter = function(exporter){
 		applet._refresh();
 	}
 
-	exporter.jsSurface = function(applet, vertices, normals, indices, 
+	exporter.jsSurface = function(applet, vertices, normals, indices,
 			nVertices, nPolygons, nFaces, bsPolygons, faceVertexMax,
 			color, vertexColors, polygonColors) {
 	// notes: Color is only used if both vertexColors and polygonColors are null.
 	//        Only one of vertexColors or polygonColors will NOT be null.
 	//        Int facevertexMax is either 3 or 4; indices may have MORE than that number
-	//        of vertex indices, because the last one may be a flag indicating which 
+	//        of vertex indices, because the last one may be a flag indicating which
 	//        edges to display when just showing mesh edges. When there are quadrilaterals,
 	//        then nPolygons != nFaces, and you need to create both 3-sides and 4-sided faces
-	//				based on the length of the individual indices[i] array.  
+	//				based on the length of the individual indices[i] array.
 
 	// nFaces was determined as follows:
 
 	//    boolean isAll = (bsPolygons == null);
 	//    if (isAll) {
 	//      for (int i = nPolygons; --i >= 0;)
-	//        nFaces += (faceVertexMax == 4 && indices[i].length == 4 ? 2 : 1);    
+	//        nFaces += (faceVertexMax == 4 && indices[i].length == 4 ? 2 : 1);
 	//    } else {
 	//      for (int i = bsPolygons.nextSetBit(0); i >= 0; i = bsPolygons.nextSetBit(i + 1))
-	//        nFaces += (faceVertexMax == 4 && indices[i].length == 4 ? 2 : 1);      
+	//        nFaces += (faceVertexMax == 4 && indices[i].length == 4 ? 2 : 1);
 
 
 		var params = {};
@@ -17519,7 +17519,7 @@ GLmol.getMat = function(me, color) {
 GLmol.setPt = function(p,q) {p.x = q.x;p.y=q.y;p.z=q.z;};
 
 
-// The GLmol object is defined by the following functions: 
+// The GLmol object is defined by the following functions:
 
 ;(function(gp){
 
@@ -17533,7 +17533,7 @@ gp.create = function() {
 	this.applet.aaScale = 2;
 	this.renderer = new THREE.WebGLRenderer({
     antialias: true,
-    preserveDrawingBuffer: true 
+    preserveDrawingBuffer: true
   });
 	var canvas = this.renderer.domElement;
 	canvas.width = this.container.width();
@@ -17579,7 +17579,7 @@ gp.create = function() {
 	// Default values
 	this.sphereQuality = 16; //16;
 	this.cylinderQuality = 16; //8;
- 
+
 };
 
 gp.getView = function() {
@@ -17664,7 +17664,7 @@ gp.initializeJmolExport = function() {
 	this.tpt1 = new THREE.Vector3();
 	this.tpt2 = new THREE.Vector3();
 	this._m = new THREE.Matrix4();
-	this._geoTriangles = null;	
+	this._geoTriangles = null;
 	if (!this.sphereGeometry) {
 		this.sphereGeometry = new THREE.SphereGeometry(1, this.sphereQuality, this.sphereQuality); // r, seg, ring
 		this.sphereGeometry0 = new THREE.SphereGeometry(1, this.sphereQuality / 4, this.sphereQuality / 4); // r, seg, ring
@@ -17710,14 +17710,14 @@ gp.addJmolTriangle = function(color, pt1, pt2, pt3) {
 	if (!geo)
 		geo = this._geoTriangles = new THREE.Geometry();
 	var n = geo.vertices.length;
-	geo.vertices.push(new THREE.Vector3(pt1.x, pt1.y, pt1.z));	
-	geo.vertices.push(new THREE.Vector3(pt2.x, pt2.y, pt2.z));	
-	geo.vertices.push(new THREE.Vector3(pt3.x, pt3.y, pt3.z));	
+	geo.vertices.push(new THREE.Vector3(pt1.x, pt1.y, pt1.z));
+	geo.vertices.push(new THREE.Vector3(pt2.x, pt2.y, pt2.z));
+	geo.vertices.push(new THREE.Vector3(pt3.x, pt3.y, pt3.z));
 	var f = new THREE.Face3(n, n+1, n+2, null, new THREE.Color(color));
 	geo.faces.push(f);
 };
 
-gp.finalizeJmolExport = function() {	
+gp.finalizeJmolExport = function() {
 
 	if (this._geoTriangles) {
 		var geo = this._geoTriangles;
@@ -17753,4 +17753,3 @@ gp.drawCylinder = function(group, from, to, radius, color, cap) {
 
 })(Jmol);
 
- 

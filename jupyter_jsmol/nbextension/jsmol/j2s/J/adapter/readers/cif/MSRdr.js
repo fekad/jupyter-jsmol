@@ -1,5 +1,5 @@
 Clazz.declarePackage ("J.adapter.readers.cif");
-Clazz.load (["J.adapter.smarter.MSInterface"], "J.adapter.readers.cif.MSRdr", ["java.lang.Boolean", "$.Exception", "$.Float", "java.util.Hashtable", "JU.Lst", "$.M3", "$.Matrix", "$.P3", "$.PT", "J.adapter.readers.cif.Subsystem", "J.adapter.smarter.AtomSetCollectionReader", "JU.BSUtil", "$.BoxInfo", "$.Escape", "$.Logger", "$.Modulation", "$.ModulationSet", "$.Vibration"], function () {
+Clazz.load (["J.adapter.smarter.MSInterface"], "J.adapter.readers.cif.MSRdr", ["java.lang.Boolean", "$.Exception", "$.Float", "java.util.Hashtable", "JU.Lst", "$.M3", "$.Matrix", "$.P3", "$.PT", "J.adapter.readers.cif.SubZystem", "J.adapter.smarter.AtomSetCollectionReader", "JU.BSUtil", "$.BoxInfo", "$.Escape", "$.Logger", "$.Modulation", "$.ModulationSet", "$.Vibration"], function () {
 c$ = Clazz.decorateAsClass (function () {
 this.cr = null;
 this.modDim = 0;
@@ -35,19 +35,19 @@ this.qlist100 = null;
 this.qs = null;
 this.modCount = 0;
 this.modTUV = null;
-this.htSubsystems = null;
+this.htSubZystems = null;
 this.minXYZ0 = null;
 this.maxXYZ0 = null;
 Clazz.instantialize (this, arguments);
 }, J.adapter.readers.cif, "MSRdr", null, J.adapter.smarter.MSInterface);
-Clazz.defineMethod (c$, "getSigma", 
+Clazz.defineMethod (c$, "getSigma",
 function () {
 return this.sigma;
 });
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function () {
 });
-Clazz.overrideMethod (c$, "initialize", 
+Clazz.overrideMethod (c$, "initialize",
 function (r, modDim) {
 this.cr = r;
 this.modCoord = r.checkFilterKey ("MODCOORD");
@@ -73,18 +73,18 @@ this.modTUV = null;
 }}this.setModDim (modDim);
 return modDim;
 }, "J.adapter.smarter.AtomSetCollectionReader,~N");
-Clazz.defineMethod (c$, "setSubsystemOptions", 
+Clazz.defineMethod (c$, "setSubZystemOptions",
  function () {
 this.cr.forceSymmetry (this.modPack);
 if (this.modCell != null) this.cr.addJmolScript ("unitcell {%" + this.modCell + "}");
 });
-Clazz.defineMethod (c$, "setModDim", 
+Clazz.defineMethod (c$, "setModDim",
 function (ndim) {
 this.htModulation =  new java.util.Hashtable ();
 this.modDim = ndim;
 this.cr.appendLoadNote ("Modulation dimension = " + this.modDim);
 }, "~N");
-Clazz.overrideMethod (c$, "addModulation", 
+Clazz.overrideMethod (c$, "addModulation",
 function (map, id, pt, iModel) {
 var ch = id.charAt (0);
 switch (ch) {
@@ -112,7 +112,7 @@ this.legendres.addLast (id);
 }JU.Logger.info ("Adding " + id + " " + JU.Escape.e (pt));
 map.put (id, pt);
 }, "java.util.Map,~S,~A,~N");
-Clazz.overrideMethod (c$, "setModulation", 
+Clazz.overrideMethod (c$, "setModulation",
 function (isPost, symmetry) {
 if (this.modDim == 0 || this.htModulation == null) return;
 if (this.modDebug) JU.Logger.debugging = JU.Logger.debuggingHigh = true;
@@ -121,7 +121,7 @@ this.symmetry = symmetry;
 this.setModulationForStructure (this.cr.asc.iSet, isPost);
 if (this.modDebug) JU.Logger.debugging = JU.Logger.debuggingHigh = false;
 }, "~B,J.api.SymmetryInterface");
-Clazz.overrideMethod (c$, "finalizeModulation", 
+Clazz.overrideMethod (c$, "finalizeModulation",
 function () {
 if (!this.finalized && this.modDim > 0 && !this.modVib) {
 if (this.modTUV != null) this.cr.appendLoadNote ("modTUV=" + this.modTUV);
@@ -129,20 +129,20 @@ this.cr.asc.setInfo ("modulationOn", this.modTUV == null ? Boolean.TRUE : this.m
 this.cr.addJmolScript ("set modulateOccupancy " + (this.haveOccupancy && !this.isCommensurate ? true : false));
 }this.finalized = true;
 });
-Clazz.defineMethod (c$, "checkKey", 
+Clazz.defineMethod (c$, "checkKey",
  function (key, checkQ) {
 var pt = key.indexOf (this.atModel);
 return (pt < 0 || key.indexOf ("_pos#") >= 0 || key.indexOf ("*;*") >= 0 || checkQ && key.indexOf ("?") >= 0 ? null : key.substring (0, pt));
 }, "~S,~B");
-Clazz.overrideMethod (c$, "getMod", 
+Clazz.overrideMethod (c$, "getMod",
 function (key) {
 return this.htModulation.get (key + this.atModel);
 }, "~S");
-Clazz.overrideMethod (c$, "getModulationMap", 
+Clazz.overrideMethod (c$, "getModulationMap",
 function () {
 return this.htModulation;
 });
-Clazz.defineMethod (c$, "setModulationForStructure", 
+Clazz.defineMethod (c$, "setModulationForStructure",
  function (iModel, isPost) {
 this.atModel = "@" + iModel;
 if (this.htModulation.containsKey ("X_" + this.atModel)) return;
@@ -163,9 +163,9 @@ for (var i = i0; i < n; i++) this.modulateAtom (this.atoms[i]);
 
 this.htAtomMods = null;
 if (this.minXYZ0 != null) this.trimAtomSet ();
-this.htSubsystems = null;
+this.htSubZystems = null;
 }, "~N,~B");
-Clazz.defineMethod (c$, "initModForStructure", 
+Clazz.defineMethod (c$, "initModForStructure",
  function (iModel) {
 var key;
 if (this.legendres != null) this.fixLegendre ();
@@ -226,7 +226,7 @@ if (key.startsWith ("F_")) this.cr.appendLoadNote ("atom wave vector " + key + "
 }
 }
 if (!map.isEmpty ()) this.htModulation.putAll (map);
-if (this.htSubsystems == null) {
+if (this.htSubZystems == null) {
 this.haveAtomMods = false;
 } else {
 this.cr.strSupercell = null;
@@ -265,7 +265,7 @@ break;
 }
 }
 }, "~N");
-Clazz.defineMethod (c$, "fixLegendre", 
+Clazz.defineMethod (c$, "fixLegendre",
  function () {
 for (var i = this.legendres.size (); --i >= 0; ) {
 var key = this.legendres.get (i);
@@ -280,12 +280,12 @@ pt[2] = NaN;
 this.htModulation.put (key,  Clazz.newDoubleArray (-1, [pt1[0], pt1[1], pt[0], pt[1]]));
 }}}
 });
-Clazz.defineMethod (c$, "fixDouble", 
+Clazz.defineMethod (c$, "fixDouble",
  function (pt) {
 if (this.cr.fixJavaFloat) for (var i = pt.length; --i >= 0; ) pt[i] = JU.PT.fixDouble (pt[i], 100000.0);
 
 }, "~A");
-Clazz.overrideMethod (c$, "getQCoefs", 
+Clazz.overrideMethod (c$, "getQCoefs",
 function (key) {
 var fn = Math.max (0, this.cr.parseIntAt (key, 2));
 if (fn == 0) {
@@ -297,13 +297,13 @@ this.qlist100[0] = 1;
 if (p == null) p = this.getMod ("F_" + fn + "_coefs_");
 return p;
 }, "~S");
-Clazz.overrideMethod (c$, "getModType", 
+Clazz.overrideMethod (c$, "getModType",
 function (key) {
 var type = key.charAt (0);
 var id = key.charAt (2);
 return (id == 'S' ? 's' : id == 'T' ? 't' : id == 'L' ? (type == 'D' ? 'l' : 'L') : id == '0' ? 'c' : type == 'D' ? 'f' : type == 'O' ? 'o' : type == 'M' ? 'm' : type == 'U' ? 'u' : '?');
 }, "~S");
-Clazz.defineMethod (c$, "calculateQCoefs", 
+Clazz.defineMethod (c$, "calculateQCoefs",
  function (p) {
 if (this.qs == null) {
 this.qs =  new Array (this.modDim);
@@ -374,16 +374,16 @@ return p;
 }
 return null;
 }, "~A");
-Clazz.defineMethod (c$, "approxInt", 
+Clazz.defineMethod (c$, "approxInt",
  function (fn) {
 var ifn = Math.round (fn);
 return (Math.abs (fn - ifn) < 0.001 ? ifn : 0);
 }, "~N");
-Clazz.defineMethod (c$, "toP3", 
+Clazz.defineMethod (c$, "toP3",
  function (x) {
 return JU.P3.new3 (x[0], x[1], x[2]);
 }, "~A");
-Clazz.defineMethod (c$, "addAtomModulation", 
+Clazz.defineMethod (c$, "addAtomModulation",
  function (atomName, axis, type, params, utens, qcoefs) {
 var list = this.htAtomMods.get (atomName);
 if (list == null) {
@@ -392,27 +392,27 @@ this.htAtomMods.put (atomName, list =  new JU.Lst ());
 }list.addLast ( new JU.Modulation (axis, type, params, utens, qcoefs));
 this.modCount++;
 }, "~S,~S,~S,~A,~S,~A");
-Clazz.overrideMethod (c$, "addSubsystem", 
+Clazz.overrideMethod (c$, "addSubZystem",
 function (code, w) {
 if (code == null) return;
-var ss =  new J.adapter.readers.cif.Subsystem (this, code, w);
-this.cr.appendLoadNote ("subsystem " + code + "\n" + w);
-this.setSubsystem (code, ss);
+var ss =  new J.adapter.readers.cif.SubZystem (this, code, w);
+this.cr.appendLoadNote ("subZystem " + code + "\n" + w);
+this.setSubZystem (code, ss);
 }, "~S,JU.Matrix");
-Clazz.defineMethod (c$, "addUStr", 
+Clazz.defineMethod (c$, "addUStr",
  function (atom, id, val) {
 var i = Clazz.doubleToInt ("U11U22U33U12U13U23UISO".indexOf (id) / 3);
 if (JU.Logger.debuggingHigh) JU.Logger.debug ("MOD RDR adding " + id + " " + i + " " + val + " to " + atom.anisoBorU[i]);
 this.cr.asc.setU (atom, i, val + atom.anisoBorU[i]);
 }, "J.adapter.smarter.Atom,~S,~N");
-Clazz.defineMethod (c$, "modulateAtom", 
+Clazz.defineMethod (c$, "modulateAtom",
  function (a) {
-if (this.modCoord && this.htSubsystems != null) {
+if (this.modCoord && this.htSubZystems != null) {
 var ptc = JU.P3.newP (a);
 var spt = this.getSymmetry (a);
 spt.toCartesian (ptc, true);
 }var list = this.htAtomMods.get (a.atomName);
-if (list == null && a.altLoc != '\0' && this.htSubsystems != null) {
+if (list == null && a.altLoc != '\0' && this.htSubZystems != null) {
 list =  new JU.Lst ();
 }if (list == null || this.symmetry == null || a.bsSymmetry == null) return;
 var iop = Math.max (a.bsSymmetry.nextSetBit (0), 0);
@@ -455,7 +455,7 @@ JU.Logger.debug ("setModulation tensor=" + JU.Escape.e ((a.tensors.get (1)).getI
 }}}if (Float.isNaN (ms.x)) ms.set (0, 0, 0);
 a.vib = ms;
 }, "J.adapter.smarter.Atom");
-Clazz.defineMethod (c$, "getAtomR0", 
+Clazz.defineMethod (c$, "getAtomR0",
  function (atom) {
 var r0 = JU.P3.newP (atom);
 if (this.supercellSymmetry != null) {
@@ -463,34 +463,34 @@ this.supercellSymmetry.toCartesian (r0, true);
 this.symmetry.toFractional (r0, true);
 }return r0;
 }, "J.adapter.smarter.Atom");
-Clazz.overrideMethod (c$, "getAtomSymmetry", 
+Clazz.overrideMethod (c$, "getAtomSymmetry",
 function (a, defaultSymmetry) {
 var ss;
-return (this.htSubsystems == null || (ss = this.getSubsystem (a)) == null ? defaultSymmetry : ss.getSymmetry ());
+return (this.htSubZystems == null || (ss = this.getSubZystem (a)) == null ? defaultSymmetry : ss.getSymmetry ());
 }, "J.adapter.smarter.Atom,J.api.SymmetryInterface");
-Clazz.defineMethod (c$, "setSubsystem", 
- function (code, system) {
-if (this.htSubsystems == null) this.htSubsystems =  new java.util.Hashtable ();
-this.htSubsystems.put (code, system);
-this.setSubsystemOptions ();
-}, "~S,J.adapter.readers.cif.Subsystem");
-Clazz.defineMethod (c$, "getMatrices", 
+Clazz.defineMethod (c$, "setSubZystem",
+ function (code, Zystem) {
+if (this.htSubZystems == null) this.htSubZystems =  new java.util.Hashtable ();
+this.htSubZystems.put (code, Zystem);
+this.setSubZystemOptions ();
+}, "~S,J.adapter.readers.cif.SubZystem");
+Clazz.defineMethod (c$, "getMatrices",
  function (a) {
-var ss = this.getSubsystem (a);
+var ss = this.getSubZystem (a);
 return (ss == null ? this.modMatrices : ss.getModMatrices ());
 }, "J.adapter.smarter.Atom");
-Clazz.defineMethod (c$, "getSymmetry", 
+Clazz.defineMethod (c$, "getSymmetry",
  function (a) {
-var ss = this.getSubsystem (a);
+var ss = this.getSubZystem (a);
 return (ss == null ? this.symmetry : ss.getSymmetry ());
 }, "J.adapter.smarter.Atom");
-Clazz.defineMethod (c$, "getSubsystem", 
+Clazz.defineMethod (c$, "getSubZystem",
  function (a) {
-return (this.htSubsystems == null ? null : this.htSubsystems.get ("" + a.altLoc));
+return (this.htSubZystems == null ? null : this.htSubZystems.get ("" + a.altLoc));
 }, "J.adapter.smarter.Atom");
-Clazz.overrideMethod (c$, "setMinMax0", 
+Clazz.overrideMethod (c$, "setMinMax0",
 function (minXYZ, maxXYZ) {
-if (this.htSubsystems == null) return;
+if (this.htSubZystems == null) return;
 var symmetry = this.getDefaultUnitCell ();
 this.minXYZ0 = JU.P3.newP (minXYZ);
 this.maxXYZ0 = JU.P3.newP (maxXYZ);
@@ -503,7 +503,7 @@ var pts = JU.BoxInfo.unitCubePoints;
 if (this.sigma == null) {
 JU.Logger.error ("Why are we in MSRdr.setMinMax0 without modulation init?");
 return;
-}for (var e, $e = this.htSubsystems.entrySet ().iterator (); $e.hasNext () && ((e = $e.next ()) || true);) {
+}for (var e, $e = this.htSubZystems.entrySet ().iterator (); $e.hasNext () && ((e = $e.next ()) || true);) {
 var sym = e.getValue ().getSymmetry ();
 for (var i = 8; --i >= 0; ) {
 pt.x = (pts[i].x == 0 ? pt0.x : pt1.x);
@@ -513,7 +513,7 @@ this.expandMinMax (pt, sym, minXYZ, maxXYZ);
 }
 }
 }, "JU.P3,JU.P3");
-Clazz.defineMethod (c$, "expandMinMax", 
+Clazz.defineMethod (c$, "expandMinMax",
  function (pt, sym, minXYZ, maxXYZ) {
 var pt2 = JU.P3.newP (pt);
 var slop = 0.0001;
@@ -525,7 +525,7 @@ if (maxXYZ.x < pt2.x - slop) maxXYZ.x = Clazz.doubleToInt (Math.ceil (pt2.x)) + 
 if (maxXYZ.y < pt2.y - slop) maxXYZ.y = Clazz.doubleToInt (Math.ceil (pt2.y)) + 1;
 if (maxXYZ.z < pt2.z - slop) maxXYZ.z = Clazz.doubleToInt (Math.ceil (pt2.z)) + 1;
 }, "JU.P3,J.api.SymmetryInterface,JU.P3,JU.P3");
-Clazz.defineMethod (c$, "trimAtomSet", 
+Clazz.defineMethod (c$, "trimAtomSet",
  function () {
 if (!this.cr.doApplySymmetry) return;
 var asc = this.cr.asc;
@@ -550,15 +550,15 @@ if (this.cr.fixJavaFloat) JU.PT.fixPtFloats (a, 100000.0);
 bs.clear (i);
 }}
 });
-Clazz.defineMethod (c$, "getDefaultUnitCell", 
+Clazz.defineMethod (c$, "getDefaultUnitCell",
  function () {
-return (this.modCell != null && this.htSubsystems.containsKey (this.modCell) ? this.htSubsystems.get (this.modCell).getSymmetry () : this.cr.asc.getSymmetry ());
+return (this.modCell != null && this.htSubZystems.containsKey (this.modCell) ? this.htSubZystems.get (this.modCell).getSymmetry () : this.cr.asc.getSymmetry ());
 });
-Clazz.overrideMethod (c$, "getSymmetryFromCode", 
+Clazz.overrideMethod (c$, "getSymmetryFromCode",
 function (code) {
-return this.htSubsystems.get (code).getSymmetry ();
+return this.htSubZystems.get (code).getSymmetry ();
 }, "~S");
-Clazz.overrideMethod (c$, "addLatticeVector", 
+Clazz.overrideMethod (c$, "addLatticeVector",
 function (lattvecs, data) {
 var a = null;
 var c = data.charAt (0);

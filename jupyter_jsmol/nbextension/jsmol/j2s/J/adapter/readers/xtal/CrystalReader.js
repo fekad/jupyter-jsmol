@@ -40,13 +40,13 @@ this.symops =  new JU.Lst ();
 this.f14 =  Clazz.newFloatArray (14, 0);
 this.f16 =  Clazz.newFloatArray (16, 0);
 });
-Clazz.defineMethod (c$, "rd", 
+Clazz.defineMethod (c$, "rd",
 function () {
 while (Clazz.superCall (this, J.adapter.readers.xtal.CrystalReader, "rd", []) != null && (this.line.startsWith (" PROCESS") || this.line.startsWith (" INFORMATION") || this.line.startsWith (" WARNING"))) {
 }
 return this.line;
 });
-Clazz.overrideMethod (c$, "initializeReader", 
+Clazz.overrideMethod (c$, "initializeReader",
 function () {
 this.doProcessLines = false;
 this.inputOnly = this.checkFilterKey ("INPUT");
@@ -57,7 +57,7 @@ this.fullSymmetry = this.checkFilterKey ("FULLSYM");
 this.setFractionalCoordinates (this.readHeader ());
 this.asc.checkLatticeOnly = !this.inputOnly;
 });
-Clazz.overrideMethod (c$, "checkLine", 
+Clazz.overrideMethod (c$, "checkLine",
 function () {
 if (this.firstLine != null) {
 this.line = this.firstLine;
@@ -65,7 +65,7 @@ this.firstLine = null;
 }if (this.line.startsWith (" TYPE OF CALCULATION")) {
 this.calculationType = this.line.substring (this.line.indexOf (":") + 1).trim ();
 return true;
-}if (this.line.indexOf ("DIMENSIONALITY OF THE SYSTEM") >= 0) {
+}if (this.line.indexOf ("DIMENSIONALITY OF THE Zystem") >= 0) {
 this.isMolecular = this.isSlab = this.isPolymer = false;
 if (this.line.indexOf ("2") >= 0) this.isSlab = true;
  else if (this.line.indexOf ("1") >= 0) this.isPolymer = true;
@@ -172,7 +172,7 @@ this.processNextCriticalPoint ();
 return true;
 }return true;
 });
-Clazz.defineMethod (c$, "processNextCriticalPoint", 
+Clazz.defineMethod (c$, "processNextCriticalPoint",
  function () {
 if (this.htCriticalPoints == null) {
 this.htCriticalPoints =  new java.util.Hashtable ();
@@ -249,14 +249,14 @@ var evectors =  new Array (3);
 evectors[0] = JU.P3.new3 (ev[0][0], ev[0][1], ev[0][2]);
 evectors[1] = JU.P3.new3 (ev[1][0], ev[1][1], ev[1][2]);
 evectors[2] = JU.P3.new3 (ev[2][0], ev[2][1], ev[2][2]);
-System.out.println ("evpts " + evectors[0] + " " + evectors[1] + " " + evectors[2]);
+Zystem.out.println ("evpts " + evectors[0] + " " + evectors[1] + " " + evectors[2]);
 m.put ("eigenvectors", evectors);
 var t =  new JU.Tensor ().setFromEigenVectors (evectors, evalues, "cp", id, null);
 m.put ("tensor", t);
 }}this.line = null;
 }
 });
-Clazz.defineMethod (c$, "newLattice", 
+Clazz.defineMethod (c$, "newLattice",
  function (isConv) {
 this.lstCoords = null;
 this.readLatticeParams (!isConv);
@@ -264,7 +264,7 @@ this.symops.clear ();
 if (!isConv) this.primitiveToCrystal = null;
 if (!this.directLatticeVectorsFirst) this.directLatticeVectors = null;
 }, "~B");
-Clazz.defineMethod (c$, "addModel", 
+Clazz.defineMethod (c$, "addModel",
  function () {
 if (this.getLastConventional) {
 return true;
@@ -276,7 +276,7 @@ return false;
 }this.processCoordLines ();
 return true;
 });
-Clazz.defineMethod (c$, "readSymmetryOperators", 
+Clazz.defineMethod (c$, "readSymmetryOperators",
  function () {
 this.symops.clear ();
 this.rd ();
@@ -296,7 +296,7 @@ this.symops.addLast (xyz);
 JU.Logger.info ("state:" + this.state + " Symmop " + this.symops.size () + ": " + xyz);
 }}
 });
-Clazz.overrideMethod (c$, "finalizeSubclassReader", 
+Clazz.overrideMethod (c$, "finalizeSubclassReader",
 function () {
 this.processCoordLines ();
 if (this.energy != null) this.setEnergy ();
@@ -318,12 +318,12 @@ this.addJmolScript ("set drawHover");
 this.appendLoadNote (note);
 this.setLoadNote ();
 }});
-Clazz.defineMethod (c$, "getDirect", 
+Clazz.defineMethod (c$, "getDirect",
  function () {
 this.directLatticeVectors = this.read3Vectors (this.line.indexOf ("(BOHR") >= 0);
 if (!this.iHaveUnitCell) this.directLatticeVectorsFirst = true;
 });
-Clazz.defineMethod (c$, "setUnitCellOrientation", 
+Clazz.defineMethod (c$, "setUnitCellOrientation",
  function () {
 if (this.directLatticeVectors == null) return;
 var a =  new JU.V3 ();
@@ -345,11 +345,11 @@ mp.getColumnV (1, b);
 }this.matUnitCellOrientation = JU.Quat.getQuaternionFrame ( new JU.P3 (), a, b).getMatrix ();
 JU.Logger.info ("oriented unit cell is in model " + this.asc.atomSetCount);
 });
-Clazz.defineMethod (c$, "readPrimitiveLatticeVectors", 
+Clazz.defineMethod (c$, "readPrimitiveLatticeVectors",
  function () {
 this.primitiveToCrystal = JU.M3.newA9 (this.fillFloatArray (null, 0,  Clazz.newFloatArray (9, 0)));
 });
-Clazz.defineMethod (c$, "readHeader", 
+Clazz.defineMethod (c$, "readHeader",
  function () {
 this.havePrimitiveMapping = true;
 this.discardLinesUntilContains ("*******************************************************************************");
@@ -391,7 +391,7 @@ if (pt >= 0 && !this.isPrimitive) this.spaceGroupName = this.line.substring (pt 
 this.doApplySymmetry = this.isProperties;
 return !this.isProperties;
 });
-Clazz.defineMethod (c$, "readLatticeParams", 
+Clazz.defineMethod (c$, "readLatticeParams",
  function (isPrimitive) {
 var f = (this.line.indexOf ("(BOHR") >= 0 ? 0.5291772 : 1);
 if (isPrimitive) this.newAtomSet ();
@@ -413,11 +413,11 @@ this.setUnitCell (this.parseFloatStr (tokens[0]) * f, -1, -1, this.parseFloatStr
 } else {
 this.setUnitCell (this.parseFloatStr (tokens[0]) * f, this.parseFloatStr (tokens[1]) * f, this.parseFloatStr (tokens[2]) * f, this.parseFloatStr (tokens[3]), this.parseFloatStr (tokens[4]), this.parseFloatStr (tokens[5]));
 }}}, "~B");
-Clazz.defineMethod (c$, "getAtomIndexFromPrimitiveIndex", 
+Clazz.defineMethod (c$, "getAtomIndexFromPrimitiveIndex",
  function (iPrim) {
 return (this.primitiveToIndex == null ? iPrim : this.primitiveToIndex[iPrim]);
 }, "~N");
-Clazz.defineMethod (c$, "readAtoms", 
+Clazz.defineMethod (c$, "readAtoms",
  function () {
 if (this.isMolecular) this.newAtomSet ();
 this.lstCoords = null;
@@ -453,15 +453,15 @@ if (z < 0 && doNormalizePrimitive) z += 1;
 this.ac = this.asc.ac - this.atomIndexLast;
 return true;
 });
-c$.fixAtomName = Clazz.defineMethod (c$, "fixAtomName", 
+c$.fixAtomName = Clazz.defineMethod (c$, "fixAtomName",
  function (s) {
 return (s.length > 1 && JU.PT.isLetter (s.charAt (1)) ? s.substring (0, 1) + Character.toLowerCase (s.charAt (1)) + s.substring (2) : s);
 }, "~S");
-Clazz.defineMethod (c$, "getAtomicNumber", 
+Clazz.defineMethod (c$, "getAtomicNumber",
  function (token) {
 return this.parseIntStr (token) % 100;
 }, "~S");
-Clazz.defineMethod (c$, "readCoordLines", 
+Clazz.defineMethod (c$, "readCoordLines",
  function () {
 var atom = (this.inputOnly ? " ATOM" : "  ATOM");
 if (this.line.indexOf (atom) < 0) this.discardLinesUntilContains (atom);
@@ -469,7 +469,7 @@ this.lstCoords =  new JU.Lst ();
 while (this.rd () != null && this.line.length > 0) if (this.line.indexOf ("****") < 0) this.lstCoords.addLast (this.line);
 
 });
-Clazz.defineMethod (c$, "processCoordLines", 
+Clazz.defineMethod (c$, "processCoordLines",
  function () {
 if (this.lstCoords == null) return;
 this.ac = this.lstCoords.size ();
@@ -509,7 +509,7 @@ this.asc.setModelInfoForSet ("primitiveVolume", Float.$valueOf (this.primitiveVo
 this.asc.setAtomSetModelProperty ("densityPrimitive", JU.DF.formatDecimal (this.primitiveDensity, 3));
 this.asc.setModelInfoForSet ("primitiveDensity", Float.$valueOf (this.primitiveDensity), this.asc.iSet);
 }});
-Clazz.overrideMethod (c$, "applySymmetryAndSetTrajectory", 
+Clazz.overrideMethod (c$, "applySymmetryAndSetTrajectory",
 function () {
 this.setUnitCellOrientation ();
 var m4p2c;
@@ -528,7 +528,7 @@ this.asc.setModelInfoForSet ("fileSymmetryOperations", this.symops.clone (), thi
 }}this.iHaveSymmetryOperators = false;
 this.applySymTrajASCR ();
 });
-Clazz.defineMethod (c$, "newAtomSet", 
+Clazz.defineMethod (c$, "newAtomSet",
  function () {
 if (this.ac > 0 && this.asc.ac > 0) {
 this.applySymmetryAndSetTrajectory ();
@@ -537,14 +537,14 @@ this.asc.newAtomSet ();
 this.setSpaceGroupName (this.spaceGroupName);
 }this.ac = 0;
 });
-Clazz.defineMethod (c$, "setEnergy", 
+Clazz.defineMethod (c$, "setEnergy",
  function () {
 this.asc.setAtomSetEnergy ("" + this.energy, this.energy.floatValue ());
 this.asc.setCurrentModelInfo ("Energy", this.energy);
 this.asc.setInfo ("Energy", this.energy);
 this.asc.setAtomSetName ("Energy = " + this.energy + " Hartree");
 });
-Clazz.defineMethod (c$, "readPartialCharges", 
+Clazz.defineMethod (c$, "readPartialCharges",
  function () {
 if (this.haveCharges || this.asc.ac == 0) return true;
 this.haveCharges = true;
@@ -559,7 +559,7 @@ iPrim++;
 }
 return true;
 });
-Clazz.defineMethod (c$, "readTotalAtomicCharges", 
+Clazz.defineMethod (c$, "readTotalAtomicCharges",
  function () {
 var data =  new JU.SB ();
 while (this.rd () != null && this.line.indexOf ("T") < 0) data.append (this.line);
@@ -578,7 +578,7 @@ atoms[i0 + iConv].partialCharge = this.nuclearCharges[i] - charges[i];
 }}
 return true;
 });
-Clazz.defineMethod (c$, "readFreqFragments", 
+Clazz.defineMethod (c$, "readFreqFragments",
  function () {
 var numAtomsFrag = this.parseIntRange (this.line, 39, 44);
 if (numAtomsFrag < 0) return;
@@ -593,7 +593,7 @@ for (var i = 0, pos = 0; i < numAtomsFrag; i++, pos += 3) this.atomFrag[i] = thi
 
 java.util.Arrays.sort (this.atomFrag);
 });
-Clazz.defineMethod (c$, "readFrequencies", 
+Clazz.defineMethod (c$, "readFrequencies",
  function () {
 this.getLastConventional = false;
 this.addModel ();
@@ -652,7 +652,7 @@ this.rd ();
 }
 if (ramanData != null) this.readRaman (ramanData);
 });
-Clazz.defineMethod (c$, "setFreqValue", 
+Clazz.defineMethod (c$, "setFreqValue",
  function (freq, data) {
 var activity = "IR: " + data[2] + ", Ram.: " + data[3];
 this.asc.setAtomSetFrequency (this.vibrationNumber, null, activity, "" + freq, null);
@@ -662,7 +662,7 @@ this.asc.setAtomSetModelProperty ("IRactivity", data[2]);
 this.asc.setAtomSetModelProperty ("Ramanactivity", data[3]);
 this.asc.setAtomSetName ((this.isLongMode ? "LO " : "") + data[0] + " " + JU.DF.formatDecimal (freq, 2) + " cm-1 (" + JU.DF.formatDecimal (Float.parseFloat (data[1]), 0) + " km/Mole), " + activity);
 }, "~N,~A");
-Clazz.defineMethod (c$, "readRaman", 
+Clazz.defineMethod (c$, "readRaman",
  function (ramanData) {
 if (ramanData == null) {
 ramanData =  new JU.Lst ();
@@ -720,7 +720,7 @@ this.asc.atoms[this.asc.getAtomSetAtomIndex (imodel)].addTensor ( new JU.Tensor 
 this.appendLoadNote ("Ellipsoids set \"raman\": Raman tensors");
 return null;
 }, "JU.Lst");
-Clazz.defineMethod (c$, "getModelForMode", 
+Clazz.defineMethod (c$, "getModelForMode",
  function (i0, mode) {
 var n = this.asc.atomSetCount;
 for (var i = i0; i < n; i++) {
@@ -730,7 +730,7 @@ if (m == mode) return i;
 }
 return -1;
 }, "~N,~N");
-Clazz.defineMethod (c$, "readGradient", 
+Clazz.defineMethod (c$, "readGradient",
  function () {
 var key = null;
 while (this.line != null) {
@@ -745,7 +745,7 @@ this.rd ();
 }
 return true;
 });
-Clazz.defineMethod (c$, "readData", 
+Clazz.defineMethod (c$, "readData",
  function (name, nfields) {
 this.processCoordLines ();
 var f =  Clazz.newFloatArray (this.ac, 0);
@@ -763,7 +763,7 @@ if (iConv >= 0) f[iConv] = this.parseFloatStr (tokens[pt]);
 this.asc.setAtomProperties (name, f, -1, false);
 return true;
 }, "~S,~N");
-Clazz.defineMethod (c$, "getQuadrupoleTensors", 
+Clazz.defineMethod (c$, "getQuadrupoleTensors",
  function () {
 this.readLines (6);
 var atoms = this.asc.atoms;
@@ -783,7 +783,7 @@ this.rd ();
 this.appendLoadNote ("Ellipsoids set \"quadrupole\": Quadrupole tensors");
 return true;
 });
-Clazz.defineMethod (c$, "readBornChargeTensors", 
+Clazz.defineMethod (c$, "readBornChargeTensors",
  function () {
 this.processCoordLines ();
 this.rd ();

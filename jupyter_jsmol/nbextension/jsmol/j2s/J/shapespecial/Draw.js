@@ -47,12 +47,12 @@ this.offset =  new JU.V3 ();
 this.vAB =  new JU.V3 ();
 this.ptXY =  new JU.P3i ();
 });
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function () {
 Clazz.superConstructor (this, J.shapespecial.Draw, []);
 this.htObjects =  new java.util.Hashtable ();
 });
-Clazz.overrideMethod (c$, "allocMesh", 
+Clazz.overrideMethod (c$, "allocMesh",
 function (thisID, m) {
 var index = this.meshCount++;
 this.meshes = this.dmeshes = JU.AU.ensureLength (this.dmeshes, this.meshCount * 2);
@@ -61,18 +61,18 @@ this.currentMesh.color = this.color;
 this.currentMesh.index = index;
 if (thisID != null && thisID !== "+PREVIOUS_MESH+" && this.htObjects != null) this.htObjects.put (thisID.toUpperCase (), this.currentMesh);
 }, "~S,J.shape.Mesh");
-Clazz.defineMethod (c$, "setPropertySuper", 
+Clazz.defineMethod (c$, "setPropertySuper",
  function (propertyName, value, bs) {
 this.currentMesh = this.thisMesh;
 this.setPropMC (propertyName, value, bs);
 this.thisMesh = this.currentMesh;
 }, "~S,~O,JU.BS");
-Clazz.defineMethod (c$, "initShape", 
+Clazz.defineMethod (c$, "initShape",
 function () {
 Clazz.superCall (this, J.shapespecial.Draw, "initShape", []);
 this.myType = "draw";
 });
-Clazz.overrideMethod (c$, "setProperty", 
+Clazz.overrideMethod (c$, "setProperty",
 function (propertyName, value, bs) {
 if ("init" === propertyName) {
 this.initDraw ();
@@ -245,7 +245,7 @@ this.deleteModels (((value)[2])[0]);
 return;
 }this.setPropertySuper (propertyName, value, bs);
 }, "~S,~O,JU.BS");
-Clazz.defineMethod (c$, "addPoints", 
+Clazz.defineMethod (c$, "addPoints",
  function (type, value) {
 var pts = value;
 var key = Integer.$valueOf (type);
@@ -274,7 +274,7 @@ pts.set (i, JS.SV.getVariable (pt));
 this.vData.addLast ( Clazz.newArray (-1, [key, pt]));
 }}
 }, "~N,~O");
-Clazz.defineMethod (c$, "deleteModels", 
+Clazz.defineMethod (c$, "deleteModels",
  function (modelIndex) {
 for (var i = this.meshCount; --i >= 0; ) {
 var m = this.dmeshes[i];
@@ -292,12 +292,12 @@ this.meshes[i].modelIndex--;
 }}
 this.resetObjects ();
 }, "~N");
-Clazz.defineMethod (c$, "deleteMeshElement", 
+Clazz.defineMethod (c$, "deleteMeshElement",
  function (i) {
 if (this.meshes[i] === this.currentMesh) this.currentMesh = this.thisMesh = null;
 this.meshes = this.dmeshes = JU.AU.deleteElements (this.meshes, i, 1);
 }, "~N");
-Clazz.defineMethod (c$, "initDraw", 
+Clazz.defineMethod (c$, "initDraw",
  function () {
 this.boundBox = null;
 this.bsAllModels = null;
@@ -322,7 +322,7 @@ this.vData =  new JU.Lst ();
 this.width = 0;
 this.setPropertySuper ("thisID", "+PREVIOUS_MESH+", null);
 });
-Clazz.overrideMethod (c$, "getPropertyData", 
+Clazz.overrideMethod (c$, "getPropertyData",
 function (property, data) {
 if (property === "keys") {
 var keys = (Clazz.instanceOf (data[1], JU.Lst) ? data[1] :  new JU.Lst ());
@@ -341,7 +341,7 @@ data[2] = this.getSpinAxis (id, index);
 return (data[2] != null);
 }return this.getPropDataMC (property, data);
 }, "~S,~A");
-Clazz.overrideMethod (c$, "getProperty", 
+Clazz.overrideMethod (c$, "getProperty",
 function (property, index) {
 var m = this.thisMesh;
 if (index >= 0 && (index >= this.meshCount || (m = this.meshes[index]) == null)) return null;
@@ -349,7 +349,7 @@ if (property === "command") return this.getCommand (m);
 if (property === "type") return Integer.$valueOf (m == null ? J.shapespecial.Draw.EnumDrawType.NONE.id : m.drawType.id);
 return this.getPropMC (property, index);
 }, "~S,~N");
-Clazz.defineMethod (c$, "getSpinCenter", 
+Clazz.defineMethod (c$, "getSpinCenter",
  function (axisID, vertexIndex, modelIndex) {
 var id;
 var pt = axisID.indexOf ("[");
@@ -373,12 +373,12 @@ if (vertexIndex == 2147483647) return JU.P3.new3 (m.index + 1, this.meshCount, m
 if (vertexIndex != -2147483648) vertexIndex = m.getVertexIndexFromNumber (vertexIndex);
 return (vertexIndex >= 0 ? m.vs[vertexIndex] : m.ptCenters == null || modelIndex < 0 || modelIndex >= m.ptCenters.length ? m.ptCenter : m.ptCenters[modelIndex]);
 }, "~S,~N,~N");
-Clazz.defineMethod (c$, "getSpinAxis", 
+Clazz.defineMethod (c$, "getSpinAxis",
  function (axisID, modelIndex) {
 var m = this.getMesh (axisID);
 return (m == null || m.vs == null ? null : m.ptCenters == null || modelIndex < 0 ? m.axis : m.axes[modelIndex]);
 }, "~S,~N");
-Clazz.defineMethod (c$, "setDrawing", 
+Clazz.defineMethod (c$, "setDrawing",
  function (connections) {
 if (this.thisMesh == null) this.allocMesh (null, null);
 this.thisMesh.clear ("draw");
@@ -472,12 +472,12 @@ this.htObjects.put (this.thisMesh.thisID, this.thisMesh);
 }this.clean ();
 return true;
 }, "~A");
-Clazz.overrideMethod (c$, "clean", 
+Clazz.overrideMethod (c$, "clean",
 function () {
 for (var i = this.meshCount; --i >= 0; ) if (this.meshes[i] == null || this.meshes[i].vc == 0 && this.meshes[i].connectedAtoms == null && this.meshes[i].lineData == null) this.deleteMeshI (i);
 
 });
-Clazz.defineMethod (c$, "addPoint", 
+Clazz.defineMethod (c$, "addPoint",
  function (newPt, iModel) {
 if (this.makePoints) {
 if (newPt == null || iModel >= 0 && !this.bsAllModels.get (iModel)) return;
@@ -487,7 +487,7 @@ if (newPt.z == 3.4028235E38 || newPt.z == -3.4028235E38) this.thisMesh.haveXyPoi
 this.bsAllModels.set (iModel);
 }this.nPoints++;
 }, "JU.T3,~N");
-Clazz.defineMethod (c$, "setPoints", 
+Clazz.defineMethod (c$, "setPoints",
  function (iModel, n) {
 this.makePoints = (n >= 0);
 if (this.makePoints) {
@@ -574,7 +574,7 @@ this.ptList[1] = this.ptList[2];
 this.ptList[2] = pt;
 }return (this.nPoints > 0);
 }, "~N,~N");
-Clazz.defineMethod (c$, "setPolygon", 
+Clazz.defineMethod (c$, "setPolygon",
  function (nPoly) {
 var nVertices = this.nPoints;
 var drawType = J.shapespecial.Draw.EnumDrawType.POINT;
@@ -721,7 +721,7 @@ this.thisMesh.pis[nPoly][i] = nVertices0 + (i < nVertices ? i : nVertices - 1);
 }
 return;
 }, "~N");
-Clazz.defineMethod (c$, "scale", 
+Clazz.defineMethod (c$, "scale",
  function (mesh, newScale) {
 var dmesh = mesh;
 if (newScale == 0 || dmesh.vc == 0 && dmesh.connectedAtoms == null || dmesh.scale == newScale) return;
@@ -757,7 +757,7 @@ throw e;
 }
 }
 }, "J.shape.Mesh,~N");
-c$.setAxes = Clazz.defineMethod (c$, "setAxes", 
+c$.setAxes = Clazz.defineMethod (c$, "setAxes",
  function (m) {
 m.axis = JU.V3.new3 (0, 0, 0);
 m.axes =  new Array (m.pc > 0 ? m.pc : 1);
@@ -778,7 +778,7 @@ n++;
 if (n == 0) return;
 m.axis.scale (1 / n);
 }, "J.shapespecial.DrawMesh");
-Clazz.overrideMethod (c$, "setModelVisibilityFlags", 
+Clazz.overrideMethod (c$, "setModelVisibilityFlags",
 function (bsModels) {
 for (var i = 0; i < this.meshCount; i++) {
 var m = this.dmeshes[i];
@@ -793,7 +793,7 @@ m.bsMeshesVisible.or (m.modelFlags);
 m.bsMeshesVisible.and (bsModels);
 }}
 }, "JU.BS");
-Clazz.overrideMethod (c$, "checkObjectClicked", 
+Clazz.overrideMethod (c$, "checkObjectClicked",
 function (x, y, action, bsVisible, drawPicking) {
 var isPickingMode = (this.vwr.getPickingMode () == 4);
 var isSpinMode = (this.vwr.getPickingMode () == 5);
@@ -817,7 +817,7 @@ this.vwr.startSpinningAxis (this.pickedMesh.vs[this.pickedMesh.pis[this.pickedMo
 this.vwr.startSpinningAxis (this.pickedMesh.vs[this.pickedMesh.pis[this.pickedModel][0]], this.pickedMesh.vs[this.pickedMesh.pis[this.pickedModel][1]], isClockwise);
 }return this.getPickedPoint (null, 0);
 }, "~N,~N,~N,JU.BS,~B");
-Clazz.overrideMethod (c$, "checkObjectHovered", 
+Clazz.overrideMethod (c$, "checkObjectHovered",
 function (x, y, bsVisible) {
 if (!this.vwr.getDrawHover ()) return false;
 if (JU.C.isColixTranslucent (this.colix)) return false;
@@ -830,7 +830,7 @@ if (s.length > 1 && s.charAt (0) == '>') s = s.substring (1);
 this.vwr.hoverOnPt (x, y, s, this.pickedMesh.thisID, this.pickedPt);
 return true;
 }, "~N,~N,JU.BS");
-Clazz.overrideMethod (c$, "checkObjectDragged", 
+Clazz.overrideMethod (c$, "checkObjectDragged",
 function (prevX, prevY, x, y, dragAction, bsVisible) {
 if (this.vwr.getPickingMode () != 4) return false;
 var moveAll = this.vwr.isBound (dragAction, 8);
@@ -846,7 +846,7 @@ this.move2D (dm, dm.pis[this.pickedModel], this.pickedVertex, x, y, moveAll);
 this.thisMesh = dm;
 return true;
 }, "~N,~N,~N,~N,~N,JU.BS");
-Clazz.defineMethod (c$, "move2D", 
+Clazz.defineMethod (c$, "move2D",
  function (mesh, vertexes, iVertex, x, y, moveAll) {
 if (vertexes == null || vertexes.length == 0) return;
 if (this.vwr.gdata.isAntialiased ()) {
@@ -876,7 +876,7 @@ mesh.vs[k].add (move);
 if (mesh.altVertices != null) mesh.recalcAltVertices = true;
 mesh.setCenters ();
 }, "J.shapespecial.DrawMesh,~A,~N,~N,~N,~B");
-Clazz.defineMethod (c$, "findPickedObject", 
+Clazz.defineMethod (c$, "findPickedObject",
  function (x, y, isPicking, bsVisible) {
 var dmin2 = 100;
 if (this.vwr.gdata.isAntialiased ()) {
@@ -905,7 +905,7 @@ this.pickedVertex = iVertex;
 this.pickedPt = pt;
 }} catch (e) {
 if (Clazz.exceptionOf (e, Exception)) {
-System.out.println (e);
+Zystem.out.println (e);
 } else {
 throw e;
 }
@@ -915,7 +915,7 @@ throw e;
 }}
 return (this.pickedMesh != null);
 }, "~N,~N,~B,JU.BS");
-Clazz.defineMethod (c$, "getCommand", 
+Clazz.defineMethod (c$, "getCommand",
  function (mesh) {
 if (mesh != null) return this.getCommand2 (mesh, mesh.modelIndex);
 var sb =  new JU.SB ();
@@ -927,7 +927,7 @@ sb.append (this.getCommand2 (m, m.modelIndex));
 }
 return sb.toString ();
 }, "J.shape.Mesh");
-Clazz.defineMethod (c$, "getCommand2", 
+Clazz.defineMethod (c$, "getCommand2",
  function (mesh, iModel) {
 var dmesh = mesh;
 if (!dmesh.isValid || dmesh.drawType === J.shapespecial.Draw.EnumDrawType.NONE && dmesh.lineData == null && dmesh.drawVertexCount == 0 && dmesh.drawVertexCounts == null) return "";
@@ -1028,11 +1028,11 @@ J.shape.Shape.appendCmd (str, dmesh.getState ("draw"));
 J.shape.Shape.appendCmd (str, J.shape.Shape.getColorCommandUnk ("draw", dmesh.colix, this.translucentAllowed));
 return str.toString ();
 }, "J.shape.Mesh,~N");
-c$.isPolygonDisplayable = Clazz.defineMethod (c$, "isPolygonDisplayable", 
+c$.isPolygonDisplayable = Clazz.defineMethod (c$, "isPolygonDisplayable",
 function (mesh, i) {
 return (i < mesh.pis.length && mesh.pis[i] != null && mesh.pis[i].length > 0);
 }, "J.shape.Mesh,~N");
-c$.getVertexList = Clazz.defineMethod (c$, "getVertexList", 
+c$.getVertexList = Clazz.defineMethod (c$, "getVertexList",
  function (mesh, iModel, nVertices) {
 var str = "";
 try {
@@ -1058,7 +1058,7 @@ throw e;
 }
 return str;
 }, "J.shapespecial.DrawMesh,~N,~N");
-Clazz.overrideMethod (c$, "getShapeDetail", 
+Clazz.overrideMethod (c$, "getShapeDetail",
 function () {
 var V =  new JU.Lst ();
 for (var i = 0; i < this.meshCount; i++) {
@@ -1107,7 +1107,7 @@ if (mesh.drawType === J.shapespecial.Draw.EnumDrawType.LINE) info.put ("length_A
 }
 return V;
 });
-Clazz.overrideMethod (c$, "getShapeState", 
+Clazz.overrideMethod (c$, "getShapeState",
 function () {
 var s =  new JU.SB ();
 s.append ("\n");
@@ -1120,7 +1120,7 @@ if (!mesh.visible) s.append (" " + this.myType + " ID " + JU.PT.esc (mesh.thisID
 }
 return s.toString ();
 });
-c$.randomPoint = Clazz.defineMethod (c$, "randomPoint", 
+c$.randomPoint = Clazz.defineMethod (c$, "randomPoint",
 function () {
 return JU.P3.new3 (Math.random (), Math.random (), Math.random ());
 });
@@ -1130,12 +1130,12 @@ this.id = 0;
 this.$$name = null;
 Clazz.instantialize (this, arguments);
 }, J.shapespecial.Draw, "EnumDrawType", Enum);
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function (a, b) {
 this.id = a;
 this.$$name = b;
 }, "~N,~S");
-c$.getType = Clazz.defineMethod (c$, "getType", 
+c$.getType = Clazz.defineMethod (c$, "getType",
 function (a) {
 switch (a) {
 case 1:

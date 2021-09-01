@@ -24,11 +24,11 @@ this.uniqueID16 =  Clazz.newByteArray (16, 0);
 this.unused =  Clazz.newByteArray (10, 0);
 this.MSAT0 =  Clazz.newIntArray (109, 0);
 });
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function (compoundDocument) {
 this.cd = compoundDocument;
 }, "JU.CompoundDocument");
-Clazz.defineMethod (c$, "readData", 
+Clazz.defineMethod (c$, "readData",
 function () {
 try {
 this.cd.readByteArray (this.magicNumbers, 0, 8);
@@ -56,7 +56,7 @@ for (var i = 0; i < 109; i++) this.MSAT0[i] = this.cd.readInt ();
 
 } catch (e) {
 if (Clazz.exceptionOf (e, Exception)) {
-System.out.println (e.toString ());
+Zystem.out.println (e.toString ());
 return false;
 } else {
 throw e;

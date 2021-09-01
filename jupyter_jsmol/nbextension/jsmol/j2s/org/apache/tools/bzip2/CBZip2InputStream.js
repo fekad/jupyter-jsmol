@@ -32,11 +32,11 @@ Clazz.instantialize (this, arguments);
 Clazz.prepareFields (c$, function () {
 this.crc =  new org.apache.tools.bzip2.CRC ();
 });
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function ($in) {
 this.construct ($in, false);
 }, "java.io.InputStream");
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function ($in, decompressConcatenated) {
 Clazz.superConstructor (this, org.apache.tools.bzip2.CBZip2InputStream);
 this.$in = $in;
@@ -45,12 +45,12 @@ this.init (true);
 this.initBlock ();
 this.setupBlock ();
 }, "java.io.InputStream,~B");
-Clazz.defineMethod (c$, "read", 
+Clazz.defineMethod (c$, "read",
 function () {
 if (this.$in == null) throw  new java.io.IOException ("stream closed");
 return this.read0 ();
 });
-Clazz.defineMethod (c$, "read", 
+Clazz.defineMethod (c$, "read",
 function (dest, offs, len) {
 if (offs < 0) {
 throw  new IndexOutOfBoundsException ("offs(" + offs + ") < 0.");
@@ -67,7 +67,7 @@ dest[destOffs++] = b;
 }
 return (destOffs == offs) ? -1 : (destOffs - offs);
 }, "~A,~N,~N");
-Clazz.defineMethod (c$, "makeMaps", 
+Clazz.defineMethod (c$, "makeMaps",
  function () {
 var inUse = this.data.inUse;
 var seqToUnseq = this.data.seqToUnseq;
@@ -78,7 +78,7 @@ seqToUnseq[nInUseShadow++] = i;
 }}
 this.nInUse = nInUseShadow;
 });
-Clazz.defineMethod (c$, "read0", 
+Clazz.defineMethod (c$, "read0",
  function () {
 var retChar = this.currentChar;
 switch (this.currentState) {
@@ -107,7 +107,7 @@ throw  new IllegalStateException ();
 }
 return retChar;
 });
-Clazz.defineMethod (c$, "init", 
+Clazz.defineMethod (c$, "init",
  function (isFirstStream) {
 if (null == this.$in) {
 throw  new java.io.IOException ("No InputStream");
@@ -132,12 +132,12 @@ this.bsLive = 0;
 this.computedCombinedCRC = 0;
 return true;
 }, "~B");
-Clazz.overrideMethod (c$, "readByteAsInt", 
+Clazz.overrideMethod (c$, "readByteAsInt",
 function () {
 {
 return(this.in.readByteAsInt());
 }});
-Clazz.defineMethod (c$, "initBlock", 
+Clazz.defineMethod (c$, "initBlock",
  function () {
 var magic0;
 var magic1;
@@ -168,7 +168,7 @@ this.data =  new org.apache.tools.bzip2.CBZip2InputStream.Data (this.blockSize10
 this.crc.initialiseCRC ();
 this.currentState = 1;
 });
-Clazz.defineMethod (c$, "endBlock", 
+Clazz.defineMethod (c$, "endBlock",
  function () {
 this.computedBlockCRC = this.crc.getFinalCRC ();
 if (this.storedBlockCRC != this.computedBlockCRC) {
@@ -178,7 +178,7 @@ org.apache.tools.bzip2.CBZip2InputStream.reportCRCError ();
 }this.computedCombinedCRC = (this.computedCombinedCRC << 1) | (this.computedCombinedCRC >>> 31);
 this.computedCombinedCRC ^= this.computedBlockCRC;
 });
-Clazz.defineMethod (c$, "complete", 
+Clazz.defineMethod (c$, "complete",
  function () {
 this.storedCombinedCRC = this.bsGetInt ();
 this.currentState = 0;
@@ -187,19 +187,19 @@ if (this.storedCombinedCRC != this.computedCombinedCRC) {
 org.apache.tools.bzip2.CBZip2InputStream.reportCRCError ();
 }return !this.decompressConcatenated || !this.init (false);
 });
-Clazz.defineMethod (c$, "close", 
+Clazz.defineMethod (c$, "close",
 function () {
 var inShadow = this.$in;
 if (inShadow != null) {
 try {
-if (inShadow !== System.$in) {
+if (inShadow !== Zystem.$in) {
 inShadow.close ();
 }} finally {
 this.data = null;
 this.$in = null;
 }
 }});
-Clazz.defineMethod (c$, "bsR", 
+Clazz.defineMethod (c$, "bsR",
  function (n) {
 var bsLiveShadow = this.bsLive;
 var bsBuffShadow = this.bsBuff;
@@ -216,7 +216,7 @@ this.bsBuff = bsBuffShadow;
 }this.bsLive = bsLiveShadow - n;
 return (bsBuffShadow >> (bsLiveShadow - n)) & ((1 << n) - 1);
 }, "~N");
-Clazz.defineMethod (c$, "bsGetBit", 
+Clazz.defineMethod (c$, "bsGetBit",
  function () {
 var bsLiveShadow = this.bsLive;
 var bsBuffShadow = this.bsBuff;
@@ -230,15 +230,15 @@ this.bsBuff = bsBuffShadow;
 }this.bsLive = bsLiveShadow - 1;
 return ((bsBuffShadow >> (bsLiveShadow - 1)) & 1) != 0;
 });
-Clazz.defineMethod (c$, "bsGetUByte", 
+Clazz.defineMethod (c$, "bsGetUByte",
  function () {
 return String.fromCharCode (this.bsR (8));
 });
-Clazz.defineMethod (c$, "bsGetInt", 
+Clazz.defineMethod (c$, "bsGetInt",
  function () {
 return (((((this.bsR (8) << 8) | this.bsR (8)) << 8) | this.bsR (8)) << 8) | this.bsR (8);
 });
-c$.hbCreateDecodeTables = Clazz.defineMethod (c$, "hbCreateDecodeTables", 
+c$.hbCreateDecodeTables = Clazz.defineMethod (c$, "hbCreateDecodeTables",
  function (limit, base, perm, length, minLen, maxLen, alphaSize) {
 for (var i = minLen, pp = 0; i <= maxLen; i++) {
 for (var j = 0; j < alphaSize; j++) {
@@ -268,7 +268,7 @@ for (var i = minLen + 1; i <= maxLen; i++) {
 base[i] = ((limit[i - 1] + 1) << 1) - base[i];
 }
 }, "~A,~A,~A,~A,~N,~N,~N");
-Clazz.defineMethod (c$, "recvDecodingTables", 
+Clazz.defineMethod (c$, "recvDecodingTables",
  function () {
 var dataShadow = this.data;
 var inUse = dataShadow.inUse;
@@ -328,7 +328,7 @@ len_t[i] = String.fromCharCode (curr);
 }
 this.createHuffmanDecodingTables (alphaSize, nGroups);
 });
-Clazz.defineMethod (c$, "createHuffmanDecodingTables", 
+Clazz.defineMethod (c$, "createHuffmanDecodingTables",
  function (alphaSize, nGroups) {
 var dataShadow = this.data;
 var len = dataShadow.temp_charArray2d;
@@ -351,7 +351,7 @@ org.apache.tools.bzip2.CBZip2InputStream.hbCreateDecodeTables (limit[t], base[t]
 minLens[t] = minLen;
 }
 }, "~N,~N");
-Clazz.defineMethod (c$, "getAndMoveToFrontDecode", 
+Clazz.defineMethod (c$, "getAndMoveToFrontDecode",
  function () {
 this.origPtr = this.bsR (24);
 this.recvDecodingTables ();
@@ -444,7 +444,7 @@ for (var j = nextSym - 1; j > 0; ) {
 yy[j] = yy[--j];
 }
 } else {
-System.arraycopy (yy, 0, yy, 1, nextSym - 1);
+Zystem.arraycopy (yy, 0, yy, 1, nextSym - 1);
 }yy[0] = tmp;
 if (groupPos == 0) {
 groupPos = 49;
@@ -483,7 +483,7 @@ this.last = lastShadow;
 this.bsLive = bsLiveShadow;
 this.bsBuff = bsBuffShadow;
 });
-Clazz.defineMethod (c$, "getAndMoveToFrontDecode0", 
+Clazz.defineMethod (c$, "getAndMoveToFrontDecode0",
  function (groupNo) {
 var inShadow = this.$in;
 var dataShadow = this.data;
@@ -509,7 +509,7 @@ this.bsLive = bsLiveShadow;
 this.bsBuff = bsBuffShadow;
 return dataShadow.perm[zt][zvec - dataShadow.base[zt][zn]];
 }, "~N");
-Clazz.defineMethod (c$, "setupBlock", 
+Clazz.defineMethod (c$, "setupBlock",
  function () {
 if (this.data == null) {
 return;
@@ -517,7 +517,7 @@ return;
 var tt = this.data.initTT (this.last + 1);
 var ll8 = this.data.ll8;
 cftab[0] = 0;
-System.arraycopy (this.data.unzftab, 0, cftab, 1, 256);
+Zystem.arraycopy (this.data.unzftab, 0, cftab, 1, 256);
 for (var i = 1, c = cftab[0]; i <= 256; i++) {
 c += cftab[i];
 cftab[i] = c;
@@ -538,7 +538,7 @@ this.setupRandPartA ();
 } else {
 this.setupNoRandPartA ();
 }});
-Clazz.defineMethod (c$, "setupRandPartA", 
+Clazz.defineMethod (c$, "setupRandPartA",
  function () {
 if (this.su_i2 <= this.last) {
 this.su_chPrev = this.su_ch2;
@@ -560,7 +560,7 @@ this.endBlock ();
 this.initBlock ();
 this.setupBlock ();
 }});
-Clazz.defineMethod (c$, "setupNoRandPartA", 
+Clazz.defineMethod (c$, "setupNoRandPartA",
  function () {
 if (this.su_i2 <= this.last) {
 this.su_chPrev = this.su_ch2;
@@ -577,7 +577,7 @@ this.endBlock ();
 this.initBlock ();
 this.setupBlock ();
 }});
-Clazz.defineMethod (c$, "setupRandPartB", 
+Clazz.defineMethod (c$, "setupRandPartB",
  function () {
 if (this.su_ch2 != this.su_chPrev) {
 this.currentState = 2;
@@ -601,7 +601,7 @@ this.su_z = String.fromCharCode ((this.su_z).charCodeAt (0) ^ 1);
 this.currentState = 2;
 this.setupRandPartA ();
 }});
-Clazz.defineMethod (c$, "setupRandPartC", 
+Clazz.defineMethod (c$, "setupRandPartC",
  function () {
 if (this.su_j2 < (this.su_z).charCodeAt (0)) {
 this.currentChar = this.su_ch2;
@@ -613,7 +613,7 @@ this.su_i2++;
 this.su_count = 0;
 this.setupRandPartA ();
 }});
-Clazz.defineMethod (c$, "setupNoRandPartB", 
+Clazz.defineMethod (c$, "setupNoRandPartB",
  function () {
 if (this.su_ch2 != this.su_chPrev) {
 this.su_count = 1;
@@ -626,7 +626,7 @@ this.setupNoRandPartC ();
 } else {
 this.setupNoRandPartA ();
 }});
-Clazz.defineMethod (c$, "setupNoRandPartC", 
+Clazz.defineMethod (c$, "setupNoRandPartC",
  function () {
 if (this.su_j2 < (this.su_z).charCodeAt (0)) {
 var su_ch2Shadow = this.su_ch2;
@@ -639,9 +639,9 @@ this.su_i2++;
 this.su_count = 0;
 this.setupNoRandPartA ();
 }});
-c$.reportCRCError = Clazz.defineMethod (c$, "reportCRCError", 
+c$.reportCRCError = Clazz.defineMethod (c$, "reportCRCError",
  function () {
-System.err.println ("BZip2 CRC error");
+Zystem.err.println ("BZip2 CRC error");
 });
 Clazz.pu$h(self.c$);
 c$ = Clazz.decorateAsClass (function () {
@@ -677,11 +677,11 @@ this.getAndMoveToFrontDecode_yy =  Clazz.newCharArray (256, '\0');
 this.temp_charArray2d =  Clazz.newCharArray (6, 258, '\0');
 this.recvDecodingTables_pos =  Clazz.newByteArray (6, 0);
 });
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function (a) {
 this.ll8 =  Clazz.newByteArray (a * 100000, 0);
 }, "~N");
-Clazz.defineMethod (c$, "initTT", 
+Clazz.defineMethod (c$, "initTT",
 function (a) {
 var b = this.tt;
 if ((b == null) || (b.length < a)) {

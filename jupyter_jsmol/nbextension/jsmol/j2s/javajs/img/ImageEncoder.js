@@ -11,13 +11,13 @@ this.doClose = true;
 this.pixels = null;
 Clazz.instantialize (this, arguments);
 }, javajs.img, "ImageEncoder", null, javajs.api.GenericImageEncoder);
-Clazz.overrideMethod (c$, "createImage", 
+Clazz.overrideMethod (c$, "createImage",
 function (type, out, params) {
 this.out = out;
 this.logging = (Boolean.TRUE === params.get ("logging"));
 this.width = (params.get ("imageWidth")).intValue ();
 this.height = (params.get ("imageHeight")).intValue ();
-System.out.println ("ImageEncoder width height " + this.width + " " + this.height);
+Zystem.out.println ("ImageEncoder width height " + this.width + " " + this.height);
 this.pixels = params.get ("imagePixels");
 this.date = params.get ("date");
 var q = params.get ("quality");
@@ -27,16 +27,16 @@ this.generate ();
 this.close ();
 return this.doClose;
 }, "~S,JU.OC,java.util.Map");
-Clazz.defineMethod (c$, "putString", 
+Clazz.defineMethod (c$, "putString",
 function (s) {
 var b = s.getBytes ();
 this.out.write (b, 0, b.length);
 }, "~S");
-Clazz.defineMethod (c$, "putByte", 
+Clazz.defineMethod (c$, "putByte",
 function (b) {
 this.out.writeByteAsInt (b);
 }, "~N");
-Clazz.defineMethod (c$, "close", 
+Clazz.defineMethod (c$, "close",
 function () {
 });
 });

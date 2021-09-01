@@ -10,7 +10,7 @@ this.maxRight = 0;
 this.eleRight = null;
 Clazz.instantialize (this, arguments);
 }, J.bspt, "Node", J.bspt.Element);
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function (bspt, level, leafLeft) {
 this.bspt = bspt;
 if (level == bspt.treeDepth) {
@@ -27,7 +27,7 @@ this.eleLeft = leafLeft;
 this.eleRight = leafRight;
 this.count = 2;
 }, "J.bspt.Bspt,~N,J.bspt.Leaf");
-Clazz.defineMethod (c$, "addTuple", 
+Clazz.defineMethod (c$, "addTuple",
 function (level, tuple) {
 var dimValue = J.bspt.Node.getDimensionValue (tuple, this.dim);
 ++this.count;
@@ -57,9 +57,9 @@ if (dimValue < this.minRight) this.minRight = dimValue;
 this.eleRight = this.eleRight.addTuple (level + 1, tuple);
 }return this;
 }, "~N,JU.T3");
-c$.getDimensionValue = Clazz.defineMethod (c$, "getDimensionValue", 
+c$.getDimensionValue = Clazz.defineMethod (c$, "getDimensionValue",
 function (pt, dim) {
-if (pt == null) System.out.println ("bspt.Node ???");
+if (pt == null) Zystem.out.println ("bspt.Node ???");
 switch (dim) {
 case 0:
 return pt.x;

@@ -21,7 +21,7 @@ this.baseIndex = 0;
 this.params = null;
 Clazz.instantialize (this, arguments);
 }, J.quantum, "NMRNoeMatrix");
-c$.createMatrix = Clazz.defineMethod (c$, "createMatrix", 
+c$.createMatrix = Clazz.defineMethod (c$, "createMatrix",
 function (viewer, bsMol, labelArray, params) {
 var bsH = null;
 try {
@@ -41,11 +41,11 @@ if (!bsMol.isEmpty ()) {
 viewer.getCurrentModelAuxInfo ().put ("noeMatrix", noeMatrix);
 }return noeMatrix;
 }, "JV.Viewer,JU.BS,~A,J.quantum.NMRNoeMatrix.NOEParams");
-Clazz.defineMethod (c$, "getParams", 
+Clazz.defineMethod (c$, "getParams",
 function () {
 return this.params;
 });
-c$.createNOEMatrix = Clazz.defineMethod (c$, "createNOEMatrix", 
+c$.createNOEMatrix = Clazz.defineMethod (c$, "createNOEMatrix",
  function (hAtoms, indexAtomInMol, atomCount, baseIndex, params) {
 var map =  Clazz.newIntArray (atomCount, 0);
 var nHAtoms = hAtoms.size ();
@@ -84,12 +84,12 @@ noeMatrix.addMethyl (a[0].x, a[0].y, a[0].z, a[1].x, a[1].y, a[1].z, a[2].x, a[2
 noeMatrix.atomMap = map;
 return noeMatrix;
 }, "JU.Lst,java.util.Map,~N,~N,J.quantum.NMRNoeMatrix.NOEParams");
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
  function (params) {
 this.params = params;
 params.id = ++J.quantum.NMRNoeMatrix.id;
 }, "J.quantum.NMRNoeMatrix.NOEParams");
-Clazz.defineMethod (c$, "calcNOEs", 
+Clazz.defineMethod (c$, "calcNOEs",
 function () {
 if (this.nHAtoms == 0 || this.atoms == null) {
 this.noeM =  Clazz.newDoubleArray (0, 0, 0);
@@ -107,7 +107,7 @@ this.params.mixingChanged = false;
 isNew = true;
 }this.params.tainted = false;
 });
-Clazz.defineMethod (c$, "initArrays", 
+Clazz.defineMethod (c$, "initArrays",
 function (n) {
 this.nHAtoms = n;
 this.atoms =  new Array (this.nHAtoms);
@@ -118,7 +118,7 @@ this.eigenVectors =  Clazz.newDoubleArray (this.nHAtoms, this.nHAtoms, 0);
 this.noeM =  Clazz.newDoubleArray (this.nHAtoms, this.nHAtoms, 0);
 this.distanceMatrix =  Clazz.newDoubleArray (this.nHAtoms, this.nHAtoms, 0);
 }, "~N");
-Clazz.defineMethod (c$, "addAtom", 
+Clazz.defineMethod (c$, "addAtom",
 function (x, y, z) {
 this.atoms[this.atomCounter] =  new J.quantum.NMRNoeMatrix.NOEAtom ();
 this.atoms[this.atomCounter].x = x;
@@ -128,7 +128,7 @@ this.atoms[this.atomCounter].methyl = false;
 this.atomCounter++;
 this.params.tainted = true;
 }, "~N,~N,~N");
-Clazz.defineMethod (c$, "addMethyl", 
+Clazz.defineMethod (c$, "addMethyl",
 function (x, y, z, x1, y1, z1, x2, y2, z2) {
 this.atoms[this.atomCounter] =  new J.quantum.NMRNoeMatrix.NOEAtom ();
 this.atoms[this.atomCounter].x = x;
@@ -144,7 +144,7 @@ this.atoms[this.atomCounter].methyl = true;
 this.atomCounter++;
 this.params.tainted = true;
 }, "~N,~N,~N,~N,~N,~N,~N,~N,~N");
-Clazz.defineMethod (c$, "addEquiv", 
+Clazz.defineMethod (c$, "addEquiv",
 function (xa, ya, za) {
 this.atoms[this.atomCounter] =  new J.quantum.NMRNoeMatrix.NOEAtom ();
 this.atoms[this.atomCounter].xa = xa;
@@ -154,7 +154,7 @@ this.atoms[this.atomCounter].equiv = true;
 this.atomCounter++;
 this.params.tainted = true;
 }, "~A,~A,~A");
-Clazz.defineMethod (c$, "calcRelaxMatrix", 
+Clazz.defineMethod (c$, "calcRelaxMatrix",
  function () {
 var alpha = 5.6965E10;
 var rho;
@@ -189,17 +189,17 @@ rho = rho + aOverR6 * JValRho;
 this.relaxMatrix[this.i][this.i] = rho + rhoStar;
 }
 });
-c$.J = Clazz.defineMethod (c$, "J", 
+c$.J = Clazz.defineMethod (c$, "J",
  function (w, tau) {
 return tau / (1 + (w * w * tau * tau));
 }, "~N,~N");
-Clazz.defineMethod (c$, "sign", 
+Clazz.defineMethod (c$, "sign",
  function (x) {
 if (x < 0) {
 return -1;
 }return 1;
 }, "~N");
-Clazz.defineMethod (c$, "calcNoeMatrix", 
+Clazz.defineMethod (c$, "calcNoeMatrix",
  function () {
 var tempEVs =  Clazz.newDoubleArray (this.nHAtoms, 0);
 var tMix = this.params.tMix;
@@ -217,7 +217,7 @@ this.noeM[this.j][this.i] = sum;
 }
 }
 });
-Clazz.defineMethod (c$, "Diagonalise", 
+Clazz.defineMethod (c$, "Diagonalise",
  function () {
 var iter = 0;
 for (var i = 0; i < this.nHAtoms; i++) {
@@ -238,13 +238,13 @@ this.rotate ();
 iter++;
 if (iter >= maxIter) {
 state = "STOP";
-System.out.println ("maximum iteration reached");
+Zystem.out.println ("maximum iteration reached");
 }} else {
 state = "SUCCESS";
 }}
 return iter;
 });
-Clazz.defineMethod (c$, "maxOffDiag", 
+Clazz.defineMethod (c$, "maxOffDiag",
  function () {
 var max = 0.0;
 for (var i = 0; i < this.nHAtoms - 1; i++) {
@@ -258,7 +258,7 @@ this.q = j;
 }
 return max;
 });
-Clazz.defineMethod (c$, "rotate", 
+Clazz.defineMethod (c$, "rotate",
  function () {
 var d = (this.eigenValues[this.p][this.p] - this.eigenValues[this.q][this.q]) / (2.0 * this.eigenValues[this.p][this.q]);
 var t = this.sign (d) / (Math.abs (d) + Math.sqrt (d * d + 1));
@@ -281,7 +281,7 @@ this.eigenVectors[k][this.p] = rkp;
 this.eigenVectors[k][this.q] = rkq;
 }
 });
-Clazz.overrideMethod (c$, "toString", 
+Clazz.overrideMethod (c$, "toString",
 function () {
 var sb;
 sb =  new StringBuffer ();
@@ -294,7 +294,7 @@ sb.append ("\n");
 sb.append (this.params.toString ());
 return sb.toString ();
 });
-Clazz.defineMethod (c$, "toStringNormRow", 
+Clazz.defineMethod (c$, "toStringNormRow",
 function () {
 var sb;
 sb =  new StringBuffer ();
@@ -307,7 +307,7 @@ sb.append ("\n");
 }
 return sb.toString ();
 });
-Clazz.defineMethod (c$, "distanceSqrd", 
+Clazz.defineMethod (c$, "distanceSqrd",
  function (a, b) {
 var atom1;
 var atom2;
@@ -405,7 +405,7 @@ var y1 = atom1.y - atom2.y;
 var z1 = atom1.z - atom2.z;
 return (x1 * x1) + (y1 * y1) + (z1 * z1);
 }}, "J.quantum.NMRNoeMatrix.NOEAtom,J.quantum.NMRNoeMatrix.NOEAtom");
-c$.createLabelMapAndIndex = Clazz.defineMethod (c$, "createLabelMapAndIndex", 
+c$.createLabelMapAndIndex = Clazz.defineMethod (c$, "createLabelMapAndIndex",
  function (viewer, bsMol, labelArray, bsH, labels, indexAtomInMol) {
 var labelMap =  new java.util.Hashtable ();
 for (var pt = 0, i = bsMol.nextSetBit (0); i >= 0; i = bsMol.nextSetBit (i + 1), pt++) {
@@ -426,7 +426,7 @@ labels.put (a, label);
 }}}
 return labelMap;
 }, "JV.Viewer,JU.BS,~A,JU.BS,java.util.Map,java.util.Map");
-c$.createHAtomList = Clazz.defineMethod (c$, "createHAtomList", 
+c$.createHAtomList = Clazz.defineMethod (c$, "createHAtomList",
  function (viewer, bsMol, bsH, labels, labelMap) {
 var hAtoms =  new JU.Lst ();
 try {
@@ -458,19 +458,19 @@ hAtoms.addLast (a);
 }}
 return hAtoms;
 }, "JV.Viewer,JU.BS,JU.BS,java.util.Map,java.util.Map");
-Clazz.defineMethod (c$, "getJmolDistance", 
+Clazz.defineMethod (c$, "getJmolDistance",
 function (a, b) {
 return this.getDistance (this.atomMap[a - this.baseIndex], this.atomMap[b - this.baseIndex]);
 }, "~N,~N");
-Clazz.defineMethod (c$, "getDistance", 
+Clazz.defineMethod (c$, "getDistance",
  function (i, j) {
 return (i < 0 || j < 0 || i >= this.nHAtoms ? NaN : this.distanceMatrix[i][j]);
 }, "~N,~N");
-Clazz.defineMethod (c$, "getJmolNoe", 
+Clazz.defineMethod (c$, "getJmolNoe",
 function (a, b) {
 return this.getNoe (this.atomMap[a - this.baseIndex], this.atomMap[b - this.baseIndex]);
 }, "~N,~N");
-Clazz.defineMethod (c$, "getNoe", 
+Clazz.defineMethod (c$, "getNoe",
  function (i, j) {
 return (i < 0 || j < 0 || i >= this.nHAtoms ? NaN : this.noeM[i][j]);
 }, "~N,~N");
@@ -496,57 +496,57 @@ this.cutoff = 10;
 this.rhoStar = 0.1;
 this.noesy = true;
 }});
-Clazz.overrideMethod (c$, "toString", 
+Clazz.overrideMethod (c$, "toString",
 function () {
 return "[id=" + this.id + " freq=" + this.getNMRfreqMHz () + " tau=" + this.tau + " tMix=" + this.tMix + " cutoff=" + this.cutoff + " rhoStar=" + this.rhoStar + " noesy=" + this.noesy + "]";
 });
-Clazz.defineMethod (c$, "setCorrelationTimeTauPS", 
+Clazz.defineMethod (c$, "setCorrelationTimeTauPS",
 function (a) {
 this.tau = a * 1E-12;
 this.tainted = true;
 }, "~N");
-Clazz.defineMethod (c$, "setMixingTimeSec", 
+Clazz.defineMethod (c$, "setMixingTimeSec",
 function (a) {
 this.tMix = a;
 this.mixingChanged = true;
 }, "~N");
-Clazz.defineMethod (c$, "setNMRfreqMHz", 
+Clazz.defineMethod (c$, "setNMRfreqMHz",
 function (a) {
 this.freq = a * 2 * 3.141592653589793 * 1E6;
 this.tainted = true;
 }, "~N");
-Clazz.defineMethod (c$, "setCutoffAng", 
+Clazz.defineMethod (c$, "setCutoffAng",
 function (a) {
 this.cutoff = a;
 this.tainted = true;
 }, "~N");
-Clazz.defineMethod (c$, "setRhoStar", 
+Clazz.defineMethod (c$, "setRhoStar",
 function (a) {
 this.rhoStar = a;
 this.tainted = true;
 }, "~N");
-Clazz.defineMethod (c$, "setNoesy", 
+Clazz.defineMethod (c$, "setNoesy",
 function (a) {
 this.noesy = a;
 this.tainted = true;
 }, "~B");
-Clazz.defineMethod (c$, "getCorrelationTimeTauPS", 
+Clazz.defineMethod (c$, "getCorrelationTimeTauPS",
 function () {
 return this.tau;
 });
-Clazz.defineMethod (c$, "getMixingTimeSec", 
+Clazz.defineMethod (c$, "getMixingTimeSec",
 function () {
 return this.tMix;
 });
-Clazz.defineMethod (c$, "getNoesy", 
+Clazz.defineMethod (c$, "getNoesy",
 function () {
 return this.noesy;
 });
-Clazz.defineMethod (c$, "getNMRfreqMHz", 
+Clazz.defineMethod (c$, "getNMRfreqMHz",
 function () {
 return this.freq / 2 / 3.141592653589793 / 1E6;
 });
-Clazz.defineMethod (c$, "getCutoffAng", 
+Clazz.defineMethod (c$, "getCutoffAng",
 function () {
 return this.cutoff;
 });

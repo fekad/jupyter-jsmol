@@ -59,14 +59,14 @@ return(message!=null)?(s+": "+message):s;
 });
 Clazz.defineMethod(c$,"printStackTrace",
 function(){
-System.err.println(this);
+Zystem.err.println(this);
 for(var i=0;i<this.stackTrace.length;i++){
 var t=this.stackTrace[i];
 var x=t.methodName.indexOf("(");
 var n=t.methodName.substring(0,x).replace(/\s+/g,"");
 if(n!="construct"||t.nativeClazz==null
 ||Clazz.getInheritedLevel(t.nativeClazz,Throwable)<0){
-System.err.println(t);
+Zystem.err.println(t);
 }
 }
 });

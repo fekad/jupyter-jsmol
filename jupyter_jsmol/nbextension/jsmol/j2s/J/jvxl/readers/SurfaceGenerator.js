@@ -26,7 +26,7 @@ this.vAB =  new JU.V3 ();
 this.vNorm =  new JU.V3 ();
 this.ptRef = JU.P3.new3 (0, 0, 1e15);
 });
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function (atomDataServer, meshDataServer, meshData, jvxlData) {
 this.atomDataServer = atomDataServer;
 this.meshDataServer = meshDataServer;
@@ -36,12 +36,12 @@ this.jvxlData = (jvxlData == null ?  new J.jvxl.data.JvxlData () : jvxlData);
 this.volumeDataTemp =  new J.jvxl.data.VolumeData ();
 this.initializeIsosurface ();
 }, "J.atomdata.AtomDataServer,J.jvxl.api.MeshDataServer,J.jvxl.data.MeshData,J.jvxl.data.JvxlData");
-Clazz.defineMethod (c$, "setJvxlData", 
+Clazz.defineMethod (c$, "setJvxlData",
 function (jvxlData) {
 this.jvxlData = jvxlData;
 if (jvxlData != null) jvxlData.version = this.version;
 }, "J.jvxl.data.JvxlData");
-Clazz.defineMethod (c$, "setProp", 
+Clazz.defineMethod (c$, "setProp",
 function (propertyName, value, bs) {
 if ("debug" === propertyName) {
 var TF = (value).booleanValue ();
@@ -487,19 +487,19 @@ return true;
 this.params.isPeriodic = true;
 }return false;
 }, "~S,~O,JU.BS");
-Clazz.defineMethod (c$, "newReader", 
+Clazz.defineMethod (c$, "newReader",
  function (name) {
 var sr = J.jvxl.readers.SurfaceGenerator.getInterface (name);
 if (sr != null) sr.init (this);
 return sr;
 }, "~S");
-Clazz.defineMethod (c$, "newReaderBr", 
+Clazz.defineMethod (c$, "newReaderBr",
  function (name, br) {
 var sr = J.jvxl.readers.SurfaceGenerator.getInterface (name);
 if (sr != null) sr.init2 (this, br);
 return sr;
 }, "~S,java.io.BufferedReader");
-c$.getInterface = Clazz.defineMethod (c$, "getInterface", 
+c$.getInterface = Clazz.defineMethod (c$, "getInterface",
  function (name) {
 try {
 var x = Clazz._4Name ("J.jvxl.readers." + name);
@@ -513,7 +513,7 @@ throw e;
 }
 }
 }, "~S");
-Clazz.defineMethod (c$, "getSurfaceSets", 
+Clazz.defineMethod (c$, "getSurfaceSets",
  function () {
 if (this.meshDataServer == null) {
 this.meshData.getSurfaceSet ();
@@ -522,7 +522,7 @@ this.meshDataServer.fillMeshData (this.meshData, 1, null);
 this.meshData.getSurfaceSet ();
 this.meshDataServer.fillMeshData (this.meshData, 3, null);
 }});
-Clazz.defineMethod (c$, "processState", 
+Clazz.defineMethod (c$, "processState",
  function () {
 if (this.params.state == 1 && this.params.thePlane != null) this.params.state++;
 if (this.params.state >= 2) {
@@ -530,7 +530,7 @@ this.mapSurface ();
 } else {
 this.generateSurface ();
 }});
-Clazz.defineMethod (c$, "setReader", 
+Clazz.defineMethod (c$, "setReader",
  function () {
 this.readerData = null;
 if (this.surfaceReader != null) return !this.surfaceReader.vertexDataOnly;
@@ -575,7 +575,7 @@ if (JU.Logger.debugging) JU.Logger.info ("Using surface reader " + this.surfaceR
 if (this.params.isSilent && this.surfaceReader != null) this.surfaceReader.isQuiet = true;
 return true;
 });
-Clazz.defineMethod (c$, "generateSurface", 
+Clazz.defineMethod (c$, "generateSurface",
  function () {
 if (++this.params.state != 2) return;
 this.setReader ();
@@ -622,7 +622,7 @@ this.params.state = 3;
 this.colorIsosurface ();
 }this.surfaceReader = null;
 });
-Clazz.defineMethod (c$, "mapSurface", 
+Clazz.defineMethod (c$, "mapSurface",
  function () {
 if (this.params.state == 1 && this.params.thePlane != null) this.params.state++;
 if (++this.params.state < 3) return;
@@ -651,7 +651,7 @@ this.surfaceReader.readVolumeData (true);
 this.surfaceReader.closeReader ();
 this.surfaceReader = null;
 });
-Clazz.defineMethod (c$, "colorIsosurface", 
+Clazz.defineMethod (c$, "colorIsosurface",
 function () {
 this.surfaceReader.colorIsosurface ();
 this.surfaceReader.jvxlUpdateInfo ();
@@ -659,13 +659,13 @@ this.surfaceReader.updateTriangles ();
 this.surfaceReader.discardTempData (true);
 if (this.meshDataServer != null) this.meshDataServer.notifySurfaceMappingCompleted ();
 });
-Clazz.defineMethod (c$, "getProperty", 
+Clazz.defineMethod (c$, "getProperty",
 function (property, index) {
 if (property === "jvxlFileData") return J.jvxl.data.JvxlCoder.jvxlGetFile (this.jvxlData, null, this.params.title, "", true, index, null, null);
 if (property === "jvxlFileInfo") return J.jvxl.data.JvxlCoder.jvxlGetInfo (this.jvxlData);
 return null;
 }, "~S,~N");
-Clazz.defineMethod (c$, "setFileData", 
+Clazz.defineMethod (c$, "setFileData",
  function (vwr, value) {
 var fileType = this.fileType;
 this.fileType = null;
@@ -718,13 +718,13 @@ if ("MRC DELPHI DSN6".indexOf (fileType.toUpperCase ()) >= 0) {
 fileType += "Binary";
 }return this.newReaderBr (fileType + "Reader", br);
 }, "JV.Viewer,~O");
-Clazz.defineMethod (c$, "getReaderData", 
+Clazz.defineMethod (c$, "getReaderData",
 function () {
 var o = this.readerData;
 this.readerData = null;
 return o;
 });
-Clazz.defineMethod (c$, "initializeIsosurface", 
+Clazz.defineMethod (c$, "initializeIsosurface",
 function () {
 this.params.initialize ();
 this.colorPtr = 0;
@@ -732,18 +732,18 @@ this.surfaceReader = null;
 this.marchingSquares = null;
 this.initState ();
 });
-Clazz.defineMethod (c$, "initState", 
+Clazz.defineMethod (c$, "initState",
 function () {
 this.params.state = 1;
 this.params.dataType = this.params.surfaceType = 0;
 });
-Clazz.defineMethod (c$, "setLcao", 
+Clazz.defineMethod (c$, "setLcao",
 function () {
 this.params.colorPos = this.params.colorPosLCAO;
 this.params.colorNeg = this.params.colorNegLCAO;
 return this.params.lcaoType;
 });
-Clazz.defineMethod (c$, "getFunctionZfromXY", 
+Clazz.defineMethod (c$, "getFunctionZfromXY",
  function () {
 var origin = this.params.functionInfo.get (1);
 var counts =  Clazz.newIntArray (3, 0);
@@ -779,12 +779,12 @@ pt.z = this.distanceVerticalToPlane (pt.x, pt.y, pta, ptb, ptc);
 
 this.params.functionInfo.set (5, data2);
 });
-Clazz.defineMethod (c$, "distanceVerticalToPlane", 
+Clazz.defineMethod (c$, "distanceVerticalToPlane",
  function (x, y, pta, ptb, ptc) {
 var d = JU.Measure.getDirectedNormalThroughPoints (pta, ptb, ptc, this.ptRef, this.vNorm, this.vAB);
 return (this.vNorm.x * x + this.vNorm.y * y + d) / -this.vNorm.z;
 }, "~N,~N,JU.P3,JU.P3,JU.P3");
-c$.findNearestThreePoints = Clazz.defineMethod (c$, "findNearestThreePoints", 
+c$.findNearestThreePoints = Clazz.defineMethod (c$, "findNearestThreePoints",
  function (x, y, xyz, result) {
 var d;
 var dist1;
@@ -818,34 +818,34 @@ result[1] = i2;
 result[2] = i3;
 return dist1;
 }, "~N,~N,~A,~A");
-Clazz.defineMethod (c$, "addRequiredFile", 
+Clazz.defineMethod (c$, "addRequiredFile",
 function (fileName) {
 if (this.meshDataServer == null) return;
 this.meshDataServer.addRequiredFile (fileName);
 }, "~S");
-Clazz.defineMethod (c$, "setRequiredFile", 
+Clazz.defineMethod (c$, "setRequiredFile",
 function (oldName, fileName) {
 if (this.meshDataServer == null) return;
 this.meshDataServer.setRequiredFile (oldName, fileName);
 }, "~S,~S");
-Clazz.defineMethod (c$, "log", 
+Clazz.defineMethod (c$, "log",
 function (msg) {
-if (this.atomDataServer == null) System.out.println (msg);
+if (this.atomDataServer == null) Zystem.out.println (msg);
  else this.atomDataServer.log (msg);
 }, "~S");
-Clazz.defineMethod (c$, "setOutputChannel", 
+Clazz.defineMethod (c$, "setOutputChannel",
 function (binaryDoc, out) {
 if (this.meshDataServer == null) return;
 this.meshDataServer.setOutputChannel (binaryDoc, out);
 }, "javajs.api.GenericBinaryDocument,JU.OC");
-Clazz.defineMethod (c$, "fillAtomData", 
+Clazz.defineMethod (c$, "fillAtomData",
 function (atomData, mode) {
 if ((mode & 2) != 0 && atomData.bsSelected != null) {
 if (this.bsVdw == null) this.bsVdw =  new JU.BS ();
 this.bsVdw.or (atomData.bsSelected);
 }this.atomDataServer.fillAtomData (atomData, mode);
 }, "J.atomdata.AtomData,~N");
-Clazz.defineMethod (c$, "getOriginVaVbVc", 
+Clazz.defineMethod (c$, "getOriginVaVbVc",
 function () {
 return (this.surfaceReader.volumeData == null ? null : this.surfaceReader.volumeData.oabc);
 });

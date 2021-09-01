@@ -60,7 +60,7 @@ if(0<=offset&&offset<=buffer.length&&0<=len&&len<=buffer.length-offset){
 if(this.isOpen()){
 if(this.pos<this.count){
 var bytesRead=this.pos+len>this.count?this.count-this.pos:len;
-System.arraycopy(this.buf,this.pos,buffer,offset,bytesRead);
+Zystem.arraycopy(this.buf,this.pos,buffer,offset,bytesRead);
 this.pos+=bytesRead;
 return bytesRead;
 }return-1;

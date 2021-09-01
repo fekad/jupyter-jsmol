@@ -248,7 +248,7 @@ this.structureList.put (J.c.STR.TURN,  Clazz.newFloatArray (-1, [30, 90, -15, 95
 this.structureList.put (J.c.STR.SHEET,  Clazz.newFloatArray (-1, [-180, -10, 70, 180, -180, -45, -180, -130, 140, 180, 90, 180]));
 this.structureList.put (J.c.STR.HELIX,  Clazz.newFloatArray (-1, [-160, 0, -100, 45]));
 }});
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function (vwr, g, clearUserVariables) {
 this.vwr = vwr;
 this.htNonbooleanParameterValues =  new java.util.Hashtable ();
@@ -572,7 +572,7 @@ this.setB ("zoomLarge", this.zoomLarge);
 this.setI ("zShadePower", this.zShadePower);
 this.setI ("zSlab", this.zSlab);
 }, "JV.Viewer,JV.GlobalSettings,~B");
-Clazz.defineMethod (c$, "clear", 
+Clazz.defineMethod (c$, "clear",
 function () {
 var e = this.htUserVariables.keySet ().iterator ();
 while (e.hasNext ()) {
@@ -588,7 +588,7 @@ this.setB ("measurementlabels", this.measurementLabels = true);
 this.setB ("drawHover", this.drawHover = false);
 this.vwr.stm.saveScene ("DELETE", null);
 });
-Clazz.defineMethod (c$, "setUnits", 
+Clazz.defineMethod (c$, "setUnits",
 function (units) {
 var mu = this.measureDistanceUnits;
 var eu = this.energyUnits;
@@ -603,35 +603,35 @@ if (units.equalsIgnoreCase ("angstroms")) this.measureDistanceUnits = "angstroms
 if (!mu.equalsIgnoreCase (this.measureDistanceUnits)) this.setO ("measurementUnits", this.measureDistanceUnits);
  else if (!eu.equalsIgnoreCase (this.energyUnits)) this.setO ("energyUnits", this.energyUnits);
 }, "~S");
-Clazz.defineMethod (c$, "isJmolVariable", 
+Clazz.defineMethod (c$, "isJmolVariable",
 function (key) {
 return key.charAt (0) == '_' || this.htNonbooleanParameterValues.containsKey (key = key.toLowerCase ()) || this.htBooleanParameterFlags.containsKey (key) || JV.GlobalSettings.unreportedProperties.indexOf (";" + key + ";") >= 0;
 }, "~S");
-Clazz.defineMethod (c$, "resetValue", 
+Clazz.defineMethod (c$, "resetValue",
  function (name, g) {
 this.setO (name, g == null ? "" : g.getParameter (name, true));
 }, "~S,JV.GlobalSettings");
-Clazz.defineMethod (c$, "setB", 
+Clazz.defineMethod (c$, "setB",
 function (name, value) {
 name = name.toLowerCase ();
 if (this.htNonbooleanParameterValues.containsKey (name)) return;
 this.htBooleanParameterFlags.put (name, value ? Boolean.TRUE : Boolean.FALSE);
 }, "~S,~B");
-Clazz.defineMethod (c$, "setI", 
+Clazz.defineMethod (c$, "setI",
 function (name, value) {
 if (value != 2147483647) this.setO (name, Integer.$valueOf (value));
 }, "~S,~N");
-Clazz.defineMethod (c$, "setF", 
+Clazz.defineMethod (c$, "setF",
 function (name, value) {
 if (!Float.isNaN (value)) this.setO (name, Float.$valueOf (value));
 }, "~S,~N");
-Clazz.defineMethod (c$, "setO", 
+Clazz.defineMethod (c$, "setO",
 function (name, value) {
 name = name.toLowerCase ();
 if (value == null || this.htBooleanParameterFlags.containsKey (name)) return;
 this.htNonbooleanParameterValues.put (name, value);
 }, "~S,~O");
-Clazz.defineMethod (c$, "removeParam", 
+Clazz.defineMethod (c$, "removeParam",
 function (key) {
 key = key.toLowerCase ();
 if (this.htBooleanParameterFlags.containsKey (key)) {
@@ -640,14 +640,14 @@ if (!this.htPropertyFlagsRemoved.containsKey (key)) this.htPropertyFlagsRemoved.
 return;
 }if (this.htNonbooleanParameterValues.containsKey (key)) this.htNonbooleanParameterValues.remove (key);
 }, "~S");
-Clazz.defineMethod (c$, "setUserVariable", 
+Clazz.defineMethod (c$, "setUserVariable",
 function (key, $var) {
 if ($var != null) {
 key = key.toLowerCase ();
 this.htUserVariables.put (key, $var.setName (key));
 }return $var;
 }, "~S,JS.SV");
-Clazz.defineMethod (c$, "unsetUserVariable", 
+Clazz.defineMethod (c$, "unsetUserVariable",
 function (key) {
 if (key.equals ("all") || key.equals ("variables")) {
 this.htUserVariables.clear ();
@@ -656,17 +656,17 @@ JU.Logger.info ("all user-defined variables deleted");
 JU.Logger.info ("variable " + key + " deleted");
 this.htUserVariables.remove (key);
 }}, "~S");
-Clazz.defineMethod (c$, "removeUserVariable", 
+Clazz.defineMethod (c$, "removeUserVariable",
 function (key) {
 this.htUserVariables.remove (key);
 }, "~S");
-Clazz.defineMethod (c$, "getUserVariable", 
+Clazz.defineMethod (c$, "getUserVariable",
 function (name) {
 if (name == null) return null;
 name = name.toLowerCase ();
 return this.htUserVariables.get (name);
 }, "~S");
-Clazz.defineMethod (c$, "getParameterEscaped", 
+Clazz.defineMethod (c$, "getParameterEscaped",
 function (name, nMax) {
 name = name.toLowerCase ();
 if (this.htNonbooleanParameterValues.containsKey (name)) {
@@ -677,18 +677,18 @@ if (this.htUserVariables.containsKey (name)) return this.htUserVariables.get (na
 if (this.htPropertyFlagsRemoved.containsKey (name)) return "false";
 return "<not defined>";
 }, "~S,~N");
-Clazz.defineMethod (c$, "getParameter", 
+Clazz.defineMethod (c$, "getParameter",
 function (name, nullAsString) {
 var v = this.getParam (name, false);
 return (v == null && nullAsString ? "" : v);
 }, "~S,~B");
-Clazz.defineMethod (c$, "getAndSetNewVariable", 
+Clazz.defineMethod (c$, "getAndSetNewVariable",
 function (name, doSet) {
 if (name == null || name.length == 0) name = "x";
 var v = this.getParam (name, true);
 return (v == null && doSet && name.charAt (0) != '_' ? this.setUserVariable (name, JS.SV.newV (4, "")) : JS.SV.getVariable (v));
 }, "~S,~B");
-Clazz.defineMethod (c$, "getParam", 
+Clazz.defineMethod (c$, "getParam",
 function (name, asVariable) {
 name = name.toLowerCase ();
 if (name.equals ("_memory")) {
@@ -705,24 +705,24 @@ var v = this.htUserVariables.get (name);
 return (asVariable ? v : JS.SV.oValue (v));
 }return null;
 }, "~S,~B");
-Clazz.defineMethod (c$, "getVariableList", 
+Clazz.defineMethod (c$, "getVariableList",
 function () {
 return JV.StateManager.getVariableList (this.htUserVariables, 0, true, false);
 });
-Clazz.defineMethod (c$, "setStructureList", 
+Clazz.defineMethod (c$, "setStructureList",
 function (list, type) {
 this.haveSetStructureList = true;
 this.structureList.put (type, list);
 }, "~A,J.c.STR");
-Clazz.defineMethod (c$, "getStructureList", 
+Clazz.defineMethod (c$, "getStructureList",
 function () {
 return this.structureList;
 });
-c$.doReportProperty = Clazz.defineMethod (c$, "doReportProperty", 
+c$.doReportProperty = Clazz.defineMethod (c$, "doReportProperty",
 function (name) {
 return (name.charAt (0) != '_' && JV.GlobalSettings.unreportedProperties.indexOf (";" + name + ";") < 0);
 }, "~S");
-Clazz.defineMethod (c$, "getAllVariables", 
+Clazz.defineMethod (c$, "getAllVariables",
 function () {
 var map =  new java.util.Hashtable ();
 map.putAll (this.htBooleanParameterFlags);
@@ -730,7 +730,7 @@ map.putAll (this.htNonbooleanParameterValues);
 map.putAll (this.htUserVariables);
 return map;
 });
-Clazz.defineMethod (c$, "getLoadState", 
+Clazz.defineMethod (c$, "getLoadState",
 function (htParams) {
 var str =  new JU.SB ();
 this.app (str, "set allowEmbeddedScripts false");
@@ -776,19 +776,19 @@ this.app (str, "set smartAromatic " + this.smartAromatic);
 if (this.zeroBasedXyzRasmol) this.app (str, "set zeroBasedXyzRasmol true");
 return str.toString ();
 }, "java.util.Map");
-Clazz.defineMethod (c$, "app", 
+Clazz.defineMethod (c$, "app",
  function (s, cmd) {
 if (cmd.length == 0) return;
 s.append ("  ").append (cmd).append (";\n");
 }, "JU.SB,~S");
-Clazz.defineMethod (c$, "setCIR", 
+Clazz.defineMethod (c$, "setCIR",
 function (template) {
 if (template == null || template.equals (this.nihResolverFormat) && this.smilesUrlFormat != null) return;
 var pt = template.indexOf ("/structure");
 if (pt > 0) {
 this.nihResolverFormat = template.substring (0, pt + 10);
 this.smilesUrlFormat = this.nihResolverFormat + "/%FILE/file?format=sdf&get3d=true";
-System.out.println ("CIR resolver set to " + this.nihResolverFormat);
+Zystem.out.println ("CIR resolver set to " + this.nihResolverFormat);
 }}, "~S");
 c$.unreportedProperties = c$.prototype.unreportedProperties = (";ambientpercent;animationfps;antialiasdisplay;antialiasimages;antialiastranslucent;appendnew;axescolor;axesposition;axesmolecular;axesorientationrasmol;axesunitcell;axeswindow;axis1color;axis2color;axis3color;backgroundcolor;backgroundmodel;bondsymmetryatoms;boundboxcolor;cameradepth;bondingversion;ciprule6full;contextdepthmax;debug;debugscript;defaultlatttice;defaults;defaultdropscript;diffusepercent;;exportdrivers;exportscale;_filecaching;_filecache;fontcaching;fontscaling;forcefield;language;hbondsDistanceMaximum;hbondsangleminimum;jmolinJSV;legacyautobonding;legacyhaddition;legacyjavafloat;loglevel;logfile;loggestures;logcommands;measurestylechime;loadformat;loadligandformat;macrodirectory;mkaddhydrogens;minimizationmaxatoms;smilesurlformat;pubchemformat;nihresolverformat;edsurlformat;edsurlcutoff;multiprocessor;navigationmode;;nodelay;pathforallfiles;perspectivedepth;phongexponent;perspectivemodel;platformspeed;preservestate;refreshing;repaintwaitms;rotationradius;selectallmodels;showaxes;showaxis1;showaxis2;showaxis3;showboundbox;showfrank;showtiming;showunitcell;slabenabled;slab;slabrange;depth;zshade;zshadepower;specular;specularexponent;specularpercent;celshading;celshadingpower;specularpower;stateversion;statusreporting;stereo;stereostate;vibrationperiod;unitcellcolor;visualrange;windowcentered;zerobasedxyzrasmol;zoomenabled;mousedragfactor;mousewheelfactor;scriptqueue;scriptreportinglevel;syncscript;syncmouse;syncstereo;defaultdirectory;currentlocalpath;defaultdirectorylocal;ambient;bonds;colorrasmol;diffuse;fractionalrelative;frank;hetero;hidenotselected;hoverlabel;hydrogen;languagetranslation;measurementunits;navigationdepth;navigationslab;picking;pickingstyle;propertycolorschemeoverload;radius;rgbblue;rgbgreen;rgbred;scaleangstromsperinch;selectionhalos;showscript;showselections;solvent;strandcount;spinx;spiny;spinz;spinfps;navx;navy;navz;navfps;" + J.c.CBK.getNameList () + ";undo;atompicking;drawpicking;bondpicking;pickspinrate;picklabel" + ";modelkitmode;autoplaymovie;allowaudio;allowgestures;allowkeystrokes;allowmultitouch;allowmodelkit" + ";dodrop;hovered;historylevel;imagestate;iskiosk;useminimizationthread" + ";checkcir;resolverresolver;showkeystrokes;saveproteinstructurestate;testflag1;testflag2;testflag3;testflag4" + ";selecthetero;selecthydrogen;" + ";").toLowerCase ();
 });

@@ -10,15 +10,15 @@ this.maxGrid = 0;
 this.useOriginStepsPoints = false;
 Clazz.instantialize (this, arguments);
 }, J.jvxl.readers, "VolumeDataReader", J.jvxl.readers.SurfaceReader);
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function () {
 Clazz.superConstructor (this, J.jvxl.readers.VolumeDataReader, []);
 });
-Clazz.overrideMethod (c$, "init", 
+Clazz.overrideMethod (c$, "init",
 function (sg) {
 this.initVDR (sg);
 }, "J.jvxl.readers.SurfaceGenerator");
-Clazz.defineMethod (c$, "initVDR", 
+Clazz.defineMethod (c$, "initVDR",
 function (sg) {
 this.initSR (sg);
 this.useOriginStepsPoints = (this.params.origin != null && this.params.points != null && this.params.steps != null);
@@ -26,24 +26,24 @@ this.dataType = this.params.dataType;
 this.precalculateVoxelData = true;
 this.allowMapData = true;
 }, "J.jvxl.readers.SurfaceGenerator");
-Clazz.defineMethod (c$, "setup", 
+Clazz.defineMethod (c$, "setup",
 function (isMapData) {
 this.jvxlFileHeaderBuffer =  new JU.SB ().append ("volume data read from file\n\n");
 J.jvxl.data.JvxlCoder.jvxlCreateHeaderWithoutTitleOrAtoms (this.volumeData, this.jvxlFileHeaderBuffer);
 }, "~B");
-Clazz.overrideMethod (c$, "readVolumeParameters", 
+Clazz.overrideMethod (c$, "readVolumeParameters",
 function (isMapData) {
 this.setup (isMapData);
 this.initializeVolumetricData ();
 return true;
 }, "~B");
-Clazz.overrideMethod (c$, "readVolumeData", 
+Clazz.overrideMethod (c$, "readVolumeData",
 function (isMapData) {
 try {
 this.readSurfaceData (isMapData);
 } catch (e) {
 if (Clazz.exceptionOf (e, Exception)) {
-System.out.println (e.toString ());
+Zystem.out.println (e.toString ());
 {
 }return false;
 } else {
@@ -52,7 +52,7 @@ throw e;
 }
 return true;
 }, "~B");
-Clazz.defineMethod (c$, "readVoxelDataIndividually", 
+Clazz.defineMethod (c$, "readVoxelDataIndividually",
 function (isMapData) {
 if (isMapData && !this.allowMapData) return;
 if (!isMapData || this.volumeData.sr != null) {
@@ -71,10 +71,10 @@ strip[z] = this.getValue (x, y, z, ptyz);
 }
 }
 }, "~B");
-Clazz.defineMethod (c$, "setVolumeData", 
+Clazz.defineMethod (c$, "setVolumeData",
 function () {
 });
-Clazz.defineMethod (c$, "setVolumeDataParams", 
+Clazz.defineMethod (c$, "setVolumeDataParams",
 function () {
 if (this.params.volumeData != null) {
 this.setVolumeDataV (this.params.volumeData);
@@ -92,7 +92,7 @@ if (this.voxelCounts[0] < 1 || this.voxelCounts[1] < 1 || this.voxelCounts[2] < 
 this.showGridInfo ();
 return true;
 });
-Clazz.defineMethod (c$, "showGridInfo", 
+Clazz.defineMethod (c$, "showGridInfo",
 function () {
 JU.Logger.info ("grid origin  = " + this.params.origin);
 JU.Logger.info ("grid steps   = " + this.params.steps);
@@ -104,7 +104,7 @@ JU.Logger.info ("grid lengths = " + this.ptTemp);
 this.ptTemp.add (this.params.origin);
 JU.Logger.info ("grid max xyz = " + this.ptTemp);
 });
-Clazz.defineMethod (c$, "setVoxelRange", 
+Clazz.defineMethod (c$, "setVoxelRange",
 function (index, min, max, ptsPerAngstrom, gridMax, minPointsPerAngstrom) {
 var nGrid;
 var d;
@@ -154,11 +154,11 @@ if (this.params.sbOut != null) this.params.sbOut.append ((this.voxelCounts[0] * 
 if (this.isEccentric) this.eccentricityMatrix.rotate (this.volumetricVectors[index]);
 return this.voxelCounts[index];
 }, "~N,~N,~N,~N,~N,~N");
-Clazz.overrideMethod (c$, "readSurfaceData", 
+Clazz.overrideMethod (c$, "readSurfaceData",
 function (isMapData) {
 this.readSurfaceDataVDR (isMapData);
 }, "~B");
-Clazz.defineMethod (c$, "readSurfaceDataVDR", 
+Clazz.defineMethod (c$, "readSurfaceDataVDR",
 function (isMapData) {
 if (this.isProgressive && !isMapData) {
 this.nDataPoints = this.volumeData.setVoxelCounts (this.nPointsX, this.nPointsY, this.nPointsZ);
@@ -167,7 +167,7 @@ return;
 }if (this.precalculateVoxelData) this.generateCube ();
  else this.readVoxelDataIndividually (isMapData);
 }, "~B");
-Clazz.defineMethod (c$, "generateCube", 
+Clazz.defineMethod (c$, "generateCube",
 function () {
 JU.Logger.info ("data type: user volumeData");
 JU.Logger.info ("voxel grid origin:" + this.volumetricOrigin);
@@ -175,7 +175,7 @@ for (var i = 0; i < 3; ++i) JU.Logger.info ("voxel grid vector:" + this.volumetr
 
 JU.Logger.info ("Read " + this.nPointsX + " x " + this.nPointsY + " x " + this.nPointsZ + " data points");
 });
-Clazz.overrideMethod (c$, "closeReader", 
+Clazz.overrideMethod (c$, "closeReader",
 function () {
 });
 });

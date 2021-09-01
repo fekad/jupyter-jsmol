@@ -22,15 +22,15 @@ this.lastY = 0;
 this.isDIF = true;
 Clazz.instantialize (this, arguments);
 }, JSV.source, "JDXDecompressor", null, java.util.Iterator);
-Clazz.defineMethod (c$, "getMinY", 
+Clazz.defineMethod (c$, "getMinY",
 function () {
 return this.minY;
 });
-Clazz.defineMethod (c$, "getMaxY", 
+Clazz.defineMethod (c$, "getMaxY",
 function () {
 return this.maxY;
 });
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function (t, firstX, lastX, xFactor, yFactor, nPoints) {
 this.t = t;
 this.firstX = firstX;
@@ -40,13 +40,13 @@ this.yFactor = yFactor;
 this.nPoints = nPoints;
 this.debugging = JU.Logger.isActiveLevel (6);
 }, "JSV.source.JDXSourceStreamTokenizer,~N,~N,~N,~N,~N");
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function (line, lastY) {
 this.line = line.trim ();
 this.lineLen = line.length;
 this.lastY = lastY;
 }, "~S,~N");
-Clazz.defineMethod (c$, "decompressData", 
+Clazz.defineMethod (c$, "decompressData",
 function (errorLog) {
 this.errorLog = errorLog;
 var deltaXcalc = JSV.common.Coordinate.deltaX (this.lastX, this.firstX, this.nPoints);
@@ -86,7 +86,7 @@ this.logError (lastLine + "\n" + this.line + "\nX-sequence Checkpoint Error! Lin
 }var xcheckDif = Math.abs (xcheck - prevXcheck);
 var xiptDif = Math.abs ((ipt - prevIpt) * deltaXcalc);
 var fracDif = Math.abs ((xcheckDif - xiptDif)) / xcheckDif;
-if (this.debugging) System.err.println ("JDXD fracDif = " + xcheck + "\t" + prevXcheck + "\txcheckDif=" + xcheckDif + "\txiptDif=" + xiptDif + "\tf=" + fracDif);
+if (this.debugging) Zystem.err.println ("JDXD fracDif = " + xcheck + "\t" + prevXcheck + "\txcheckDif=" + xcheckDif + "\txiptDif=" + xiptDif + "\tf=" + fracDif);
 if (fracDif > difFracMax) {
 this.logError (lastLine + "\n" + this.line + "\nX-value Checkpoint Error! Line " + lineNumber + " expected " + xiptDif + " but X-Sequence Check difference reads " + xcheckDif);
 }}prevIpt = (ipt == 1 ? 0 : ipt);
@@ -121,7 +121,7 @@ throw ioe;
 this.checkZeroFill (ipt, lastXExpected);
 return this.xyCoords;
 }, "JU.SB");
-Clazz.defineMethod (c$, "checkZeroFill", 
+Clazz.defineMethod (c$, "checkZeroFill",
  function (ipt, lastXExpected) {
 this.nptsFound = ipt;
 if (this.nPoints == this.nptsFound) {
@@ -131,7 +131,7 @@ this.logError ("Decompressor did not find " + this.nPoints + " points -- instead
 for (var i = this.nptsFound; i < this.nPoints; i++) this.addPoint ( new JSV.common.Coordinate ().set (0, NaN), i);
 
 }}, "~N,~N");
-Clazz.defineMethod (c$, "addPoint", 
+Clazz.defineMethod (c$, "addPoint",
  function (pt, ipt) {
 if (ipt >= this.nPoints) return;
 this.xyCoords[ipt] = pt;
@@ -140,13 +140,13 @@ if (y > this.maxY) this.maxY = y;
  else if (y < this.minY) this.minY = y;
 if (this.debugging) this.logError ("Coord: " + ipt + pt);
 }, "JSV.common.Coordinate,~N");
-Clazz.defineMethod (c$, "logError", 
+Clazz.defineMethod (c$, "logError",
  function (s) {
 if (this.debugging) JU.Logger.debug (s);
-System.err.println (s);
+Zystem.err.println (s);
 this.errorLog.append (s).appendC ('\n');
 }, "~S");
-Clazz.defineMethod (c$, "nextValue", 
+Clazz.defineMethod (c$, "nextValue",
  function (yval) {
 if (this.dupCount > 0) return this.getDuplicate (yval);
 var ch = this.skipUnknown ();
@@ -174,14 +174,14 @@ break;
 this.isDIF = false;
 return yval;
 }, "~N");
-Clazz.defineMethod (c$, "skipUnknown", 
+Clazz.defineMethod (c$, "skipUnknown",
  function () {
 var ch = '\u0000';
 while (this.ich < this.lineLen && JSV.source.JDXDecompressor.actions[(ch = this.line.charAt (this.ich++)).charCodeAt (0)] == 0) {
 }
 return ch;
 });
-Clazz.defineMethod (c$, "readSignedFloat", 
+Clazz.defineMethod (c$, "readSignedFloat",
  function () {
 var ich0 = this.ich;
 var ch = '\u0000';
@@ -205,12 +205,12 @@ break;
 }
 }return factor * Double.parseDouble (this.line.substring (ich0, this.ich));
 });
-Clazz.defineMethod (c$, "getDuplicate", 
+Clazz.defineMethod (c$, "getDuplicate",
  function (yval) {
 this.dupCount--;
 return (this.isDIF ? yval + this.lastDif : yval);
 }, "~N");
-Clazz.defineMethod (c$, "readNextInteger", 
+Clazz.defineMethod (c$, "readNextInteger",
  function (n) {
 var c = String.fromCharCode (0);
 while (this.ich < this.lineLen && (c = this.line.charAt (this.ich)) >= '0' && c <= '9') {
@@ -219,32 +219,32 @@ this.ich++;
 }
 return n;
 }, "~N");
-Clazz.defineMethod (c$, "readNextSqueezedNumber", 
+Clazz.defineMethod (c$, "readNextSqueezedNumber",
  function (ch) {
 var ich0 = this.ich;
 this.scanToNonnumeric ();
 return Double.parseDouble ((ch.charCodeAt (0) > 0x60 ? 0x60 - ch.charCodeAt (0) : ch.charCodeAt (0) - 0x40) + this.line.substring (ich0, this.ich));
 }, "~S");
-Clazz.defineMethod (c$, "scanToNonnumeric", 
+Clazz.defineMethod (c$, "scanToNonnumeric",
  function () {
 var ch = String.fromCharCode (0);
 while (this.ich < this.lineLen && ((ch = this.line.charAt (this.ich)) == '.' || ch >= '0' && ch <= '9')) this.ich++;
 
 return (this.ich < this.lineLen ? ch : '\0');
 });
-Clazz.defineMethod (c$, "getNPointsFound", 
+Clazz.defineMethod (c$, "getNPointsFound",
 function () {
 return this.nptsFound;
 });
-Clazz.overrideMethod (c$, "hasNext", 
+Clazz.overrideMethod (c$, "hasNext",
 function () {
 return (this.ich < this.lineLen || this.dupCount > 0);
 });
-Clazz.overrideMethod (c$, "next", 
+Clazz.overrideMethod (c$, "next",
 function () {
 return (this.hasNext () ? Double.$valueOf (this.lastY = this.nextValue (this.lastY)) : null);
 });
-Clazz.overrideMethod (c$, "remove", 
+Clazz.overrideMethod (c$, "remove",
 function () {
 });
 Clazz.defineStatics (c$,

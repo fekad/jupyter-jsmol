@@ -23,11 +23,11 @@ Clazz.instantialize (this, arguments);
 Clazz.prepareFields (c$, function () {
 this.crcbuf =  Clazz.newByteArray (4, 0);
 });
-Clazz.defineMethod (c$, "reset", 
+Clazz.defineMethod (c$, "reset",
 function () {
 this.inflateReset ();
 });
-Clazz.defineMethod (c$, "inflateReset", 
+Clazz.defineMethod (c$, "inflateReset",
 function () {
 if (this.z == null) return -2;
 this.z.total_in = this.z.total_out = 0;
@@ -37,17 +37,17 @@ this.need_bytes = -1;
 this.blocks.reset ();
 return 0;
 });
-Clazz.defineMethod (c$, "inflateEnd", 
+Clazz.defineMethod (c$, "inflateEnd",
 function () {
 if (this.blocks != null) {
 this.blocks.free ();
 }return 0;
 });
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function (z) {
 this.z = z;
 }, "JU.ZStream");
-Clazz.defineMethod (c$, "inflateInit", 
+Clazz.defineMethod (c$, "inflateInit",
 function (w) {
 this.z.msg = null;
 this.blocks = null;
@@ -68,7 +68,7 @@ this.blocks =  new JU.InfBlocks (this.z, 1 << w);
 this.inflateReset ();
 return 0;
 }, "~N");
-Clazz.defineMethod (c$, "inflate", 
+Clazz.defineMethod (c$, "inflate",
 function (f) {
 var r;
 var b;
@@ -312,7 +312,7 @@ if (this.gheader != null) {
 var foo = this.tmp_string.toByteArray ();
 this.tmp_string = null;
 if (foo.length == this.gheader.extra.length) {
-System.arraycopy (foo, 0, this.gheader.extra, 0, foo.length);
+Zystem.arraycopy (foo, 0, this.gheader.extra, 0, foo.length);
 } else {
 this.z.msg = "bad extra field length";
 this.mode = 13;
@@ -387,7 +387,7 @@ return -2;
 }
 }
 }, "~N");
-Clazz.defineMethod (c$, "inflateSetDictionary", 
+Clazz.defineMethod (c$, "inflateSetDictionary",
 function (dictionary, dictLength) {
 if (this.z == null || (this.mode != 6 && this.wrap != 0)) {
 return -2;
@@ -407,7 +407,7 @@ index = dictLength - length;
 this.mode = 7;
 return 0;
 }, "~A,~N");
-Clazz.defineMethod (c$, "inflateSync", 
+Clazz.defineMethod (c$, "inflateSync",
 function () {
 var n;
 var p;
@@ -445,12 +445,12 @@ this.z.total_out = w;
 this.mode = 7;
 return 0;
 });
-Clazz.defineMethod (c$, "inflateSyncPoint", 
+Clazz.defineMethod (c$, "inflateSyncPoint",
 function () {
 if (this.z == null || this.blocks == null) return -2;
 return this.blocks.sync_point ();
 });
-Clazz.defineMethod (c$, "readBytes", 
+Clazz.defineMethod (c$, "readBytes",
  function (n, r, f) {
 if (this.need_bytes == -1) {
 this.need_bytes = n;
@@ -471,7 +471,7 @@ this.need &= 0xffffffff;
 }this.need_bytes = -1;
 return r;
 }, "~N,~N,~N");
-Clazz.defineMethod (c$, "readString", 
+Clazz.defineMethod (c$, "readString",
  function (r, f) {
 if (this.tmp_string == null) {
 this.tmp_string =  new java.io.ByteArrayOutputStream ();
@@ -489,7 +489,7 @@ this.z.next_in_index++;
 } while (b != 0);
 return r;
 }, "~N,~N");
-Clazz.defineMethod (c$, "readBytes", 
+Clazz.defineMethod (c$, "readBytes",
  function (r, f) {
 if (this.tmp_string == null) {
 this.tmp_string =  new java.io.ByteArrayOutputStream ();
@@ -506,7 +506,7 @@ this.need--;
 }
 return r;
 }, "~N,~N");
-Clazz.defineMethod (c$, "checksum", 
+Clazz.defineMethod (c$, "checksum",
  function (n, v) {
 for (var i = 0; i < n; i++) {
 this.crcbuf[i] = (v & 0xff);
@@ -514,11 +514,11 @@ v >>= 8;
 }
 this.z.checksum.update (this.crcbuf, 0, n);
 }, "~N,~N");
-Clazz.defineMethod (c$, "getGZIPHeader", 
+Clazz.defineMethod (c$, "getGZIPHeader",
 function () {
 return this.gheader;
 });
-Clazz.defineMethod (c$, "inParsingHeader", 
+Clazz.defineMethod (c$, "inParsingHeader",
 function () {
 switch (this.mode) {
 case 14:
@@ -546,7 +546,7 @@ Clazz.prepareCallback (this, arguments);
 this.r = 0;
 Clazz.instantialize (this, arguments);
 }, JU.Inflate, "Return", Exception);
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function (a) {
 Clazz.superConstructor (this, JU.Inflate.Return, []);
 this.r = a;

@@ -1,9 +1,9 @@
 // JSmolJavaExt.js
- 
 
-// This library will be wrapped by an additional anonymous function using ANT in 
-// build_03_tojs.xml. This task will also modify variable names. References 
-// to Clazz._ will not be changed, but other Clazz.xxx will be changed to 
+
+// This library will be wrapped by an additional anonymous function using ANT in
+// build_03_tojs.xml. This task will also modify variable names. References
+// to Clazz._ will not be changed, but other Clazz.xxx will be changed to
 // (local scope) Clazz_xxx, allowing them to be further compressed using
 // Google Closure Compiler in that same ANT task.
 
@@ -17,19 +17,19 @@
 // BH 9/19/2015 11:05:45 PM Float.isInfinite(), Float.isNaN(), Double.isInfinite(), Double.isNaN() all not implemented
 // BH 5/31/2015 5:53:04 PM Number.compareTo added
 // BH 5/21/2015 5:46:30 PM Number("0xFFFFFFFF") is not -1
-// BH 4/23/2015 9:08:59 AM xx.getComponentType() is nonfunctional. Array.newInstance now defines a wrapper for .getClass().getComponentType() that works  
+// BH 4/23/2015 9:08:59 AM xx.getComponentType() is nonfunctional. Array.newInstance now defines a wrapper for .getClass().getComponentType() that works
 // BH 4/12/2015 1:37:44 PM adding Math.rint = Math.round
 // BH 1/16/2015 10:09:38 AM Chrome failure jqGrig due to new String("x").toString() not being a simple string
 // BH 8/14/2014 6:49:22 PM Character class efficiencies
 // BH 7/24/2014 9:02:18 AM most browsers do not support String.codePointAt()
-// BH 7/11/2014 4:17:22 PM fix for Boolean.valueOf("false") not being false 
+// BH 7/11/2014 4:17:22 PM fix for Boolean.valueOf("false") not being false
 // BH 5/27/2014 6:29:59 AM ensure floats and doubles have decimal point in toString
-// BH 4/1/2014 12:23:41 PM Encoding moved to Clazz._Encoding; 
+// BH 4/1/2014 12:23:41 PM Encoding moved to Clazz._Encoding;
 // BH 4/1/2014 7:51:46 AM removing java.lang.B00lean
 // BH 3/7/2014 9:17:10 AM removing Array.toString; moving that code here from j2sJmol.js
 // BH 1/30/2014 9:04:25 AM adding Throwable.getStackTrace() as a STRING
 // BH 12/4/2013 9:20:44 PM fix for reassigning Date.prototype.toString()
-// BH 12/3/2013 11:43:10 AM bizarre Safari bug in reassigning Boolean (OK, I admit, we shouldn't have done that...) 
+// BH 12/3/2013 11:43:10 AM bizarre Safari bug in reassigning Boolean (OK, I admit, we shouldn't have done that...)
 // BH 12/1/2013 6:50:16 AM evit Number.prototype.toString assignment removed!
 // BH 11/30/2013 1:46:31 PM fixing Byte, Short, Long, Integer, Float, Double to reflect proper bounds and error conditions
 // BH 11/29/2013 8:58:49 PM removing Boolean.toString(boolean)
@@ -37,10 +37,10 @@
 // BH 10/19/2013 1:29:27 PM fixed String.$replace()
 // BH 10/18/2013 6:09:23 PM fixed (Double|Float).valueOf(NaN).valueOf(), which should return NaN, not throw an error
 // BH 10/12/2013 11:18:44 AM fixed bug in Double(String) and Float(String) that was returning typeof "string"
-// BH 10/10/2013 2:40:20 PM  added Math.log10   
+// BH 10/10/2013 2:40:20 PM  added Math.log10
 // BH 7/23/2013 7:24:01 AM fixing Number.shortValue() and Number.byteValue() for negative values
 // BH 6/16/2013 1:31:30 PM adding /| in String.replace -- thank you David Koes
-// BH 3/13/2013 12:49:23 PM setting Boolean.valueOf() "@" 
+// BH 3/13/2013 12:49:23 PM setting Boolean.valueOf() "@"
 // BH 3/2/2013 10:46:45 PM removed Double.valueOf(String)
 // BH 11/6/2012 8:26:33 PM added instanceof Int32Array in String.instantialize
 // BH 10/13/2012 11:38:07 PM corrected Integer.parseInt to allow only +-0123456789; created Integer.parseIntRadix
@@ -58,7 +58,7 @@
 
   var sJU = "java.util";
 
-  //var sJU = "JU";  
+  //var sJU = "JU";
 	//Clazz._Loader.registerPackages (sJU, ["regex", "zip"]);
 	//var javautil = JU;
 
@@ -321,7 +321,7 @@ function(){
 return this.valueOf();
 });
 
-// Note that Long is problematic in JavaScript 
+// Note that Long is problematic in JavaScript
 
 java.lang.Long=Long=function(){
 Clazz.instantialize(this,arguments);
@@ -579,12 +579,12 @@ Clazz._a32 = null;
 Float.floatToIntBits = function(f) {
 var a = Clazz._a32 || (Clazz._a32 = new Float32Array(1));
 a[0] = f;
-return new Int32Array(a.buffer)[0]; 
+return new Int32Array(a.buffer)[0];
 }
 
 Clazz.overrideConstructor(Float, function(v){
  v == null && (v = 0);
- if (typeof v != "number") 
+ if (typeof v != "number")
 	v = Number(v);
  this.valueOf=function(){return v;}
 });
@@ -653,7 +653,7 @@ return Clazz._floatToString(this.valueOf());
 
 Clazz.overrideConstructor(Double, function(v){
  v == null && (v = 0);
- if (typeof v != "number") 
+ if (typeof v != "number")
 	v = Double.parseDouble(v);
  this.valueOf=function(){return v;};
 }); // BH
@@ -779,7 +779,7 @@ Boolean.getBoolean=Clazz.defineMethod(Boolean,"getBoolean",
 function(name){
 var result=false;
 try{
-result=Boolean.toBoolean(System.getProperty(name));
+result=Boolean.toBoolean(Zystem.getProperty(name));
 }catch(e){
 if(Clazz.instanceOf(e,IllegalArgumentException)){
 }else if(Clazz.instanceOf(e,NullPointerException)){
@@ -1018,7 +1018,7 @@ sp.$replace=function(c1,c2){
 	if (c1 == c2 || this.indexOf (c1) < 0) return "" + this;
 	if (c1.length == 1) {
 		if ("\\$.*+|?^{}()[]".indexOf(c1) >= 0) 	c1 = "\\" + c1;
-	} else {    
+	} else {
 		c1=c1.replace(/([\\\$\.\*\+\|\?\^\{\}\(\)\[\]])/g,function($0,$1){return"\\"+$1;});
 	}
 	return this.replace(new RegExp(c1,"gm"),c2);
@@ -1448,7 +1448,7 @@ case 1:
 		return valueCopy.join('')
 	}
 	return""+x;
-case 2:	
+case 2:
 	var x=arguments[0];
 	var hibyte=arguments[1];
 	if(typeof hibyte=="string"){
@@ -1801,7 +1801,7 @@ return(message ? s+": "+message : s);
 });
 Clazz.defineMethod(c$,"printStackTrace",
 function(){
-System.err.println(this.getStackTrace ? this.getStackTrace() : this.message + " " + Clazz.getStackTrace());
+Zystem.err.println(this.getStackTrace ? this.getStackTrace() : this.message + " " + Clazz.getStackTrace());
 });
 
 Clazz.defineMethod(c$,"getStackTrace",
@@ -1980,13 +1980,13 @@ TypeError.prototype.getMessage || (TypeError.prototype.getMessage = function(){ 
 
 Clazz.Error = Error;
 
-Clazz.declareTypeError = function (prefix, name, clazzParent, interfacez, 
+Clazz.declareTypeError = function (prefix, name, clazzParent, interfacez,
 		parentClazzInstance, _declareType) {
 	var f = function () {
 		Clazz.instantialize (this, arguments);
     return Clazz.Error();
 	};
-	return Clazz.decorateAsClass (f, prefix, name, clazzParent, interfacez, 
+	return Clazz.decorateAsClass (f, prefix, name, clazzParent, interfacez,
 			parentClazzInstance);
 };
 
@@ -2729,7 +2729,7 @@ return this.name;
 });
 Clazz.defineMethod(c$,"getParameterTypes",
 function(){
-return this.parameterTypes; 
+return this.parameterTypes;
 });
 Clazz.defineMethod(c$,"getReturnType",
 function(){

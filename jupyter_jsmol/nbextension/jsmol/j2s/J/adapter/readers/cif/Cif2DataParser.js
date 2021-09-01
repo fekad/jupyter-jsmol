@@ -1,15 +1,15 @@
 Clazz.declarePackage ("J.adapter.readers.cif");
 Clazz.load (["JU.CifDataParser"], "J.adapter.readers.cif.Cif2DataParser", ["java.lang.Float", "java.util.Hashtable", "JU.PT"], function () {
 c$ = Clazz.declareType (J.adapter.readers.cif, "Cif2DataParser", JU.CifDataParser);
-Clazz.overrideMethod (c$, "getVersion", 
+Clazz.overrideMethod (c$, "getVersion",
 function () {
 return 2;
 });
-Clazz.overrideMethod (c$, "toUnicode", 
+Clazz.overrideMethod (c$, "toUnicode",
 function (data) {
 return data;
 }, "~S");
-Clazz.overrideMethod (c$, "isQuote", 
+Clazz.overrideMethod (c$, "isQuote",
 function (ch) {
 switch (ch) {
 case '\1':
@@ -24,16 +24,16 @@ return true;
 }
 return false;
 }, "~S");
-Clazz.overrideMethod (c$, "getQuotedStringOrObject", 
+Clazz.overrideMethod (c$, "getQuotedStringOrObject",
 function (ch) {
 return this.processQuotedString ();
 }, "~S");
-Clazz.overrideMethod (c$, "preprocessString", 
+Clazz.overrideMethod (c$, "preprocessString",
 function () {
 this.line = (this.ich == 0 ? this.str : this.str.substring (this.ich));
 return this.setString (this.processSemiString ());
 });
-Clazz.defineMethod (c$, "processQuotedString", 
+Clazz.defineMethod (c$, "processQuotedString",
  function () {
 var str = null;
 var quoteChar = this.str.charAt (this.ich);
@@ -72,14 +72,14 @@ break;
 }
 } catch (e) {
 if (Clazz.exceptionOf (e, Exception)) {
-System.out.println ("exception in Cif2DataParser ; " + e);
+Zystem.out.println ("exception in Cif2DataParser ; " + e);
 } else {
 throw e;
 }
 }
 return (this.cterm == '\0' || this.asObject ? str : JU.PT.esc (str));
 });
-Clazz.defineMethod (c$, "processSemiString", 
+Clazz.defineMethod (c$, "processSemiString",
 function () {
 var pt1;
 var pt2;
@@ -91,7 +91,7 @@ str = "\1" + str.substring (str.charAt (pt1 + 1) == '\\' ? pt1 + 1 : pt2 < 0 ? s
 }this.ich = 0;
 return this.fixLineFolding (str);
 });
-Clazz.defineMethod (c$, "readTable", 
+Clazz.defineMethod (c$, "readTable",
 function () {
 this.ich++;
 var cterm0 = this.cterm;
@@ -116,7 +116,7 @@ this.cterm = cterm0;
 this.nullString = ns;
 return (this.asObject ? map : "{" + str + "}");
 });
-Clazz.defineMethod (c$, "isSpaceOrColon", 
+Clazz.defineMethod (c$, "isSpaceOrColon",
  function (ich) {
 if (ich < this.cch) switch (this.line.charAt (ich)) {
 case ' ':
@@ -127,7 +127,7 @@ return true;
 }
 return false;
 }, "~N");
-Clazz.overrideMethod (c$, "unquoted", 
+Clazz.overrideMethod (c$, "unquoted",
 function (s) {
 if (this.cterm == '\0' && !this.asObject) return s;
 var n = s.length;
@@ -150,7 +150,7 @@ return (this.asObject ? Integer.$valueOf (i) : "" + i);
 }
 }}return (this.asObject ? s : JU.PT.esc (s));
 }, "~S");
-Clazz.defineMethod (c$, "fixLineFolding", 
+Clazz.defineMethod (c$, "fixLineFolding",
  function (str) {
 if (str.indexOf ('\\') < 0) return str;
 var n = str.length;
@@ -172,7 +172,7 @@ if (pt < eol) str = str.substring (0, pt) + str.substring (eol + 1);
 }
 return str;
 }, "~S");
-c$.getArrayFromStringList = Clazz.defineMethod (c$, "getArrayFromStringList", 
+c$.getArrayFromStringList = Clazz.defineMethod (c$, "getArrayFromStringList",
 function (s, n) {
 var f =  Clazz.newFloatArray (n, 0);
 JU.PT.parseFloatArrayInfested (JU.PT.getTokens (s.$replace (',', ' ').$replace ('[', ' ')), f);
@@ -181,7 +181,7 @@ for (var i = 0; i < n; i++) d[i] = f[i];
 
 return d;
 }, "~S,~N");
-c$.getIntArrayFromStringList = Clazz.defineMethod (c$, "getIntArrayFromStringList", 
+c$.getIntArrayFromStringList = Clazz.defineMethod (c$, "getIntArrayFromStringList",
 function (s, n) {
 var f =  Clazz.newFloatArray (n, 0);
 JU.PT.parseFloatArrayInfested (JU.PT.getTokens (s.$replace (',', ' ').$replace ('[', ' ')), f);

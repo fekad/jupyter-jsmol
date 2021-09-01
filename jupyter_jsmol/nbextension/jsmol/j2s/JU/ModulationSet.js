@@ -12,7 +12,7 @@ this.spinOp = 0;
 this.rsvs = null;
 this.vib = null;
 this.mods = null;
-this.isSubsystem = false;
+this.isSubZystem = false;
 this.isCommensurate = false;
 this.fileOcc = 0;
 this.occParams = null;
@@ -41,23 +41,23 @@ Clazz.prepareFields (c$, function () {
 this.qtOffset =  new JU.P3 ();
 this.ptTemp =  new JU.P3 ();
 });
-Clazz.overrideMethod (c$, "getSubSystemUnitCell", 
+Clazz.overrideMethod (c$, "getSubZystemUnitCell",
 function () {
-return (this.isSubsystem ? this.symmetry : null);
+return (this.isSubZystem ? this.symmetry : null);
 });
-Clazz.overrideMethod (c$, "isEnabled", 
+Clazz.overrideMethod (c$, "isEnabled",
 function () {
 return this.enabled;
 });
-Clazz.overrideMethod (c$, "getScale", 
+Clazz.overrideMethod (c$, "getScale",
 function () {
 return this.$scale;
 });
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function () {
 Clazz.superConstructor (this, JU.ModulationSet, []);
 });
-Clazz.defineMethod (c$, "setMod", 
+Clazz.defineMethod (c$, "setMod",
 function (id, r00, r0, d, mods, gammaE, factors, symmetry, nOps, iop, v, isCommensurate) {
 this.id = id;
 this.symmetry = symmetry;
@@ -71,7 +71,7 @@ this.mods = mods;
 this.gammaE = gammaE;
 this.sigma = factors[0];
 if (factors[1] != null) {
-this.isSubsystem = true;
+this.isSubZystem = true;
 this.tFactorInv = factors[1].inverse ();
 }if (v != null) {
 this.vib = v;
@@ -90,7 +90,7 @@ this.tau = this.gammaIinv.mul (this.sigma.mul (vR0).sub (gammaM.mul (vR00)).sub 
 if (JU.Logger.debuggingHigh) JU.Logger.debug ("MODSET create " + id + " r0=" + JU.Escape.eP (r0) + " tau=" + this.tau);
 return this;
 }, "~S,JU.P3,JU.P3,~N,JU.Lst,JU.M3,~A,J.api.SymmetryInterface,~N,~N,JU.Vibration,~B");
-Clazz.defineMethod (c$, "calculate", 
+Clazz.defineMethod (c$, "calculate",
 function (tuv, isQ) {
 this.x = this.y = this.z = 0;
 this.htUij = null;
@@ -118,7 +118,7 @@ case 1:
 a[0][0] += tuv.x;
 break;
 }
-}if (this.isSubsystem) {
+}if (this.isSubZystem) {
 this.rI = this.tFactorInv.mul (this.rI);
 }this.rI = this.tau.add (this.gammaIinv.mul (this.rI));
 var arI = this.rI.getArray ();
@@ -130,7 +130,7 @@ this.gammaE.rotate (this.mxyz);
 if (this.spinOp < 0) this.mxyz.scale (this.spinOp);
 }return this;
 }, "JU.T3,~B");
-Clazz.defineMethod (c$, "addUTens", 
+Clazz.defineMethod (c$, "addUTens",
 function (utens, v) {
 if (this.htUij == null) this.htUij =  new java.util.Hashtable ();
 var f = this.htUij.get (utens);
@@ -138,7 +138,7 @@ if (JU.Logger.debuggingHigh) JU.Logger.debug ("MODSET " + this.id + " utens=" + 
 if (f != null) v += f.floatValue ();
 this.htUij.put (utens, Float.$valueOf (v));
 }, "~S,~N");
-Clazz.overrideMethod (c$, "setModTQ", 
+Clazz.overrideMethod (c$, "setModTQ",
 function (a, isOn, qtOffset, isQ, scale) {
 if (this.enabled) this.addTo (a, NaN);
 this.enabled = false;
@@ -153,7 +153,7 @@ if (!Float.isNaN (this.vOcc)) this.occValue = this.getOccupancy ();
 this.addTo (a, 1);
 this.enabled = true;
 }}, "JU.T3,~B,JU.T3,~B,~N");
-Clazz.overrideMethod (c$, "addTo", 
+Clazz.overrideMethod (c$, "addTo",
 function (a, scale) {
 var isReset = (Float.isNaN (scale));
 if (isReset) scale = -1;
@@ -164,7 +164,7 @@ this.symmetry.toCartesian (this.ptTemp, true);
 a.add (this.ptTemp);
 }if (this.mxyz != null) this.setVib (isReset, scale);
 }, "JU.T3,~N");
-Clazz.defineMethod (c$, "setVib", 
+Clazz.defineMethod (c$, "setVib",
  function (isReset, modulationScale) {
 if (isReset) {
 this.vib.setT (this.v0);
@@ -176,18 +176,18 @@ this.ptTemp.add (this.v0);
 this.ptTemp.scale (this.vib.modScale * modulationScale * this.$scale);
 this.vib.setT (this.ptTemp);
 }, "~B,~N");
-Clazz.overrideMethod (c$, "getState", 
+Clazz.overrideMethod (c$, "getState",
 function () {
 var s = "";
 if (this.qtOffset != null && this.qtOffset.length () > 0) s += "; modulation " + JU.Escape.eP (this.qtOffset) + " " + this.isQ + ";\n";
 s += "modulation {selected} " + (this.enabled ? "ON" : "OFF");
 return s;
 });
-Clazz.overrideMethod (c$, "getModPoint", 
+Clazz.overrideMethod (c$, "getModPoint",
 function (asEnabled) {
 return (asEnabled ? this : this.r0);
 }, "~B");
-Clazz.overrideMethod (c$, "getModulation", 
+Clazz.overrideMethod (c$, "getModulation",
 function (type, tuv) {
 this.getModCalc ();
 switch (type) {
@@ -204,14 +204,14 @@ return Float.$valueOf (Math.abs (tuv == null ? this.getOccupancy100 (false) : th
 }
 return null;
 }, "~S,JU.T3");
-Clazz.overrideMethod (c$, "setCalcPoint", 
+Clazz.overrideMethod (c$, "setCalcPoint",
 function (pt, t456, vibScale, scale) {
 if (this.enabled) {
 this.addTo (pt, NaN);
 this.getModCalc ().calculate (t456, false).addTo (pt, scale);
 }return pt;
 }, "JU.T3,JU.T3,~N,~N");
-Clazz.defineMethod (c$, "getModCalc", 
+Clazz.defineMethod (c$, "getModCalc",
  function () {
 if (this.modCalc == null) {
 this.modCalc =  new JU.ModulationSet ();
@@ -237,7 +237,7 @@ this.modCalc.vib = this.vib;
 if (this.mxyz != null) this.modCalc.mxyz =  new JU.V3 ();
 }return this.modCalc;
 });
-Clazz.overrideMethod (c$, "getInfo", 
+Clazz.overrideMethod (c$, "getInfo",
 function (info) {
 var modInfo =  new java.util.Hashtable ();
 modInfo.put ("id", this.id);
@@ -255,7 +255,7 @@ for (var i = 0; i < this.mods.size (); i++) mInfo.addLast (this.mods.get (i).get
 modInfo.put ("mods", mInfo);
 info.put ("modulation", modInfo);
 }, "java.util.Map");
-Clazz.overrideMethod (c$, "setXYZ", 
+Clazz.overrideMethod (c$, "setXYZ",
 function (v) {
 if (this.vib == null) return;
 if (this.vib.modDim == -2) {
@@ -264,16 +264,16 @@ this.vib.modScale = v.z;
 return;
 }}this.vib.setT (v);
 }, "JU.T3");
-Clazz.overrideMethod (c$, "getVibration", 
+Clazz.overrideMethod (c$, "getVibration",
 function (forceNew) {
 if (this.vib == null && forceNew) this.vib =  new JU.Vibration ();
 return this.vib;
 }, "~B");
-Clazz.overrideMethod (c$, "getV3", 
+Clazz.overrideMethod (c$, "getV3",
 function () {
 return (this.mxyz == null ? this : this.mxyz);
 });
-Clazz.overrideMethod (c$, "scaleVibration", 
+Clazz.overrideMethod (c$, "scaleVibration",
 function (m) {
 if (this.vib == null) return;
 if (m == 0) {
@@ -281,24 +281,24 @@ m = 1 / this.vib.modScale;
 }this.vib.scale (m);
 this.vib.modScale *= m;
 }, "~N");
-Clazz.overrideMethod (c$, "setMoment", 
+Clazz.overrideMethod (c$, "setMoment",
 function () {
 if (this.mxyz == null) return;
 this.symmetry.toCartesian (this.vib, true);
 this.v0 = JU.V3.newV (this.vib);
 });
-Clazz.overrideMethod (c$, "isNonzero", 
+Clazz.overrideMethod (c$, "isNonzero",
 function () {
 return this.x != 0 || this.y != 0 || this.z != 0 || this.mxyz != null && (this.mxyz.x != 0 || this.mxyz.y != 0 || this.mxyz.z != 0);
 });
-Clazz.defineMethod (c$, "setOccupancy", 
+Clazz.defineMethod (c$, "setOccupancy",
 function (pt, foccupancy, siteMult) {
 this.occParams = pt;
 this.fileOcc = foccupancy;
 this.occSiteMultiplicity = siteMult;
 return this.getOccupancy ();
 }, "~A,~N,~N");
-Clazz.overrideMethod (c$, "getOccupancy100", 
+Clazz.overrideMethod (c$, "getOccupancy100",
 function (isTemp) {
 if (this.isCommensurate || Float.isNaN (this.vOcc)) return -2147483648;
 if (!isTemp && !this.enabled) return Clazz.doubleToInt (-this.fileOcc * 100);
@@ -307,7 +307,7 @@ this.modCalc.getOccupancy ();
 return this.modCalc.getOccupancy100 (false);
 }return Clazz.floatToInt (this.occValue * 100);
 }, "~B");
-Clazz.defineMethod (c$, "getOccupancy", 
+Clazz.defineMethod (c$, "getOccupancy",
  function () {
 var occ;
 if (this.occAbsolute) {

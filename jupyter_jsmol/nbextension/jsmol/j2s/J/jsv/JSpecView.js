@@ -4,17 +4,17 @@ c$ = Clazz.decorateAsClass (function () {
 this.vwr = null;
 Clazz.instantialize (this, arguments);
 }, J.jsv, "JSpecView", null, J.api.JmolJSpecView);
-Clazz.overrideMethod (c$, "setViewer", 
+Clazz.overrideMethod (c$, "setViewer",
 function (vwr) {
 this.vwr = vwr;
 }, "JV.Viewer");
-Clazz.overrideMethod (c$, "atomPicked", 
+Clazz.overrideMethod (c$, "atomPicked",
 function (atomIndex) {
 if (atomIndex < 0) return;
 var peak = this.getPeakAtomRecord (atomIndex);
 if (peak != null) this.sendJSpecView (peak + " src=\"JmolAtomSelect\"");
 }, "~N");
-Clazz.defineMethod (c$, "getPeakAtomRecord", 
+Clazz.defineMethod (c$, "getPeakAtomRecord",
  function (atomIndex) {
 var atoms = this.vwr.ms.at;
 var iModel = atoms[atomIndex].mi;
@@ -35,25 +35,25 @@ this.vwr.ms.htPeaks =  new java.util.Hashtable ();
 var htPeaks = this.vwr.ms.htPeaks;
 for (var i = 0; i < peaks.size (); i++) {
 var peak = peaks.get (i);
-System.out.println ("Jmol JSpecView.java peak=" + peak);
+Zystem.out.println ("Jmol JSpecView.java peak=" + peak);
 var bsPeak = htPeaks.get (peak);
-System.out.println ("Jmol JSpecView.java bspeak=" + bsPeak);
+Zystem.out.println ("Jmol JSpecView.java bspeak=" + bsPeak);
 if (bsPeak == null) {
 htPeaks.put (peak, bsPeak =  new JU.BS ());
 var satoms = JU.PT.getQuotedAttribute (peak, "atoms");
 var select = JU.PT.getQuotedAttribute (peak, "select");
-System.out.println ("Jmol JSpecView.java satoms select " + satoms + " " + select);
+Zystem.out.println ("Jmol JSpecView.java satoms select " + satoms + " " + select);
 var script = "";
 if (satoms != null) script += "visible & (atomno=" + JU.PT.rep (satoms, ",", " or atomno=") + ")";
  else if (select != null) script += "visible & (" + select + ")";
-System.out.println ("Jmol JSpecView.java script : " + script);
+Zystem.out.println ("Jmol JSpecView.java script : " + script);
 bsPeak.or (this.vwr.getAtomBitSet (script));
-}System.out.println ("Jmol JSpecView bsPeak now : " + bsPeak + " " + atomIndex);
+}Zystem.out.println ("Jmol JSpecView bsPeak now : " + bsPeak + " " + atomIndex);
 if (bsPeak.get (atomIndex)) return peak;
 }
 return null;
 }, "~N");
-Clazz.defineMethod (c$, "sendJSpecView", 
+Clazz.defineMethod (c$, "sendJSpecView",
  function (peak) {
 var msg = JU.PT.getQuotedAttribute (peak, "title");
 if (msg != null) this.vwr.scriptEcho (JU.Logger.debugging ? peak : msg);
@@ -61,21 +61,21 @@ peak = this.vwr.fullName + "JSpecView: " + peak;
 JU.Logger.info ("Jmol.JSpecView.sendJSpecView Jmol>JSV " + peak);
 this.vwr.sm.syncSend (peak, ">", 0);
 }, "~S");
-Clazz.overrideMethod (c$, "setModel", 
+Clazz.overrideMethod (c$, "setModel",
 function (modelIndex) {
 var syncMode = ("sync on".equals (this.vwr.ms.getInfoM ("jmolscript")) ? 1 : this.vwr.sm.getSyncMode ());
 if (syncMode != 1) return;
 var peak = this.vwr.ms.getInfo (modelIndex, "jdxModelSelect");
 if (peak != null) this.sendJSpecView (peak + " src=\"Jmol\"");
 }, "~N");
-Clazz.overrideMethod (c$, "getBaseModelIndex", 
+Clazz.overrideMethod (c$, "getBaseModelIndex",
 function (modelIndex) {
 var baseModel = this.vwr.ms.getInfo (modelIndex, "jdxBaseModel");
 if (baseModel != null) for (var i = this.vwr.ms.mc; --i >= 0; ) if (baseModel.equals (this.vwr.ms.getInfo (i, "jdxModelID"))) return i;
 
 return modelIndex;
 }, "~N");
-Clazz.overrideMethod (c$, "processSync", 
+Clazz.overrideMethod (c$, "processSync",
 function (script, jsvMode) {
 if (JU.Logger.debugging) JU.Logger.info ("J.jsv.JSpecView jsvMode=" + jsvMode + " script=" + script);
 switch (jsvMode) {

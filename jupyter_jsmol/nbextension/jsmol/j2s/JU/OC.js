@@ -17,15 +17,15 @@ this.bytes = null;
 this.bigEndian = true;
 Clazz.instantialize (this, arguments);
 }, JU, "OC", java.io.OutputStream, javajs.api.GenericOutputChannel);
-Clazz.overrideMethod (c$, "isBigEndian", 
+Clazz.overrideMethod (c$, "isBigEndian",
 function () {
 return this.bigEndian;
 });
-Clazz.defineMethod (c$, "setBigEndian", 
+Clazz.defineMethod (c$, "setBigEndian",
 function (TF) {
 this.bigEndian = TF;
 }, "~B");
-Clazz.defineMethod (c$, "setParams", 
+Clazz.defineMethod (c$, "setParams",
 function (bytePoster, fileName, asWriter, os) {
 this.bytePoster = bytePoster;
 this.fileName = fileName;
@@ -39,32 +39,32 @@ this.isLocalFile = (fileName != null && !JU.OC.isRemote (fileName));
 if (asWriter && !this.$isBase64 && os != null) this.bw =  new java.io.BufferedWriter ( new java.io.OutputStreamWriter (os));
 return this;
 }, "javajs.api.BytePoster,~S,~B,java.io.OutputStream");
-Clazz.defineMethod (c$, "setBytes", 
+Clazz.defineMethod (c$, "setBytes",
 function (b) {
 this.bytes = b;
 return this;
 }, "~A");
-Clazz.defineMethod (c$, "getFileName", 
+Clazz.defineMethod (c$, "getFileName",
 function () {
 return this.fileName;
 });
-Clazz.defineMethod (c$, "getName", 
+Clazz.defineMethod (c$, "getName",
 function () {
 return (this.fileName == null ? null : this.fileName.substring (this.fileName.lastIndexOf ("/") + 1));
 });
-Clazz.defineMethod (c$, "getByteCount", 
+Clazz.defineMethod (c$, "getByteCount",
 function () {
 return this.byteCount;
 });
-Clazz.defineMethod (c$, "setType", 
+Clazz.defineMethod (c$, "setType",
 function (type) {
 this.type = type;
 }, "~S");
-Clazz.defineMethod (c$, "getType", 
+Clazz.defineMethod (c$, "getType",
 function () {
 return this.type;
 });
-Clazz.defineMethod (c$, "append", 
+Clazz.defineMethod (c$, "append",
 function (s) {
 try {
 if (this.bw != null) {
@@ -86,12 +86,12 @@ throw e;
 this.byteCount += s.length;
 return this;
 }, "~S");
-Clazz.overrideMethod (c$, "reset", 
+Clazz.overrideMethod (c$, "reset",
 function () {
 this.sb = null;
 this.initOS ();
 });
-Clazz.defineMethod (c$, "initOS", 
+Clazz.defineMethod (c$, "initOS",
  function () {
 if (this.sb != null) {
 var s = this.sb.toString ();
@@ -107,21 +107,21 @@ this.bw.close ();
 this.bw =  new java.io.BufferedWriter ( new java.io.OutputStreamWriter (this.os));
 }} catch (e) {
 if (Clazz.exceptionOf (e, Exception)) {
-System.out.println (e.toString ());
+Zystem.out.println (e.toString ());
 } else {
 throw e;
 }
 }
 this.byteCount = 0;
 });
-Clazz.overrideMethod (c$, "writeByteAsInt", 
+Clazz.overrideMethod (c$, "writeByteAsInt",
 function (b) {
 if (this.os == null) this.initOS ();
 {
 this.os.writeByteAsInt(b);
 }this.byteCount++;
 }, "~N");
-Clazz.overrideMethod (c$, "write", 
+Clazz.overrideMethod (c$, "write",
 function (buf, i, len) {
 if (this.os == null) this.initOS ();
 if (len < 0) len = buf.length - i;
@@ -135,7 +135,7 @@ throw e;
 }
 this.byteCount += len;
 }, "~A,~N,~N");
-Clazz.overrideMethod (c$, "writeShort", 
+Clazz.overrideMethod (c$, "writeShort",
 function (i) {
 if (this.isBigEndian ()) {
 this.writeByteAsInt (i >> 8);
@@ -144,7 +144,7 @@ this.writeByteAsInt (i);
 this.writeByteAsInt (i);
 this.writeByteAsInt (i >> 8);
 }}, "~N");
-Clazz.overrideMethod (c$, "writeLong", 
+Clazz.overrideMethod (c$, "writeLong",
 function (b) {
 if (this.isBigEndian ()) {
 this.writeInt (((b >> 32) & 0xFFFFFFFF));
@@ -159,12 +159,12 @@ this.writeByteAsInt ((b >> 16));
 this.writeByteAsInt ((b >> 8));
 this.writeByteAsInt (b);
 }}, "~N");
-Clazz.defineMethod (c$, "cancel", 
+Clazz.defineMethod (c$, "cancel",
 function () {
 this.isCanceled = true;
 this.closeChannel ();
 });
-Clazz.overrideMethod (c$, "closeChannel", 
+Clazz.overrideMethod (c$, "closeChannel",
 function () {
 if (this.closed) return null;
 try {
@@ -213,23 +213,23 @@ if (_function == null) jmol.doAjax (this.fileName, null, data, this.sb == null);
  else jmol.applyFunc (this.fileName, data);
 }return null;
 });
-Clazz.defineMethod (c$, "isBase64", 
+Clazz.defineMethod (c$, "isBase64",
 function () {
 return this.$isBase64;
 });
-Clazz.defineMethod (c$, "getBase64", 
+Clazz.defineMethod (c$, "getBase64",
 function () {
 return JU.Base64.getBase64 (this.toByteArray ()).toString ();
 });
-Clazz.defineMethod (c$, "toByteArray", 
+Clazz.defineMethod (c$, "toByteArray",
 function () {
 return (this.bytes != null ? this.bytes : Clazz.instanceOf (this.os, java.io.ByteArrayOutputStream) ? (this.os).toByteArray () : null);
 });
-Clazz.defineMethod (c$, "close", 
+Clazz.defineMethod (c$, "close",
 function () {
 this.closeChannel ();
 });
-Clazz.overrideMethod (c$, "toString", 
+Clazz.overrideMethod (c$, "toString",
 function () {
 if (this.bw != null) try {
 this.bw.flush ();
@@ -242,22 +242,22 @@ throw e;
 if (this.sb != null) return this.closeChannel ();
 return this.byteCount + " bytes";
 });
-Clazz.defineMethod (c$, "postByteArray", 
+Clazz.defineMethod (c$, "postByteArray",
  function () {
 var bytes = (this.sb == null ? this.toByteArray () : this.sb.toString ().getBytes ());
 return this.bytePoster.postByteArray (this.fileName, bytes);
 });
-c$.isRemote = Clazz.defineMethod (c$, "isRemote", 
+c$.isRemote = Clazz.defineMethod (c$, "isRemote",
 function (fileName) {
 if (fileName == null) return false;
 var itype = JU.OC.urlTypeIndex (fileName);
 return (itype >= 0 && itype < 4);
 }, "~S");
-c$.isLocal = Clazz.defineMethod (c$, "isLocal", 
+c$.isLocal = Clazz.defineMethod (c$, "isLocal",
 function (fileName) {
 return (fileName != null && !JU.OC.isRemote (fileName));
 }, "~S");
-c$.urlTypeIndex = Clazz.defineMethod (c$, "urlTypeIndex", 
+c$.urlTypeIndex = Clazz.defineMethod (c$, "urlTypeIndex",
 function (name) {
 if (name == null) return -2;
 for (var i = 0; i < JU.OC.urlPrefixes.length; ++i) {
@@ -266,7 +266,7 @@ return i;
 }}
 return -1;
 }, "~S");
-Clazz.overrideMethod (c$, "writeInt", 
+Clazz.overrideMethod (c$, "writeInt",
 function (i) {
 if (this.bigEndian) {
 this.writeByteAsInt (i >> 24);
@@ -279,7 +279,7 @@ this.writeByteAsInt (i >> 8);
 this.writeByteAsInt (i >> 16);
 this.writeByteAsInt (i >> 24);
 }}, "~N");
-Clazz.defineMethod (c$, "writeFloat", 
+Clazz.defineMethod (c$, "writeFloat",
 function (x) {
 this.writeInt (x == 0 ? 0 : Float.floatToIntBits (x));
 }, "~N");

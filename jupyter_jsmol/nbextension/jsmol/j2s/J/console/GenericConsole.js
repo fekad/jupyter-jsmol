@@ -21,7 +21,7 @@ Clazz.instantialize (this, arguments);
 Clazz.prepareFields (c$, function () {
 this.menuMap =  new java.util.Hashtable ();
 });
-Clazz.defineMethod (c$, "setViewer", 
+Clazz.defineMethod (c$, "setViewer",
 function (vwr) {
 this.vwr = vwr;
 if (J.console.GenericConsole.labels == null) {
@@ -30,24 +30,24 @@ l.put ("title", J.i18n.GT.$ ("Jmol Script Console") + " " + JV.Viewer.getJmolVer
 this.setupLabels (l);
 J.console.GenericConsole.labels = l;
 }}, "JV.Viewer");
-Clazz.defineMethod (c$, "addButton", 
+Clazz.defineMethod (c$, "addButton",
 function (b, label) {
 b.addConsoleListener (this);
 this.menuMap.put (label, b);
 return b;
 }, "J.api.JmolAbstractButton,~S");
-Clazz.defineMethod (c$, "getLabel1", 
+Clazz.defineMethod (c$, "getLabel1",
 function () {
 return null;
 });
-Clazz.defineMethod (c$, "setupLabels", 
+Clazz.defineMethod (c$, "setupLabels",
 function (labels) {
 labels.put ("saveas", J.i18n.GT.$ ("&Save As..."));
 labels.put ("file", J.i18n.GT.$ ("&File"));
 labels.put ("close", J.i18n.GT.$ ("&Close"));
 this.setupLabels0 (labels);
 }, "java.util.Map");
-Clazz.defineMethod (c$, "setupLabels0", 
+Clazz.defineMethod (c$, "setupLabels0",
 function (labels) {
 labels.put ("help", J.i18n.GT.$ ("&Help"));
 labels.put ("search", J.i18n.GT.$ ("&Search..."));
@@ -65,7 +65,7 @@ labels.put ("Load", J.i18n.GT.$ ("Load"));
 labels.put ("label1", J.i18n.GT.$ ("press CTRL-ENTER for new line or paste model data and press Load"));
 labels.put ("default", J.i18n.GT.$ ("Messages will appear here. Enter commands in the box below. Click the console Help menu item for on-line help, which will appear in a new browser window."));
 }, "java.util.Map");
-Clazz.defineMethod (c$, "setLabels", 
+Clazz.defineMethod (c$, "setLabels",
 function () {
 var doTranslate = J.i18n.GT.setDoTranslate (true);
 this.editButton = this.setButton ("Editor");
@@ -79,20 +79,20 @@ this.defaultMessage = J.console.GenericConsole.getLabel ("default");
 this.setTitle ();
 J.i18n.GT.setDoTranslate (doTranslate);
 });
-c$.getLabel = Clazz.defineMethod (c$, "getLabel", 
+c$.getLabel = Clazz.defineMethod (c$, "getLabel",
 function (key) {
 return J.console.GenericConsole.labels.get (key);
 }, "~S");
-Clazz.defineMethod (c$, "displayConsole", 
+Clazz.defineMethod (c$, "displayConsole",
 function () {
 this.layoutWindow (null);
 this.outputMsg (this.defaultMessage);
 });
-Clazz.defineMethod (c$, "updateLabels", 
+Clazz.defineMethod (c$, "updateLabels",
 function () {
 return;
 });
-Clazz.defineMethod (c$, "completeCommand", 
+Clazz.defineMethod (c$, "completeCommand",
 function (thisCmd) {
 if (thisCmd.length == 0) return null;
 var strCommand = (this.nTab <= 0 || this.incompleteCmd == null ? thisCmd : this.incompleteCmd);
@@ -126,7 +126,7 @@ this.vwr.getObjectMap (map, inBrace || isSelect ? '{' : splitCmd[2].startsWith (
 cmd = splitCmd[0] + (cmd == null ? notThis : asCommand ? cmd : splitCmd[1] + cmd);
 }return (cmd == null || cmd.equals (strCommand) ? null : cmd);
 }, "~S");
-Clazz.defineMethod (c$, "doAction", 
+Clazz.defineMethod (c$, "doAction",
 function (source) {
 if (source === this.runButton) {
 this.execute (null);
@@ -149,18 +149,18 @@ return;
 this.execute ((source).getName ());
 return;
 }}, "~O");
-Clazz.defineMethod (c$, "execute", 
+Clazz.defineMethod (c$, "execute",
 function (strCommand) {
 var cmd = (strCommand == null ? this.input.getText () : strCommand);
 if (strCommand == null) this.input.setText (null);
 var strErrorMessage = this.vwr.script (cmd + "\u0001## EDITOR_IGNORE ##");
 if (strErrorMessage != null && !strErrorMessage.equals ("pending")) this.outputMsg (strErrorMessage);
 }, "~S");
-Clazz.defineMethod (c$, "destroyConsole", 
+Clazz.defineMethod (c$, "destroyConsole",
 function () {
 if (this.vwr.isApplet) this.vwr.getProperty ("DATA_API", "getAppConsole", Boolean.FALSE);
 });
-c$.setAbstractButtonLabels = Clazz.defineMethod (c$, "setAbstractButtonLabels", 
+c$.setAbstractButtonLabels = Clazz.defineMethod (c$, "setAbstractButtonLabels",
 function (menuMap, labels) {
 for (var key, $key = menuMap.keySet ().iterator (); $key.hasNext () && ((key = $key.next ()) || true);) {
 var m = menuMap.get (key);
@@ -174,7 +174,7 @@ label = J.console.GenericConsole.getLabelWithoutMnemonic (label);
 m.setText (label);
 }}
 }, "java.util.Map,java.util.Map");
-c$.getLabelWithoutMnemonic = Clazz.defineMethod (c$, "getLabelWithoutMnemonic", 
+c$.getLabelWithoutMnemonic = Clazz.defineMethod (c$, "getLabelWithoutMnemonic",
 function (label) {
 if (label == null) {
 return null;
@@ -183,7 +183,7 @@ if (index == -1) {
 return label;
 }return label.substring (0, index) + ((index < label.length - 1) ? label.substring (index + 1) : "");
 }, "~S");
-c$.getMnemonic = Clazz.defineMethod (c$, "getMnemonic", 
+c$.getMnemonic = Clazz.defineMethod (c$, "getMnemonic",
 function (label) {
 if (label == null) {
 return ' ';
@@ -192,15 +192,15 @@ if ((index == -1) || (index == label.length - 1)) {
 return ' ';
 }return label.charAt (index + 1);
 }, "~S");
-c$.map = Clazz.defineMethod (c$, "map", 
+c$.map = Clazz.defineMethod (c$, "map",
 function (button, key, label, menuMap) {
 var mnemonic = J.console.GenericConsole.getMnemonic (label);
 if (mnemonic != ' ') (button).setMnemonic (mnemonic);
 if (menuMap != null) {
-if (key.indexOf ("NMR.") >= 0) System.out.println ("genericconsole mapping " + key + " to " + label);
+if (key.indexOf ("NMR.") >= 0) Zystem.out.println ("genericconsole mapping " + key + " to " + label);
 menuMap.put (key, button);
 }}, "~O,~S,~S,java.util.Map");
-Clazz.overrideMethod (c$, "notifyEnabled", 
+Clazz.overrideMethod (c$, "notifyEnabled",
 function (type) {
 switch (type) {
 case J.c.CBK.ECHO:
@@ -228,7 +228,7 @@ break;
 }
 return false;
 }, "J.c.CBK");
-Clazz.overrideMethod (c$, "notifyCallback", 
+Clazz.overrideMethod (c$, "notifyCallback",
 function (type, data) {
 var strInfo = (data == null || data[1] == null ? null : data[1].toString ());
 switch (type) {
@@ -248,11 +248,11 @@ this.sendConsoleMessage (strInfo);
 break;
 }
 }, "J.c.CBK,~A");
-Clazz.overrideMethod (c$, "getText", 
+Clazz.overrideMethod (c$, "getText",
 function () {
 return this.output.getText ();
 });
-Clazz.overrideMethod (c$, "sendConsoleEcho", 
+Clazz.overrideMethod (c$, "sendConsoleEcho",
 function (strEcho) {
 if (strEcho == null) {
 this.updateLabels ();
@@ -264,7 +264,7 @@ Clazz.Console.clear();
 }strEcho = null;
 }this.outputMsg (strEcho);
 }, "~S");
-Clazz.defineMethod (c$, "outputMsg", 
+Clazz.defineMethod (c$, "outputMsg",
  function (message) {
 var n = (message == null ? -1 : message.length);
 switch (n) {
@@ -278,27 +278,27 @@ message += "\n";
 }
 this.output.append (message);
 }, "~S");
-Clazz.defineMethod (c$, "clearContent", 
+Clazz.defineMethod (c$, "clearContent",
 function (text) {
 this.output.setText (text);
 }, "~S");
-Clazz.overrideMethod (c$, "sendConsoleMessage", 
+Clazz.overrideMethod (c$, "sendConsoleMessage",
 function (strInfo) {
 if (strInfo != null && this.output.getText ().startsWith (this.defaultMessage)) this.outputMsg (null);
 this.outputMsg (strInfo);
 }, "~S");
-Clazz.overrideMethod (c$, "setCallbackFunction", 
+Clazz.overrideMethod (c$, "setCallbackFunction",
 function (callbackType, callbackFunction) {
 }, "~S,~S");
-Clazz.overrideMethod (c$, "zap", 
+Clazz.overrideMethod (c$, "zap",
 function () {
 });
-Clazz.defineMethod (c$, "recallCommand", 
+Clazz.defineMethod (c$, "recallCommand",
 function (up) {
 var cmd = this.vwr.getSetHistory (up ? -1 : 1);
 if (cmd != null) this.input.setText (JU.PT.escUnicode (cmd));
 }, "~B");
-Clazz.defineMethod (c$, "processKey", 
+Clazz.defineMethod (c$, "processKey",
 function (kcode, kid, isControlDown) {
 var mode = 0;
 switch (kid) {
@@ -333,7 +333,7 @@ break;
 }
 return mode | 2;
 }, "~N,~N,~B");
-c$.splitCommandLine = Clazz.defineMethod (c$, "splitCommandLine", 
+c$.splitCommandLine = Clazz.defineMethod (c$, "splitCommandLine",
  function (cmd) {
 var sout =  new Array (4);
 var isEscaped1 = false;

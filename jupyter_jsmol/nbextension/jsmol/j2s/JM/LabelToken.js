@@ -14,22 +14,22 @@ this.zeroPad = false;
 this.intAsFloat = false;
 Clazz.instantialize (this, arguments);
 }, JM, "LabelToken");
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function () {
 });
-Clazz.defineMethod (c$, "set", 
+Clazz.defineMethod (c$, "set",
  function (text, pt) {
 this.text = text;
 this.pt = pt;
 return this;
 }, "~S,~N");
-c$.isLabelPropertyTok = Clazz.defineMethod (c$, "isLabelPropertyTok", 
+c$.isLabelPropertyTok = Clazz.defineMethod (c$, "isLabelPropertyTok",
  function (tok) {
 for (var i = JM.LabelToken.labelTokenIds.length; --i >= 0; ) if (JM.LabelToken.labelTokenIds[i] == tok) return true;
 
 return false;
 }, "~N");
-c$.compile = Clazz.defineMethod (c$, "compile", 
+c$.compile = Clazz.defineMethod (c$, "compile",
 function (vwr, strFormat, chAtom, htValues) {
 if (strFormat == null || strFormat.length == 0) return null;
 if (strFormat.indexOf ("%") < 0 || strFormat.length < 2) return  Clazz.newArray (-1, [ new JM.LabelToken ().set (strFormat, -1)]);
@@ -50,11 +50,11 @@ ich = JM.LabelToken.setToken (vwr, strFormat, lt, cch, chAtom.charCodeAt (0), ht
 if (ich < cch) tokens[i++] =  new JM.LabelToken ().set (strFormat.substring (ich), -1);
 return tokens;
 }, "JV.Viewer,~S,~S,java.util.Map");
-Clazz.defineMethod (c$, "formatLabel", 
+Clazz.defineMethod (c$, "formatLabel",
 function (vwr, atom, strFormat, ptTemp) {
 return (strFormat == null || strFormat.length == 0 ? null : JM.LabelToken.formatLabelAtomArray (vwr, atom, JM.LabelToken.compile (vwr, strFormat, '\0', null), '\0', null, ptTemp));
 }, "JV.Viewer,JM.Atom,~S,JU.P3");
-c$.formatLabelAtomArray = Clazz.defineMethod (c$, "formatLabelAtomArray", 
+c$.formatLabelAtomArray = Clazz.defineMethod (c$, "formatLabelAtomArray",
 function (vwr, atom, tokens, chAtom, indices, ptTemp) {
 if (atom == null) return null;
 var strLabel = (chAtom > '0' ? null :  new JU.SB ());
@@ -71,7 +71,7 @@ JM.LabelToken.appendAtomTokenValue (vwr, atom, t, strLabel, indices, ptTemp);
 }}
 return (strLabel == null ? null : strLabel.toString ().intern ());
 }, "JV.Viewer,JM.Atom,~A,~S,~A,JU.P3");
-c$.getBondLabelValues = Clazz.defineMethod (c$, "getBondLabelValues", 
+c$.getBondLabelValues = Clazz.defineMethod (c$, "getBondLabelValues",
 function () {
 var htValues =  new java.util.Hashtable ();
 htValues.put ("#", "");
@@ -81,7 +81,7 @@ htValues.put ("LENGTH", Float.$valueOf (0));
 htValues.put ("ENERGY", Float.$valueOf (0));
 return htValues;
 });
-c$.formatLabelBond = Clazz.defineMethod (c$, "formatLabelBond", 
+c$.formatLabelBond = Clazz.defineMethod (c$, "formatLabelBond",
 function (vwr, bond, tokens, values, indices, ptTemp) {
 values.put ("#", "" + (bond.index + 1));
 values.put ("ORDER", "" + JU.Edge.getBondOrderNumberFromOrder (bond.order));
@@ -93,7 +93,7 @@ JM.LabelToken.formatLabelAtomArray (vwr, bond.atom1, tokens, '1', indices, ptTem
 JM.LabelToken.formatLabelAtomArray (vwr, bond.atom2, tokens, '2', indices, ptTemp);
 return JM.LabelToken.getLabel (tokens);
 }, "JV.Viewer,JM.Bond,~A,java.util.Map,~A,JU.P3");
-c$.formatLabelMeasure = Clazz.defineMethod (c$, "formatLabelMeasure", 
+c$.formatLabelMeasure = Clazz.defineMethod (c$, "formatLabelMeasure",
 function (vwr, m, label, value, units) {
 var htValues =  new java.util.Hashtable ();
 htValues.put ("#", "" + (m.index + 1));
@@ -109,7 +109,7 @@ for (var i = indices[0]; i >= 1; --i) if (indices[i] >= 0) JM.LabelToken.formatL
 label = JM.LabelToken.getLabel (tokens);
 return (label == null ? "" : label);
 }, "JV.Viewer,JM.Measurement,~S,~N,~S");
-c$.setValues = Clazz.defineMethod (c$, "setValues", 
+c$.setValues = Clazz.defineMethod (c$, "setValues",
 function (tokens, values) {
 for (var i = 0; i < tokens.length; i++) {
 var lt = tokens[i];
@@ -119,7 +119,7 @@ var value = values.get (lt.key);
 lt.text = (Clazz.instanceOf (value, Float) ? lt.format ((value).floatValue (), null, null) : lt.format (NaN, value, null));
 }
 }, "~A,java.util.Map");
-c$.getLabel = Clazz.defineMethod (c$, "getLabel", 
+c$.getLabel = Clazz.defineMethod (c$, "getLabel",
 function (tokens) {
 var sb =  new JU.SB ();
 for (var i = 0; i < tokens.length; i++) {
@@ -129,7 +129,7 @@ sb.append (lt.text);
 }
 return sb.toString ();
 }, "~A");
-c$.setToken = Clazz.defineMethod (c$, "setToken", 
+c$.setToken = Clazz.defineMethod (c$, "setToken",
  function (vwr, strFormat, lt, cch, chAtom, htValues) {
 var ich = lt.pt + 1;
 if (ich >= cch) {
@@ -221,7 +221,7 @@ lt.ch1 = ch;
 if (ch.charCodeAt (0) != chAtom && chAtom != 1) lt.tok = 0;
 }return ich;
 }, "JV.Viewer,~S,JM.LabelToken,~N,~N,java.util.Map");
-c$.appendAtomTokenValue = Clazz.defineMethod (c$, "appendAtomTokenValue", 
+c$.appendAtomTokenValue = Clazz.defineMethod (c$, "appendAtomTokenValue",
  function (vwr, atom, t, strLabel, indices, ptTemp) {
 var strT = null;
 var floatT = NaN;
@@ -244,7 +244,7 @@ floatT = (t.data)[atom.i];
 if (t.tok == 1073742189 && floatT != 1 && floatT != 0) {
 var o = vwr.getAtomValidation (t.text.substring (13, t.text.length - 1), atom);
 if (o == null) {
-System.out.println ("?? o is null ??");
+Zystem.out.println ("?? o is null ??");
 } else if (o.size () == 1) {
 floatT = o.get (0).floatValue ();
 } else {
@@ -363,7 +363,7 @@ strT = t.format (floatT, strT, ptT);
 if (strLabel == null) t.text = strT;
  else strLabel.append (strT);
 }, "JV.Viewer,JM.Atom,JM.LabelToken,JU.SB,~A,JU.P3");
-Clazz.defineMethod (c$, "format", 
+Clazz.defineMethod (c$, "format",
  function (floatT, strT, ptT) {
 if (!Float.isNaN (floatT)) {
 return JU.PT.formatF (floatT, this.width, this.precision, this.alignLeft, this.zeroPad);

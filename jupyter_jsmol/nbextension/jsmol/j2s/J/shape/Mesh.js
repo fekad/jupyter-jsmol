@@ -54,11 +54,11 @@ this.recalcAltVertices = false;
 this.symopColixes = null;
 Clazz.instantialize (this, arguments);
 }, J.shape, "Mesh", JU.MeshSurface);
-Clazz.defineMethod (c$, "setVisibilityFlags", 
+Clazz.defineMethod (c$, "setVisibilityFlags",
 function (n) {
 this.visibilityFlags = n;
 }, "~N");
-Clazz.defineMethod (c$, "mesh1", 
+Clazz.defineMethod (c$, "mesh1",
 function (vwr, thisID, colix, index) {
 if ("+PREVIOUS_MESH+".equals (thisID)) thisID = null;
 this.vwr = vwr;
@@ -70,11 +70,11 @@ this.vAB =  new JU.V3 ();
 this.vTemp =  new JU.V3 ();
 return this;
 }, "JV.Viewer,~S,~N,~N");
-Clazz.defineMethod (c$, "clear", 
+Clazz.defineMethod (c$, "clear",
 function (meshType) {
 this.clearMesh (meshType);
 }, "~S");
-Clazz.defineMethod (c$, "clearMesh", 
+Clazz.defineMethod (c$, "clearMesh",
 function (meshType) {
 this.altVertices = null;
 this.bsDisplay = null;
@@ -117,7 +117,7 @@ this.vertexSource = null;
 this.volumeRenderPointSize = 0.15;
 this.meshType = meshType;
 }, "~S");
-Clazz.defineMethod (c$, "initialize", 
+Clazz.defineMethod (c$, "initialize",
 function (lighting, vertices, plane) {
 if (vertices == null) vertices = this.vs;
 var normals = this.getNormals (vertices, plane);
@@ -127,7 +127,7 @@ if (this.insideOut) this.invertNormixes ();
 if (this.isShell && !this.isTwoSided) this.invertNormixes ();
 this.setLighting (lighting);
 }, "~N,~A,JU.P4");
-Clazz.defineMethod (c$, "setNormixes", 
+Clazz.defineMethod (c$, "setNormixes",
 function (normals) {
 if (normals == null) return (this.normixes = null);
 this.normixes =  Clazz.newShortArray (this.normixCount, 0);
@@ -138,7 +138,7 @@ if (this.haveXyPoints) for (var i = this.normixCount; --i >= 0; ) this.normixes[
 
 return this.normixes;
 }, "~A");
-Clazz.defineMethod (c$, "getNormals", 
+Clazz.defineMethod (c$, "getNormals",
 function (vertices, plane) {
 this.normixCount = (this.isDrawPolygon ? this.pc : this.vc);
 if (this.normixCount < 0) return null;
@@ -156,35 +156,35 @@ normals[i].normalize ();
 }
 return normals;
 }, "~A,JU.P4");
-Clazz.defineMethod (c$, "setLighting", 
+Clazz.defineMethod (c$, "setLighting",
 function (lighting) {
 this.isTwoSided = (lighting == 1073741964);
 if (lighting == this.lighting) return;
 this.flipLighting (this.lighting);
 this.flipLighting (this.lighting = lighting);
 }, "~N");
-Clazz.defineMethod (c$, "flipLighting", 
+Clazz.defineMethod (c$, "flipLighting",
  function (lighting) {
 if (lighting == 1073741964) for (var i = this.normixCount; --i >= 0; ) this.normixes[i] = ~this.normixes[i];
 
  else if ((lighting == 1073741958) == this.insideOut) this.invertNormixes ();
 }, "~N");
-Clazz.defineMethod (c$, "invertNormixes", 
+Clazz.defineMethod (c$, "invertNormixes",
  function () {
 JU.Normix.setInverseNormixes ();
 this.normalsInverted = !this.normalsInverted;
 for (var i = this.normixCount; --i >= 0; ) this.normixes[i] = JU.Normix.getInverseNormix (this.normixes[i]);
 
 });
-Clazz.defineMethod (c$, "setTranslucent", 
+Clazz.defineMethod (c$, "setTranslucent",
 function (isTranslucent, iLevel) {
 this.colix = JU.C.getColixTranslucent3 (this.colix, isTranslucent, iLevel);
 }, "~B,~N");
-Clazz.defineMethod (c$, "sumVertexNormals", 
+Clazz.defineMethod (c$, "sumVertexNormals",
 function (vertices, normals) {
 J.shape.Mesh.sumVertexNormals2 (this, vertices, normals);
 }, "~A,~A");
-c$.sumVertexNormals2 = Clazz.defineMethod (c$, "sumVertexNormals2", 
+c$.sumVertexNormals2 = Clazz.defineMethod (c$, "sumVertexNormals2",
 function (m, vertices, normals) {
 var adjustment = m.checkByteCount;
 var min = m.getMinDistance2ForVertexGrouping ();
@@ -207,18 +207,18 @@ normals[k].add (m.vTemp);
 }
 }} catch (e) {
 if (Clazz.exceptionOf (e, Exception)) {
-System.out.println (e);
+Zystem.out.println (e);
 } else {
 throw e;
 }
 }
 }
 }, "J.shape.Mesh,~A,~A");
-Clazz.defineMethod (c$, "getMinDistance2ForVertexGrouping", 
+Clazz.defineMethod (c$, "getMinDistance2ForVertexGrouping",
 function () {
 return 1e-8;
 });
-Clazz.defineMethod (c$, "getState", 
+Clazz.defineMethod (c$, "getState",
 function (type) {
 var s =  new JU.SB ();
 if (this.isValid) {
@@ -234,7 +234,7 @@ if (!type.equals ("mo") && !type.equals ("nbo")) s.append (" ID ").append (JU.PT
 s.append (" display " + JU.Escape.eBS (this.bsDisplay));
 }}return s.toString ();
 }, "~S");
-Clazz.defineMethod (c$, "getRendering", 
+Clazz.defineMethod (c$, "getRendering",
 function () {
 var s =  new JU.SB ();
 s.append (this.fillTriangles ? " fill" : " noFill");
@@ -247,7 +247,7 @@ s.append (" ").append (JS.T.nameOf (this.lighting));
 if (this.isShell && !this.isTwoSided) s.append (" backshell");
 return s.toString ();
 });
-Clazz.defineMethod (c$, "getOffsetVertices", 
+Clazz.defineMethod (c$, "getOffsetVertices",
 function (thePlane) {
 if (this.altVertices != null && !this.recalcAltVertices) return this.altVertices;
 this.altVertices =  new Array (this.vc);
@@ -273,7 +273,7 @@ this.initialize (this.lighting, this.altVertices, null);
 this.recalcAltVertices = false;
 return this.altVertices;
 }, "JU.P4");
-Clazz.defineMethod (c$, "setShowWithin", 
+Clazz.defineMethod (c$, "setShowWithin",
 function (showWithinPoints, showWithinDistance2, isWithinNot) {
 if (showWithinPoints.size () == 0) {
 this.bsDisplay = (isWithinNot ? JU.BSUtil.newBitSet2 (0, this.vc) : null);
@@ -282,22 +282,22 @@ return;
 for (var i = 0; i < this.vc; i++) if (J.shape.Mesh.checkWithin (this.vs[i], showWithinPoints, showWithinDistance2, isWithinNot)) this.bsDisplay.set (i);
 
 }, "JU.Lst,~N,~B");
-c$.checkWithin = Clazz.defineMethod (c$, "checkWithin", 
+c$.checkWithin = Clazz.defineMethod (c$, "checkWithin",
 function (pti, withinPoints, withinDistance2, isWithinNot) {
 if (withinPoints.size () != 0) for (var i = withinPoints.size (); --i >= 0; ) if (pti.distanceSquared (withinPoints.get (i)) <= withinDistance2) return !isWithinNot;
 
 return isWithinNot;
 }, "JU.T3,JU.Lst,~N,~B");
-Clazz.defineMethod (c$, "getVertexIndexFromNumber", 
+Clazz.defineMethod (c$, "getVertexIndexFromNumber",
 function (vertexIndex) {
 if (--vertexIndex < 0) vertexIndex = this.vc + vertexIndex;
 return (this.vc <= vertexIndex ? this.vc - 1 : vertexIndex < 0 ? 0 : vertexIndex);
 }, "~N");
-Clazz.defineMethod (c$, "getVisibleVertexBitSet", 
+Clazz.defineMethod (c$, "getVisibleVertexBitSet",
 function () {
 return this.getVisibleVBS ();
 });
-Clazz.defineMethod (c$, "getVisibleVBS", 
+Clazz.defineMethod (c$, "getVisibleVBS",
 function () {
 var bs =  new JU.BS ();
 if (this.pc == 0 && this.bsSlabDisplay != null) JU.BSUtil.copy2 (this.bsSlabDisplay, bs);
@@ -310,7 +310,7 @@ bs.set (vertexIndexes[2]);
 }
 return bs;
 });
-Clazz.defineMethod (c$, "setTokenProperty", 
+Clazz.defineMethod (c$, "setTokenProperty",
 function (tokProp, bProp) {
 switch (tokProp) {
 case 1073742058:
@@ -350,7 +350,7 @@ this.showContourLines = (tokProp == 1073741898 ? bProp : !bProp);
 return;
 }
 }, "~N,~B");
-Clazz.defineMethod (c$, "getInfo", 
+Clazz.defineMethod (c$, "getInfo",
 function (isAll) {
 var info =  new java.util.Hashtable ();
 info.put ("id", this.thisID);
@@ -375,7 +375,7 @@ np = bs.cardinality ();
 }}}info.put ("polygonCount", Integer.$valueOf (np));
 return info;
 }, "~B");
-c$.nonNullBS = Clazz.defineMethod (c$, "nonNullBS", 
+c$.nonNullBS = Clazz.defineMethod (c$, "nonNullBS",
  function (bsSlabDisplay, pis, pc) {
 var bs =  new JU.BS ();
 for (var pt = 0, i = 0; i < pc; i++) {
@@ -385,7 +385,7 @@ pt++;
 }}
 return bs;
 }, "JU.BS,~A,~N");
-c$.nonNull = Clazz.defineMethod (c$, "nonNull", 
+c$.nonNull = Clazz.defineMethod (c$, "nonNull",
  function (pis, pc) {
 var n = 0;
 for (var i = pc; --i >= 0; ) if (pis[i] != null) {
@@ -396,15 +396,15 @@ if (n > 0) for (var pt = 0, i = 0; i < pc; i++) if (pis[i] != null) ii[pt++] = p
 
 return ii;
 }, "~A,~N");
-Clazz.defineMethod (c$, "getBoundingBox", 
+Clazz.defineMethod (c$, "getBoundingBox",
 function () {
 return null;
 });
-Clazz.defineMethod (c$, "getUnitCell", 
+Clazz.defineMethod (c$, "getUnitCell",
 function () {
 return null;
 });
-Clazz.defineMethod (c$, "rotateTranslate", 
+Clazz.defineMethod (c$, "rotateTranslate",
 function (q, offset, isAbsolute) {
 if (q == null && offset == null) {
 this.mat4 = null;
@@ -422,7 +422,7 @@ m3.mul (q.getMatrix ());
 }this.mat4 = JU.M4.newMV (m3, v);
 this.recalcAltVertices = true;
 }, "JU.Quat,JU.T3,~B");
-Clazz.defineMethod (c$, "getNormalsTemp", 
+Clazz.defineMethod (c$, "getNormalsTemp",
 function () {
 return (this.normalsTemp == null ? (this.normalsTemp = this.getNormals (this.vs, null)) : this.normalsTemp);
 });

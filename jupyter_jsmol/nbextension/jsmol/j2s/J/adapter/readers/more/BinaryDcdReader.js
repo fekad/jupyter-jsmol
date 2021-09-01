@@ -11,18 +11,18 @@ this.zAll = null;
 this.crystGroup = 0;
 Clazz.instantialize (this, arguments);
 }, J.adapter.readers.more, "BinaryDcdReader", J.adapter.smarter.AtomSetCollectionReader);
-Clazz.overrideMethod (c$, "setup", 
+Clazz.overrideMethod (c$, "setup",
 function (fullPath, htParams, reader) {
 this.isBinary = true;
 this.requiresBSFilter = true;
 this.setupASCR (fullPath, htParams, reader);
 }, "~S,java.util.Map,~O");
-Clazz.overrideMethod (c$, "initializeReader", 
+Clazz.overrideMethod (c$, "initializeReader",
 function () {
 this.initializeTrajectoryFile ();
 this.asc.setInfo ("ignoreUnitCell", Boolean.TRUE);
 });
-Clazz.overrideMethod (c$, "processBinaryDocument", 
+Clazz.overrideMethod (c$, "processBinaryDocument",
 function () {
 var bytes =  Clazz.newByteArray (40, 0);
 this.binaryDoc.setStream (null, this.binaryDoc.readInt () == 0x54);
@@ -62,13 +62,13 @@ JU.Logger.info ("free: " + this.bsFree.cardinality () + " " + JU.Escape.eBS (thi
 }this.readCoordinates ();
 JU.Logger.info ("Total number of trajectory steps=" + this.trajectorySteps.size ());
 });
-Clazz.defineMethod (c$, "trimString", 
+Clazz.defineMethod (c$, "trimString",
  function (s) {
 var pt = s.indexOf ('\0');
 if (pt >= 0) s = s.substring (0, pt);
 return s.trim ();
 }, "~S");
-Clazz.defineMethod (c$, "readFloatArray", 
+Clazz.defineMethod (c$, "readFloatArray",
  function () {
 var n = Clazz.doubleToInt (this.binaryDoc.readInt () / 4);
 var data =  Clazz.newFloatArray (n, 0);
@@ -77,7 +77,7 @@ for (var i = 0; i < n; i++) data[i] = this.binaryDoc.readFloat ();
 this.binaryDoc.readInt ();
 return data;
 });
-Clazz.defineMethod (c$, "readDoubleArray", 
+Clazz.defineMethod (c$, "readDoubleArray",
  function () {
 var n = Clazz.doubleToInt (this.binaryDoc.readInt () / 8);
 var data =  Clazz.newDoubleArray (n, 0);
@@ -86,7 +86,7 @@ for (var i = 0; i < n; i++) data[i] = this.binaryDoc.readDouble ();
 this.binaryDoc.readInt ();
 return data;
 });
-Clazz.defineMethod (c$, "readCoordinates", 
+Clazz.defineMethod (c$, "readCoordinates",
  function () {
 var ac = (this.bsFilter == null ? this.templateAtomCount : (this.htParams.get ("filteredAtomCount")).intValue ());
 for (var i = 0; i < this.nModels; i++) if (this.doGetModel (++this.modelNumber, null)) {
@@ -101,7 +101,7 @@ this.readFloatArray ();
 this.readFloatArray ();
 }
 });
-Clazz.defineMethod (c$, "getTrajectoryStep", 
+Clazz.defineMethod (c$, "getTrajectoryStep",
  function (trajectoryStep) {
 try {
 var ac = trajectoryStep.length;
@@ -135,7 +135,7 @@ throw e;
 }
 }
 }, "~A");
-Clazz.defineMethod (c$, "calcUnitCell", 
+Clazz.defineMethod (c$, "calcUnitCell",
  function (abc) {
 var a = abc[0];
 var angle1 = abc[1];
@@ -146,7 +146,7 @@ var c = abc[5];
 var alpha = (1.5707963267948966 - Math.asin (angle3)) * 180 / 3.141592653589793;
 var beta = (1.5707963267948966 - Math.asin (angle2)) * 180 / 3.141592653589793;
 var gamma = (1.5707963267948966 - Math.asin (angle1)) * 180 / 3.141592653589793;
-System.out.println ("unitcell:[" + a + " " + b + " " + c + " " + alpha + " " + beta + " " + gamma + "]");
+Zystem.out.println ("unitcell:[" + a + " " + b + " " + c + " " + alpha + " " + beta + " " + gamma + "]");
 return  Clazz.newFloatArray (-1, [a, b, c, alpha, beta, gamma]);
 }, "~A");
 });

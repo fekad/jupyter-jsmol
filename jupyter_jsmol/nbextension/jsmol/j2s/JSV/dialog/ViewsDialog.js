@@ -9,16 +9,16 @@ this.viewSelectedButton = null;
 this.checking = false;
 Clazz.instantialize (this, arguments);
 }, JSV.dialog, "ViewsDialog", JSV.dialog.JSVDialog);
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function () {
 Clazz.superConstructor (this, JSV.dialog.ViewsDialog, []);
 this.type = JSV.common.Annotation.AType.Views;
 });
-Clazz.overrideMethod (c$, "getPosXY", 
+Clazz.overrideMethod (c$, "getPosXY",
 function () {
 return JSV.dialog.ViewsDialog.posXY;
 });
-Clazz.defineMethod (c$, "addUniqueControls", 
+Clazz.defineMethod (c$, "addUniqueControls",
 function () {
 this.checkBoxes =  new JU.Lst ();
 this.treeNodes =  new JU.Lst ();
@@ -34,7 +34,7 @@ this.txt1 = this.dialog.addCheckBox (null, null, 0, false);
 this.addCheckBoxes (this.vwr.spectraTree.getRootNode (), 0, true);
 this.addCheckBoxes (this.vwr.spectraTree.getRootNode (), 0, false);
 });
-Clazz.defineMethod (c$, "addCheckBoxes", 
+Clazz.defineMethod (c$, "addCheckBoxes",
  function (rootNode, level, isViews) {
 var enume = rootNode.children ();
 while (enume.hasMoreElements ()) {
@@ -51,19 +51,19 @@ this.checkBoxes.addLast (cb);
 this.addCheckBoxes (treeNode, level + 1, isViews);
 }
 }, "JSV.api.JSVTreeNode,~N,~B");
-Clazz.overrideMethod (c$, "checkEnables", 
+Clazz.overrideMethod (c$, "checkEnables",
 function () {
 var n = 0;
 for (var i = 0; i < this.checkBoxes.size (); i++) {
 if (this.dialog.isSelected (this.checkBoxes.get (i)) && this.treeNodes.get (i).getPanelNode ().jsvp != null) {
 n++;
 }}
-System.out.println ("viewsdialog n=" + n);
+Zystem.out.println ("viewsdialog n=" + n);
 this.dialog.setEnabled (this.closeSelectedButton, n > 0);
 this.dialog.setEnabled (this.combineSelectedButton, n > 1);
 this.dialog.setEnabled (this.viewSelectedButton, n == 1);
 });
-Clazz.defineMethod (c$, "check", 
+Clazz.defineMethod (c$, "check",
 function (name) {
 var i = JU.PT.parseInt (name.substring (name.indexOf ("_") + 1));
 var node = this.treeNodes.get (i);
@@ -91,7 +91,7 @@ this.treeNodes.get (i).getPanelNode ().isSelected = false;
 }
 this.checkEnables ();
 }, "~S");
-Clazz.defineMethod (c$, "selectAll", 
+Clazz.defineMethod (c$, "selectAll",
 function (mode) {
 for (var i = this.checkBoxes.size (); --i >= 0; ) {
 this.dialog.setSelected (this.checkBoxes.get (i), mode);
@@ -99,10 +99,10 @@ this.treeNodes.get (i).getPanelNode ().isSelected = mode;
 }
 this.checkEnables ();
 }, "~B");
-Clazz.defineMethod (c$, "combineSelected", 
+Clazz.defineMethod (c$, "combineSelected",
 function () {
 });
-Clazz.defineMethod (c$, "viewSelected", 
+Clazz.defineMethod (c$, "viewSelected",
 function () {
 var sb =  new JU.SB ();
 var thisNode = null;
@@ -130,12 +130,12 @@ this.layoutDialog ();
 this.vwr.setNode (thisNode);
 }if (script != null) this.vwr.runScript (script);
 });
-Clazz.defineMethod (c$, "closeSelected", 
+Clazz.defineMethod (c$, "closeSelected",
 function () {
 this.vwr.runScript ("close !selected");
 this.layoutDialog ();
 });
-Clazz.overrideMethod (c$, "callback", 
+Clazz.overrideMethod (c$, "callback",
 function (id, msg) {
 if (id.equals ("btnSelectAll")) {
 this.selectAll (true);
@@ -160,7 +160,7 @@ this.checkEnables ();
 return this.callbackAD (id, msg);
 }return true;
 }, "~S,~S");
-Clazz.overrideMethod (c$, "applyFromFields", 
+Clazz.overrideMethod (c$, "applyFromFields",
 function () {
 this.apply ( Clazz.newArray (-1, [this.dialog.getText (this.txt2)]));
 });

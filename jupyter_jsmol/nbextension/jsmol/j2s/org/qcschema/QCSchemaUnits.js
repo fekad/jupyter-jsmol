@@ -1,7 +1,7 @@
 Clazz.declarePackage ("org.qcschema");
 Clazz.load (["java.util.Hashtable", "JV.Viewer"], "org.qcschema.QCSchemaUnits", ["java.lang.Double", "java.util.Map"], function () {
 c$ = Clazz.declareType (org.qcschema, "QCSchemaUnits");
-c$.getFactorToAU = Clazz.defineMethod (c$, "getFactorToAU", 
+c$.getFactorToAU = Clazz.defineMethod (c$, "getFactorToAU",
 function (units) {
 switch ("cm cm^-1 cm-1 angstroms au atomic units fractional bohrs hartrees ev kj_mol kcal_mol".indexOf (units.toLowerCase ())) {
 case 0:
@@ -32,7 +32,7 @@ default:
 return NaN;
 }
 }, "~S");
-c$.getUnitConversion = Clazz.defineMethod (c$, "getUnitConversion", 
+c$.getUnitConversion = Clazz.defineMethod (c$, "getUnitConversion",
 function (fromUnits, toUnits) {
 if (fromUnits.equalsIgnoreCase (toUnits)) return 1;
 var key = "" + fromUnits + toUnits;
@@ -52,7 +52,7 @@ throw e;
 org.qcschema.QCSchemaUnits.htConvert.put (key, Double.$valueOf (val));
 return val;
 }, "~S,~S");
-c$.getConversionFactorTo = Clazz.defineMethod (c$, "getConversionFactorTo", 
+c$.getConversionFactorTo = Clazz.defineMethod (c$, "getConversionFactorTo",
 function (unitsFactor, unitsDesired) {
 try {
 var toAUDesired = org.qcschema.QCSchemaUnits.getFactorToAU (unitsDesired);
@@ -67,27 +67,27 @@ throw e;
 }
 }
 }, "java.util.ArrayList,~S");
-c$.convertValue = Clazz.defineMethod (c$, "convertValue", 
+c$.convertValue = Clazz.defineMethod (c$, "convertValue",
 function (valueUnits, toUnits) {
 return org.qcschema.QCSchemaUnits.getDouble (valueUnits, "value", null) * org.qcschema.QCSchemaUnits.getConversionFactor (valueUnits, "units", toUnits);
 }, "java.util.Map,~S");
-c$.getUnitsJSON = Clazz.defineMethod (c$, "getUnitsJSON", 
+c$.getUnitsJSON = Clazz.defineMethod (c$, "getUnitsJSON",
 function (name, asArray) {
 var d = org.qcschema.QCSchemaUnits.getFactorToAU (name);
 var toAU = (!Double.isNaN (d) ? "" + d : asArray ? "?" : "\"?\"");
 return (asArray ?  Clazz.newArray (-1, [name, toAU]) : "[\"" + name + "\"," + toAU + "]");
 }, "~S,~B");
-c$.getConversionFactor = Clazz.defineMethod (c$, "getConversionFactor", 
+c$.getConversionFactor = Clazz.defineMethod (c$, "getConversionFactor",
 function (map, key, toUnits) {
 var list = org.qcschema.QCSchemaUnits.getList (map, key + "_units");
 var units = (list == null ? null : list.get (0).toString ());
 var f = org.qcschema.QCSchemaUnits.getConversionFactorTo (list, toUnits);
 if (Double.isNaN (f)) {
-System.out.println ("units for " + units + "? " + units);
+Zystem.out.println ("units for " + units + "? " + units);
 f = 1;
 }return f;
 }, "java.util.Map,~S,~S");
-c$.getDouble = Clazz.defineMethod (c$, "getDouble", 
+c$.getDouble = Clazz.defineMethod (c$, "getDouble",
 function (map, key, toUnits) {
 var o = map.get (key);
 var conv = 1;
@@ -97,7 +97,7 @@ return org.qcschema.QCSchemaUnits.convertValue (o, toUnits);
 conv = org.qcschema.QCSchemaUnits.getConversionFactor (map, key, toUnits);
 }return (o == null ? NaN : (o).doubleValue () * conv);
 }, "java.util.Map,~S,~S");
-c$.getList = Clazz.defineMethod (c$, "getList", 
+c$.getList = Clazz.defineMethod (c$, "getList",
 function (mapOrList, key) {
 var list = (key == null ? mapOrList : (mapOrList).get (key));
 if (list == null) return null;
@@ -113,11 +113,11 @@ list1.addLast(value);
 }
 return list1;
 }, "~O,~S");
-c$.newList = Clazz.defineMethod (c$, "newList", 
+c$.newList = Clazz.defineMethod (c$, "newList",
 function () {
 return new JU  .Lst();
 });
-c$.getDoubleArray = Clazz.defineMethod (c$, "getDoubleArray", 
+c$.getDoubleArray = Clazz.defineMethod (c$, "getDoubleArray",
 function (mapOrList, key) {
 var list = org.qcschema.QCSchemaUnits.getList (mapOrList, key);
 if (list == null) return null;
@@ -135,7 +135,7 @@ throw e;
 }
 return a;
 }, "~O,~S");
-c$.getIntArray = Clazz.defineMethod (c$, "getIntArray", 
+c$.getIntArray = Clazz.defineMethod (c$, "getIntArray",
 function (mapOrList, key) {
 var list = org.qcschema.QCSchemaUnits.getList (mapOrList, key);
 if (list != null) {
@@ -152,7 +152,7 @@ throw e;
 }
 }return null;
 }, "~O,~S");
-c$.getStringArray = Clazz.defineMethod (c$, "getStringArray", 
+c$.getStringArray = Clazz.defineMethod (c$, "getStringArray",
 function (mapOrList, key) {
 var list = org.qcschema.QCSchemaUnits.getList (mapOrList, key);
 if (list == null) return null;

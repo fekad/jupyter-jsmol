@@ -1,11 +1,11 @@
 Clazz.declarePackage ("JSV.common");
 Clazz.load (["java.util.Hashtable"], "JSV.common.JSVFileManager", ["java.io.BufferedInputStream", "$.BufferedReader", "$.InputStreamReader", "$.StringReader", "java.net.URL", "JU.AU", "$.BS", "$.Encoding", "$.JSJSONParser", "$.P3", "$.PT", "$.SB", "JSV.common.JSVersion", "$.JSViewer", "JSV.exception.JSVException", "JU.Logger"], function () {
 c$ = Clazz.declareType (JSV.common, "JSVFileManager");
-Clazz.defineMethod (c$, "isApplet", 
+Clazz.defineMethod (c$, "isApplet",
 function () {
 return (JSV.common.JSVFileManager.appletDocumentBase != null);
 });
-c$.getFileAsString = Clazz.defineMethod (c$, "getFileAsString", 
+c$.getFileAsString = Clazz.defineMethod (c$, "getFileAsString",
 function (name) {
 if (name == null) return null;
 var br;
@@ -27,7 +27,7 @@ throw e;
 }
 return sb.toString ();
 }, "~S");
-c$.getBufferedReaderForInputStream = Clazz.defineMethod (c$, "getBufferedReaderForInputStream", 
+c$.getBufferedReaderForInputStream = Clazz.defineMethod (c$, "getBufferedReaderForInputStream",
 function ($in) {
 try {
 return  new java.io.BufferedReader ( new java.io.InputStreamReader ($in, "UTF-8"));
@@ -39,11 +39,11 @@ throw e;
 }
 }
 }, "java.io.InputStream");
-c$.getBufferedReaderForStringOrBytes = Clazz.defineMethod (c$, "getBufferedReaderForStringOrBytes", 
+c$.getBufferedReaderForStringOrBytes = Clazz.defineMethod (c$, "getBufferedReaderForStringOrBytes",
 function (stringOrBytes) {
 return (stringOrBytes == null ? null :  new java.io.BufferedReader ( new java.io.StringReader (Clazz.instanceOf (stringOrBytes, String) ? stringOrBytes :  String.instantialize (stringOrBytes))));
 }, "~O");
-c$.getBufferedReaderFromName = Clazz.defineMethod (c$, "getBufferedReaderFromName", 
+c$.getBufferedReaderFromName = Clazz.defineMethod (c$, "getBufferedReaderFromName",
 function (name, startCode) {
 if (name == null) throw  new JSV.exception.JSVException ("Cannot find " + name);
 JU.Logger.info ("JSVFileManager getBufferedReaderFromName " + name);
@@ -51,7 +51,7 @@ var path = JSV.common.JSVFileManager.getFullPathName (name);
 if (!path.equals (name)) JU.Logger.info ("JSVFileManager getBufferedReaderFromName " + path);
 return JSV.common.JSVFileManager.getUnzippedBufferedReaderFromName (path, startCode);
 }, "~S,~S");
-c$.getFullPathName = Clazz.defineMethod (c$, "getFullPathName", 
+c$.getFullPathName = Clazz.defineMethod (c$, "getFullPathName",
 function (name) {
 try {
 if (JSV.common.JSVFileManager.appletDocumentBase == null) {
@@ -71,13 +71,13 @@ throw e;
 }
 }
 }, "~S");
-c$.isURL = Clazz.defineMethod (c$, "isURL", 
+c$.isURL = Clazz.defineMethod (c$, "isURL",
 function (name) {
 for (var i = JSV.common.JSVFileManager.urlPrefixes.length; --i >= 0; ) if (name.startsWith (JSV.common.JSVFileManager.urlPrefixes[i])) return true;
 
 return false;
 }, "~S");
-c$.urlTypeIndex = Clazz.defineMethod (c$, "urlTypeIndex", 
+c$.urlTypeIndex = Clazz.defineMethod (c$, "urlTypeIndex",
 function (name) {
 for (var i = 0; i < JSV.common.JSVFileManager.urlPrefixes.length; ++i) {
 if (name.startsWith (JSV.common.JSVFileManager.urlPrefixes[i])) {
@@ -85,13 +85,13 @@ return i;
 }}
 return -1;
 }, "~S");
-c$.isLocal = Clazz.defineMethod (c$, "isLocal", 
+c$.isLocal = Clazz.defineMethod (c$, "isLocal",
 function (fileName) {
 if (fileName == null) return false;
 var itype = JSV.common.JSVFileManager.urlTypeIndex (fileName);
 return (itype < 0 || itype == 4);
 }, "~S");
-c$.getUnzippedBufferedReaderFromName = Clazz.defineMethod (c$, "getUnzippedBufferedReaderFromName", 
+c$.getUnzippedBufferedReaderFromName = Clazz.defineMethod (c$, "getUnzippedBufferedReaderFromName",
  function (name, startCode) {
 var subFileList = null;
 if (name.indexOf ("|") >= 0) {
@@ -115,49 +115,49 @@ throw e;
 }
 }
 }, "~S,~S");
-c$.getAbbrSimulationFileName = Clazz.defineMethod (c$, "getAbbrSimulationFileName", 
+c$.getAbbrSimulationFileName = Clazz.defineMethod (c$, "getAbbrSimulationFileName",
 function (name) {
 var type = JSV.common.JSVFileManager.getSimulationType (name);
 var filename = JSV.common.JSVFileManager.getAbbreviatedSimulationName (name, type, true);
 return filename;
 }, "~S");
-c$.getAbbreviatedSimulationName = Clazz.defineMethod (c$, "getAbbreviatedSimulationName", 
+c$.getAbbreviatedSimulationName = Clazz.defineMethod (c$, "getAbbreviatedSimulationName",
 function (name, type, addProtocol) {
 return (name.indexOf ("MOL=") >= 0 ? (addProtocol ? "http://SIMULATION/" : "") + "MOL=" + JSV.common.JSVFileManager.getSimulationHash (name, type) : name);
 }, "~S,~S,~B");
-c$.getSimulationHash = Clazz.defineMethod (c$, "getSimulationHash", 
+c$.getSimulationHash = Clazz.defineMethod (c$, "getSimulationHash",
  function (name, type) {
 var code = type + Math.abs (name.substring (name.indexOf ("V2000") + 1).hashCode ());
-if (JU.Logger.debugging) System.out.println ("JSVFileManager hash for " + name + " = " + code);
+if (JU.Logger.debugging) Zystem.out.println ("JSVFileManager hash for " + name + " = " + code);
 return code;
 }, "~S,~S");
-c$.getSimulationFileData = Clazz.defineMethod (c$, "getSimulationFileData", 
+c$.getSimulationFileData = Clazz.defineMethod (c$, "getSimulationFileData",
 function (name, type) {
 return JSV.common.JSVFileManager.cacheGet (name.startsWith ("MOL=") ? name.substring (4) : JSV.common.JSVFileManager.getAbbreviatedSimulationName (name, type, false));
 }, "~S,~S");
-c$.cachePut = Clazz.defineMethod (c$, "cachePut", 
+c$.cachePut = Clazz.defineMethod (c$, "cachePut",
 function (name, data) {
 if (JU.Logger.debugging) JU.Logger.debug ("JSVFileManager cachePut " + data + " for " + name);
 if (data != null) JSV.common.JSVFileManager.htCorrelationCache.put (name, data);
 }, "~S,~S");
-c$.cacheGet = Clazz.defineMethod (c$, "cacheGet", 
+c$.cacheGet = Clazz.defineMethod (c$, "cacheGet",
 function (key) {
 var data = JSV.common.JSVFileManager.htCorrelationCache.get (key);
 if (JU.Logger.debugging) JU.Logger.info ("JSVFileManager cacheGet " + data + " for " + key);
 return data;
 }, "~S");
-c$.getSimulationReader = Clazz.defineMethod (c$, "getSimulationReader", 
+c$.getSimulationReader = Clazz.defineMethod (c$, "getSimulationReader",
  function (name) {
 var data = JSV.common.JSVFileManager.cacheGet (name);
 if (data == null) JSV.common.JSVFileManager.cachePut (name, data = JSV.common.JSVFileManager.getNMRSimulationJCampDX (name.substring ("http://SIMULATION/".length)));
 return JSV.common.JSVFileManager.getBufferedReaderForStringOrBytes (data);
 }, "~S");
-c$.isAB = Clazz.defineMethod (c$, "isAB", 
+c$.isAB = Clazz.defineMethod (c$, "isAB",
 function (x) {
 {
 return Clazz.isAB(x);
 }}, "~O");
-c$.isZipFile = Clazz.defineMethod (c$, "isZipFile", 
+c$.isZipFile = Clazz.defineMethod (c$, "isZipFile",
 function (is) {
 try {
 var abMagic =  Clazz.newByteArray (4, 0);
@@ -173,7 +173,7 @@ throw e;
 }
 }
 }, "java.io.InputStream");
-c$.isGzip = Clazz.defineMethod (c$, "isGzip", 
+c$.isGzip = Clazz.defineMethod (c$, "isGzip",
  function (is) {
 try {
 var abMagic =  Clazz.newByteArray (4, 0);
@@ -189,7 +189,7 @@ throw e;
 }
 }
 }, "java.io.InputStream");
-c$.getStreamAsBytes = Clazz.defineMethod (c$, "getStreamAsBytes", 
+c$.getStreamAsBytes = Clazz.defineMethod (c$, "getStreamAsBytes",
 function (bis, out) {
 try {
 var buf =  Clazz.newByteArray (1024, 0);
@@ -200,7 +200,7 @@ while ((len = bis.read (buf, 0, 1024)) > 0) {
 totalLen += len;
 if (out == null) {
 if (totalLen >= bytes.length) bytes = JU.AU.ensureLengthByte (bytes, totalLen * 2);
-System.arraycopy (buf, 0, bytes, totalLen - len, len);
+Zystem.arraycopy (buf, 0, bytes, totalLen - len, len);
 } else {
 out.write (buf, 0, len);
 }}
@@ -216,7 +216,7 @@ throw e;
 }
 }
 }, "java.io.BufferedInputStream,JU.OC");
-c$.postByteArray = Clazz.defineMethod (c$, "postByteArray", 
+c$.postByteArray = Clazz.defineMethod (c$, "postByteArray",
 function (fileName, bytes) {
 var ret = null;
 try {
@@ -247,7 +247,7 @@ throw e;
 }
 return (ret == null ? "" : JSV.common.JSVFileManager.fixUTF (ret));
 }, "~S,~A");
-c$.getUTFEncoding = Clazz.defineMethod (c$, "getUTFEncoding", 
+c$.getUTFEncoding = Clazz.defineMethod (c$, "getUTFEncoding",
  function (bytes) {
 if (bytes.length >= 3 && bytes[0] == 0xEF && bytes[1] == 0xBB && bytes[2] == 0xBF) return JU.Encoding.UTF8;
 if (bytes.length >= 4 && bytes[0] == 0 && bytes[1] == 0 && bytes[2] == 0xFE && bytes[3] == 0xFF) return JU.Encoding.UTF_32BE;
@@ -256,7 +256,7 @@ if (bytes.length >= 2 && bytes[0] == 0xFF && bytes[1] == 0xFE) return JU.Encodin
 if (bytes.length >= 2 && bytes[0] == 0xFE && bytes[1] == 0xFF) return JU.Encoding.UTF_16BE;
 return JU.Encoding.NONE;
 }, "~A");
-c$.fixUTF = Clazz.defineMethod (c$, "fixUTF", 
+c$.fixUTF = Clazz.defineMethod (c$, "fixUTF",
 function (bytes) {
 var encoding = JSV.common.JSVFileManager.getUTFEncoding (bytes);
 if (encoding !== JU.Encoding.NONE) try {
@@ -280,7 +280,7 @@ throw e;
 }
 return  String.instantialize (bytes);
 }, "~A");
-c$.getInputStream = Clazz.defineMethod (c$, "getInputStream", 
+c$.getInputStream = Clazz.defineMethod (c$, "getInputStream",
 function (name, showMsg, postBytes) {
 var isURL = JSV.common.JSVFileManager.isURL (name);
 var isApplet = (JSV.common.JSVFileManager.appletDocumentBase != null);
@@ -309,7 +309,7 @@ $in = JSV.common.JSVFileManager.viewer.apiPlatform.getBufferedFileInputStream (n
 }if (Clazz.instanceOf ($in, String)) throw  new JSV.exception.JSVException ($in);
 return $in;
 }, "~S,~B,~A");
-c$.getNMRSimulationJCampDX = Clazz.defineMethod (c$, "getNMRSimulationJCampDX", 
+c$.getNMRSimulationJCampDX = Clazz.defineMethod (c$, "getNMRSimulationJCampDX",
  function (name) {
 var pt = 0;
 var molFile = null;
@@ -337,10 +337,10 @@ JSV.common.JSVFileManager.cachePut ("json", json);
 if (is13C) map = map.get ("result");
 var jsonMolFile = map.get ("molfile");
 if (jsonMolFile == null) {
-System.out.println ("JSVFileManager: no MOL file returned from EPFL");
+Zystem.out.println ("JSVFileManager: no MOL file returned from EPFL");
 jsonMolFile = molFile;
 } else {
-System.out.println ("JSVFileManager: MOL file hash=" + jsonMolFile.hashCode ());
+Zystem.out.println ("JSVFileManager: MOL file hash=" + jsonMolFile.hashCode ());
 }var atomMap = JSV.common.JSVFileManager.getAtomMap (jsonMolFile, molFile);
 JSV.common.JSVFileManager.cachePut ("mol", molFile);
 {
@@ -399,7 +399,7 @@ JSV.common.JSVFileManager.cachePut ("jcamp", jcamp);
 JSV.common.JSVFileManager.cachePut (key, jcamp);
 return jcamp;
 }, "~S");
-c$.getAtomMap = Clazz.defineMethod (c$, "getAtomMap", 
+c$.getAtomMap = Clazz.defineMethod (c$, "getAtomMap",
  function (jsonMolFile, jmolMolFile) {
 var acJson = JSV.common.JSVFileManager.getCoord (jsonMolFile);
 var acJmol = JSV.common.JSVFileManager.getCoord (jmolMolFile);
@@ -421,7 +421,7 @@ break;
 }
 return (haveMap ? map : null);
 }, "~S,~S");
-c$.getCoord = Clazz.defineMethod (c$, "getCoord", 
+c$.getCoord = Clazz.defineMethod (c$, "getCoord",
  function (mol) {
 var lines = JU.PT.split (mol, "\n");
 var data =  Clazz.newFloatArray (3, 0);
@@ -434,11 +434,11 @@ pts[i] = JU.P3.new3 (data[0], data[1], data[2]);
 }
 return pts;
 }, "~S");
-c$.setAttr = Clazz.defineMethod (c$, "setAttr", 
+c$.setAttr = Clazz.defineMethod (c$, "setAttr",
  function (sb, mykey, lucsKey, map) {
 sb.append (mykey + "=\"").appendO (map.get (lucsKey)).append ("\" ");
 }, "JU.SB,~S,~S,java.util.Map");
-c$.getResource = Clazz.defineMethod (c$, "getResource", 
+c$.getResource = Clazz.defineMethod (c$, "getResource",
  function (object, fileName, error) {
 var url = null;
 try {
@@ -452,7 +452,7 @@ throw e;
 }
 return url;
 }, "~O,~S,~A");
-c$.getResourceString = Clazz.defineMethod (c$, "getResourceString", 
+c$.getResourceString = Clazz.defineMethod (c$, "getResourceString",
 function (object, name, error) {
 var url = JSV.common.JSVFileManager.getResource (object, name, error);
 if (url == null) {
@@ -476,7 +476,7 @@ throw e;
 }
 return sb.toString ();
 }, "~O,~S,~A");
-c$.getJmolFilePath = Clazz.defineMethod (c$, "getJmolFilePath", 
+c$.getJmolFilePath = Clazz.defineMethod (c$, "getJmolFilePath",
 function (filePath) {
 try {
 filePath = JSV.common.JSVFileManager.getFullPathName (filePath);
@@ -489,7 +489,7 @@ throw e;
 }
 return (JSV.common.JSVFileManager.appletDocumentBase == null ? filePath.$replace ('\\', '/') : filePath);
 }, "~S");
-c$.getTagName = Clazz.defineMethod (c$, "getTagName", 
+c$.getTagName = Clazz.defineMethod (c$, "getTagName",
 function (fileName) {
 if (fileName == null) return "String" + (++JSV.common.JSVFileManager.stringCount);
 if (JSV.common.JSVFileManager.isURL (fileName)) {
@@ -506,12 +506,12 @@ throw e;
 }
 }return JSV.common.JSVFileManager.viewer.apiPlatform.newFile (fileName).getName ();
 }, "~S");
-c$.setDocumentBase = Clazz.defineMethod (c$, "setDocumentBase", 
+c$.setDocumentBase = Clazz.defineMethod (c$, "setDocumentBase",
 function (v, documentBase) {
 JSV.common.JSVFileManager.viewer = v;
 JSV.common.JSVFileManager.appletDocumentBase = documentBase;
 }, "JSV.common.JSViewer,java.net.URL");
-c$.getSimulationType = Clazz.defineMethod (c$, "getSimulationType", 
+c$.getSimulationType = Clazz.defineMethod (c$, "getSimulationType",
 function (filePath) {
 return (filePath.indexOf ("C13/") >= 0 ? "C13" : "H1");
 }, "~S");

@@ -7,7 +7,7 @@ Clazz.instantialize(this,arguments);
 },java.util,"Random",null,java.io.Serializable);
 Clazz.makeConstructor(c$,
 function(){
-this.setSeed(System.currentTimeMillis());
+this.setSeed(Zystem.currentTimeMillis());
 });
 Clazz.makeConstructor(c$,
 function(seed){

@@ -53,26 +53,26 @@ Clazz.instantialize (this, arguments);
 Clazz.prepareFields (c$, function () {
 this.errorLog =  new JU.SB ();
 });
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function () {
 });
-Clazz.overrideMethod (c$, "getSource", 
+Clazz.overrideMethod (c$, "getSource",
 function (filePath, br) {
 this.filePath = filePath;
 return this.getXML (br);
 }, "~S,java.io.BufferedReader");
-Clazz.defineMethod (c$, "getSimpleXmlReader", 
+Clazz.defineMethod (c$, "getSimpleXmlReader",
 function (br) {
 this.parser =  new JSV.source.XMLParser (br);
 }, "java.io.BufferedReader");
-Clazz.defineMethod (c$, "checkStart", 
+Clazz.defineMethod (c$, "checkStart",
 function () {
 if (this.parser.peek () == 1) return;
 var errMsg = "Error: XML <xxx> not found at beginning of file; not an XML document?";
 this.errorLog.append (errMsg);
 throw  new java.io.IOException (errMsg);
 });
-Clazz.defineMethod (c$, "populateVariables", 
+Clazz.defineMethod (c$, "populateVariables",
 function () {
 var LDRTable =  new JU.Lst ();
 var spectrum =  new JSV.common.Spectrum ();
@@ -94,7 +94,7 @@ if (!this.obNucleus.equals ("")) JSV.source.JDXReader.addHeader (LDRTable, "##.O
 JSV.source.JDXReader.addHeader (LDRTable, "##$MANUFACTURER", this.vendor);
 if (!this.casRN.equals ("")) JSV.source.JDXReader.addHeader (LDRTable, "##CASREGISTRYNO", this.casRN);
 if (!this.molForm.equals ("")) JSV.source.JDXReader.addHeader (LDRTable, "##MOLFORM", this.molForm);
-if (!this.modelType.equals ("")) JSV.source.JDXReader.addHeader (LDRTable, "##SPECTROMETER/DATA SYSTEM", this.modelType);
+if (!this.modelType.equals ("")) JSV.source.JDXReader.addHeader (LDRTable, "##SPECTROMETER/DATA Zystem", this.modelType);
 spectrum.setHeaderTable (LDRTable);
 var xScale = 1;
 if (this.obFreq != 1.7976931348623157E308) {
@@ -112,16 +112,16 @@ spectrum.setYUnits (this.yUnits);
 spectrum.setXYCoords (xyCoords);
 this.source.addJDXSpectrum (this.filePath, spectrum, false);
 });
-Clazz.defineMethod (c$, "checkPointCount", 
+Clazz.defineMethod (c$, "checkPointCount",
 function () {
 if (this.continuous && this.npoints < 5) {
-System.err.println ("Insufficient points to plot");
+Zystem.err.println ("Insufficient points to plot");
 this.errorLog.append ("Insufficient points to plot \n");
 this.source.setErrorLog (this.errorLog.toString ());
 return false;
 }return true;
 });
-Clazz.defineMethod (c$, "processErrors", 
+Clazz.defineMethod (c$, "processErrors",
 function (type) {
 this.parser = null;
 if (this.errorLog.length () > 0) {
@@ -129,7 +129,7 @@ this.errorLog.append ("these errors were found in " + type + " \n");
 this.errorLog.append ("=====================\n");
 }this.source.setErrorLog (this.errorLog.toString ());
 }, "~S");
-Clazz.defineMethod (c$, "processXML", 
+Clazz.defineMethod (c$, "processXML",
 function (i0, i1) {
 while (this.parser.hasNext ()) {
 if (this.parser.nextEvent () != 1) continue;
@@ -142,7 +142,7 @@ break;
 }
 }
 }, "~N,~N");
-Clazz.defineMethod (c$, "process", 
+Clazz.defineMethod (c$, "process",
 function (tagId, requiresEndTag) {
 var thisTagName = JSV.source.XMLReader.tagNames[tagId];
 try {

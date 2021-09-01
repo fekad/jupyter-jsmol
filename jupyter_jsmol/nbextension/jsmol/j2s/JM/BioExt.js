@@ -5,16 +5,16 @@ this.vwr = null;
 this.ms = null;
 Clazz.instantialize (this, arguments);
 }, JM, "BioExt");
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function () {
 });
-Clazz.defineMethod (c$, "set", 
+Clazz.defineMethod (c$, "set",
 function (vwr, ms) {
 this.vwr = vwr;
 this.ms = ms;
 return this;
 }, "JV.Viewer,JM.ModelSet");
-Clazz.defineMethod (c$, "getAllPolymerInfo", 
+Clazz.defineMethod (c$, "getAllPolymerInfo",
 function (bs, fullInfo) {
 var modelVector =  new JU.Lst ();
 var modelCount = this.ms.mc;
@@ -66,7 +66,7 @@ modelVector.addLast (modelInfo);
 }}
 fullInfo.put ("models", modelVector);
 }, "JU.BS,java.util.Map");
-Clazz.defineMethod (c$, "calculateStraightnessAll", 
+Clazz.defineMethod (c$, "calculateStraightnessAll",
 function () {
 var qtype = this.vwr.getQuaternionFrame ();
 var mStep = this.vwr.getInt (553648144);
@@ -78,7 +78,7 @@ for (var p = 0; p < m.bioPolymerCount; p++) this.getPdbData (m.bioPolymers[p], '
 }
 this.ms.haveStraightness = true;
 });
-Clazz.defineMethod (c$, "getPdbData", 
+Clazz.defineMethod (c$, "getPdbData",
  function (bp, ctype, qtype, mStep, derivType, bsAtoms, bsSelected, bothEnds, isDraw, addHeader, tokens, pdbATOM, pdbCONECT, bsWritten, ptTemp) {
 var calcRamachandranStraightness = (qtype == 'C' || qtype == 'P');
 var isRamachandran = (ctype == 'R' || ctype == 'S' && calcRamachandranStraightness);
@@ -124,7 +124,7 @@ for (var j = 0; j < (bothEnds ? 2 : 1); j++, factor *= -1) for (var i = 0; i < (
 
 
 }, "JM.BioPolymer,~S,~S,~N,~N,JU.BS,JU.BS,~B,~B,~B,~A,JU.OC,JU.SB,JU.BS,JU.P3");
-Clazz.defineMethod (c$, "getData", 
+Clazz.defineMethod (c$, "getData",
  function (m0, mStep, p, ctype, qtype, derivType, bsAtoms, bsSelected, isDraw, isRamachandran, calcRamachandranStraightness, useQuaternionStraightness, writeRamachandranStraightness, quaternionStraightness, factor, isAmino, isRelativeAlias, tokens, pdbATOM, pdbCONECT, bsWritten, ptTemp) {
 var prefix = (derivType > 0 ? "dq" + (derivType == 2 ? "2" : "") : "q");
 var q;
@@ -276,30 +276,30 @@ pdbCONECT.append ("CONECT").append (JU.PT.formatStringI ("%5i", "i", atomLast.ge
 }atomLast = a;
 }}
 }, "~N,~N,JM.BioPolymer,~S,~S,~N,JU.BS,JU.BS,~B,~B,~B,~B,~B,~B,~N,~B,~B,~A,JU.OC,JU.SB,JU.BS,JU.P3");
-c$.getQInfo = Clazz.defineMethod (c$, "getQInfo", 
+c$.getQInfo = Clazz.defineMethod (c$, "getQInfo",
  function (q) {
 var axis = q.toAxisAngle4f ();
 return JU.PT.sprintf ("%10.6f%10.6f%10.6f%10.6f  %6.2f  %10.5f %10.5f %10.5f", "F",  Clazz.newArray (-1, [ Clazz.newFloatArray (-1, [q.q0, q.q1, q.q2, q.q3, (axis.angle * 180 / 3.141592653589793), axis.x, axis.y, axis.z])]));
 }, "JU.Quat");
-c$.drawQuat = Clazz.defineMethod (c$, "drawQuat", 
+c$.drawQuat = Clazz.defineMethod (c$, "drawQuat",
 function (q, prefix, id, ptCenter, scale) {
 var strV = " VECTOR " + JU.Escape.eP (ptCenter) + " ";
 if (scale == 0) scale = 1;
 return "draw " + prefix + "x" + id + strV + JU.Escape.eP (q.getVectorScaled (0, scale)) + " color red\n" + "draw " + prefix + "y" + id + strV + JU.Escape.eP (q.getVectorScaled (1, scale)) + " color green\n" + "draw " + prefix + "z" + id + strV + JU.Escape.eP (q.getVectorScaled (2, scale)) + " color blue\n";
 }, "JU.Quat,~S,~S,JU.P3,~N");
-c$.get3DStraightness = Clazz.defineMethod (c$, "get3DStraightness", 
+c$.get3DStraightness = Clazz.defineMethod (c$, "get3DStraightness",
  function (id, dq, dqnext) {
 return dq.getNormal ().dot (dqnext.getNormal ());
 }, "~S,JU.Quat,JU.Quat");
-c$.getQuaternionStraightness = Clazz.defineMethod (c$, "getQuaternionStraightness", 
+c$.getQuaternionStraightness = Clazz.defineMethod (c$, "getQuaternionStraightness",
  function (id, dq, dqnext) {
 return JM.BioExt.getStraightness (dq.dot (dqnext));
 }, "~S,JU.Quat,JU.Quat");
-c$.getStraightness = Clazz.defineMethod (c$, "getStraightness", 
+c$.getStraightness = Clazz.defineMethod (c$, "getStraightness",
  function (cosHalfTheta) {
 return (1 - 2 * Math.acos (Math.abs (cosHalfTheta)) / 3.141592653589793);
 }, "~N");
-Clazz.defineMethod (c$, "getPdbDataM", 
+Clazz.defineMethod (c$, "getPdbDataM",
 function (m, vwr, type, ctype, isDraw, bsSelected, out, tokens, pdbCONECT, bsWritten) {
 var bothEnds = false;
 var qtype = (ctype != 'R' ? 'r' : type.length > 13 && type.indexOf ("ramachandran ") >= 0 ? type.charAt (13) : 'R');
@@ -318,7 +318,7 @@ if (ctype == 'R') out.append ("REMARK   6 Jmol data min = {-180 -180 -180} max =
 for (var p = 0; p < m.bioPolymerCount; p++) this.getPdbData (m.bioPolymers[p], ctype, qtype, mStep, derivType, m.bsAtoms, bsSelected, bothEnds, isDraw, p == 0, tokens, out, pdbCONECT, bsWritten, ptTemp);
 
 }, "JM.BioModel,JV.Viewer,~S,~S,~B,JU.BS,JU.OC,~A,JU.SB,JU.BS");
-Clazz.defineMethod (c$, "calculateAllstruts", 
+Clazz.defineMethod (c$, "calculateAllstruts",
 function (vwr, ms, bs1, bs2) {
 vwr.setModelVisibility ();
 ms.makeConnections2 (0, 3.4028235E38, 32768, 12291, bs1, bs2, null, false, false, 0);
@@ -348,7 +348,7 @@ ms.bondAtoms (o[0], o[1], 32768, mad, null, 0, false, true);
 }
 return struts.size ();
 }, "JV.Viewer,JM.ModelSet,JU.BS,JU.BS");
-c$.calculateStruts = Clazz.defineMethod (c$, "calculateStruts", 
+c$.calculateStruts = Clazz.defineMethod (c$, "calculateStruts",
  function (modelSet, bs1, bs2, vCA, thresh, delta, allowMultiple) {
 var vStruts =  new JU.Lst ();
 var thresh2 = thresh * thresh;
@@ -437,11 +437,11 @@ if (okC) JM.BioExt.setStrut (iC, jC, n, vCA, bs1, bs2, vStruts, bsStruts, bsNotA
 }
 return vStruts;
 }, "JM.ModelSet,JU.BS,JU.BS,JU.Lst,~N,~N,~B");
-c$.strutPoint = Clazz.defineMethod (c$, "strutPoint", 
+c$.strutPoint = Clazz.defineMethod (c$, "strutPoint",
  function (i, j, n) {
 return (j < i ? Clazz.doubleToInt (j * (2 * n - j - 1) / 2) + i - j - 1 : Clazz.doubleToInt (i * (2 * n - i - 1) / 2) + j - i - 1);
 }, "~N,~N,~N");
-c$.setStrut = Clazz.defineMethod (c$, "setStrut", 
+c$.setStrut = Clazz.defineMethod (c$, "setStrut",
  function (i, j, n, vCA, bs1, bs2, vStruts, bsStruts, bsNotAvailable, bsNearbyResidues, delta) {
 var a1 = vCA.get (i);
 var a2 = vCA.get (j);
@@ -459,7 +459,7 @@ bsNotAvailable.set (ipt);
 }}
 }
 }, "~N,~N,~N,JU.Lst,JU.BS,JU.BS,JU.Lst,JU.BS,JU.BS,JU.BS,~N");
-Clazz.defineMethod (c$, "mutate", 
+Clazz.defineMethod (c$, "mutate",
 function (vwr, bs, group, sequence) {
 var i0 = bs.nextSetBit (0);
 if (sequence == null) return JM.BioExt.mutateAtom (vwr, i0, group);
@@ -479,7 +479,7 @@ group = "==" + group;
 }
 return isOK;
 }, "JV.Viewer,JU.BS,~S,~A");
-c$.mutateAtom = Clazz.defineMethod (c$, "mutateAtom", 
+c$.mutateAtom = Clazz.defineMethod (c$, "mutateAtom",
  function (vwr, iatom, fileName) {
 var ms = vwr.ms;
 var iModel = ms.at[iatom].mi;
@@ -501,7 +501,7 @@ vwr.eval.runScript (script);
 } catch (e) {
 if (Clazz.exceptionOf (e, Exception)) {
 if (!JV.Viewer.isJS) e.printStackTrace ();
-System.out.println (e);
+Zystem.out.println (e);
 } else {
 throw e;
 }
@@ -524,7 +524,7 @@ JM.BioExt.replaceMutatedMonomer (vwr, res0, res1);
 vwr.fm.setFileInfo (info);
 return true;
 }, "JV.Viewer,~N,~S");
-c$.replaceMutatedMonomer = Clazz.defineMethod (c$, "replaceMutatedMonomer", 
+c$.replaceMutatedMonomer = Clazz.defineMethod (c$, "replaceMutatedMonomer",
  function (vwr, res0, res1) {
 res1.setResno (res0.getResno ());
 res1.chain.groupCount = 0;
@@ -545,7 +545,7 @@ m[j] = res1;
 break;
 }
 }}, "JV.Viewer,JM.AminoMonomer,JM.AminoMonomer");
-c$.getMutationBackbone = Clazz.defineMethod (c$, "getMutationBackbone", 
+c$.getMutationBackbone = Clazz.defineMethod (c$, "getMutationBackbone",
  function (res1, backbone) {
 var b =  Clazz.newArray (-1, [res1.getCarbonylCarbonAtom (), res1.getCarbonylOxygenAtom (), res1.getLeadAtom (), res1.getNitrogenAtom (), res1.getExplicitNH ()]);
 if (backbone == null) {
@@ -558,7 +558,7 @@ if (a0 != null && a1 != null) a1.setT (a0);
 }
 }return b;
 }, "JM.AminoMonomer,~A");
-Clazz.defineMethod (c$, "getFullPDBHeader", 
+Clazz.defineMethod (c$, "getFullPDBHeader",
 function (auxiliaryInfo) {
 var info = this.vwr.getCurrentFileAsString ("biomodel");
 var ichMin = info.length;
@@ -579,7 +579,7 @@ info = info.substring (0, ichMin);
 auxiliaryInfo.put ("fileHeader", info);
 return info;
 }, "java.util.Map");
-Clazz.defineMethod (c$, "getAminoAcidValenceAndCharge", 
+Clazz.defineMethod (c$, "getAminoAcidValenceAndCharge",
 function (res, name, ret) {
 var valence = ret[4];
 ret[4] = 0;

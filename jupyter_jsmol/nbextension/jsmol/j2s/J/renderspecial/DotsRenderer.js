@@ -15,18 +15,18 @@ Clazz.prepareFields (c$, function () {
 this.v3temp =  new JU.V3 ();
 this.scrTemp =  new JU.P3i ();
 });
-Clazz.overrideMethod (c$, "initRenderer", 
+Clazz.overrideMethod (c$, "initRenderer",
 function () {
 this.screenLevel = J.shapespecial.Dots.MAX_LEVEL;
 this.screenDotCount = JU.Geodesic.getVertexCount (J.shapespecial.Dots.MAX_LEVEL);
 this.scrCoords =  Clazz.newIntArray (3 * this.screenDotCount, 0);
 });
-Clazz.overrideMethod (c$, "render", 
+Clazz.overrideMethod (c$, "render",
 function () {
 this.render1 (this.shape);
 return false;
 });
-Clazz.defineMethod (c$, "render1", 
+Clazz.defineMethod (c$, "render1",
 function (dots) {
 if (!this.iShowSolid && !this.g3d.setC (4)) return;
 var sppa = Clazz.floatToInt (this.vwr.getScalePixelsPerAngstrom (true));
@@ -61,20 +61,20 @@ this.scrCoords[j++] = this.scrTemp.z;
 if (nPoints != 0) this.renderConvex (JU.C.getColixInherited (dots.colixes[i], atom.colixAtom), map, nPoints);
 } catch (e) {
 if (Clazz.exceptionOf (e, Exception)) {
-System.out.println ("Dots rendering error");
-System.out.println (e.toString ());
+Zystem.out.println ("Dots rendering error");
+Zystem.out.println (e.toString ());
 } else {
 throw e;
 }
 }
 }
 }, "J.shapespecial.Dots");
-Clazz.defineMethod (c$, "renderConvex", 
+Clazz.defineMethod (c$, "renderConvex",
 function (colix, map, nPoints) {
 this.colix = JU.C.getColixTranslucent3 (colix, false, 0);
 this.renderDots (nPoints);
 }, "~N,JU.BS,~N");
-Clazz.defineMethod (c$, "renderDots", 
+Clazz.defineMethod (c$, "renderDots",
 function (nPoints) {
 this.g3d.setC (this.colix);
 this.g3d.drawPoints (nPoints, this.scrCoords, this.dotScale);

@@ -29,18 +29,18 @@ this.bsEnes =  new JU.BS ();
 this.vNorm =  new JU.V3 ();
 this.vTemp =  new JU.V3 ();
 });
-Clazz.defineMethod (c$, "isTracker", 
+Clazz.defineMethod (c$, "isTracker",
 function () {
 return false;
 });
-Clazz.defineMethod (c$, "isSmiles", 
+Clazz.defineMethod (c$, "isSmiles",
 function () {
 return false;
 });
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function () {
 });
-Clazz.defineMethod (c$, "set", 
+Clazz.defineMethod (c$, "set",
 function (vwr, bsAtoms) {
 this.vwr = vwr;
 this.atoms = vwr.ms.at;
@@ -49,7 +49,7 @@ this.bsMolecule = vwr.ms.getMoleculeBitSet (bsAtoms);
 this.init ();
 return this;
 }, "JV.Viewer,JU.BS");
-Clazz.defineMethod (c$, "init", 
+Clazz.defineMethod (c$, "init",
 function () {
 try {
 var lstRing = this.match ("[r]");
@@ -80,7 +80,7 @@ throw e;
 }
 }
 });
-Clazz.defineMethod (c$, "getList", 
+Clazz.defineMethod (c$, "getList",
 function (smarts) {
 var level = JU.Logger.getLogLevel ();
 JU.Logger.setLogLevel (Math.min (level, 4));
@@ -88,7 +88,7 @@ var list = this.vwr.getSubstructureSetArray (smarts, this.bsMolecule, 2);
 JU.Logger.setLogLevel (level);
 return list;
 }, "~S");
-Clazz.defineMethod (c$, "match", 
+Clazz.defineMethod (c$, "match",
 function (smarts) {
 var level = JU.Logger.getLogLevel ();
 JU.Logger.setLogLevel (Math.min (level, 4));
@@ -96,7 +96,7 @@ var bs = this.vwr.getSmartsMatch (smarts, this.bsMolecule);
 JU.Logger.setLogLevel (level);
 return bs;
 }, "~S");
-Clazz.defineMethod (c$, "getEneKekule", 
+Clazz.defineMethod (c$, "getEneKekule",
 function () {
 if (this.bsEnes.cardinality () < 8) return;
 var bsAllEnes = this.bsEnes.clone ();
@@ -109,7 +109,7 @@ bsEneAtom1.clearAll ();
 this.checkEne (bsAllEnes, bsPath, -1, i, 2, bsEneAtom1);
 }
 });
-Clazz.defineMethod (c$, "checkEne", 
+Clazz.defineMethod (c$, "checkEne",
  function (bsAllEnes, bsPath, iLast, iAtom, order, bsEneAtom1) {
 if (bsPath.get (iAtom)) return (bsEneAtom1.get (iAtom) == (order == 2) ? iAtom : -1);
 bsPath.set (iAtom);
@@ -128,7 +128,7 @@ this.bsKekuleAmbiguous.set (iAtom);
 this.bsEnes.clear (iAtom);
 }return isLoop == iAtom ? -1 : isLoop;
 }, "JU.BS,JU.BS,~N,~N,~N,JU.BS");
-Clazz.defineMethod (c$, "getAzacyclic", 
+Clazz.defineMethod (c$, "getAzacyclic",
  function () {
 out : for (var i = this.bsAtoms.nextSetBit (0); i >= 0; i = this.bsAtoms.nextSetBit (i + 1)) {
 var atom = this.atoms[i];
@@ -170,17 +170,17 @@ continue out;
 }
 }
 });
-Clazz.defineMethod (c$, "addAzacyclicN", 
+Clazz.defineMethod (c$, "addAzacyclicN",
  function (i) {
 if (this.bsAzacyclic == null) this.bsAzacyclic =  new JU.BS ();
 this.bsAzacyclic.set (i);
 }, "~N");
-Clazz.defineMethod (c$, "couldBeChiralAtom", 
+Clazz.defineMethod (c$, "couldBeChiralAtom",
 function (a) {
 var mustBePlanar = false;
 switch (a.getCovalentBondCount ()) {
 default:
-System.out.println ("?? too many bonds! " + a);
+Zystem.out.println ("?? too many bonds! " + a);
 return false;
 case 0:
 return false;
@@ -223,7 +223,7 @@ if (edges[j].getOtherNode (a).getIsotopeNumber () == 1) nH++;
 }
 return (nH < 2 && (haveDouble || this.isSmiles () || mustBePlanar == Math.abs (this.getTrigonality (a, this.vNorm)) < 0.2));
 }, "JU.SimpleNode");
-Clazz.defineMethod (c$, "couldBeChiralAlkene", 
+Clazz.defineMethod (c$, "couldBeChiralAlkene",
 function (a, edge) {
 var b = (edge == null ? null : edge.getOtherNode (a));
 switch (a.getCovalentBondCount ()) {
@@ -247,7 +247,7 @@ return -1;
 }}
 return 13;
 }, "JU.SimpleNode,JU.SimpleEdge");
-Clazz.defineMethod (c$, "getTrigonality", 
+Clazz.defineMethod (c$, "getTrigonality",
 function (a, vNorm) {
 var pts =  new Array (4);
 var bonds = a.getEdges ();
@@ -256,27 +256,27 @@ for (var n = bonds.length, i = n, pt = 0; --i >= 0 && pt < 4; ) if (bonds[i].isC
 var plane = JU.Measure.getPlaneThroughPoints (pts[0], pts[1], pts[2], vNorm, this.vTemp,  new JU.P4 ());
 return JU.Measure.distanceToPlane (plane, (pts[3] == null ? a.getXYZ () : pts[3]));
 }, "JU.SimpleNode,JU.V3");
-Clazz.defineMethod (c$, "isCis", 
+Clazz.defineMethod (c$, "isCis",
 function (a, b, c, d) {
 JU.Measure.getNormalThroughPoints (a.atom.getXYZ (), b.atom.getXYZ (), c.atom.getXYZ (), this.vNorm, this.vTemp);
 var vNorm2 =  new JU.V3 ();
 JU.Measure.getNormalThroughPoints (b.atom.getXYZ (), c.atom.getXYZ (), d.atom.getXYZ (), vNorm2, this.vTemp);
 return (this.vNorm.dot (vNorm2) > 0 ? 13 : 14);
 }, "JS.CIPChirality.CIPAtom,JS.CIPChirality.CIPAtom,JS.CIPChirality.CIPAtom,JS.CIPChirality.CIPAtom");
-Clazz.defineMethod (c$, "isPositiveTorsion", 
+Clazz.defineMethod (c$, "isPositiveTorsion",
 function (a, b, c, d) {
 var angle = JU.Measure.computeTorsion (a.atom.getXYZ (), b.atom.getXYZ (), c.atom.getXYZ (), d.atom.getXYZ (), true);
 return (angle > 0 ? 18 : 17);
 }, "JS.CIPChirality.CIPAtom,JS.CIPChirality.CIPAtom,JS.CIPChirality.CIPAtom,JS.CIPChirality.CIPAtom");
-Clazz.defineMethod (c$, "getBondOrder", 
+Clazz.defineMethod (c$, "getBondOrder",
 function (bond) {
 return bond.getCovalentOrder ();
 }, "JU.SimpleEdge");
-Clazz.defineMethod (c$, "setCoord", 
+Clazz.defineMethod (c$, "setCoord",
 function (atom1, atoms) {
 return true;
 }, "JU.SimpleNode,~A");
-Clazz.defineMethod (c$, "checkHandedness", 
+Clazz.defineMethod (c$, "checkHandedness",
 function (a) {
 var atoms = a.atoms;
 if (!this.setCoord (a.atom, atoms)) return 0;
@@ -289,14 +289,14 @@ this.vTemp.setT (p0);
 this.vTemp.sub (p1);
 return (this.vTemp.dot (this.vNorm) > 0 ? 1 : 2);
 }, "JS.CIPChirality.CIPAtom");
-Clazz.defineMethod (c$, "track", 
+Clazz.defineMethod (c$, "track",
 function (cip, a, b, sphere, finalScore, trackTerminal) {
 }, "JS.CIPChirality,JS.CIPChirality.CIPAtom,JS.CIPChirality.CIPAtom,~N,~N,~B");
-Clazz.defineMethod (c$, "getRootTrackerResult", 
+Clazz.defineMethod (c$, "getRootTrackerResult",
 function (root) {
 return null;
 }, "JS.CIPChirality.CIPAtom");
-Clazz.defineMethod (c$, "setRule6Full", 
+Clazz.defineMethod (c$, "setRule6Full",
 function (rrrr) {
 this.testRule6Full = rrrr;
 }, "~B");

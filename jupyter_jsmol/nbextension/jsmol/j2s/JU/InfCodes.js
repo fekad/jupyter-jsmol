@@ -18,12 +18,12 @@ this.z = null;
 this.s = null;
 Clazz.instantialize (this, arguments);
 }, JU, "InfCodes");
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function (z, s) {
 this.z = z;
 this.s = s;
 }, "JU.ZStream,JU.InfBlocks");
-Clazz.defineMethod (c$, "init", 
+Clazz.defineMethod (c$, "init",
 function (bl, bd, tl, tl_index, td, td_index) {
 this.mode = 0;
 this.lbits = bl;
@@ -34,7 +34,7 @@ this.dtree = td;
 this.dtree_index = td_index;
 this.tree = null;
 }, "~N,~N,~A,~N,~A,~N");
-Clazz.defineMethod (c$, "proc", 
+Clazz.defineMethod (c$, "proc",
 function (r) {
 var j;
 var tindex;
@@ -311,10 +311,10 @@ return this.s.inflate_flush (r);
 }
 }
 }, "~N");
-Clazz.defineMethod (c$, "free", 
+Clazz.defineMethod (c$, "free",
 function (z) {
 }, "JU.ZStream");
-Clazz.defineMethod (c$, "inflate_fast", 
+Clazz.defineMethod (c$, "inflate_fast",
 function (bl, bd, tl, tl_index, td, td_index, s, z) {
 var t;
 var tp;
@@ -395,7 +395,7 @@ s.window[q++] = s.window[r++];
 s.window[q++] = s.window[r++];
 c -= 2;
 } else {
-System.arraycopy (s.window, r, s.window, q, 2);
+Zystem.arraycopy (s.window, r, s.window, q, 2);
 q += 2;
 r += 2;
 c -= 2;
@@ -412,7 +412,7 @@ do {
 s.window[q++] = s.window[r++];
 } while (--e != 0);
 } else {
-System.arraycopy (s.window, r, s.window, q, e);
+Zystem.arraycopy (s.window, r, s.window, q, e);
 q += e;
 r += e;
 e = 0;
@@ -422,7 +422,7 @@ do {
 s.window[q++] = s.window[r++];
 } while (--c != 0);
 } else {
-System.arraycopy (s.window, r, s.window, q, c);
+Zystem.arraycopy (s.window, r, s.window, q, c);
 q += c;
 r += c;
 c = 0;

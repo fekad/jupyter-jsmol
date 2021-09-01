@@ -42,7 +42,7 @@ Clazz.defineMethod(c$,"enlargeBuffer",
 ($fz=function(min){
 var twice=(this.value.length<<1)+2;
 var newData=Clazz.newArray(min>twice?min:twice,'\0');
-System.arraycopy(this.value,0,newData,0,this.count);
+Zystem.arraycopy(this.value,0,newData,0,this.count);
 this.value=newData;
 this.shared=false;
 },$fz.isPrivate=true,$fz),"~N");
@@ -67,7 +67,7 @@ this.enlargeBuffer(newSize);
 }else if(this.shared){
 this.value=this.value.clone();
 this.shared=false;
-}System.arraycopy(chars,0,this.value,this.count,chars.length);
+}Zystem.arraycopy(chars,0,this.value,this.count,chars.length);
 this.count=newSize;
 },"~A");
 Clazz.defineMethod(c$,"append0",
@@ -81,7 +81,7 @@ this.enlargeBuffer(newSize);
 }else if(this.shared){
 this.value=this.value.clone();
 this.shared=false;
-}System.arraycopy(chars,start,this.value,this.count,length);
+}Zystem.arraycopy(chars,start,this.value,this.count,length);
 this.count=newSize;
 }else{
 throw new ArrayIndexOutOfBoundsException();
@@ -136,11 +136,11 @@ return;
 var length=this.count-end;
 if(length>0){
 if(!this.shared){
-System.arraycopy(this.value,end,this.value,start,length);
+Zystem.arraycopy(this.value,end,this.value,start,length);
 }else{
 var newData=Clazz.newArray(this.value.length,'\0');
-System.arraycopy(this.value,0,newData,0,start);
-System.arraycopy(this.value,end,newData,start,length);
+Zystem.arraycopy(this.value,0,newData,0,start);
+Zystem.arraycopy(this.value,end,newData,start,length);
 this.value=newData;
 this.shared=false;
 }}this.count-=end-start;
@@ -153,11 +153,11 @@ if(0>location||location>=this.count)throw new StringIndexOutOfBoundsException(lo
 var length=this.count-location-1;
 if(length>0){
 if(!this.shared){
-System.arraycopy(this.value,location+1,this.value,location,length);
+Zystem.arraycopy(this.value,location+1,this.value,location,length);
 }else{
 var newData=Clazz.newArray(this.value.length,'\0');
-System.arraycopy(this.value,0,newData,0,location);
-System.arraycopy(this.value,location+1,newData,location,length);
+Zystem.arraycopy(this.value,0,newData,0,location);
+Zystem.arraycopy(this.value,location+1,newData,location,length);
 this.value=newData;
 this.shared=false;
 }}this.count--;
@@ -171,7 +171,7 @@ Clazz.defineMethod(c$,"getChars",
 function(start,end,dest,destStart){
 if(start>this.count||end>this.count||start>end){
 throw new StringIndexOutOfBoundsException();
-}System.arraycopy(this.value,start,dest,destStart,end-start);
+}Zystem.arraycopy(this.value,start,dest,destStart,end-start);
 },"~N,~N,~A,~N");
 Clazz.defineMethod(c$,"insert0",
 function(index,chars){
@@ -179,7 +179,7 @@ if(0>index||index>this.count){
 throw new StringIndexOutOfBoundsException(index);
 }if(chars.length!=0){
 this.move(chars.length,index);
-System.arraycopy(chars,0,this.value,index,chars.length);
+Zystem.arraycopy(chars,0,this.value,index,chars.length);
 this.count+=chars.length;
 }},"~N,~A");
 Clazz.defineMethod(c$,"insert0",
@@ -188,7 +188,7 @@ if(0<=index&&index<=this.count){
 if(start>=0&&0<=length&&length<=chars.length-start){
 if(length!=0){
 this.move(length,index);
-System.arraycopy(chars,start,this.value,index,length);
+Zystem.arraycopy(chars,start,this.value,index,length);
 this.count+=length;
 }return;
 }throw new StringIndexOutOfBoundsException("offset "+start+", len "+length+", array.length "+chars.length);
@@ -229,7 +229,7 @@ Clazz.defineMethod(c$,"move",
 var newSize;
 if(this.value.length-this.count>=size){
 if(!this.shared){
-System.arraycopy(this.value,index,this.value,index+size,this.count-index);
+Zystem.arraycopy(this.value,index,this.value,index+size,this.count-index);
 return;
 }newSize=this.value.length;
 }else{
@@ -237,8 +237,8 @@ var a=this.count+size;
 var b=(this.value.length<<1)+2;
 newSize=a>b?a:b;
 }var newData=Clazz.newArray(newSize,'\0');
-System.arraycopy(this.value,0,newData,0,index);
-System.arraycopy(this.value,index,newData,index+size,this.count-index);
+Zystem.arraycopy(this.value,0,newData,0,index);
+Zystem.arraycopy(this.value,index,newData,index+size,this.count-index);
 this.value=newData;
 this.shared=false;
 },$fz.isPrivate=true,$fz),"~N,~N");
@@ -251,11 +251,11 @@ var stringLength=string.length;
 var diff=end-start-stringLength;
 if(diff>0){
 if(!this.shared){
-System.arraycopy(this.value,end,this.value,start+stringLength,this.count-end);
+Zystem.arraycopy(this.value,end,this.value,start+stringLength,this.count-end);
 }else{
 var newData=Clazz.newArray(this.value.length,'\0');
-System.arraycopy(this.value,0,newData,0,start);
-System.arraycopy(this.value,end,newData,start+stringLength,this.count-end);
+Zystem.arraycopy(this.value,0,newData,0,start);
+Zystem.arraycopy(this.value,end,newData,start+stringLength,this.count-end);
 this.value=newData;
 this.shared=false;
 }}else if(diff<0){
@@ -308,7 +308,7 @@ this.enlargeBuffer(length);
 }else{
 if(this.shared){
 var newData=Clazz.newArray(this.value.length,'\0');
-System.arraycopy(this.value,0,newData,0,this.count);
+Zystem.arraycopy(this.value,0,newData,0,this.count);
 this.value=newData;
 this.shared=false;
 }else{
@@ -405,7 +405,7 @@ Clazz.defineMethod(c$,"trimToSize",
 function(){
 if(this.count<this.value.length){
 var newValue=Clazz.newArray(this.count,'\0');
-System.arraycopy(this.value,0,newValue,0,this.count);
+Zystem.arraycopy(this.value,0,newValue,0,this.count);
 this.value=newValue;
 this.shared=false;
 }});

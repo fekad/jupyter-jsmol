@@ -51,7 +51,7 @@ this.codetab =  Clazz.newIntArray (5003, 0);
 this.masks =  Clazz.newIntArray (-1, [0x0000, 0x0001, 0x0003, 0x0007, 0x000F, 0x001F, 0x003F, 0x007F, 0x00FF, 0x01FF, 0x03FF, 0x07FF, 0x0FFF, 0x1FFF, 0x3FFF, 0x7FFF, 0xFFFF]);
 this.buf =  Clazz.newByteArray (256, 0);
 });
-Clazz.overrideMethod (c$, "setParams", 
+Clazz.overrideMethod (c$, "setParams",
 function (params) {
 this.params = params;
 var ic = params.get ("transparentColor");
@@ -102,7 +102,7 @@ this.out.cancel ();
 break;
 }
 }, "java.util.Map");
-Clazz.overrideMethod (c$, "generate", 
+Clazz.overrideMethod (c$, "generate",
 function () {
 if (this.addHeader) this.writeHeader ();
 this.addHeader = false;
@@ -112,7 +112,7 @@ this.writeGraphicControlExtension ();
 if (this.delayTime100ths >= 0 && this.looping) this.writeNetscapeLoopExtension ();
 this.writeImage ();
 }});
-Clazz.overrideMethod (c$, "close", 
+Clazz.overrideMethod (c$, "close",
 function () {
 if (this.addTrailer) {
 this.writeTrailer ();
@@ -120,7 +120,7 @@ this.writeTrailer ();
 this.doClose = false;
 }if (this.capturing) this.params.put ("captureByteCount", Integer.$valueOf (this.byteCount));
 });
-Clazz.defineMethod (c$, "createPalette", 
+Clazz.defineMethod (c$, "createPalette",
  function () {
 var tempColors =  new JU.Lst ();
 var ciHash =  new java.util.Hashtable ();
@@ -134,11 +134,11 @@ ciHash.put (key, item);
 tempColors.addLast (item);
 }}
 var nColors = tempColors.size ();
-System.out.println ("GIF total image colors: " + nColors);
+Zystem.out.println ("GIF total image colors: " + nColors);
 ciHash = null;
 var cells = this.quantizeColors (tempColors);
 nColors = cells.size ();
-System.out.println ("GIF final color count: " + nColors);
+Zystem.out.println ("GIF final color count: " + nColors);
 var colorMap =  new java.util.Hashtable ();
 this.bitsPerPixel = (nColors <= 2 ? 1 : nColors <= 4 ? 2 : nColors <= 16 ? 4 : 8);
 this.palette =  new Array (1 << this.bitsPerPixel);
@@ -148,7 +148,7 @@ colorMap.put (Integer.$valueOf (JU.CU.colorPtToFFRGB (this.palette[i] = c.setCol
 }
 this.pixels = this.indexPixels (cells, colorMap);
 });
-Clazz.defineMethod (c$, "quantizeColors", 
+Clazz.defineMethod (c$, "quantizeColors",
  function (tempColors) {
 var n = tempColors.size ();
 var cells =  new JU.Lst ();
@@ -180,7 +180,7 @@ if (maxCell == null || !maxCell.splitCell (cells)) break;
 }
 return cells;
 }, "JU.Lst");
-Clazz.defineMethod (c$, "indexPixels", 
+Clazz.defineMethod (c$, "indexPixels",
  function (cells, colorMap) {
 var w2 = this.width + 2;
 var errors =  new Array (w2);
@@ -236,7 +236,7 @@ if (notLastCol) this.addError (err, 1, errors, p + this.width + 1, w2);
 }
 return newPixels;
 }, "JU.Lst,java.util.Map");
-Clazz.defineMethod (c$, "addError", 
+Clazz.defineMethod (c$, "addError",
  function (err, f, errors, p, w2) {
 if (this.pixels[p] == this.backgroundColor) return;
 p %= w2;
@@ -245,7 +245,7 @@ if (errp == null) errp = errors[p] =  new JU.P3 ();
  else if (errp.x == 3.4028235E38) errp.set (0, 0, 0);
 errp.scaleAdd2 (f / 16, err, errp);
 }, "JU.P3,~N,~A,~N,~N");
-Clazz.defineMethod (c$, "toLABnorm", 
+Clazz.defineMethod (c$, "toLABnorm",
 function (rgb) {
 var lab = JU.CU.colorPtFromInt (rgb, null);
 this.rgbToXyz (lab, lab);
@@ -254,7 +254,7 @@ lab.y = (lab.y + 86.185) / (184.439) * 100;
 lab.z = (lab.z + 107.863) / (202.345) * 100;
 return lab;
 }, "~N");
-Clazz.defineMethod (c$, "toRGB", 
+Clazz.defineMethod (c$, "toRGB",
 function (lab) {
 var xyz = JU.P3.newP (lab);
 xyz.y = xyz.y / 100 * (184.439) - 86.185;
@@ -262,7 +262,7 @@ xyz.z = xyz.z / 100 * (202.345) - 107.863;
 this.labToXyz (xyz, xyz);
 return this.xyzToRgb (xyz, xyz);
 }, "JU.P3");
-Clazz.defineMethod (c$, "rgbToXyz", 
+Clazz.defineMethod (c$, "rgbToXyz",
 function (rgb, xyz) {
 if (xyz == null) xyz =  new JU.P3 ();
 xyz.x = this.sxyz (rgb.x);
@@ -271,12 +271,12 @@ xyz.z = this.sxyz (rgb.z);
 javajs.img.GifEncoder.rgb2xyz.rotate (xyz);
 return xyz;
 }, "JU.P3,JU.P3");
-Clazz.defineMethod (c$, "sxyz", 
+Clazz.defineMethod (c$, "sxyz",
  function (x) {
 x /= 255;
 return (x <= 0.04045 ? x / 12.92 : Math.pow (((x + 0.055) / 1.055), 2.4)) * 100;
 }, "~N");
-Clazz.defineMethod (c$, "xyzToRgb", 
+Clazz.defineMethod (c$, "xyzToRgb",
 function (xyz, rgb) {
 if (rgb == null) rgb =  new JU.P3 ();
 rgb.setT (xyz);
@@ -287,11 +287,11 @@ rgb.y = this.clamp (this.srgb (rgb.y), 0, 255);
 rgb.z = this.clamp (this.srgb (rgb.z), 0, 255);
 return rgb;
 }, "JU.P3,JU.P3");
-Clazz.defineMethod (c$, "srgb", 
+Clazz.defineMethod (c$, "srgb",
  function (x) {
 return (x > 0.0031308 ? (1.055 * Math.pow (x, 0.4166666666666667)) - 0.055 : x * 12.92) * 255;
 }, "~N");
-Clazz.defineMethod (c$, "xyzToLab", 
+Clazz.defineMethod (c$, "xyzToLab",
 function (xyz, lab) {
 if (lab == null) lab =  new JU.P3 ();
 var x = this.flab (xyz.x / 95.0429);
@@ -302,11 +302,11 @@ lab.y = 500 * (x - y);
 lab.z = 200 * (y - z);
 return lab;
 }, "JU.P3,JU.P3");
-Clazz.defineMethod (c$, "flab", 
+Clazz.defineMethod (c$, "flab",
  function (t) {
 return (t > 8.85645168E-3 ? Math.pow (t, 0.333333333) : 7.78703704 * t + 0.137931034);
 }, "~N");
-Clazz.defineMethod (c$, "labToXyz", 
+Clazz.defineMethod (c$, "labToXyz",
 function (lab, xyz) {
 if (xyz == null) xyz =  new JU.P3 ();
 xyz.setT (lab);
@@ -318,16 +318,16 @@ xyz.y = this.fxyz (y) * 100;
 xyz.z = this.fxyz (z) * 108.89;
 return xyz;
 }, "JU.P3,JU.P3");
-Clazz.defineMethod (c$, "fxyz", 
+Clazz.defineMethod (c$, "fxyz",
  function (t) {
 return (t > 0.206896552 ? t * t * t : 0.128418549 * (t - 0.137931034));
 }, "~N");
-Clazz.defineMethod (c$, "clamp", 
+Clazz.defineMethod (c$, "clamp",
  function (c, min, max) {
 c = (c < min ? min : c > max ? max : c);
 return (min == 0 ? Math.round (c) : c);
 }, "~N,~N,~N");
-Clazz.defineMethod (c$, "writeHeader", 
+Clazz.defineMethod (c$, "writeHeader",
  function () {
 this.putString ("GIF89a");
 this.putWord (this.width);
@@ -336,7 +336,7 @@ this.putByte (0);
 this.putByte (0);
 this.putByte (0);
 });
-Clazz.defineMethod (c$, "writeGraphicControlExtension", 
+Clazz.defineMethod (c$, "writeGraphicControlExtension",
  function () {
 if (this.isTransparent || this.delayTime100ths >= 0) {
 this.putByte (0x21);
@@ -347,7 +347,7 @@ this.putWord (this.delayTime100ths > 0 ? this.delayTime100ths : 0);
 this.putByte (0);
 this.putByte (0);
 }});
-Clazz.defineMethod (c$, "writeNetscapeLoopExtension", 
+Clazz.defineMethod (c$, "writeNetscapeLoopExtension",
  function () {
 this.putByte (0x21);
 this.putByte (0xff);
@@ -358,7 +358,7 @@ this.putByte (1);
 this.putWord (0);
 this.putByte (0);
 });
-Clazz.defineMethod (c$, "writeImage", 
+Clazz.defineMethod (c$, "writeImage",
  function () {
 this.putByte (0x2C);
 this.putWord (0);
@@ -379,11 +379,11 @@ this.putByte (this.initCodeSize = (this.bitsPerPixel <= 1 ? 2 : this.bitsPerPixe
 this.compress ();
 this.putByte (0);
 });
-Clazz.defineMethod (c$, "writeTrailer", 
+Clazz.defineMethod (c$, "writeTrailer",
  function () {
 this.putByte (0x3B);
 });
-Clazz.defineMethod (c$, "nextPixel", 
+Clazz.defineMethod (c$, "nextPixel",
  function () {
 if (this.countDown-- == 0) return -1;
 var colorIndex = this.pixels[this.curpt];
@@ -395,23 +395,23 @@ if (this.interlaced) this.updateY (javajs.img.GifEncoder.INTERLACE_PARAMS[this.p
 }this.curpt = this.cury * this.width + this.curx;
 return colorIndex & 0xff;
 });
-Clazz.defineMethod (c$, "updateY", 
+Clazz.defineMethod (c$, "updateY",
  function (yNext, yNew) {
 this.cury += yNext;
 if (yNew >= 0 && this.cury >= this.height) {
 this.cury = yNew;
 ++this.pass;
 }}, "~N,~N");
-Clazz.defineMethod (c$, "putWord", 
+Clazz.defineMethod (c$, "putWord",
  function (w) {
 this.putByte (w);
 this.putByte (w >> 8);
 }, "~N");
-c$.MAXCODE = Clazz.defineMethod (c$, "MAXCODE", 
+c$.MAXCODE = Clazz.defineMethod (c$, "MAXCODE",
  function (nBits) {
 return (1 << nBits) - 1;
 }, "~N");
-Clazz.defineMethod (c$, "compress", 
+Clazz.defineMethod (c$, "compress",
  function () {
 this.countDown = this.width * this.height;
 this.pass = 0;
@@ -460,7 +460,7 @@ this.clearBlock ();
 this.output (ent);
 this.output (this.EOFCode);
 });
-Clazz.defineMethod (c$, "output", 
+Clazz.defineMethod (c$, "output",
  function (code) {
 this.curAccum &= this.masks[this.curBits];
 if (this.curBits > 0) this.curAccum |= (code << this.curBits);
@@ -487,24 +487,24 @@ this.curBits -= 8;
 }
 this.flushBytes ();
 }}, "~N");
-Clazz.defineMethod (c$, "clearBlock", 
+Clazz.defineMethod (c$, "clearBlock",
  function () {
 this.clearHash (this.hsize);
 this.freeEnt = this.clearCode + 2;
 this.clearFlag = true;
 this.output (this.clearCode);
 });
-Clazz.defineMethod (c$, "clearHash", 
+Clazz.defineMethod (c$, "clearHash",
  function (hsize) {
 for (var i = 0; i < hsize; ++i) this.htab[i] = -1;
 
 }, "~N");
-Clazz.defineMethod (c$, "byteOut", 
+Clazz.defineMethod (c$, "byteOut",
  function (c) {
 this.buf[this.bufPt++] = c;
 if (this.bufPt >= 254) this.flushBytes ();
 }, "~N");
-Clazz.defineMethod (c$, "flushBytes", 
+Clazz.defineMethod (c$, "flushBytes",
 function () {
 if (this.bufPt > 0) {
 this.putByte (this.bufPt);
@@ -519,7 +519,7 @@ Clazz.prepareCallback (this, arguments);
 this.isBackground = false;
 Clazz.instantialize (this, arguments);
 }, javajs.img.GifEncoder, "ColorItem", JU.P3);
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function (a, b) {
 Clazz.superConstructor (this, javajs.img.GifEncoder.ColorItem, []);
 this.isBackground = b;
@@ -536,12 +536,12 @@ this.center = null;
 this.volume = 0;
 Clazz.instantialize (this, arguments);
 }, javajs.img.GifEncoder, "ColorCell", JU.Lst);
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function (a) {
 Clazz.superConstructor (this, javajs.img.GifEncoder.ColorCell, []);
 this.index = a;
 }, "~N");
-Clazz.defineMethod (c$, "getVolume", 
+Clazz.defineMethod (c$, "getVolume",
 function (a) {
 if (this.volume != 0) return this.volume;
 if (this.size () < 2) return -1;
@@ -566,7 +566,7 @@ var k = (d - e);
 var l = (f - g);
 return this.volume = j * j + k * k + l * l;
 }, "~B");
-Clazz.defineMethod (c$, "setColor", 
+Clazz.defineMethod (c$, "setColor",
 function () {
 var a = this.size ();
 this.center =  new JU.P3 ();
@@ -575,7 +575,7 @@ for (var b = a; --b >= 0; ) this.center.add (this.get (b));
 this.center.scale (1 / a);
 return this.b$["javajs.img.GifEncoder"].toRGB (this.center);
 });
-Clazz.defineMethod (c$, "splitCell", 
+Clazz.defineMethod (c$, "splitCell",
 function (a) {
 var b = this.size ();
 if (b < 2) return false;

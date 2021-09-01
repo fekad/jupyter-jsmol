@@ -6,7 +6,7 @@ this.mopacBasis = null;
 this.allowMopacDCoef = false;
 Clazz.instantialize (this, arguments);
 }, J.adapter.readers.quantum, "MopacSlaterReader", J.adapter.readers.quantum.SlaterReader);
-Clazz.defineMethod (c$, "scaleSlater", 
+Clazz.defineMethod (c$, "scaleSlater",
 function (ex, ey, ez, er, zeta) {
 if (ex >= 0 && ey >= 0) {
 return Clazz.superCall (this, J.adapter.readers.quantum.MopacSlaterReader, "scaleSlater", [ex, ey, ez, er, zeta]);
@@ -15,11 +15,11 @@ if (el == 3) {
 return 0;
 }return J.adapter.readers.quantum.SlaterReader.getSlaterConstDSpherical (el + er + 1, Math.abs (zeta), ex, ey);
 }, "~N,~N,~N,~N,~N");
-Clazz.defineMethod (c$, "setMOData", 
+Clazz.defineMethod (c$, "setMOData",
 function (clearOrbitals) {
 if (!this.allowNoOrbitals && this.orbitals.size () == 0) return;
 if (this.mopacBasis == null || !this.forceMOPAC && this.gaussians != null && this.shells != null) {
-if (this.forceMOPAC) System.out.println ("MopacSlaterReader ignoring MOPAC zeta parameters -- using Gaussian contractions");
+if (this.forceMOPAC) Zystem.out.println ("MopacSlaterReader ignoring MOPAC zeta parameters -- using Gaussian contractions");
 Clazz.superCall (this, J.adapter.readers.quantum.MopacSlaterReader, "setMOData", [clearOrbitals]);
 return;
 }this.setSlaters (false);
@@ -30,11 +30,11 @@ this.finalizeMOData (this.lastMoData = this.moData);
 if (clearOrbitals) {
 this.clearOrbitals ();
 }}, "~B");
-c$.getNPQ = Clazz.defineMethod (c$, "getNPQ", 
+c$.getNPQ = Clazz.defineMethod (c$, "getNPQ",
  function (atomicNumber) {
 return (atomicNumber < J.adapter.readers.quantum.MopacSlaterReader.principalQuantumNumber.length ? J.adapter.readers.quantum.MopacSlaterReader.principalQuantumNumber[atomicNumber] : 0);
 }, "~N");
-c$.getNPQs = Clazz.defineMethod (c$, "getNPQs", 
+c$.getNPQs = Clazz.defineMethod (c$, "getNPQs",
  function (atomicNumber) {
 var n = J.adapter.readers.quantum.MopacSlaterReader.getNPQ (atomicNumber);
 switch (atomicNumber) {
@@ -48,7 +48,7 @@ default:
 return n;
 }
 }, "~N");
-c$.getNPQp = Clazz.defineMethod (c$, "getNPQp", 
+c$.getNPQp = Clazz.defineMethod (c$, "getNPQp",
  function (atomicNumber) {
 var n = J.adapter.readers.quantum.MopacSlaterReader.getNPQ (atomicNumber);
 switch (atomicNumber) {
@@ -58,11 +58,11 @@ default:
 return n;
 }
 }, "~N");
-c$.getNPQd = Clazz.defineMethod (c$, "getNPQd", 
+c$.getNPQd = Clazz.defineMethod (c$, "getNPQd",
  function (atomicNumber) {
 return (atomicNumber < J.adapter.readers.quantum.MopacSlaterReader.npqd.length ? J.adapter.readers.quantum.MopacSlaterReader.npqd[atomicNumber] : 0);
 }, "~N");
-Clazz.overrideMethod (c$, "addSlaterBasis", 
+Clazz.overrideMethod (c$, "addSlaterBasis",
 function () {
 if (this.mopacBasis == null || this.slaters != null && this.slaters.size () > 0) return;
 var ac = this.asc.ac;
@@ -73,7 +73,7 @@ var an = atoms[i].elementNumber;
 this.createMopacSlaters (i, an, this.mopacBasis[an], this.allowMopacDCoef);
 }
 });
-Clazz.defineMethod (c$, "createMopacSlaters", 
+Clazz.defineMethod (c$, "createMopacSlaters",
 function (iAtom, atomicNumber, values, allowD) {
 var zeta;
 if ((zeta = values[0]) != 0) {
@@ -89,7 +89,7 @@ this.createSphericalSlaterByType (iAtom, atomicNumber, "Dz2", zeta, 1);
 this.createSphericalSlaterByType (iAtom, atomicNumber, "Dyz", zeta, 1);
 this.createSphericalSlaterByType (iAtom, atomicNumber, "Dxy", zeta, 1);
 }}, "~N,~N,~A,~B");
-Clazz.defineMethod (c$, "createSphericalSlaterByType", 
+Clazz.defineMethod (c$, "createSphericalSlaterByType",
 function (iAtom, atomicNumber, type, zeta, coef) {
 var pt = "S Px Py Pz  Dx2-y2Dxz Dz2 Dyz Dxy".indexOf (type);
 switch (pt) {
@@ -105,7 +105,7 @@ return;
 pt = (pt >> 2) * 3 - 9;
 this.addSlater (iAtom + 1, J.adapter.readers.quantum.MopacSlaterReader.sphericalDValues[pt++], J.adapter.readers.quantum.MopacSlaterReader.sphericalDValues[pt++], J.adapter.readers.quantum.MopacSlaterReader.sphericalDValues[pt++], J.adapter.readers.quantum.MopacSlaterReader.getNPQd (atomicNumber) - 3, zeta, coef);
 }, "~N,~N,~S,~N,~N");
-c$.getMopacAtomZetaSPD = Clazz.defineMethod (c$, "getMopacAtomZetaSPD", 
+c$.getMopacAtomZetaSPD = Clazz.defineMethod (c$, "getMopacAtomZetaSPD",
 function (type) {
 if (J.adapter.readers.quantum.MopacSlaterReader.mopacParams == null) J.adapter.readers.quantum.MopacSlaterReader.mopacParams =  new java.util.Hashtable ();
 var params = J.adapter.readers.quantum.MopacSlaterReader.mopacParams.get (type);
@@ -133,14 +133,14 @@ J.adapter.readers.quantum.MopacSlaterReader.addData (params, J.adapter.readers.q
 data = J.adapter.readers.quantum.MopacSlaterReader._RM1_C;
 break;
 default:
-System.err.println ("MopacSlaterReader could not find MOPAC params for " + type);
+Zystem.err.println ("MopacSlaterReader could not find MOPAC params for " + type);
 return null;
 }
 J.adapter.readers.quantum.MopacSlaterReader.addData (params, data);
-}System.out.println ("MopacSlaterReader using MOPAC params for " + type);
+}Zystem.out.println ("MopacSlaterReader using MOPAC params for " + type);
 return params;
 }, "~S");
-c$.addData = Clazz.defineMethod (c$, "addData", 
+c$.addData = Clazz.defineMethod (c$, "addData",
  function (params, data) {
 for (var i = 0, p = 0, a = 0; i < data.length; i++) {
 var d = data[i];

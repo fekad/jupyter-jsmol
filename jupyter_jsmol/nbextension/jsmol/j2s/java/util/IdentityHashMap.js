@@ -109,7 +109,7 @@ return index;
 },$fz.isPrivate=true,$fz),"~O,~A");
 Clazz.defineMethod(c$,"getModuloHash",
 ($fz=function(key,length){
-return((System.identityHashCode(key)&0x7FFFFFFF)%(Math.floor(length/2)))*2;
+return((Zystem.identityHashCode(key)&0x7FFFFFFF)%(Math.floor(length/2)))*2;
 },$fz.isPrivate=true,$fz),"~O,~N");
 Clazz.overrideMethod(c$,"put",
 function(key,value){
@@ -335,7 +335,7 @@ return(this.key===b.getKey())&&(this.value===b.getValue());
 },"~O");
 Clazz.overrideMethod(c$,"hashCode",
 function(){
-return System.identityHashCode(this.key)^System.identityHashCode(this.value);
+return Zystem.identityHashCode(this.key)^Zystem.identityHashCode(this.value);
 });
 Clazz.overrideMethod(c$,"toString",
 function(){

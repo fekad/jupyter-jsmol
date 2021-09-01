@@ -15,28 +15,28 @@ this.done = false;
 this.mtime = 0;
 Clazz.instantialize (this, arguments);
 }, JU, "GZIPHeader", null, Cloneable);
-Clazz.defineMethod (c$, "setModifiedTime", 
+Clazz.defineMethod (c$, "setModifiedTime",
 function (mtime) {
 this.mtime = mtime;
 }, "~N");
-Clazz.defineMethod (c$, "getModifiedTime", 
+Clazz.defineMethod (c$, "getModifiedTime",
 function () {
 return this.mtime;
 });
-Clazz.defineMethod (c$, "setOS", 
+Clazz.defineMethod (c$, "setOS",
 function (os) {
 if ((0 <= os && os <= 13) || os == 255) this.os = os;
  else throw  new IllegalArgumentException ("os: " + os);
 }, "~N");
-Clazz.defineMethod (c$, "getOS", 
+Clazz.defineMethod (c$, "getOS",
 function () {
 return this.os;
 });
-Clazz.defineMethod (c$, "setName", 
+Clazz.defineMethod (c$, "setName",
 function (name) {
 this.name = JU.ZStream.getBytes (name);
 }, "~S");
-Clazz.defineMethod (c$, "getName", 
+Clazz.defineMethod (c$, "getName",
 function () {
 if (this.name == null) return "";
 try {
@@ -49,11 +49,11 @@ throw e;
 }
 }
 });
-Clazz.defineMethod (c$, "setComment", 
+Clazz.defineMethod (c$, "setComment",
 function (comment) {
 this.comment = JU.ZStream.getBytes (comment);
 }, "~S");
-Clazz.defineMethod (c$, "getComment", 
+Clazz.defineMethod (c$, "getComment",
 function () {
 if (this.comment == null) return "";
 try {
@@ -66,15 +66,15 @@ throw e;
 }
 }
 });
-Clazz.defineMethod (c$, "setCRC", 
+Clazz.defineMethod (c$, "setCRC",
 function (crc) {
 this.crc = crc;
 }, "~N");
-Clazz.defineMethod (c$, "getCRC", 
+Clazz.defineMethod (c$, "getCRC",
 function () {
 return this.crc;
 });
-Clazz.defineMethod (c$, "put", 
+Clazz.defineMethod (c$, "put",
 function (d) {
 var flag = 0;
 if (this.text) {
@@ -112,21 +112,21 @@ d.put_byteB (0);
 d.put_byte (this.comment, 0, this.comment.length);
 d.put_byteB (0);
 }}, "JU.Deflate");
-Clazz.defineMethod (c$, "clone", 
+Clazz.defineMethod (c$, "clone",
 function () {
 var gheader = Clazz.superCall (this, JU.GZIPHeader, "clone", []);
 var tmp;
 if (gheader.extra != null) {
 tmp =  Clazz.newByteArray (gheader.extra.length, 0);
-System.arraycopy (gheader.extra, 0, tmp, 0, tmp.length);
+Zystem.arraycopy (gheader.extra, 0, tmp, 0, tmp.length);
 gheader.extra = tmp;
 }if (gheader.name != null) {
 tmp =  Clazz.newByteArray (gheader.name.length, 0);
-System.arraycopy (gheader.name, 0, tmp, 0, tmp.length);
+Zystem.arraycopy (gheader.name, 0, tmp, 0, tmp.length);
 gheader.name = tmp;
 }if (gheader.comment != null) {
 tmp =  Clazz.newByteArray (gheader.comment.length, 0);
-System.arraycopy (gheader.comment, 0, tmp, 0, tmp.length);
+Zystem.arraycopy (gheader.comment, 0, tmp, 0, tmp.length);
 gheader.comment = tmp;
 }return gheader;
 });
@@ -141,7 +141,7 @@ Clazz.defineStatics (c$,
 "OS_TOPS20", 0x0a,
 "OS_WIN32", 0x0b,
 "OS_VMCMS", 0x04,
-"OS_ZSYSTEM", 0x08,
+"OS_ZZystem", 0x08,
 "OS_CPM", 0x09,
 "OS_QDOS", 0x0c,
 "OS_RISCOS", 0x0d,

@@ -23,14 +23,14 @@ Clazz.instantialize (this, arguments);
 Clazz.prepareFields (c$, function () {
 this.floats =  Clazz.newFloatArray (6, 0);
 });
-Clazz.overrideMethod (c$, "initializeReader", 
+Clazz.overrideMethod (c$, "initializeReader",
 function () {
 this.modAxes = this.getFilter ("MODAXES=");
 this.setFractionalCoordinates (true);
 this.asc.newAtomSet ();
 this.asc.setCurrentModelInfo ("autoBondUsingOccupation", Boolean.TRUE);
 });
-Clazz.overrideMethod (c$, "checkLine", 
+Clazz.overrideMethod (c$, "checkLine",
 function () {
 if (this.line.length < 3) return true;
 JU.Logger.info (this.line);
@@ -72,7 +72,7 @@ var n = 3 + this.modDim;
 var m;
 if (this.thisSub++ == 0) {
 m = JU.Matrix.identity (n, n);
-this.ms.addSubsystem ("" + this.thisSub++, m);
+this.ms.addSubZystem ("" + this.thisSub++, m);
 }m =  new JU.Matrix (null, n, n);
 var a = m.getArray ();
 var data =  Clazz.newFloatArray (n * n, 0);
@@ -80,40 +80,40 @@ this.fillFloatArray (null, 0, data);
 for (var i = 0, pt = 0; i < n; i++) for (var j = 0; j < n; j++, pt++) a[i][j] = data[pt];
 
 
-this.ms.addSubsystem ("" + this.thisSub, m);
+this.ms.addSubZystem ("" + this.thisSub, m);
 }
 return true;
 });
-Clazz.overrideMethod (c$, "doPreSymmetry", 
+Clazz.overrideMethod (c$, "doPreSymmetry",
 function () {
 if (this.ms != null) this.ms.setModulation (false, null);
 if (this.vibsFractional) this.asc.getXSymmetry ().scaleFractionalVibs ();
 });
-Clazz.overrideMethod (c$, "finalizeSubclassReader", 
+Clazz.overrideMethod (c$, "finalizeSubclassReader",
 function () {
 if (!this.haveM40Data) this.readM40Data (false);
 if (this.lattvecs != null && this.lattvecs.size () > 0) this.asc.getSymmetry ().addLatticeVectors (this.lattvecs);
 this.applySymmetryAndSetTrajectory ();
 this.finalizeReaderASCR ();
 });
-Clazz.overrideMethod (c$, "finalizeSubclassSymmetry", 
+Clazz.overrideMethod (c$, "finalizeSubclassSymmetry",
 function (haveSymmetry) {
 this.adjustM40Occupancies ();
 if (this.ms != null && haveSymmetry) {
 this.ms.setModulation (true, this.asc.getXSymmetry ().getBaseSymmetry ());
 this.ms.finalizeModulation ();
 }}, "~B");
-Clazz.defineMethod (c$, "cell", 
+Clazz.defineMethod (c$, "cell",
  function () {
 for (var ipt = 0; ipt < 6; ipt++) this.setUnitCellItem (ipt, this.parseFloat ());
 
 });
-Clazz.defineMethod (c$, "ndim", 
+Clazz.defineMethod (c$, "ndim",
  function () {
 this.ms = J.api.Interface.getOption ("adapter.readers.cif.MSRdr", this.vwr, "file");
 this.modDim = this.ms.initialize (this, (this.parseIntStr (this.getTokens ()[1]) - 3));
 });
-Clazz.defineMethod (c$, "qi", 
+Clazz.defineMethod (c$, "qi",
  function () {
 var pt =  Clazz.newDoubleArray (this.modDim, 0);
 pt[this.qicount] = 1;
@@ -124,11 +124,11 @@ for (var i = 0; i < 3; i++) a[i] += this.parseFloat ();
 this.ms.addModulation (null, "W_" + (++this.qicount), a, -1);
 this.ms.addModulation (null, "F_" + this.qicount + "_coefs_", pt, -1);
 });
-Clazz.defineMethod (c$, "symmetry", 
+Clazz.defineMethod (c$, "symmetry",
  function () {
 this.setSymmetryOperator (JU.PT.rep (this.line.substring (9).trim (), " ", ","));
 });
-Clazz.defineMethod (c$, "readM40Data", 
+Clazz.defineMethod (c$, "readM40Data",
  function (haveReader) {
 if (haveReader) {
 this.parseM40Floats ();
@@ -210,27 +210,27 @@ if (this.molAtoms.size () == 0) continue;
 this.processPosition (posName, atom, isAxial);
 }}
 }, "~B");
-Clazz.defineMethod (c$, "getInt", 
+Clazz.defineMethod (c$, "getInt",
  function (col1, col2) {
 var n = this.line.length;
 return (n > col1 ? this.parseIntStr (this.getStr (col1, col2)) : 0);
 }, "~N,~N");
-Clazz.defineMethod (c$, "getStr", 
+Clazz.defineMethod (c$, "getStr",
  function (col1, col2) {
 var n = this.line.length;
 return (n > col1 ? this.line.substring (col1, Math.min (n, col2)).trim () : "");
 }, "~N,~N");
-Clazz.defineMethod (c$, "getFlag", 
+Clazz.defineMethod (c$, "getFlag",
  function (i) {
 return (this.getInt (i, i + 1) > 0);
 }, "~N");
-Clazz.defineMethod (c$, "skipToNextAtom", 
+Clazz.defineMethod (c$, "skipToNextAtom",
  function () {
 while (this.readM40Floats () != null && (this.line.length == 0 || this.line.charAt (0) == ' ' || this.line.charAt (0) == '-')) {
 }
 return this.line;
 });
-Clazz.defineMethod (c$, "readM40WaveVectors", 
+Clazz.defineMethod (c$, "readM40WaveVectors",
  function () {
 while (!this.readM40Floats ().contains ("end")) if (this.line.startsWith ("wave")) {
 var tokens = this.getTokens ();
@@ -241,7 +241,7 @@ this.ms.addModulation (null, "F_" + this.parseIntStr (tokens[1]) + "_coefs_", pt
 }
 this.readM40Floats ();
 });
-Clazz.defineMethod (c$, "processPosition", 
+Clazz.defineMethod (c$, "processPosition",
  function (posName, pos, isAxial) {
 pos.atomName = this.molName + "_" + posName;
 var isImproper = (this.getInt (9, 11) == -1);
@@ -288,14 +288,14 @@ script = "@" + this.molName + ext + script.substring (1);
 this.addJmolScript (script);
 this.appendLoadNote (script);
 }, "~S,J.adapter.smarter.Atom,~B");
-Clazz.defineMethod (c$, "cartesianProduct", 
+Clazz.defineMethod (c$, "cartesianProduct",
  function (vA, vB) {
 this.symmetry.toCartesian (vA, true);
 if (vB == null) this.matR.rotate2 (vA, vA);
  else vA.cross (vA, vB);
 this.symmetry.toFractional (vA, true);
 }, "JU.T3,JU.T3");
-Clazz.defineMethod (c$, "readAtomRecord", 
+Clazz.defineMethod (c$, "readAtomRecord",
  function (atom, rm, rp, isPos) {
 var label = ";" + atom.atomName;
 var tType = (isPos ? -1 : this.getInt (13, 14));
@@ -391,7 +391,7 @@ this.ms.addModulation (null, "U_" + (j + 1) + "#" + "U11U22U33U12U13U23UISO".sub
 }}}
 }return rotData;
 }, "J.adapter.smarter.Atom,JU.P3,JU.P3,~B");
-Clazz.defineMethod (c$, "addSinCos", 
+Clazz.defineMethod (c$, "addSinCos",
  function (j, key, label, isPos) {
 this.readM40Floats ();
 if (this.isLegendre) {
@@ -421,7 +421,7 @@ var id = key + (j + 1) + "#" + axis + label;
 this.ms.addModulation (null, id,  Clazz.newDoubleArray (-1, [csin, ccos, 0]), -1);
 }
 }, "~N,~S,~S,~B");
-Clazz.defineMethod (c$, "ensureFourier", 
+Clazz.defineMethod (c$, "ensureFourier",
  function (j) {
 var pt;
 if (j > 0 && this.ms.getMod ("F_" + (++j) + "_coefs_") == null && (pt = this.ms.getMod ("F_1_coefs_")) != null) {
@@ -430,21 +430,21 @@ for (var i = this.modDim; --i >= 0; ) p[i] = pt[i] * j;
 
 this.ms.addModulation (null, "F_" + j + "_coefs_", p, -1);
 }}, "~N");
-Clazz.defineMethod (c$, "readM40Floats", 
+Clazz.defineMethod (c$, "readM40Floats",
  function () {
 if ((this.line = this.rd ()) == null || this.line.indexOf ("-------") >= 0) return (this.line = null);
 if (this.debugging) JU.Logger.debug (this.line);
 this.parseM40Floats ();
 return this.line;
 });
-Clazz.defineMethod (c$, "parseM40Floats", 
+Clazz.defineMethod (c$, "parseM40Floats",
  function () {
 var ptLast = this.line.length - 9;
 for (var i = 0, pt = 0; i < 6; i++, pt += 9) {
 this.floats[i] = (pt <= ptLast ? this.parseFloatStr (this.line.substring (pt, pt + 9)) : NaN);
 }
 });
-Clazz.defineMethod (c$, "readM40FloatLines", 
+Clazz.defineMethod (c$, "readM40FloatLines",
  function (nLines, nFloats) {
 var data =  Clazz.newFloatArray (nLines, nFloats, 0);
 for (var i = 0; i < nLines; i++) {
@@ -455,7 +455,7 @@ for (var j = 0; j < nFloats; j++) data[i][j] = this.floats[j];
 }
 return data;
 }, "~N,~N");
-Clazz.defineMethod (c$, "adjustM40Occupancies", 
+Clazz.defineMethod (c$, "adjustM40Occupancies",
  function () {
 var htSiteMult =  new java.util.Hashtable ();
 var atoms = this.asc.atoms;
@@ -467,7 +467,7 @@ if (ii == null) htSiteMult.put (a.atomName, ii = Integer.$valueOf (symmetry.getS
 a.foccupancy *= ii.intValue ();
 }
 });
-Clazz.defineMethod (c$, "copyModulations", 
+Clazz.defineMethod (c$, "copyModulations",
  function (label, newLabel) {
 var mapTemp =  new java.util.Hashtable ();
 for (var e, $e = this.ms.getModulationMap ().entrySet ().iterator (); $e.hasNext () && ((e = $e.next ()) || true);) {
@@ -489,7 +489,7 @@ mapTemp.put (key, val);
 for (var e, $e = mapTemp.entrySet ().iterator (); $e.hasNext () && ((e = $e.next ()) || true);) this.ms.addModulation (null, e.getKey (), e.getValue (), -1);
 
 }, "~S,~S");
-Clazz.defineMethod (c$, "setRigidBodyPhase", 
+Clazz.defineMethod (c$, "setRigidBodyPhase",
  function (key, v) {
 var isCenter = false;
 switch (this.ms.getModType (key)) {
@@ -523,7 +523,7 @@ v[0] = sA * cX + cA * sX;
 v[1] = -sA * sX + cA * cX;
 }return v;
 }, "~S,~A");
-Clazz.defineMethod (c$, "setRigidBodyRotations", 
+Clazz.defineMethod (c$, "setRigidBodyRotations",
  function (label, params) {
 var n = params.length;
 for (var i = 0; i < n; i++) {
@@ -549,12 +549,12 @@ this.setMolecularModulation (keyy, vsin.y, vcos.y);
 this.setMolecularModulation (keyz, vsin.z, vcos.z);
 }
 }, "~S,~A");
-Clazz.defineMethod (c$, "combineModulation", 
+Clazz.defineMethod (c$, "combineModulation",
  function (key, csin, ccos) {
 var v = this.ms.getMod (key);
 return  Clazz.newDoubleArray (-1, [v[0] + csin, v[1] + ccos, 0]);
 }, "~S,~N,~N");
-Clazz.defineMethod (c$, "setMolecularModulation", 
+Clazz.defineMethod (c$, "setMolecularModulation",
  function (key, csin, ccos) {
 this.ms.addModulation (null, key, this.setRigidBodyPhase (key,  Clazz.newDoubleArray (-1, [csin, ccos, 0])), -1);
 }, "~S,~N,~N");

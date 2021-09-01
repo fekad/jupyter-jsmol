@@ -67,16 +67,16 @@ var $t$;
 Clazz_declarePackage ("JSV.dialog");
 Clazz_load (["JSV.dialog.JSVDialog"], "JSV.dialog.IntegrationDialog", ["java.lang.Double", "JU.DF", "JSV.common.Annotation"], function () {
 c$ = Clazz_declareType (JSV.dialog, "IntegrationDialog", JSV.dialog.JSVDialog);
-Clazz_makeConstructor (c$, 
+Clazz_makeConstructor (c$,
 function () {
 Clazz_superConstructor (this, JSV.dialog.IntegrationDialog, []);
 this.type = JSV.common.Annotation.AType.Integration;
 });
-Clazz_overrideMethod (c$, "getPosXY", 
+Clazz_overrideMethod (c$, "getPosXY",
 function () {
 return JSV.dialog.IntegrationDialog.posXY;
 });
-Clazz_defineMethod (c$, "addUniqueControls", 
+Clazz_defineMethod (c$, "addUniqueControls",
 function () {
 this.txt1 = this.dialog.addTextField ("txtBaselineOffset", "Baseline Offset", null, "%", "" + this.vwr.parameters.integralOffset, true);
 this.txt2 = this.dialog.addTextField ("txtScale", "Scale", null, "%", "" + this.vwr.parameters.integralRange, true);
@@ -86,11 +86,11 @@ this.dialog.addButton ("btnAuto", "Auto");
 this.dialog.addButton ("btnDelete", "Delete");
 this.dialog.addButton ("btnNormalize", "Normalize");
 });
-Clazz_overrideMethod (c$, "applyFromFields", 
+Clazz_overrideMethod (c$, "applyFromFields",
 function () {
 this.apply ( Clazz_newArray (-1, [this.dialog.getText (this.txt1), this.dialog.getText (this.txt2)]));
 });
-Clazz_overrideMethod (c$, "callback", 
+Clazz_overrideMethod (c$, "callback",
 function (id, msg) {
 var val;
 try {
@@ -126,14 +126,14 @@ throw ex;
 }
 return true;
 }, "~S,~S");
-Clazz_defineMethod (c$, "checkSelectedIntegral", 
+Clazz_defineMethod (c$, "checkSelectedIntegral",
  function () {
 if (this.iSelected < 0) {
 this.showMessage ("Select a line on the table first, then click this button.", "Integration", 1);
 return false;
 }return true;
 });
-Clazz_defineMethod (c$, "deleteIntegral", 
+Clazz_defineMethod (c$, "deleteIntegral",
  function () {
 if (!this.checkSelectedIntegral ()) return;
 this.xyData.removeItemAt (this.iSelected);
@@ -147,23 +147,23 @@ Clazz_defineStatics (c$,
 Clazz_declarePackage ("JSV.dialog");
 Clazz_load (["JSV.dialog.JSVDialog"], "JSV.dialog.PeakListDialog", ["JSV.common.Annotation"], function () {
 c$ = Clazz_declareType (JSV.dialog, "PeakListDialog", JSV.dialog.JSVDialog);
-Clazz_makeConstructor (c$, 
+Clazz_makeConstructor (c$,
 function () {
 Clazz_superConstructor (this, JSV.dialog.PeakListDialog, []);
 this.type = JSV.common.Annotation.AType.PeakList;
 });
-Clazz_overrideMethod (c$, "getPosXY", 
+Clazz_overrideMethod (c$, "getPosXY",
 function () {
 return JSV.dialog.PeakListDialog.posXY;
 });
-Clazz_defineMethod (c$, "addUniqueControls", 
+Clazz_defineMethod (c$, "addUniqueControls",
 function () {
 this.txt1 = this.dialog.addTextField ("txtThreshold", "Threshold", null, "", "", true);
 this.dialog.setPreferredSize (780, 350);
 this.setThreshold (NaN);
 this.combo1 = this.dialog.addSelectOption ("cmbInterpolation", "Interpolation",  Clazz_newArray (-1, ["parabolic", "none"]), 0, true);
 });
-Clazz_overrideMethod (c$, "callback", 
+Clazz_overrideMethod (c$, "callback",
 function (id, msg) {
 if (id.equals ("cmbInterpolation") || id.equals ("txtThreshold")) id = "btnApply";
 return this.callbackAD (id, msg);
@@ -174,19 +174,19 @@ Clazz_defineStatics (c$,
 Clazz_declarePackage ("JSV.dialog");
 Clazz_load (["JSV.dialog.JSVDialog"], "JSV.dialog.MeasurementsDialog", ["JSV.common.Annotation"], function () {
 c$ = Clazz_declareType (JSV.dialog, "MeasurementsDialog", JSV.dialog.JSVDialog);
-Clazz_makeConstructor (c$, 
+Clazz_makeConstructor (c$,
 function () {
 Clazz_superConstructor (this, JSV.dialog.MeasurementsDialog, []);
 this.type = JSV.common.Annotation.AType.Measurements;
 });
-Clazz_defineMethod (c$, "addUniqueControls", 
+Clazz_defineMethod (c$, "addUniqueControls",
 function () {
 });
-Clazz_overrideMethod (c$, "getPosXY", 
+Clazz_overrideMethod (c$, "getPosXY",
 function () {
 return JSV.dialog.MeasurementsDialog.posXY;
 });
-Clazz_overrideMethod (c$, "callback", 
+Clazz_overrideMethod (c$, "callback",
 function (id, msg) {
 return this.callbackAD (id, msg);
 }, "~S,~S");
@@ -196,19 +196,19 @@ Clazz_defineStatics (c$,
 Clazz_declarePackage ("JSV.dialog");
 Clazz_load (["JSV.dialog.JSVDialog"], "JSV.dialog.OverlayLegendDialog", ["JSV.common.Annotation"], function () {
 c$ = Clazz_declareType (JSV.dialog, "OverlayLegendDialog", JSV.dialog.JSVDialog);
-Clazz_makeConstructor (c$, 
+Clazz_makeConstructor (c$,
 function () {
 Clazz_superConstructor (this, JSV.dialog.OverlayLegendDialog, []);
 this.type = JSV.common.Annotation.AType.OverlayLegend;
 });
-Clazz_overrideMethod (c$, "getPosXY", 
+Clazz_overrideMethod (c$, "getPosXY",
 function () {
 return JSV.dialog.OverlayLegendDialog.posXY;
 });
-Clazz_defineMethod (c$, "addUniqueControls", 
+Clazz_defineMethod (c$, "addUniqueControls",
 function () {
 });
-Clazz_overrideMethod (c$, "callback", 
+Clazz_overrideMethod (c$, "callback",
 function (id, msg) {
 return false;
 }, "~S,~S");
@@ -226,16 +226,16 @@ this.viewSelectedButton = null;
 this.checking = false;
 Clazz_instantialize (this, arguments);
 }, JSV.dialog, "ViewsDialog", JSV.dialog.JSVDialog);
-Clazz_makeConstructor (c$, 
+Clazz_makeConstructor (c$,
 function () {
 Clazz_superConstructor (this, JSV.dialog.ViewsDialog, []);
 this.type = JSV.common.Annotation.AType.Views;
 });
-Clazz_overrideMethod (c$, "getPosXY", 
+Clazz_overrideMethod (c$, "getPosXY",
 function () {
 return JSV.dialog.ViewsDialog.posXY;
 });
-Clazz_defineMethod (c$, "addUniqueControls", 
+Clazz_defineMethod (c$, "addUniqueControls",
 function () {
 this.checkBoxes =  new JU.Lst ();
 this.treeNodes =  new JU.Lst ();
@@ -251,7 +251,7 @@ this.txt1 = this.dialog.addCheckBox (null, null, 0, false);
 this.addCheckBoxes (this.vwr.spectraTree.getRootNode (), 0, true);
 this.addCheckBoxes (this.vwr.spectraTree.getRootNode (), 0, false);
 });
-Clazz_defineMethod (c$, "addCheckBoxes", 
+Clazz_defineMethod (c$, "addCheckBoxes",
  function (rootNode, level, isViews) {
 var enume = rootNode.children ();
 while (enume.hasMoreElements ()) {
@@ -268,19 +268,19 @@ this.checkBoxes.addLast (cb);
 this.addCheckBoxes (treeNode, level + 1, isViews);
 }
 }, "JSV.api.JSVTreeNode,~N,~B");
-Clazz_overrideMethod (c$, "checkEnables", 
+Clazz_overrideMethod (c$, "checkEnables",
 function () {
 var n = 0;
 for (var i = 0; i < this.checkBoxes.size (); i++) {
 if (this.dialog.isSelected (this.checkBoxes.get (i)) && this.treeNodes.get (i).getPanelNode ().jsvp != null) {
 n++;
 }}
-System.out.println ("viewsdialog n=" + n);
+Zystem.out.println ("viewsdialog n=" + n);
 this.dialog.setEnabled (this.closeSelectedButton, n > 0);
 this.dialog.setEnabled (this.combineSelectedButton, n > 1);
 this.dialog.setEnabled (this.viewSelectedButton, n == 1);
 });
-Clazz_defineMethod (c$, "check", 
+Clazz_defineMethod (c$, "check",
 function (name) {
 var i = JU.PT.parseInt (name.substring (name.indexOf ("_") + 1));
 var node = this.treeNodes.get (i);
@@ -308,7 +308,7 @@ this.treeNodes.get (i).getPanelNode ().isSelected = false;
 }
 this.checkEnables ();
 }, "~S");
-Clazz_defineMethod (c$, "selectAll", 
+Clazz_defineMethod (c$, "selectAll",
 function (mode) {
 for (var i = this.checkBoxes.size (); --i >= 0; ) {
 this.dialog.setSelected (this.checkBoxes.get (i), mode);
@@ -316,10 +316,10 @@ this.treeNodes.get (i).getPanelNode ().isSelected = mode;
 }
 this.checkEnables ();
 }, "~B");
-Clazz_defineMethod (c$, "combineSelected", 
+Clazz_defineMethod (c$, "combineSelected",
 function () {
 });
-Clazz_defineMethod (c$, "viewSelected", 
+Clazz_defineMethod (c$, "viewSelected",
 function () {
 var sb =  new JU.SB ();
 var thisNode = null;
@@ -347,12 +347,12 @@ this.layoutDialog ();
 this.vwr.setNode (thisNode);
 }if (script != null) this.vwr.runScript (script);
 });
-Clazz_defineMethod (c$, "closeSelected", 
+Clazz_defineMethod (c$, "closeSelected",
 function () {
 this.vwr.runScript ("close !selected");
 this.layoutDialog ();
 });
-Clazz_overrideMethod (c$, "callback", 
+Clazz_overrideMethod (c$, "callback",
 function (id, msg) {
 if (id.equals ("btnSelectAll")) {
 this.selectAll (true);
@@ -377,7 +377,7 @@ this.checkEnables ();
 return this.callbackAD (id, msg);
 }return true;
 }, "~S,~S");
-Clazz_overrideMethod (c$, "applyFromFields", 
+Clazz_overrideMethod (c$, "applyFromFields",
 function () {
 this.apply ( Clazz_newArray (-1, [this.dialog.getText (this.txt2)]));
 });
@@ -387,33 +387,33 @@ Clazz_defineStatics (c$,
 Clazz_declarePackage ("JSV.js2d");
 Clazz_load (["JSV.dialog.DialogManager"], "JSV.js2d.JsDialogManager", ["JU.PT", "JSV.js2d.DialogTableModel", "$.JsDialog", "JS.Dimension", "$.JDialog", "$.JEditorPane", "$.JLabel", "$.JScrollPane", "$.JTable"], function () {
 c$ = Clazz_declareType (JSV.js2d, "JsDialogManager", JSV.dialog.DialogManager);
-Clazz_makeConstructor (c$, 
+Clazz_makeConstructor (c$,
 function () {
 Clazz_superConstructor (this, JSV.js2d.JsDialogManager, []);
 });
-Clazz_overrideMethod (c$, "getDialog", 
+Clazz_overrideMethod (c$, "getDialog",
 function (jsvDialog) {
 return  new JSV.js2d.JsDialog (this, jsvDialog, this.registerDialog (jsvDialog));
 }, "JSV.dialog.JSVDialog");
-Clazz_overrideMethod (c$, "getDialogInput", 
+Clazz_overrideMethod (c$, "getDialogInput",
 function (parentComponent, phrase, title, msgType, icon, objects, defaultStr) {
 {
 return prompt(phrase, defaultStr);
 }}, "~O,~S,~S,~N,~O,~A,~S");
-Clazz_overrideMethod (c$, "showMessageDialog", 
+Clazz_overrideMethod (c$, "showMessageDialog",
 function (parentComponent, msg, title, msgType) {
 {
 alert(msg);
 }}, "~O,~S,~S,~N");
-Clazz_overrideMethod (c$, "getLocationOnScreen", 
+Clazz_overrideMethod (c$, "getLocationOnScreen",
 function (component) {
 return  Clazz_newIntArray (2, 0);
 }, "~O");
-Clazz_overrideMethod (c$, "getOptionFromDialog", 
+Clazz_overrideMethod (c$, "getOptionFromDialog",
 function (frame, items, jsvp, dialogName, labelName) {
 return this.vwr.html5Applet.getOption (items, dialogName, labelName);
 }, "~O,~A,JSV.api.JSVPanel,~S,~S");
-Clazz_overrideMethod (c$, "showProperties", 
+Clazz_overrideMethod (c$, "showProperties",
 function (frame, spectrum) {
 var dialog =  new JS.JDialog ();
 dialog.setTitle ("Header Information");
@@ -428,7 +428,7 @@ dialog.pack ();
 dialog.setVisible (true);
 dialog.toFront ();
 }, "~O,JSV.common.Spectrum");
-Clazz_overrideMethod (c$, "showMessage", 
+Clazz_overrideMethod (c$, "showMessage",
 function (frame, text, title) {
 var dialog =  new JS.JDialog ();
 {
@@ -445,7 +445,7 @@ dialog.pack ();
 dialog.setVisible (true);
 dialog.toFront ();
 }, "~O,~S,~S");
-Clazz_defineMethod (c$, "actionPerformed", 
+Clazz_defineMethod (c$, "actionPerformed",
 function (eventId) {
 var pt = eventId.indexOf ("/JT");
 if (pt >= 0) {
@@ -467,14 +467,14 @@ this.htDialogs = null;
 this.options = null;
 Clazz_instantialize (this, arguments);
 }, JSV.dialog, "DialogManager");
-Clazz_defineMethod (c$, "set", 
+Clazz_defineMethod (c$, "set",
 function (viewer) {
 this.vwr = viewer;
 this.htSelectors =  new java.util.Hashtable ();
 this.htDialogs =  new java.util.Hashtable ();
 return this;
 }, "JSV.common.JSViewer");
-Clazz_defineMethod (c$, "registerDialog", 
+Clazz_defineMethod (c$, "registerDialog",
 function (jsvDialog) {
 var id = jsvDialog.optionKey;
 if (!id.endsWith ("!")) id += " " + ("" + Math.random ()).substring (3);
@@ -482,15 +482,15 @@ if (this.htDialogs.containsKey (id)) this.htDialogs.get (id).dispose ();
 this.htDialogs.put (id, jsvDialog);
 return id;
 }, "JSV.dialog.JSVDialog");
-Clazz_defineMethod (c$, "registerSelector", 
+Clazz_defineMethod (c$, "registerSelector",
 function (selectorName, columnSelector) {
 this.htSelectors.put (columnSelector, selectorName);
 }, "~S,~O");
-Clazz_defineMethod (c$, "getSelectorName", 
+Clazz_defineMethod (c$, "getSelectorName",
 function (selector) {
 return this.htSelectors.get (selector);
 }, "~O");
-Clazz_defineMethod (c$, "showSourceErrors", 
+Clazz_defineMethod (c$, "showSourceErrors",
 function (frame, currentSource) {
 if (currentSource == null) {
 this.showMessageDialog (frame, "Please Select a Spectrum.", "Select Spectrum", 2);
@@ -499,7 +499,7 @@ return;
 if (errorLog != null && errorLog.length > 0) this.showMessage (frame, errorLog, JSV.dialog.DialogManager.fixTitle (currentSource.getFilePath ()));
  else this.showMessageDialog (frame, "No errors found.", "Error Log", 1);
 }, "~O,JSV.source.JDXSource");
-Clazz_defineMethod (c$, "showSource", 
+Clazz_defineMethod (c$, "showSource",
 function (frame, spec) {
 var filePath = spec.getFilePath ();
 if (filePath == null) {
@@ -520,14 +520,14 @@ throw ex;
 }
 }
 }, "~O,JSV.common.Spectrum");
-Clazz_defineMethod (c$, "processClick", 
+Clazz_defineMethod (c$, "processClick",
 function (eventId) {
 var pt = eventId.lastIndexOf ("/");
 var id = eventId.substring (pt + 1);
 var dialog = eventId.substring (0, pt);
 this.dialogCallback (dialog, id, null);
 }, "~S");
-Clazz_defineMethod (c$, "processTableEvent", 
+Clazz_defineMethod (c$, "processTableEvent",
 function (eventId, index1, index2, adjusting) {
 var pt = eventId.lastIndexOf ("/");
 var dialog = eventId.substring (0, pt);
@@ -535,22 +535,22 @@ var selector = eventId.substring (pt + 1);
 var msg = "&selector=" + selector + "&index=" + index1 + (index2 < 0 ? "&adjusting=" + adjusting : "&index2=" + index2);
 this.dialogCallback (dialog, "tableSelect", msg);
 }, "~S,~N,~N,~B");
-Clazz_defineMethod (c$, "processWindowClosing", 
+Clazz_defineMethod (c$, "processWindowClosing",
 function (dialogId) {
 this.dialogCallback (dialogId, "windowClosing", null);
 this.htDialogs.remove (dialogId);
 }, "~S");
-Clazz_defineMethod (c$, "dialogCallback", 
+Clazz_defineMethod (c$, "dialogCallback",
  function (dialogId, id, msg) {
 var jsvDialog = this.htDialogs.get (dialogId);
 if (jsvDialog != null) jsvDialog.callback (id, msg);
 }, "~S,~S,~S");
-Clazz_defineMethod (c$, "getDialogOptions", 
+Clazz_defineMethod (c$, "getDialogOptions",
 function () {
 if (this.options == null) this.options =  new java.util.Hashtable ();
 return this.options;
 });
-c$.fixTitle = Clazz_defineMethod (c$, "fixTitle", 
+c$.fixTitle = Clazz_defineMethod (c$, "fixTitle",
 function (title) {
 return (title.length > 50 ? title.substring (0, 50) + "..." : title);
 }, "~S");
@@ -572,7 +572,7 @@ this.thisCol = 0;
 this.tableCellAlignLeft = false;
 Clazz_instantialize (this, arguments);
 }, JSV.js2d, "DialogTableModel", null, JS.AbstractTableModel);
-Clazz_makeConstructor (c$, 
+Clazz_makeConstructor (c$,
 function (columnNames, data, asString, tableCellAlignLeft) {
 this.columnNames = columnNames;
 this.data = data;
@@ -580,33 +580,33 @@ this.asString = asString;
 this.widths = (data.length == 0 ?  Clazz_newIntArray (0, 0) :  Clazz_newIntArray (data[0].length, 0));
 this.tableCellAlignLeft = tableCellAlignLeft;
 }, "~A,~A,~B,~B");
-Clazz_defineMethod (c$, "getColumnCount", 
+Clazz_defineMethod (c$, "getColumnCount",
 function () {
 return this.columnNames.length;
 });
-Clazz_defineMethod (c$, "getRowCount", 
+Clazz_defineMethod (c$, "getRowCount",
 function () {
 return this.data.length;
 });
-Clazz_defineMethod (c$, "getColumnName", 
+Clazz_defineMethod (c$, "getColumnName",
 function (col) {
 return this.columnNames[col];
 }, "~N");
-Clazz_defineMethod (c$, "getValueAt", 
+Clazz_defineMethod (c$, "getValueAt",
 function (row, col) {
 var o = this.data[row][col];
 return (this.asString ? " " + o + " " : o);
 }, "~N,~N");
-Clazz_overrideMethod (c$, "getColumn", 
+Clazz_overrideMethod (c$, "getColumn",
 function (i) {
 this.thisCol = i;
 return this;
 }, "~N");
-Clazz_overrideMethod (c$, "setPreferredWidth", 
+Clazz_overrideMethod (c$, "setPreferredWidth",
 function (n) {
 this.widths[this.thisCol] = n;
 }, "~N");
-Clazz_overrideMethod (c$, "toHTML", 
+Clazz_overrideMethod (c$, "toHTML",
 function (sb, id, selectedRows) {
 if (this.data == null || this.data[0] == null || this.data[0].length == 0) return;
 var nrows = this.data.length;
@@ -621,12 +621,12 @@ if (i == -1) this.getCellHtml (sb, id + "_h" + j, i, j, this.columnNames[j], fal
 sb.append ("</tr>");
 }
 }, "JU.SB,~S,JU.BS");
-Clazz_defineMethod (c$, "getCellHtml", 
+Clazz_defineMethod (c$, "getCellHtml",
  function (sb, id, iRow, iCol, o, isSelected) {
 var style = this.getCellStyle (id, iRow, iCol, o, isSelected);
 sb.append ("<td id='" + id + "'" + style + " onclick=SwingController.click(this)>" + o + "</td>");
 }, "JU.SB,~S,~N,~N,~O,~B");
-Clazz_defineMethod (c$, "getCellStyle", 
+Clazz_defineMethod (c$, "getCellStyle",
  function (id, iRow, iCol, o, isSelected) {
 var style = "padding:1px 1px 1px 1px";
 if (iRow < 0) {
@@ -670,7 +670,7 @@ Clazz_prepareFields (c$, function () {
 this.buttonInsets =  new JS.Insets (5, 5, 5, 5);
 this.panelInsets =  new JS.Insets (0, 0, 2, 2);
 });
-Clazz_makeConstructor (c$, 
+Clazz_makeConstructor (c$,
 function (manager, jsvDialog, registryKey) {
 Clazz_superConstructor (this, JSV.js2d.JsDialog);
 this.defaultHeight = 350;
@@ -683,16 +683,16 @@ if (this.options == null) this.options =  new java.util.Hashtable ();
 this.getContentPane ().setBackground (JS.Color.get3 (230, 230, 230));
 this.toFront ();
 }, "JSV.dialog.DialogManager,JSV.dialog.JSVDialog,~S");
-Clazz_defineMethod (c$, "onFocus", 
+Clazz_defineMethod (c$, "onFocus",
 function () {
 this.toFront ();
 });
-Clazz_overrideMethod (c$, "setFocus", 
+Clazz_overrideMethod (c$, "setFocus",
 function (tf) {
 if (tf) {
 this.toFront ();
 }}, "~B");
-Clazz_overrideMethod (c$, "addButton", 
+Clazz_overrideMethod (c$, "addButton",
 function (name, text) {
 var btn =  new JS.JButton ();
 btn.setPreferredSize ( new JS.Dimension (120, 25));
@@ -702,7 +702,7 @@ btn.addActionListener (this.manager);
 this.thisPanel.add (btn,  new JS.GridBagConstraints (0, this.iRow++, 3, 1, 0.0, 0.0, 10, 0, this.buttonInsets, 0, 0));
 return btn;
 }, "~S,~S");
-Clazz_overrideMethod (c$, "addCheckBox", 
+Clazz_overrideMethod (c$, "addCheckBox",
 function (name, title, level, isSelected) {
 if (name == null) {
 this.iRow = 0;
@@ -717,7 +717,7 @@ var insets =  new JS.Insets (0, 20 * level, 2, 2);
 this.thisPanel.add (cb,  new JS.GridBagConstraints (0, this.iRow++, 1, 1, 0.0, 0.0, 17, 0, insets, 0, 0));
 return cb;
 }, "~S,~S,~N,~B");
-Clazz_defineMethod (c$, "addPanelLine", 
+Clazz_defineMethod (c$, "addPanelLine",
  function (name, label, obj, units) {
 this.thisPanel.add ( new JS.JLabel (label == null ? name : label),  new JS.GridBagConstraints (0, this.iRow, 1, 1, 0.0, 0.0, 13, 0, this.panelInsets, 0, 0));
 if (units == null) {
@@ -727,7 +727,7 @@ this.thisPanel.add (obj,  new JS.GridBagConstraints (1, this.iRow, 1, 1, 0.0, 0.
 this.thisPanel.add ( new JS.JLabel (units),  new JS.GridBagConstraints (2, this.iRow, 1, 1, 0.0, 0.0, 17, 0, this.panelInsets, 0, 0));
 }this.iRow++;
 }, "~S,~S,JS.JComponent,~S");
-Clazz_overrideMethod (c$, "addSelectOption", 
+Clazz_overrideMethod (c$, "addSelectOption",
 function (name, label, info, iPt, visible) {
 var combo =  new JS.JComboBox (info);
 combo.setSelectedIndex (iPt);
@@ -737,7 +737,7 @@ combo.addActionListener (this.manager);
 this.addPanelLine (name, label, combo, null);
 }return combo;
 }, "~S,~S,~A,~N,~B");
-Clazz_overrideMethod (c$, "addTextField", 
+Clazz_overrideMethod (c$, "addTextField",
 function (name, label, value, units, defaultValue, visible) {
 var key = this.optionKey + "_" + name;
 if (value == null) {
@@ -751,7 +751,7 @@ obj.addActionListener (this.manager);
 this.addPanelLine (name, label, obj, units);
 }return obj;
 }, "~S,~S,~S,~S,~S,~B");
-Clazz_overrideMethod (c$, "createTable", 
+Clazz_overrideMethod (c$, "createTable",
 function (data, header, widths) {
 try {
 var scrollPane =  new JS.JScrollPane (this.dataTable = this.getDataTable (data, header, widths, (this.leftPanel == null ? this.defaultHeight : this.leftPanel.getHeight () - 50)));
@@ -768,13 +768,13 @@ throw e;
 this.validate ();
 this.repaint ();
 }, "~A,~A,~A");
-Clazz_overrideMethod (c$, "endLayout", 
+Clazz_overrideMethod (c$, "endLayout",
 function () {
 this.getContentPane ().removeAll ();
 this.getContentPane ().add (this.mainSplitPane);
 this.pack ();
 });
-Clazz_defineMethod (c$, "getDataTable", 
+Clazz_defineMethod (c$, "getDataTable",
  function (data, columnNames, columnWidths, height) {
 this.selectedRow = -1;
 var tableModel =  new JSV.js2d.DialogTableModel (columnNames, data, !this.haveColors, this.tableCellAlignLeft);
@@ -792,23 +792,23 @@ n += columnWidths[i];
 }
 return table;
 }, "~A,~A,~A,~N");
-Clazz_overrideMethod (c$, "getSelectedIndex", 
+Clazz_overrideMethod (c$, "getSelectedIndex",
 function (c) {
 return (c).getSelectedIndex ();
 }, "~O");
-Clazz_overrideMethod (c$, "getSelectedItem", 
+Clazz_overrideMethod (c$, "getSelectedItem",
 function (combo) {
 return (combo).getSelectedItem ();
 }, "~O");
-Clazz_defineMethod (c$, "getText", 
+Clazz_defineMethod (c$, "getText",
 function (o) {
 return (o).getText ();
 }, "~O");
-Clazz_overrideMethod (c$, "isSelected", 
+Clazz_overrideMethod (c$, "isSelected",
 function (chkbox) {
 return (chkbox).isSelected ();
 }, "~O");
-Clazz_overrideMethod (c$, "selectTableRow", 
+Clazz_overrideMethod (c$, "selectTableRow",
 function (i) {
 this.selectedRow = i;
 this.dataTable.clearSelection ();
@@ -817,15 +817,15 @@ this.dataTable.setRowSelectionAllowed (true);
 this.dataTable.setRowSelectionInterval (this.selectedRow, this.selectedRow + 1);
 this.repaint ();
 }}, "~N");
-Clazz_overrideMethod (c$, "setCellSelectionEnabled", 
+Clazz_overrideMethod (c$, "setCellSelectionEnabled",
 function (enabled) {
 this.dataTable.setCellSelectionEnabled (enabled);
 }, "~B");
-Clazz_defineMethod (c$, "setEnabled", 
+Clazz_defineMethod (c$, "setEnabled",
 function (btn, b) {
 (btn).setEnabled (b);
 }, "~O,~B");
-Clazz_overrideMethod (c$, "setIntLocation", 
+Clazz_overrideMethod (c$, "setIntLocation",
 function (loc) {
 var d =  new JS.Dimension (0, 0);
 {
@@ -834,23 +834,23 @@ SwingController.getScreenDimensions(d);
 loc[1] = Math.min (d.height - 50, loc[1]);
 this.setLocation (loc);
 }, "~A");
-Clazz_defineMethod (c$, "setPreferredSize", 
+Clazz_defineMethod (c$, "setPreferredSize",
 function (width, height) {
 this.setPreferredSize ( new JS.Dimension (width, height));
 }, "~N,~N");
-Clazz_overrideMethod (c$, "setSelected", 
+Clazz_overrideMethod (c$, "setSelected",
 function (chkbox, b) {
 (chkbox).setSelected (b);
 }, "~O,~B");
-Clazz_overrideMethod (c$, "setSelectedIndex", 
+Clazz_overrideMethod (c$, "setSelectedIndex",
 function (combo, i) {
 (combo).setSelectedIndex (i);
 }, "~O,~N");
-Clazz_defineMethod (c$, "setText", 
+Clazz_defineMethod (c$, "setText",
 function (o, text) {
 (o).setText (text);
 }, "~O,~S");
-Clazz_overrideMethod (c$, "startLayout", 
+Clazz_overrideMethod (c$, "startLayout",
 function () {
 this.setPreferredSize ( new JS.Dimension (600, 370));
 this.getContentPane ().removeAll ();
@@ -876,7 +876,7 @@ this.mainSplitPane =  new JS.JSplitPane (1);
 this.mainSplitPane.setLeftComponent (this.leftPanel);
 this.mainSplitPane.setRightComponent ( new JS.JScrollPane (this.rightPanel));
 }});
-Clazz_defineMethod (c$, "getColumnCentering", 
+Clazz_defineMethod (c$, "getColumnCentering",
 function (column) {
 return this.tableCellAlignLeft ? 2 : column == 0 ? 0 : 4;
 }, "~N");

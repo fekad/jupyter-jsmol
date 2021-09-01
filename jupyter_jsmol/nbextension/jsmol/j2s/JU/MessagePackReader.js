@@ -5,26 +5,26 @@ this.doc = null;
 this.isHomo = false;
 Clazz.instantialize (this, arguments);
 }, JU, "MessagePackReader");
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function (binaryDoc, isHomogeneousArrays) {
 this.isHomo = isHomogeneousArrays;
 this.doc = binaryDoc;
 }, "javajs.api.GenericBinaryDocumentReader,~B");
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function () {
 });
-Clazz.defineMethod (c$, "getMapForStream", 
+Clazz.defineMethod (c$, "getMapForStream",
 function (is) {
 this.doc =  new JU.BinaryDocument ().setStream (is, true);
 var map = this.readMap ();
 is.close ();
 return map;
 }, "java.io.BufferedInputStream");
-Clazz.defineMethod (c$, "readMap", 
+Clazz.defineMethod (c$, "readMap",
 function () {
 return this.getNext (null, 0);
 });
-Clazz.defineMethod (c$, "getNext", 
+Clazz.defineMethod (c$, "getNext",
 function (array, pt) {
 var b = this.doc.readByte () & 0xFF;
 var be0 = b & 0xE0;
@@ -162,11 +162,11 @@ break;
 }}
 return null;
 }, "~O,~N");
-Clazz.defineMethod (c$, "getObject", 
+Clazz.defineMethod (c$, "getObject",
  function (n) {
 return  Clazz.newArray (-1, [Integer.$valueOf (this.doc.readUInt8 ()), this.doc.readBytes (n)]);
 }, "~N");
-Clazz.defineMethod (c$, "getArray", 
+Clazz.defineMethod (c$, "getArray",
  function (n) {
 if (this.isHomo) {
 if (n == 0) return null;
@@ -197,7 +197,7 @@ for (var i = 0; i < n; i++) o[i] = this.getNext (null, 0);
 
 return o;
 }, "~N");
-Clazz.defineMethod (c$, "getMap", 
+Clazz.defineMethod (c$, "getMap",
  function (n) {
 var map =  new java.util.Hashtable ();
 for (var i = 0; i < n; i++) {
@@ -209,7 +209,7 @@ map.put (key, value);
 }}
 return map;
 }, "~N");
-c$.decode = Clazz.defineMethod (c$, "decode", 
+c$.decode = Clazz.defineMethod (c$, "decode",
 function (b) {
 var type = JU.BC.bytesToInt (b, 0, true);
 var n = JU.BC.bytesToInt (b, 4, true);
@@ -242,11 +242,11 @@ case 14:
 case 15:
 return JU.MessagePackReader.unpack (b, 16 - type, n);
 default:
-System.out.println ("MMTF type " + type + " not found!");
+Zystem.out.println ("MMTF type " + type + " not found!");
 return null;
 }
 }, "~A");
-c$.getFloats = Clazz.defineMethod (c$, "getFloats", 
+c$.getFloats = Clazz.defineMethod (c$, "getFloats",
 function (b, n, divisor) {
 if (b == null) return null;
 var a =  Clazz.newFloatArray (n, 0);
@@ -269,7 +269,7 @@ throw e;
 }
 return a;
 }, "~A,~N,~N");
-c$.getInts = Clazz.defineMethod (c$, "getInts", 
+c$.getInts = Clazz.defineMethod (c$, "getInts",
 function (b, n) {
 if (b == null) return null;
 var a =  Clazz.newIntArray (n, 0);
@@ -289,7 +289,7 @@ break;
 }
 return a;
 }, "~A,~N");
-c$.rldecode32ToStr = Clazz.defineMethod (c$, "rldecode32ToStr", 
+c$.rldecode32ToStr = Clazz.defineMethod (c$, "rldecode32ToStr",
 function (b) {
 var id =  new Array (Clazz.doubleToInt ((b.length - 12) / 4));
 out : for (var i = 0, len = id.length, pt = 12; i < len; i++) {
@@ -309,7 +309,7 @@ continue;
 }
 return id;
 }, "~A");
-c$.rldecode32ToChar = Clazz.defineMethod (c$, "rldecode32ToChar", 
+c$.rldecode32ToChar = Clazz.defineMethod (c$, "rldecode32ToChar",
 function (b, n) {
 if (b == null) return null;
 var ret =  Clazz.newCharArray (n, '\0');
@@ -320,7 +320,7 @@ for (var j = JU.BC.bytesToInt (b, (pt++) << 2, true); --j >= 0; ) ret[i++] = val
 }
 return ret;
 }, "~A,~N");
-c$.rldecode32 = Clazz.defineMethod (c$, "rldecode32", 
+c$.rldecode32 = Clazz.defineMethod (c$, "rldecode32",
 function (b, n) {
 if (b == null) return null;
 var ret =  Clazz.newIntArray (n, 0);
@@ -331,7 +331,7 @@ for (var j = JU.BC.bytesToInt (b, (pt++) << 2, true); --j >= 0; ) ret[i++] = val
 }
 return ret;
 }, "~A,~N");
-c$.rldecode32Delta = Clazz.defineMethod (c$, "rldecode32Delta", 
+c$.rldecode32Delta = Clazz.defineMethod (c$, "rldecode32Delta",
 function (b, n) {
 if (b == null) return null;
 var ret =  Clazz.newIntArray (n, 0);
@@ -342,7 +342,7 @@ for (var j = JU.BC.bytesToInt (b, (pt++) << 2, true); --j >= 0; ) ret[i++] = (va
 }
 return ret;
 }, "~A,~N");
-c$.rldecodef = Clazz.defineMethod (c$, "rldecodef", 
+c$.rldecodef = Clazz.defineMethod (c$, "rldecodef",
 function (b, n, divisor) {
 if (b == null) return null;
 var ret =  Clazz.newFloatArray (n, 0);
@@ -353,7 +353,7 @@ for (var j = JU.BC.bytesToInt (b, (pt++) << 2, true); --j >= 0; ) ret[i++] = val
 }
 return ret;
 }, "~A,~N,~N");
-c$.unpack16Deltaf = Clazz.defineMethod (c$, "unpack16Deltaf", 
+c$.unpack16Deltaf = Clazz.defineMethod (c$, "unpack16Deltaf",
 function (b, n, divisor) {
 if (b == null) return null;
 var ret =  Clazz.newFloatArray (n, 0);
@@ -367,7 +367,7 @@ buf = 0;
 }}
 return ret;
 }, "~A,~N,~N");
-c$.unpackf = Clazz.defineMethod (c$, "unpackf", 
+c$.unpackf = Clazz.defineMethod (c$, "unpackf",
 function (b, nBytes, n, divisor) {
 if (b == null) return null;
 var ret =  Clazz.newFloatArray (n, 0);
@@ -395,7 +395,7 @@ break;
 }
 return ret;
 }, "~A,~N,~N,~N");
-c$.unpack = Clazz.defineMethod (c$, "unpack", 
+c$.unpack = Clazz.defineMethod (c$, "unpack",
 function (b, nBytes, n) {
 if (b == null) return null;
 var ret =  Clazz.newIntArray (n, 0);

@@ -27,41 +27,41 @@ Clazz.prepareFields (c$, function () {
 this.columnData =  new Array (100);
 this.fileHeader =  new JU.SB ();
 });
-Clazz.defineMethod (c$, "getVersion", 
+Clazz.defineMethod (c$, "getVersion",
 function () {
 return 1;
 });
-Clazz.defineMethod (c$, "setNullValue", 
+Clazz.defineMethod (c$, "setNullValue",
 function (nullString) {
 this.nullString = nullString;
 }, "~S");
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function () {
 });
-Clazz.overrideMethod (c$, "getColumnData", 
+Clazz.overrideMethod (c$, "getColumnData",
 function (i) {
 return this.columnData[i];
 }, "~N");
-Clazz.overrideMethod (c$, "getColumnCount", 
+Clazz.overrideMethod (c$, "getColumnCount",
 function () {
 return this.columnCount;
 });
-Clazz.overrideMethod (c$, "getColumnName", 
+Clazz.overrideMethod (c$, "getColumnName",
 function (i) {
 return this.columnNames[i];
 }, "~N");
-Clazz.overrideMethod (c$, "set", 
+Clazz.overrideMethod (c$, "set",
 function (reader, br, debugging) {
 this.reader = reader;
 this.br = br;
 this.debugging = debugging;
 return this;
 }, "javajs.api.GenericLineReader,java.io.BufferedReader,~B");
-Clazz.overrideMethod (c$, "getFileHeader", 
+Clazz.overrideMethod (c$, "getFileHeader",
 function () {
 return this.fileHeader.toString ();
 });
-Clazz.overrideMethod (c$, "getAllCifData", 
+Clazz.overrideMethod (c$, "getAllCifData",
 function () {
 this.line = "";
 var key;
@@ -86,7 +86,7 @@ continue;
 if (key.equals ("save_")) {
 var n = saveFrames.size ();
 if (n == 0) {
-System.out.println ("CIF ERROR ? save_ without corresponding save_xxxx");
+Zystem.out.println ("CIF ERROR ? save_ without corresponding save_xxxx");
 data = data0;
 } else {
 data = saveFrames.removeItemAt (n - 1);
@@ -97,11 +97,11 @@ data =  new java.util.Hashtable ();
 d.put (key, data);
 }continue;
 }if (key.charAt (0) != '_') {
-System.out.println ("CIF ERROR ? should be an underscore: " + key);
+Zystem.out.println ("CIF ERROR ? should be an underscore: " + key);
 } else {
 var value = (this.asObject ? this.getNextTokenObject () : this.getNextToken ());
 if (value == null) {
-System.out.println ("CIF ERROR ? end of file; data missing: " + key);
+Zystem.out.println ("CIF ERROR ? end of file; data missing: " + key);
 } else {
 data.put (this.fixKey (key), value);
 }}}
@@ -123,7 +123,7 @@ throw e;
 this.nullString = "\0";
 return allData;
 });
-Clazz.defineMethod (c$, "getAllCifLoopData", 
+Clazz.defineMethod (c$, "getAllCifLoopData",
  function (data) {
 var key;
 var keyWords =  new JU.Lst ();
@@ -141,7 +141,7 @@ while (this.getData ()) for (var i = 0; i < this.columnCount; i++) (data.get (ke
 
 this.isLoop = false;
 }, "java.util.Map");
-Clazz.overrideMethod (c$, "readLine", 
+Clazz.overrideMethod (c$, "readLine",
 function () {
 try {
 this.line = (this.reader == null ? this.br.readLine () : this.reader.readNextLine ());
@@ -158,7 +158,7 @@ throw e;
 }
 }
 });
-Clazz.overrideMethod (c$, "getData", 
+Clazz.overrideMethod (c$, "getData",
 function () {
 if (this.isLoop) {
 for (var i = 0; i < this.columnCount; ++i) if ((this.columnData[i] = this.getNextDataToken ()) == null) return false;
@@ -169,7 +169,7 @@ this.haveData = false;
 return false;
 }return (this.columnCount > 0);
 });
-Clazz.overrideMethod (c$, "skipLoop", 
+Clazz.overrideMethod (c$, "skipLoop",
 function (doReport) {
 var str;
 var ret = (doReport ?  new JU.SB () : null);
@@ -188,21 +188,21 @@ if ((++m % n) == 0) ret.append ("\n");
 }
 return (ret == null ? null : ret.toString ());
 }, "~B");
-Clazz.overrideMethod (c$, "getNextToken", 
+Clazz.overrideMethod (c$, "getNextToken",
 function () {
 this.wasUnquoted = true;
 return this.getNextTokenProtected ();
 });
-Clazz.defineMethod (c$, "getNextTokenObject", 
+Clazz.defineMethod (c$, "getNextTokenObject",
 function () {
 this.wasUnquoted = true;
 return this.getNextTokenProtected ();
 });
-Clazz.defineMethod (c$, "getNextTokenProtected", 
+Clazz.defineMethod (c$, "getNextTokenProtected",
 function () {
 return (this.getNextLine () ? this.nextStrToken () : null);
 });
-Clazz.overrideMethod (c$, "getNextDataToken", 
+Clazz.overrideMethod (c$, "getNextDataToken",
 function () {
 var o = this.peekToken ();
 if (o == null) return null;
@@ -211,7 +211,7 @@ var str = o;
 if (str.charAt (0) == '_' || str.startsWith ("loop_") || str.startsWith ("data_") || str.startsWith ("save_") || str.startsWith ("stop_") || str.startsWith ("global_")) return null;
 }return this.getTokenPeeked ();
 });
-Clazz.overrideMethod (c$, "peekToken", 
+Clazz.overrideMethod (c$, "peekToken",
 function () {
 if (!this.getNextLine ()) return null;
 var ich = this.ich;
@@ -220,18 +220,18 @@ this.ichPeeked = this.ich;
 this.ich = ich;
 return this.strPeeked;
 });
-Clazz.defineMethod (c$, "getNextLine", 
+Clazz.defineMethod (c$, "getNextLine",
  function () {
 while (!this.strHasMoreTokens ()) if (this.prepareNextLine () == null) return false;
 
 return true;
 });
-Clazz.overrideMethod (c$, "getTokenPeeked", 
+Clazz.overrideMethod (c$, "getTokenPeeked",
 function () {
 this.ich = this.ichPeeked;
 return this.strPeeked;
 });
-Clazz.overrideMethod (c$, "fullTrim", 
+Clazz.overrideMethod (c$, "fullTrim",
 function (str) {
 var pt0 = -1;
 var pt1 = str.length;
@@ -241,7 +241,7 @@ while (--pt1 > pt0 && JU.PT.isWhitespace (str.charAt (pt1))) {
 }
 return str.substring (pt0, pt1 + 1);
 }, "~S");
-Clazz.overrideMethod (c$, "toUnicode", 
+Clazz.overrideMethod (c$, "toUnicode",
 function (data) {
 var pt;
 try {
@@ -258,7 +258,7 @@ throw e;
 }
 return data;
 }, "~S");
-Clazz.overrideMethod (c$, "parseDataBlockParameters", 
+Clazz.overrideMethod (c$, "parseDataBlockParameters",
 function (fields, key, data, key2col, col2key) {
 this.isLoop = (key == null);
 var o;
@@ -305,18 +305,18 @@ key = null;
 }
 this.haveData = (this.columnCount > 0);
 }}, "~A,~S,~S,~A,~A");
-Clazz.overrideMethod (c$, "fixKey", 
+Clazz.overrideMethod (c$, "fixKey",
 function (key) {
 return (key.startsWith ("_magnetic") ? key.substring (9) : key.startsWith ("_jana") ? key.substring (5) : key).$replace ('.', '_').toLowerCase ();
 }, "~S");
-Clazz.defineMethod (c$, "setString", 
+Clazz.defineMethod (c$, "setString",
 function (str) {
 this.str = this.line = str;
 this.cch = (str == null ? 0 : str.length);
 this.ich = 0;
 return str;
 }, "~S");
-Clazz.defineMethod (c$, "prepareNextLine", 
+Clazz.defineMethod (c$, "prepareNextLine",
 function () {
 this.setString (this.readLine ());
 if (this.line == null || this.line.length == 0) return this.line;
@@ -324,11 +324,11 @@ if (this.line.charAt (0) == ';') return this.preprocessString ();
 if (this.str.startsWith ("###non-st#")) this.ich = 10;
 return this.line;
 });
-Clazz.defineMethod (c$, "preprocessString", 
+Clazz.defineMethod (c$, "preprocessString",
 function () {
 return this.setString (this.preprocessSemiString ());
 });
-Clazz.defineMethod (c$, "preprocessSemiString", 
+Clazz.defineMethod (c$, "preprocessSemiString",
 function () {
 this.ich = 1;
 var str = '\1' + this.line.substring (1) + '\n';
@@ -340,7 +340,7 @@ break;
 }
 return str;
 });
-Clazz.defineMethod (c$, "strHasMoreTokens", 
+Clazz.defineMethod (c$, "strHasMoreTokens",
  function () {
 if (this.str == null) return false;
 var ch = '#';
@@ -348,7 +348,7 @@ while (this.ich < this.cch && ((ch = this.str.charAt (this.ich)) == ' ' || ch ==
 
 return (this.ich < this.cch && ch != '#');
 });
-Clazz.defineMethod (c$, "nextStrToken", 
+Clazz.defineMethod (c$, "nextStrToken",
  function () {
 if (this.ich == this.cch) return null;
 var ch = this.str.charAt (this.ich);
@@ -363,15 +363,15 @@ if (this.ich == ichStart + 1) if (this.nullString != null && (this.str.charAt (i
 var s = this.str.substring (ichStart, this.ich);
 return this.unquoted (s);
 });
-Clazz.defineMethod (c$, "unquoted", 
+Clazz.defineMethod (c$, "unquoted",
 function (s) {
 return s;
 }, "~S");
-Clazz.defineMethod (c$, "isTerminator", 
+Clazz.defineMethod (c$, "isTerminator",
 function (c) {
 return c == ' ' || c == '\t' || c == this.cterm;
 }, "~S");
-Clazz.defineMethod (c$, "isQuote", 
+Clazz.defineMethod (c$, "isQuote",
 function (ch) {
 switch (ch) {
 case '\'':
@@ -383,7 +383,7 @@ return true;
 }
 return false;
 }, "~S");
-Clazz.defineMethod (c$, "getQuotedStringOrObject", 
+Clazz.defineMethod (c$, "getQuotedStringOrObject",
 function (ch) {
 switch (ch) {
 case '[':
@@ -391,7 +391,7 @@ try {
 return this.readList ();
 } catch (e) {
 if (Clazz.exceptionOf (e, Exception)) {
-System.out.println ("exception in CifDataParser ; " + e);
+Zystem.out.println ("exception in CifDataParser ; " + e);
 } else {
 throw e;
 }
@@ -417,7 +417,7 @@ pt2++;
 ++this.ich;
 }return this.str.substring (pt1, pt2);
 }, "~S");
-Clazz.defineMethod (c$, "readList", 
+Clazz.defineMethod (c$, "readList",
 function () {
 this.ich++;
 var cterm0 = this.cterm;

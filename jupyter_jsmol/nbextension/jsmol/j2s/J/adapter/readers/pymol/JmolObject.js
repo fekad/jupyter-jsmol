@@ -15,14 +15,14 @@ this.rd = null;
 this.cacheID = null;
 Clazz.instantialize (this, arguments);
 }, J.adapter.readers.pymol, "JmolObject");
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function (id, branchNameID, bsAtoms, info) {
 this.id = id;
 this.bsAtoms = bsAtoms;
 this.info = info;
 this.jmolName = branchNameID;
 }, "~N,~S,JU.BS,~O");
-Clazz.defineMethod (c$, "offset", 
+Clazz.defineMethod (c$, "offset",
 function (modelOffset, atomOffset) {
 if (modelOffset > 0) {
 if (this.modelIndex != -2147483648) this.modelIndex += modelOffset;
@@ -51,10 +51,10 @@ return;
 if (this.colors != null) {
 var colixes = this.colors[0];
 var c =  Clazz.newShortArray (colixes.length + atomOffset, 0);
-System.arraycopy (colixes, 0, c, atomOffset, colixes.length);
+Zystem.arraycopy (colixes, 0, c, atomOffset, colixes.length);
 this.colors[0] = c;
 }}, "~N,~N");
-Clazz.defineMethod (c$, "finalizeObject", 
+Clazz.defineMethod (c$, "finalizeObject",
 function (pymolScene, m, mepList, doCache) {
 var sm = m.sm;
 var color = "color";
@@ -241,18 +241,18 @@ sm.setShapePropertyBs (this.id, "translucentLevel", Float.$valueOf (this.translu
 sm.setShapePropertyBs (this.id, "translucency", "translucent", this.bsAtoms);
 } else if (this.colors != null) sm.setShapePropertyBs (this.id, "colors", this.colors, this.bsAtoms);
 }, "J.adapter.readers.pymol.PyMOLScene,JM.ModelSet,~S,~B");
-Clazz.defineMethod (c$, "getModelIndex", 
+Clazz.defineMethod (c$, "getModelIndex",
  function (m) {
 if (this.bsAtoms == null) return -1;
 var iAtom = this.bsAtoms.nextSetBit (0);
-if (iAtom >= m.at.length) System.out.println ("PyMOL LOADING ERROR IN MERGE");
+if (iAtom >= m.at.length) Zystem.out.println ("PyMOL LOADING ERROR IN MERGE");
 return (iAtom < 0 ? -1 : m.at[iAtom].mi);
 }, "JM.ModelSet");
-Clazz.defineMethod (c$, "setColors", 
+Clazz.defineMethod (c$, "setColors",
 function (colixes, translucency) {
 this.colors =  Clazz.newArray (-1, [colixes, Float.$valueOf (translucency)]);
 }, "~A,~N");
-Clazz.defineMethod (c$, "setSize", 
+Clazz.defineMethod (c$, "setSize",
 function (size) {
 this.size = Clazz.floatToInt (size * 1000);
 }, "~N");

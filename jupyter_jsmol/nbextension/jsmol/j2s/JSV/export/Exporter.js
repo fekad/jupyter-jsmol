@@ -1,10 +1,10 @@
 Clazz.declarePackage ("JSV.export");
 Clazz.load (["JSV.api.ExportInterface"], "JSV.export.Exporter", ["JU.OC", "$.PT", "JSV.common.ExportType", "$.JSVFileManager", "$.JSViewer"], function () {
 c$ = Clazz.declareType (JSV["export"], "Exporter", null, JSV.api.ExportInterface);
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function () {
 });
-Clazz.overrideMethod (c$, "write", 
+Clazz.overrideMethod (c$, "write",
 function (viewer, tokens, forInkscape) {
 if (tokens == null) return this.printPDF (viewer, null, false);
 var type = null;
@@ -60,14 +60,14 @@ out = viewer.getOutputChannel (fileName, false);
 return this.exportSpectrumOrImage (viewer, eType, -1, out);
 } catch (e) {
 if (Clazz.exceptionOf (e, Exception)) {
-System.out.println (e);
+Zystem.out.println (e);
 return null;
 } else {
 throw e;
 }
 }
 }, "JSV.common.JSViewer,JU.Lst,~B");
-Clazz.defineMethod (c$, "exportSpectrumOrImage", 
+Clazz.defineMethod (c$, "exportSpectrumOrImage",
  function (viewer, eType, index, out) {
 var spec;
 var pd = viewer.pd ();
@@ -90,7 +90,7 @@ throw ioe;
 }
 return "Error exporting " + out.getFileName () + ": " + msg;
 }, "JSV.common.JSViewer,JSV.common.ExportType,~N,JU.OC");
-Clazz.defineMethod (c$, "exportTheSpectrum", 
+Clazz.defineMethod (c$, "exportTheSpectrum",
 function (viewer, mode, out, spec, startIndex, endIndex, pd, asBase64) {
 var jsvp = viewer.selectedPanel;
 var type = mode.name ();
@@ -132,7 +132,7 @@ return null;
 }
 return (JSV.common.JSViewer.getInterface ("JSV.export." + type.toUpperCase () + "Exporter")).exportTheSpectrum (viewer, mode, out, spec, startIndex, endIndex, null, false);
 }, "JSV.common.JSViewer,JSV.common.ExportType,JU.OC,JSV.common.Spectrum,~N,~N,JSV.common.PanelData,~B");
-Clazz.defineMethod (c$, "printPDF", 
+Clazz.defineMethod (c$, "printPDF",
  function (viewer, pdfFileName, isBase64) {
 var isJob = (pdfFileName == null || pdfFileName.length == 0);
 if (!isBase64 && !viewer.si.isSigned ()) return "Error: Applet must be signed for the PRINT command.";
@@ -175,7 +175,7 @@ throw e;
 }
 return s;
 }, "JSV.common.JSViewer,~S,~B");
-Clazz.defineMethod (c$, "getExportableItems", 
+Clazz.defineMethod (c$, "getExportableItems",
  function (viewer, isSameType) {
 var pd = viewer.pd ();
 var isView = viewer.currentSource.isView;
@@ -186,7 +186,7 @@ for (var i = 0; i < nSpectra; i++) items[i] = pd.getSpectrumAt (i).getTitle ();
 
 return items;
 }, "JSV.common.JSViewer,~B");
-Clazz.defineMethod (c$, "getSuggestedFileName", 
+Clazz.defineMethod (c$, "getSuggestedFileName",
  function (viewer, imode) {
 var pd = viewer.pd ();
 var sourcePath = pd.getSpectrum ().getFilePath ();
@@ -221,7 +221,7 @@ if (viewer.currentSource.isView) name = pd.getPrintJobTitle (isPrint);
 name += ext;
 return name;
 }, "JSV.common.JSViewer,JSV.common.ExportType");
-c$.fileCopy = Clazz.defineMethod (c$, "fileCopy", 
+c$.fileCopy = Clazz.defineMethod (c$, "fileCopy",
  function (name, out) {
 try {
 var br = JSV.common.JSVFileManager.getBufferedReaderFromName (name, null);
@@ -240,5 +240,5 @@ throw e;
 }
 }
 }, "~S,JU.OC");
-c$.newLine = c$.prototype.newLine = System.getProperty ("line.separator");
+c$.newLine = c$.prototype.newLine = Zystem.getProperty ("line.separator");
 });

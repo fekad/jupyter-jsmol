@@ -18,12 +18,12 @@ Clazz.prepareFields (c$, function () {
 this.header =  new JU.CompoundDocHeader (this);
 this.directory =  new JU.Lst ();
 });
-Clazz.makeConstructor (c$, 
+Clazz.makeConstructor (c$,
 function () {
 Clazz.superConstructor (this, JU.CompoundDocument);
 this.isBigEndian = true;
 });
-Clazz.defineMethod (c$, "setDocStream", 
+Clazz.defineMethod (c$, "setDocStream",
 function (jzt, bis) {
 this.jzt = jzt;
 if (!this.isRandom) {
@@ -34,11 +34,11 @@ this.getSectorAllocationTable ();
 this.getShortSectorAllocationTable ();
 this.getDirectoryTable ();
 }, "javajs.api.GenericZipTools,java.io.BufferedInputStream");
-Clazz.defineMethod (c$, "getDirectory", 
+Clazz.defineMethod (c$, "getDirectory",
 function () {
 return this.directory;
 });
-Clazz.defineMethod (c$, "getDirectoryListing", 
+Clazz.defineMethod (c$, "getDirectoryListing",
 function (separator) {
 var sb =  new JU.SB ();
 for (var i = 0; i < this.directory.size (); i++) {
@@ -47,11 +47,11 @@ if (!thisEntry.isEmpty) sb.append (separator).append (thisEntry.entryName).appen
 }
 return sb.toString ();
 }, "~S");
-Clazz.defineMethod (c$, "getAllData", 
+Clazz.defineMethod (c$, "getAllData",
 function () {
 return this.getAllDataFiles (null, null);
 });
-Clazz.overrideMethod (c$, "getAllDataMapped", 
+Clazz.overrideMethod (c$, "getAllDataMapped",
 function (prefix, binaryFileList, fileData) {
 fileData.put ("#Directory_Listing", this.getDirectoryListing ("|"));
 binaryFileList = "|" + binaryFileList + "|";
@@ -59,14 +59,14 @@ for (var i = 0; i < this.directory.size (); i++) {
 var thisEntry = this.directory.get (i);
 if (!thisEntry.isEmpty && thisEntry.entryType != 5) {
 var name = thisEntry.entryName;
-System.out.println ("CompoundDocument file " + name);
+Zystem.out.println ("CompoundDocument file " + name);
 var isBinary = (binaryFileList.indexOf ("|" + name + "|") >= 0);
 if (isBinary) name += ":asBinaryString";
 fileData.put (prefix + "/" + name, this.appendData ( new JU.SB (), name, thisEntry, isBinary).toString ());
 }}
 this.close ();
 }, "~S,~S,java.util.Map");
-Clazz.overrideMethod (c$, "getAllDataFiles", 
+Clazz.overrideMethod (c$, "getAllDataFiles",
 function (binaryFileList, firstFile) {
 var data =  new JU.SB ();
 data.append ("Compound Document File Directory: ");
@@ -92,14 +92,14 @@ break;
 this.close ();
 return data;
 }, "~S,~S");
-Clazz.defineMethod (c$, "appendData", 
+Clazz.defineMethod (c$, "appendData",
  function (data, name, thisEntry, isBinary) {
 data.append ("BEGIN Directory Entry ").append (name).append ("\n");
 data.appendSB (this.getEntryAsString (thisEntry, isBinary));
 data.append ("\nEND Directory Entry ").append (name).append ("\n");
 return data;
 }, "JU.SB,~S,JU.CompoundDocDirEntry,~B");
-Clazz.defineMethod (c$, "getFileAsString", 
+Clazz.defineMethod (c$, "getFileAsString",
 function (entryName) {
 for (var i = 0; i < this.directory.size (); i++) {
 var thisEntry = this.directory.get (i);
@@ -107,15 +107,15 @@ if (thisEntry.entryName.equals (entryName)) return this.getEntryAsString (thisEn
 }
 return  new JU.SB ();
 }, "~S");
-Clazz.defineMethod (c$, "getOffset", 
+Clazz.defineMethod (c$, "getOffset",
  function (SID) {
 return (SID + 1) * this.sectorSize;
 }, "~N");
-Clazz.defineMethod (c$, "gotoSector", 
+Clazz.defineMethod (c$, "gotoSector",
  function (SID) {
 this.seek (this.getOffset (SID));
 }, "~N");
-Clazz.defineMethod (c$, "readHeader", 
+Clazz.defineMethod (c$, "readHeader",
  function () {
 if (!this.header.readData ()) return false;
 this.sectorSize = 1 << this.header.sectorPower;
@@ -125,7 +125,7 @@ this.nIntPerSector = Clazz.doubleToInt (this.sectorSize / 4);
 this.nDirEntriesperSector = Clazz.doubleToInt (this.sectorSize / 128);
 return true;
 });
-Clazz.defineMethod (c$, "getSectorAllocationTable", 
+Clazz.defineMethod (c$, "getSectorAllocationTable",
  function () {
 var nSID = 0;
 var thisSID;
@@ -157,13 +157,13 @@ thisSID = MSAT[this.nIntPerSector - 1];
 }
 } catch (e) {
 if (Clazz.exceptionOf (e, Exception)) {
-System.out.println (e.toString ());
+Zystem.out.println (e.toString ());
 } else {
 throw e;
 }
 }
 });
-Clazz.defineMethod (c$, "getShortSectorAllocationTable", 
+Clazz.defineMethod (c$, "getShortSectorAllocationTable",
  function () {
 var nSSID = 0;
 var thisSID = this.header.SID_SSAT_start;
@@ -179,13 +179,13 @@ thisSID = this.SAT[thisSID];
 }
 } catch (e) {
 if (Clazz.exceptionOf (e, Exception)) {
-System.out.println (e.toString ());
+Zystem.out.println (e.toString ());
 } else {
 throw e;
 }
 }
 });
-Clazz.defineMethod (c$, "getDirectoryTable", 
+Clazz.defineMethod (c$, "getDirectoryTable",
  function () {
 var thisSID = this.header.SID_DIR_start;
 var thisEntry;
@@ -203,18 +203,18 @@ thisSID = this.SAT[thisSID];
 }
 } catch (e) {
 if (Clazz.exceptionOf (e, Exception)) {
-System.out.println (e.toString ());
+Zystem.out.println (e.toString ());
 } else {
 throw e;
 }
 }
 });
-Clazz.defineMethod (c$, "getEntryAsString", 
+Clazz.defineMethod (c$, "getEntryAsString",
  function (thisEntry, asBinaryString) {
 if (thisEntry.isEmpty) return  new JU.SB ();
 return (thisEntry.isStandard ? this.getStandardStringData (thisEntry.SIDfirstSector, thisEntry.lenStream, asBinaryString) : this.getShortStringData (thisEntry.SIDfirstSector, thisEntry.lenStream, asBinaryString));
 }, "JU.CompoundDocDirEntry,~B");
-Clazz.defineMethod (c$, "getStandardStringData", 
+Clazz.defineMethod (c$, "getStandardStringData",
  function (thisSID, nBytes, asBinaryString) {
 var data =  new JU.SB ();
 var byteBuf =  Clazz.newByteArray (this.sectorSize, 0);
@@ -228,7 +228,7 @@ thisSID = this.SAT[thisSID];
 if (nBytes == -9999) return  new JU.SB ();
 } catch (e) {
 if (Clazz.exceptionOf (e, Exception)) {
-System.out.println (e.toString ());
+Zystem.out.println (e.toString ());
 } else {
 throw e;
 }
@@ -236,7 +236,7 @@ throw e;
 if (gzipData.isEnabled) gzipData.addTo (this.jzt, data);
 return data;
 }, "~N,~N,~B");
-Clazz.defineMethod (c$, "getSectorData", 
+Clazz.defineMethod (c$, "getSectorData",
  function (data, byteBuf, nSectorBytes, nBytes, asBinaryString, gzipData) {
 this.readByteArray (byteBuf, 0, byteBuf.length);
 var n = gzipData.addBytes (byteBuf, nSectorBytes, nBytes);
@@ -254,7 +254,7 @@ if (--nBytes < 1) break;
 }
 }return nBytes;
 }, "JU.SB,~A,~N,~N,~B,JU.ZipData");
-Clazz.defineMethod (c$, "getShortStringData", 
+Clazz.defineMethod (c$, "getShortStringData",
  function (shortSID, nBytes, asBinaryString) {
 var data =  new JU.SB ();
 if (this.rootEntry == null) return data;
@@ -274,8 +274,8 @@ shortSID = this.SSAT[shortSID];
 }
 } catch (e) {
 if (Clazz.exceptionOf (e, Exception)) {
-System.out.println (data.toString ());
-System.out.println ("reader error in CompoundDocument " + e.toString ());
+Zystem.out.println (data.toString ());
+Zystem.out.println ("reader error in CompoundDocument " + e.toString ());
 } else {
 throw e;
 }

@@ -1,17 +1,17 @@
 Clazz.declarePackage ("JU");
 Clazz.load (null, "JU.PT", ["java.lang.Boolean", "$.Double", "$.Float", "$.Number", "java.util.Map", "javajs.api.JSONEncodable", "JU.AU", "$.DF", "$.Lst", "$.M34", "$.M4", "$.SB"], function () {
 c$ = Clazz.declareType (JU, "PT");
-c$.parseInt = Clazz.defineMethod (c$, "parseInt", 
+c$.parseInt = Clazz.defineMethod (c$, "parseInt",
 function (str) {
 return JU.PT.parseIntNext (str,  Clazz.newIntArray (-1, [0]));
 }, "~S");
-c$.parseIntNext = Clazz.defineMethod (c$, "parseIntNext", 
+c$.parseIntNext = Clazz.defineMethod (c$, "parseIntNext",
 function (str, next) {
 var cch = str.length;
 if (next[0] < 0 || next[0] >= cch) return -2147483648;
 return JU.PT.parseIntChecked (str, cch, next);
 }, "~S,~A");
-c$.parseIntChecked = Clazz.defineMethod (c$, "parseIntChecked", 
+c$.parseIntChecked = Clazz.defineMethod (c$, "parseIntChecked",
 function (str, ichMax, next) {
 var digitSeen = false;
 var value = 0;
@@ -34,12 +34,12 @@ if (!digitSeen) value = -2147483648;
 next[0] = ich;
 return value;
 }, "~S,~N,~A");
-c$.isWhiteSpace = Clazz.defineMethod (c$, "isWhiteSpace", 
+c$.isWhiteSpace = Clazz.defineMethod (c$, "isWhiteSpace",
 function (str, ich) {
 var ch;
 return (ich >= 0 && ((ch = str.charAt (ich)) == ' ' || ch == '\t' || ch == '\n'));
 }, "~S,~N");
-c$.parseFloatChecked = Clazz.defineMethod (c$, "parseFloatChecked", 
+c$.parseFloatChecked = Clazz.defineMethod (c$, "parseFloatChecked",
 function (str, ichMax, next, isStrict) {
 var digitSeen = false;
 var ich = next[0];
@@ -106,18 +106,18 @@ next[0] = ich;
 if (value == Infinity) value = 3.4028235E38;
 return (!isStrict || (!isExponent || isDecimal) && JU.PT.checkTrailingText (str, next[0], ichMax) ? value : NaN);
 }, "~S,~N,~A,~B");
-c$.checkTrailingText = Clazz.defineMethod (c$, "checkTrailingText", 
+c$.checkTrailingText = Clazz.defineMethod (c$, "checkTrailingText",
 function (str, ich, ichMax) {
 var ch;
 while (ich < ichMax && (JU.PT.isWhitespace (ch = str.charAt (ich)) || ch == ';')) ++ich;
 
 return (ich == ichMax);
 }, "~S,~N,~N");
-c$.parseFloatArray = Clazz.defineMethod (c$, "parseFloatArray", 
+c$.parseFloatArray = Clazz.defineMethod (c$, "parseFloatArray",
 function (str) {
 return JU.PT.parseFloatArrayNext (str,  Clazz.newIntArray (1, 0), null, null, null);
 }, "~S");
-c$.parseFloatArrayInfested = Clazz.defineMethod (c$, "parseFloatArrayInfested", 
+c$.parseFloatArrayInfested = Clazz.defineMethod (c$, "parseFloatArrayInfested",
 function (tokens, data) {
 var len = data.length;
 var nTokens = tokens.length;
@@ -132,7 +132,7 @@ if (n == nTokens) break;
 }
 return max + 1;
 }, "~A,~A");
-c$.parseFloatArrayNext = Clazz.defineMethod (c$, "parseFloatArrayNext", 
+c$.parseFloatArrayNext = Clazz.defineMethod (c$, "parseFloatArrayNext",
 function (str, next, f, strStart, strEnd) {
 var n = 0;
 var pt = next[0];
@@ -153,57 +153,57 @@ for (var i = n; i < f.length; i++) f[i] = NaN;
 
 return f;
 }, "~S,~A,~A,~S,~S");
-c$.parseFloatRange = Clazz.defineMethod (c$, "parseFloatRange", 
+c$.parseFloatRange = Clazz.defineMethod (c$, "parseFloatRange",
 function (str, ichMax, next) {
 var cch = str.length;
 if (ichMax > cch) ichMax = cch;
 if (next[0] < 0 || next[0] >= ichMax) return NaN;
 return JU.PT.parseFloatChecked (str, ichMax, next, false);
 }, "~S,~N,~A");
-c$.parseFloatNext = Clazz.defineMethod (c$, "parseFloatNext", 
+c$.parseFloatNext = Clazz.defineMethod (c$, "parseFloatNext",
 function (str, next) {
 var cch = (str == null ? -1 : str.length);
 return (next[0] < 0 || next[0] >= cch ? NaN : JU.PT.parseFloatChecked (str, cch, next, false));
 }, "~S,~A");
-c$.parseFloatStrict = Clazz.defineMethod (c$, "parseFloatStrict", 
+c$.parseFloatStrict = Clazz.defineMethod (c$, "parseFloatStrict",
 function (str) {
 var cch = str.length;
 if (cch == 0) return NaN;
 return JU.PT.parseFloatChecked (str, cch,  Clazz.newIntArray (-1, [0]), true);
 }, "~S");
-c$.parseFloat = Clazz.defineMethod (c$, "parseFloat", 
+c$.parseFloat = Clazz.defineMethod (c$, "parseFloat",
 function (str) {
 return JU.PT.parseFloatNext (str,  Clazz.newIntArray (-1, [0]));
 }, "~S");
-c$.parseIntRadix = Clazz.defineMethod (c$, "parseIntRadix", 
+c$.parseIntRadix = Clazz.defineMethod (c$, "parseIntRadix",
 function (s, i) {
 {
 return Integer.parseIntRadix(s, i);
 }}, "~S,~N");
-c$.getTokens = Clazz.defineMethod (c$, "getTokens", 
+c$.getTokens = Clazz.defineMethod (c$, "getTokens",
 function (line) {
 return JU.PT.getTokensAt (line, 0);
 }, "~S");
-c$.parseToken = Clazz.defineMethod (c$, "parseToken", 
+c$.parseToken = Clazz.defineMethod (c$, "parseToken",
 function (str) {
 return JU.PT.parseTokenNext (str,  Clazz.newIntArray (-1, [0]));
 }, "~S");
-c$.parseTrimmed = Clazz.defineMethod (c$, "parseTrimmed", 
+c$.parseTrimmed = Clazz.defineMethod (c$, "parseTrimmed",
 function (str) {
 return JU.PT.parseTrimmedRange (str, 0, str.length);
 }, "~S");
-c$.parseTrimmedAt = Clazz.defineMethod (c$, "parseTrimmedAt", 
+c$.parseTrimmedAt = Clazz.defineMethod (c$, "parseTrimmedAt",
 function (str, ichStart) {
 return JU.PT.parseTrimmedRange (str, ichStart, str.length);
 }, "~S,~N");
-c$.parseTrimmedRange = Clazz.defineMethod (c$, "parseTrimmedRange", 
+c$.parseTrimmedRange = Clazz.defineMethod (c$, "parseTrimmedRange",
 function (str, ichStart, ichMax) {
 var cch = str.length;
 if (ichMax < cch) cch = ichMax;
 if (cch < ichStart) return "";
 return JU.PT.parseTrimmedChecked (str, ichStart, cch);
 }, "~S,~N,~N");
-c$.getTokensAt = Clazz.defineMethod (c$, "getTokensAt", 
+c$.getTokensAt = Clazz.defineMethod (c$, "getTokensAt",
 function (line, ich) {
 if (line == null) return null;
 var cchLine = line.length;
@@ -216,14 +216,14 @@ for (var i = 0; i < tokenCount; ++i) tokens[i] = JU.PT.parseTokenChecked (line, 
 
 return tokens;
 }, "~S,~N");
-c$.countChar = Clazz.defineMethod (c$, "countChar", 
+c$.countChar = Clazz.defineMethod (c$, "countChar",
 function (line, c) {
 var n = 0;
 for (var i = line.lastIndexOf (c) + 1; --i >= 0; ) if (line.charAt (i) == c) n++;
 
 return n;
 }, "~S,~S");
-c$.countTokens = Clazz.defineMethod (c$, "countTokens", 
+c$.countTokens = Clazz.defineMethod (c$, "countTokens",
 function (line, ich) {
 var tokenCount = 0;
 if (line != null) {
@@ -239,18 +239,18 @@ do {
 }
 }return tokenCount;
 }, "~S,~N");
-c$.parseTokenNext = Clazz.defineMethod (c$, "parseTokenNext", 
+c$.parseTokenNext = Clazz.defineMethod (c$, "parseTokenNext",
 function (str, next) {
 var cch = str.length;
 return (next[0] < 0 || next[0] >= cch ? null : JU.PT.parseTokenChecked (str, cch, next));
 }, "~S,~A");
-c$.parseTokenRange = Clazz.defineMethod (c$, "parseTokenRange", 
+c$.parseTokenRange = Clazz.defineMethod (c$, "parseTokenRange",
 function (str, ichMax, next) {
 var cch = str.length;
 if (ichMax > cch) ichMax = cch;
 return (next[0] < 0 || next[0] >= ichMax ? null : JU.PT.parseTokenChecked (str, ichMax, next));
 }, "~S,~N,~A");
-c$.parseTokenChecked = Clazz.defineMethod (c$, "parseTokenChecked", 
+c$.parseTokenChecked = Clazz.defineMethod (c$, "parseTokenChecked",
 function (str, ichMax, next) {
 var ich = next[0];
 while (ich < ichMax && JU.PT.isWhiteSpace (str, ich)) ++ich;
@@ -261,7 +261,7 @@ while (ich < ichMax && !JU.PT.isWhiteSpace (str, ich)) ++ich;
 next[0] = ich;
 return (ichNonWhite == ich ? null : str.substring (ichNonWhite, ich));
 }, "~S,~N,~A");
-c$.parseTrimmedChecked = Clazz.defineMethod (c$, "parseTrimmedChecked", 
+c$.parseTrimmedChecked = Clazz.defineMethod (c$, "parseTrimmedChecked",
 function (str, ich, ichMax) {
 while (ich < ichMax && JU.PT.isWhiteSpace (str, ich)) ++ich;
 
@@ -270,7 +270,7 @@ while (ichLast >= ich && JU.PT.isWhiteSpace (str, ichLast)) --ichLast;
 
 return (ichLast < ich ? "" : str.substring (ich, ichLast + 1));
 }, "~S,~N,~N");
-c$.dVal = Clazz.defineMethod (c$, "dVal", 
+c$.dVal = Clazz.defineMethod (c$, "dVal",
 function (s) {
 {
 if(s==null)
@@ -280,27 +280,27 @@ if(isNaN(d))
 throw new NumberFormatException("Not a Number : "+s);
 return d
 }}, "~S");
-c$.fVal = Clazz.defineMethod (c$, "fVal", 
+c$.fVal = Clazz.defineMethod (c$, "fVal",
 function (s) {
 {
 return this.dVal(s);
 }}, "~S");
-c$.parseIntRange = Clazz.defineMethod (c$, "parseIntRange", 
+c$.parseIntRange = Clazz.defineMethod (c$, "parseIntRange",
 function (str, ichMax, next) {
 var cch = str.length;
 if (ichMax > cch) ichMax = cch;
 return (next[0] < 0 || next[0] >= ichMax ? -2147483648 : JU.PT.parseIntChecked (str, ichMax, next));
 }, "~S,~N,~A");
-c$.parseFloatArrayData = Clazz.defineMethod (c$, "parseFloatArrayData", 
+c$.parseFloatArrayData = Clazz.defineMethod (c$, "parseFloatArrayData",
 function (tokens, data) {
 JU.PT.parseFloatArrayDataN (tokens, data, data.length);
 }, "~A,~A");
-c$.parseFloatArrayDataN = Clazz.defineMethod (c$, "parseFloatArrayDataN", 
+c$.parseFloatArrayDataN = Clazz.defineMethod (c$, "parseFloatArrayDataN",
 function (tokens, data, nData) {
 for (var i = nData; --i >= 0; ) data[i] = (i >= tokens.length ? NaN : JU.PT.parseFloat (tokens[i]));
 
 }, "~A,~A,~N");
-c$.split = Clazz.defineMethod (c$, "split", 
+c$.split = Clazz.defineMethod (c$, "split",
 function (text, run) {
 if (text.length == 0) return  new Array (0);
 var n = 1;
@@ -326,12 +326,12 @@ if (text.indexOf (run, len) != len) len += runLen;
 lines[pt] = text.substring (i, len);
 return lines;
 }, "~S,~S");
-c$.getQuotedStringAt = Clazz.defineMethod (c$, "getQuotedStringAt", 
+c$.getQuotedStringAt = Clazz.defineMethod (c$, "getQuotedStringAt",
 function (line, ipt0) {
 var next =  Clazz.newIntArray (-1, [ipt0]);
 return JU.PT.getQuotedStringNext (line, next);
 }, "~S,~N");
-c$.getQuotedStringNext = Clazz.defineMethod (c$, "getQuotedStringNext", 
+c$.getQuotedStringNext = Clazz.defineMethod (c$, "getQuotedStringNext",
 function (line, next) {
 var i = next[0];
 if (i < 0 || (i = line.indexOf ("\"", i)) < 0) return "";
@@ -342,7 +342,7 @@ while (++i < len && line.charAt (i) != '"') if (line.charAt (i) == '\\') i++;
 next[0] = i + 1;
 return line.substring (pt, i);
 }, "~S,~A");
-c$.getQuotedOrUnquotedAttribute = Clazz.defineMethod (c$, "getQuotedOrUnquotedAttribute", 
+c$.getQuotedOrUnquotedAttribute = Clazz.defineMethod (c$, "getQuotedOrUnquotedAttribute",
 function (line, key) {
 if (line == null || key == null) return null;
 var pt = line.toLowerCase ().indexOf (key.toLowerCase () + "=");
@@ -360,7 +360,7 @@ line += " ";
 var pt1 = line.indexOf (c, pt);
 return (pt1 < 0 ? null : line.substring (pt, pt1));
 }, "~S,~S");
-c$.getCSVString = Clazz.defineMethod (c$, "getCSVString", 
+c$.getCSVString = Clazz.defineMethod (c$, "getCSVString",
 function (line, next) {
 var i = next[1];
 if (i < 0 || (i = line.indexOf ("\"", i)) < 0) return null;
@@ -380,22 +380,22 @@ return null;
 var s = line.substring (pt + 1, i);
 return (haveEscape ? JU.PT.rep (JU.PT.rep (s, "\"\"", "\0"), "\0", "\"") : s);
 }, "~S,~A");
-c$.isOneOf = Clazz.defineMethod (c$, "isOneOf", 
+c$.isOneOf = Clazz.defineMethod (c$, "isOneOf",
 function (key, semiList) {
 if (semiList.length == 0) return false;
 if (semiList.charAt (0) != ';') semiList = ";" + semiList + ";";
 return key.indexOf (";") < 0 && semiList.indexOf (';' + key + ';') >= 0;
 }, "~S,~S");
-c$.getQuotedAttribute = Clazz.defineMethod (c$, "getQuotedAttribute", 
+c$.getQuotedAttribute = Clazz.defineMethod (c$, "getQuotedAttribute",
 function (info, name) {
 var i = info.indexOf (name + "=");
 return (i < 0 ? null : JU.PT.getQuotedStringAt (info, i));
 }, "~S,~S");
-c$.approx = Clazz.defineMethod (c$, "approx", 
+c$.approx = Clazz.defineMethod (c$, "approx",
 function (f, n) {
 return Math.round (f * n) / n;
 }, "~N,~N");
-c$.rep = Clazz.defineMethod (c$, "rep", 
+c$.rep = Clazz.defineMethod (c$, "rep",
 function (str, strFrom, strTo) {
 if (str == null || strFrom.length == 0 || str.indexOf (strFrom) < 0) return str;
 var isOnce = (strTo.indexOf (strFrom) >= 0);
@@ -404,15 +404,15 @@ str = str.$replace (strFrom, strTo);
 } while (!isOnce && str.indexOf (strFrom) >= 0);
 return str;
 }, "~S,~S,~S");
-c$.formatF = Clazz.defineMethod (c$, "formatF", 
+c$.formatF = Clazz.defineMethod (c$, "formatF",
 function (value, width, precision, alignLeft, zeroPad) {
 return JU.PT.formatS (JU.DF.formatDecimal (value, precision), width, 0, alignLeft, zeroPad);
 }, "~N,~N,~N,~B,~B");
-c$.formatD = Clazz.defineMethod (c$, "formatD", 
+c$.formatD = Clazz.defineMethod (c$, "formatD",
 function (value, width, precision, alignLeft, zeroPad, allowOverflow) {
 return JU.PT.formatS (JU.DF.formatDecimal (value, -1 - precision), width, 0, alignLeft, zeroPad);
 }, "~N,~N,~N,~B,~B,~B");
-c$.formatS = Clazz.defineMethod (c$, "formatS", 
+c$.formatS = Clazz.defineMethod (c$, "formatS",
 function (value, width, precision, alignLeft, zeroPad) {
 if (value == null) return "";
 var len = value.length;
@@ -431,14 +431,14 @@ for (var i = padLength; --i > 0; ) sb.appendC (padChar);
 if (!alignLeft) sb.append (isNeg ? padChar + value.substring (1) : value);
 return sb.toString ();
 }, "~S,~N,~N,~B,~B");
-c$.replaceWithCharacter = Clazz.defineMethod (c$, "replaceWithCharacter", 
+c$.replaceWithCharacter = Clazz.defineMethod (c$, "replaceWithCharacter",
 function (str, strFrom, chTo) {
 if (str == null) return null;
 for (var i = strFrom.length; --i >= 0; ) str = str.$replace (strFrom.charAt (i), chTo);
 
 return str;
 }, "~S,~S,~S");
-c$.replaceAllCharacters = Clazz.defineMethod (c$, "replaceAllCharacters", 
+c$.replaceAllCharacters = Clazz.defineMethod (c$, "replaceAllCharacters",
 function (str, strFrom, strTo) {
 for (var i = strFrom.length; --i >= 0; ) {
 var chFrom = strFrom.substring (i, i + 1);
@@ -446,7 +446,7 @@ str = JU.PT.rep (str, chFrom, strTo);
 }
 return str;
 }, "~S,~S,~S");
-c$.trim = Clazz.defineMethod (c$, "trim", 
+c$.trim = Clazz.defineMethod (c$, "trim",
 function (str, chars) {
 if (str == null || str.length == 0) return str;
 if (chars.length == 0) return str.trim ();
@@ -459,20 +459,20 @@ while (m > k && chars.indexOf (str.charAt (m)) >= 0) m--;
 
 return str.substring (k, m + 1);
 }, "~S,~S");
-c$.trimQuotes = Clazz.defineMethod (c$, "trimQuotes", 
+c$.trimQuotes = Clazz.defineMethod (c$, "trimQuotes",
 function (value) {
 return (value != null && value.length > 1 && value.startsWith ("\"") && value.endsWith ("\"") ? value.substring (1, value.length - 1) : value);
 }, "~S");
-c$.isNonStringPrimitive = Clazz.defineMethod (c$, "isNonStringPrimitive", 
+c$.isNonStringPrimitive = Clazz.defineMethod (c$, "isNonStringPrimitive",
 function (info) {
 return Clazz.instanceOf (info, Number) || Clazz.instanceOf (info, Boolean);
 }, "~O");
-c$.arrayGet = Clazz.defineMethod (c$, "arrayGet", 
+c$.arrayGet = Clazz.defineMethod (c$, "arrayGet",
  function (info, i) {
 {
 return info[i];
 }}, "~O,~N");
-c$.toJSON = Clazz.defineMethod (c$, "toJSON", 
+c$.toJSON = Clazz.defineMethod (c$, "toJSON",
 function (infoType, info) {
 if (info == null) return JU.PT.packageJSON (infoType, null);
 if (JU.PT.isNonStringPrimitive (info)) return JU.PT.packageJSON (infoType, info.toString ());
@@ -534,12 +534,12 @@ break;
 }
 return JU.PT.packageJSON (infoType, (s == null ? sb.toString () : s));
 }, "~S,~O");
-c$.nonArrayString = Clazz.defineMethod (c$, "nonArrayString", 
+c$.nonArrayString = Clazz.defineMethod (c$, "nonArrayString",
 function (x) {
 {
 return (x.constructor == Array || x.BYTES_PER_ELEMENT ? null : x.toString());
 }}, "~O");
-c$.byteArrayToJSON = Clazz.defineMethod (c$, "byteArrayToJSON", 
+c$.byteArrayToJSON = Clazz.defineMethod (c$, "byteArrayToJSON",
 function (data) {
 var sb =  new JU.SB ();
 sb.append ("[");
@@ -551,11 +551,11 @@ sb.appendI (data[i] & 0xFF);
 sb.append ("]");
 return sb.toString ();
 }, "~A");
-c$.packageJSON = Clazz.defineMethod (c$, "packageJSON", 
+c$.packageJSON = Clazz.defineMethod (c$, "packageJSON",
 function (infoType, info) {
 return (infoType == null ? info : "\"" + infoType + "\": " + info);
 }, "~S,~S");
-c$.escapeUrl = Clazz.defineMethod (c$, "escapeUrl", 
+c$.escapeUrl = Clazz.defineMethod (c$, "escapeUrl",
 function (url) {
 url = JU.PT.rep (url, "\n", "");
 url = JU.PT.rep (url, "%", "%25");
@@ -566,7 +566,7 @@ url = JU.PT.rep (url, "]", "%5D");
 url = JU.PT.rep (url, " ", "%20");
 return url;
 }, "~S");
-c$.esc = Clazz.defineMethod (c$, "esc", 
+c$.esc = Clazz.defineMethod (c$, "esc",
 function (str) {
 if (str == null || str.length == 0) return "\"\"";
 var haveEscape = false;
@@ -590,7 +590,7 @@ str = sb.toString ();
 }
 return "\"" + JU.PT.escUnicode (str) + "\"";
 }, "~S");
-c$.escUnicode = Clazz.defineMethod (c$, "escUnicode", 
+c$.escUnicode = Clazz.defineMethod (c$, "escUnicode",
 function (str) {
 for (var i = str.length; --i >= 0; ) if (str.charCodeAt (i) > 0x7F) {
 var s = "0000" + Integer.toHexString (str.charCodeAt (i));
@@ -598,7 +598,7 @@ str = str.substring (0, i) + "\\u" + s.substring (s.length - 4) + str.substring 
 }
 return str;
 }, "~S");
-c$.escF = Clazz.defineMethod (c$, "escF", 
+c$.escF = Clazz.defineMethod (c$, "escF",
 function (f) {
 var sf = "" + f;
 {
@@ -606,7 +606,7 @@ if (sf.indexOf(".") < 0 && sf.indexOf("e") < 0)
 sf += ".0";
 }return sf;
 }, "~N");
-c$.join = Clazz.defineMethod (c$, "join", 
+c$.join = Clazz.defineMethod (c$, "join",
 function (s, c, i0) {
 if (s.length < i0) return null;
 var sb =  new JU.SB ();
@@ -615,7 +615,7 @@ for (var i = i0; i < s.length; i++) sb.appendC (c).append (s[i]);
 
 return sb.toString ();
 }, "~A,~S,~N");
-c$.isLike = Clazz.defineMethod (c$, "isLike", 
+c$.isLike = Clazz.defineMethod (c$, "isLike",
 function (a, b) {
 var areEqual = a.equals (b);
 if (areEqual) return true;
@@ -623,7 +623,7 @@ var isStart = b.startsWith ("*");
 var isEnd = b.endsWith ("*");
 return (!isStart && !isEnd) ? areEqual : isStart && isEnd ? b.length == 1 || a.contains (b.substring (1, b.length - 1)) : isStart ? a.endsWith (b.substring (1)) : a.startsWith (b.substring (0, b.length - 1));
 }, "~S,~S");
-c$.getMapValueNoCase = Clazz.defineMethod (c$, "getMapValueNoCase", 
+c$.getMapValueNoCase = Clazz.defineMethod (c$, "getMapValueNoCase",
 function (h, key) {
 if ("this".equals (key)) return h;
 var val = h.get (key);
@@ -631,11 +631,11 @@ if (val == null) for (var e, $e = h.entrySet ().iterator (); $e.hasNext () && ((
 
 return val;
 }, "java.util.Map,~S");
-c$.clean = Clazz.defineMethod (c$, "clean", 
+c$.clean = Clazz.defineMethod (c$, "clean",
 function (s) {
 return JU.PT.rep (JU.PT.replaceAllCharacters (s, " \t\n\r", " "), "  ", " ").trim ();
 }, "~S");
-c$.fdup = Clazz.defineMethod (c$, "fdup", 
+c$.fdup = Clazz.defineMethod (c$, "fdup",
 function (f, pt, n) {
 var ch;
 var count = 0;
@@ -659,7 +659,7 @@ for (var i = 0; i < n; i++) sb.append (s);
 sb.append (f.substring (pt + 1));
 return sb.toString ();
 }, "~S,~N,~N");
-c$.formatString = Clazz.defineMethod (c$, "formatString", 
+c$.formatString = Clazz.defineMethod (c$, "formatString",
  function (strFormat, key, strT, floatT, doubleT, doOne) {
 if (strFormat == null) return null;
 if ("".equals (strFormat)) return "";
@@ -723,19 +723,19 @@ throw ioobe;
 strLabel += strFormat.substring (ich);
 return strLabel;
 }, "~S,~S,~S,~N,~N,~B");
-c$.formatStringS = Clazz.defineMethod (c$, "formatStringS", 
+c$.formatStringS = Clazz.defineMethod (c$, "formatStringS",
 function (strFormat, key, strT) {
 return JU.PT.formatString (strFormat, key, strT, NaN, NaN, false);
 }, "~S,~S,~S");
-c$.formatStringF = Clazz.defineMethod (c$, "formatStringF", 
+c$.formatStringF = Clazz.defineMethod (c$, "formatStringF",
 function (strFormat, key, floatT) {
 return JU.PT.formatString (strFormat, key, null, floatT, NaN, false);
 }, "~S,~S,~N");
-c$.formatStringI = Clazz.defineMethod (c$, "formatStringI", 
+c$.formatStringI = Clazz.defineMethod (c$, "formatStringI",
 function (strFormat, key, intT) {
 return JU.PT.formatString (strFormat, key, "" + intT, NaN, NaN, false);
 }, "~S,~S,~N");
-c$.sprintf = Clazz.defineMethod (c$, "sprintf", 
+c$.sprintf = Clazz.defineMethod (c$, "sprintf",
 function (strFormat, list, values) {
 if (values == null) return strFormat;
 var n = list.length;
@@ -799,10 +799,10 @@ if (Clazz.exceptionOf (e, Exception)) {
 throw e;
 }
 }
-System.out.println ("TextFormat.sprintf error " + list + " " + strFormat);
+Zystem.out.println ("TextFormat.sprintf error " + list + " " + strFormat);
 return JU.PT.rep (strFormat, "%", "?");
 }, "~S,~S,~A");
-c$.formatCheck = Clazz.defineMethod (c$, "formatCheck", 
+c$.formatCheck = Clazz.defineMethod (c$, "formatCheck",
 function (strFormat) {
 if (strFormat == null || strFormat.indexOf ('p') < 0 && strFormat.indexOf ('q') < 0) return strFormat;
 strFormat = JU.PT.rep (strFormat, "%%", "\1");
@@ -821,28 +821,28 @@ if ((pt = f.indexOf ('q')) >= 0) f = JU.PT.fdup (f, pt, 4);
 }
 return sb.toString ().$replace ('\1', '%');
 }, "~S");
-c$.leftJustify = Clazz.defineMethod (c$, "leftJustify", 
+c$.leftJustify = Clazz.defineMethod (c$, "leftJustify",
 function (s, s1, s2) {
 s.append (s2);
 var n = s1.length - s2.length;
 if (n > 0) s.append (s1.substring (0, n));
 }, "JU.SB,~S,~S");
-c$.rightJustify = Clazz.defineMethod (c$, "rightJustify", 
+c$.rightJustify = Clazz.defineMethod (c$, "rightJustify",
 function (s, s1, s2) {
 var n = s1.length - s2.length;
 if (n > 0) s.append (s1.substring (0, n));
 s.append (s2);
 }, "JU.SB,~S,~S");
-c$.safeTruncate = Clazz.defineMethod (c$, "safeTruncate", 
+c$.safeTruncate = Clazz.defineMethod (c$, "safeTruncate",
 function (f, n) {
 if (f > -0.001 && f < 0.001) f = 0;
 return (f + "         ").substring (0, n);
 }, "~N,~N");
-c$.isWild = Clazz.defineMethod (c$, "isWild", 
+c$.isWild = Clazz.defineMethod (c$, "isWild",
 function (s) {
 return s != null && (s.indexOf ("*") >= 0 || s.indexOf ("?") >= 0);
 }, "~S");
-c$.isMatch = Clazz.defineMethod (c$, "isMatch", 
+c$.isMatch = Clazz.defineMethod (c$, "isMatch",
 function (search, match, checkStar, allowInitialStar) {
 if (search.equals (match)) return true;
 var mLen = match.length;
@@ -885,7 +885,7 @@ if (chm != chs && (chm != '\1' || chs != '?')) return false;
 }
 return true;
 }, "~S,~S,~B,~B");
-c$.replaceQuotedStrings = Clazz.defineMethod (c$, "replaceQuotedStrings", 
+c$.replaceQuotedStrings = Clazz.defineMethod (c$, "replaceQuotedStrings",
 function (s, list, newList) {
 var n = list.size ();
 for (var i = 0; i < n; i++) {
@@ -895,7 +895,7 @@ if (!newName.equals (name)) s = JU.PT.rep (s, "\"" + name + "\"", "\"" + newName
 }
 return s;
 }, "~S,JU.Lst,JU.Lst");
-c$.replaceStrings = Clazz.defineMethod (c$, "replaceStrings", 
+c$.replaceStrings = Clazz.defineMethod (c$, "replaceStrings",
 function (s, list, newList) {
 var n = list.size ();
 for (var i = 0; i < n; i++) {
@@ -905,47 +905,47 @@ if (!newName.equals (name)) s = JU.PT.rep (s, name, newName);
 }
 return s;
 }, "~S,JU.Lst,JU.Lst");
-c$.isDigit = Clazz.defineMethod (c$, "isDigit", 
+c$.isDigit = Clazz.defineMethod (c$, "isDigit",
 function (ch) {
 var c = (ch).charCodeAt (0);
 return (48 <= c && c <= 57);
 }, "~S");
-c$.isUpperCase = Clazz.defineMethod (c$, "isUpperCase", 
+c$.isUpperCase = Clazz.defineMethod (c$, "isUpperCase",
 function (ch) {
 var c = (ch).charCodeAt (0);
 return (65 <= c && c <= 90);
 }, "~S");
-c$.isLowerCase = Clazz.defineMethod (c$, "isLowerCase", 
+c$.isLowerCase = Clazz.defineMethod (c$, "isLowerCase",
 function (ch) {
 var c = (ch).charCodeAt (0);
 return (97 <= c && c <= 122);
 }, "~S");
-c$.isLetter = Clazz.defineMethod (c$, "isLetter", 
+c$.isLetter = Clazz.defineMethod (c$, "isLetter",
 function (ch) {
 var c = (ch).charCodeAt (0);
 return (65 <= c && c <= 90 || 97 <= c && c <= 122);
 }, "~S");
-c$.isLetterOrDigit = Clazz.defineMethod (c$, "isLetterOrDigit", 
+c$.isLetterOrDigit = Clazz.defineMethod (c$, "isLetterOrDigit",
 function (ch) {
 var c = (ch).charCodeAt (0);
 return (65 <= c && c <= 90 || 97 <= c && c <= 122 || 48 <= c && c <= 57);
 }, "~S");
-c$.isWhitespace = Clazz.defineMethod (c$, "isWhitespace", 
+c$.isWhitespace = Clazz.defineMethod (c$, "isWhitespace",
 function (ch) {
 var c = (ch).charCodeAt (0);
 return (c >= 0x1c && c <= 0x20 || c >= 0x9 && c <= 0xd);
 }, "~S");
-c$.fixPtFloats = Clazz.defineMethod (c$, "fixPtFloats", 
+c$.fixPtFloats = Clazz.defineMethod (c$, "fixPtFloats",
 function (pt, f) {
 pt.x = Math.round (pt.x * f) / f;
 pt.y = Math.round (pt.y * f) / f;
 pt.z = Math.round (pt.z * f) / f;
 }, "JU.T3,~N");
-c$.fixDouble = Clazz.defineMethod (c$, "fixDouble", 
+c$.fixDouble = Clazz.defineMethod (c$, "fixDouble",
 function (d, f) {
 return Math.round (d * f) / f;
 }, "~N,~N");
-c$.parseFloatFraction = Clazz.defineMethod (c$, "parseFloatFraction", 
+c$.parseFloatFraction = Clazz.defineMethod (c$, "parseFloatFraction",
 function (s) {
 var pt = s.indexOf ("/");
 return (pt < 0 ? JU.PT.parseFloat (s) : JU.PT.parseFloat (s.substring (0, pt)) / JU.PT.parseFloat (s.substring (pt + 1)));

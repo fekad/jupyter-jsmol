@@ -60,7 +60,7 @@ if(required>0){
 this.growBy(required);
 }var count=this.elementCount-location;
 if(count>0){
-System.arraycopy(this.elementData,location,this.elementData,location+size,count);
+Zystem.arraycopy(this.elementData,location,this.elementData,location+size,count);
 }var it=collection.iterator();
 while(it.hasNext()){
 this.elementData[location++]=it.next();
@@ -109,7 +109,7 @@ return this.indexOf(object,0)!=-1;
 },"~O");
 Clazz.defineMethod(c$,"copyInto",
 function(elements){
-System.arraycopy(this.elementData,0,elements,0,this.elementCount);
+Zystem.arraycopy(this.elementData,0,elements,0,this.elementCount);
 },"~A");
 Clazz.defineMethod(c$,"elementAt",
 function(location){
@@ -159,7 +159,7 @@ return this.elementAt(location);
 Clazz.defineMethod(c$,"grow",
 ($fz=function(newCapacity){
 var newData=this.newElementArray(newCapacity);
-System.arraycopy(this.elementData,0,newData,0,this.elementCount);
+Zystem.arraycopy(this.elementData,0,newData,0,this.elementCount);
 this.elementData=newData;
 },$fz.isPrivate=true,$fz),"~N");
 Clazz.defineMethod(c$,"growByOne",
@@ -171,7 +171,7 @@ adding=1;
 }}else{
 adding=this.capacityIncrement;
 }var newData=this.newElementArray(this.elementData.length+adding);
-System.arraycopy(this.elementData,0,newData,0,this.elementCount);
+Zystem.arraycopy(this.elementData,0,newData,0,this.elementCount);
 this.elementData=newData;
 },$fz.isPrivate=true,$fz));
 Clazz.defineMethod(c$,"growBy",
@@ -188,7 +188,7 @@ adding=(Math.floor(required/this.capacityIncrement))*this.capacityIncrement;
 if(adding<required){
 adding+=this.capacityIncrement;
 }}var newData=this.newElementArray(this.elementData.length+adding);
-System.arraycopy(this.elementData,0,newData,0,this.elementCount);
+Zystem.arraycopy(this.elementData,0,newData,0,this.elementCount);
 this.elementData=newData;
 },$fz.isPrivate=true,$fz),"~N");
 Clazz.overrideMethod(c$,"hashCode",
@@ -224,7 +224,7 @@ if(this.elementCount==this.elementData.length){
 this.growByOne();
 }var count=this.elementCount-location;
 if(count>0){
-System.arraycopy(this.elementData,location,this.elementData,location+1,count);
+Zystem.arraycopy(this.elementData,location,this.elementData,location+1,count);
 }this.elementData[location]=object;
 this.elementCount++;
 this.modCount++;
@@ -274,7 +274,7 @@ var result=this.elementData[location];
 this.elementCount--;
 var size=this.elementCount-location;
 if(size>0){
-System.arraycopy(this.elementData,location+1,this.elementData,location,size);
+Zystem.arraycopy(this.elementData,location+1,this.elementData,location,size);
 }this.elementData[this.elementCount]=null;
 this.modCount++;
 return result;
@@ -304,7 +304,7 @@ if(0<=location&&location<this.elementCount){
 this.elementCount--;
 var size=this.elementCount-location;
 if(size>0){
-System.arraycopy(this.elementData,location+1,this.elementData,location,size);
+Zystem.arraycopy(this.elementData,location+1,this.elementData,location,size);
 }this.elementData[this.elementCount]=null;
 this.modCount++;
 }else{
@@ -316,7 +316,7 @@ if(start>=0&&start<=end&&end<=this.size()){
 if(start==end){
 return;
 }if(end!=this.elementCount){
-System.arraycopy(this.elementData,end,this.elementData,start,this.elementCount-end);
+Zystem.arraycopy(this.elementData,end,this.elementData,start,this.elementCount-end);
 var newCount=this.elementCount-(end-start);
 java.util.Arrays.fill(this.elementData,newCount,this.elementCount,null);
 this.elementCount=newCount;
@@ -363,7 +363,7 @@ return new java.util.Collections.SynchronizedRandomAccessList(Clazz.superCall(th
 Clazz.defineMethod(c$,"toArray",
 function(){
 var result=new Array(this.elementCount);
-System.arraycopy(this.elementData,0,result,0,this.elementCount);
+Zystem.arraycopy(this.elementData,0,result,0,this.elementCount);
 return result;
 });
 Clazz.defineMethod(c$,"toArray",
@@ -371,7 +371,7 @@ function(contents){
 if(this.elementCount>contents.length){
 var ct=contents.getClass().getComponentType();
 contents=java.lang.reflect.Array.newInstance(ct,this.elementCount);
-}System.arraycopy(this.elementData,0,contents,0,this.elementCount);
+}Zystem.arraycopy(this.elementData,0,contents,0,this.elementCount);
 if(this.elementCount<contents.length){
 contents[this.elementCount]=null;
 }return contents;
