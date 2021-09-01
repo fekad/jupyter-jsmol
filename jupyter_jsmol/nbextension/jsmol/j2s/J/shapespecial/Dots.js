@@ -111,7 +111,7 @@ case J.atomdata.RadiusData.EnumType.ABSOLUTE:
 if (rd.value == 0) isVisible = false;
 setRadius = rd.value;
 default:
-rd.valueExtended = this.vwr.getCurrentSolventProbeRadius ();
+rd.valueExtended = (this.vwr.getBoolean (1612709912) ? this.vwr.getFloat (570425394) : 0);
 }
 var maxRadius;
 switch (rd.vdwType) {

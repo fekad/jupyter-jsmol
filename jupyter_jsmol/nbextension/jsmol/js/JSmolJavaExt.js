@@ -1421,14 +1421,19 @@ sp.codePointAt || (sp.codePointAt = sp.charCodeAt); // Firefox only
 
 })(String.prototype);
 
+var textDecoder = new TextDecoder();
+
 String.instantialize=function(){
 switch (arguments.length) {
 case 0:
 	return new String();
 case 1:
 	var x=arguments[0];
-  if (x.BYTES_PER_ELEMENT || x instanceof Array){
-		return (x.length == 0 ? "" : typeof x[0]=="number" ? Encoding.readUTF8Array(x) : x.join(''));
+  if (x.BYTES_PER_ELEMENT) {
+		return (x.length == 0 ? "" : typeof x[0]=="number" ? textDecoder.decode(x) : x.join(''));
+  }
+  if (x instanceof Array){
+		return (x.length == 0 ? "" : typeof x[0]=="number" ? textDecoder.decode(new Uint8Array(x)) : x.join(''));
   }
 	if(typeof x=="string"||x instanceof String){
 		return new String(x);
@@ -1482,11 +1487,12 @@ case 4:
 	if(typeof y=="string"||y instanceof String){
 		var offset=arguments[1];
 		var length=arguments[2];
-		var arr=new Array(length);
+		var arr=new Uint8Array(length);
 		for(var i=0;i<length;i++){
 			arr[i]=bytes[offset+i];
 		}
-		return Encoding.readUTF8Array(arr);
+		return textDecoder.decode(arr);
+		//return Encoding.readUTF8Array(arr);
 	}
 	var count=arguments[3];
 	var offset=arguments[2];

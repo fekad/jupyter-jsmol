@@ -71,7 +71,13 @@ Clazz_declareInterface (J.api, "JmolScriptEvaluator");
 Clazz_declarePackage ("J.api");
 Clazz_declareInterface (J.api, "JmolScriptFunction");
 Clazz_declarePackage ("J.api");
-Clazz_declareInterface (J.api, "JmolScriptManager");
+c$ = Clazz_declareInterface (J.api, "JmolScriptManager");
+Clazz_defineStatics (c$,
+"PDB_CARTOONS", 1,
+"NO_SCRIPT", 2,
+"IS_APPEND", 4,
+"NO_AUTOPLAY", 8,
+"FILE_DROPPED", 16);
 Clazz_declarePackage ("JS");
 Clazz_load (["J.thread.JmolThread"], "JS.CommandWatcherThread", ["java.lang.Thread", "JU.Logger"], function () {
 c$ = Clazz_decorateAsClass (function () {
@@ -295,6 +301,7 @@ return (this.thisFunction != null ? this.thisFunction.isVariable (ident) : this.
 }, "~S");
 Clazz_defineMethod (c$, "cleanScriptComments", 
  function (script) {
+if (script.indexOf ('\u00A0') >= 0) script = script.$replace ('\u00A0', ' ');
 if (script.indexOf ('\u201C') >= 0) script = script.$replace ('\u201C', '"');
 if (script.indexOf ('\u201D') >= 0) script = script.$replace ('\u201D', '"');
 if (script.indexOf ('\uFEFF') >= 0) script = script.$replace ('\uFEFF', ' ');
@@ -2712,10 +2719,10 @@ case 553648167:
 if (ival >= 10) JS.ScriptEval.contextDepthMax = ival;
 return JS.ScriptEval.contextDepthMax;
 case 553648146:
-if (ival >= 0) JS.ScriptEval.commandHistoryLevelMax = ival;
+if (ival >= -1) JS.ScriptEval.commandHistoryLevelMax = ival;
 return JS.ScriptEval.commandHistoryLevelMax;
 case 553648168:
-if (ival >= 0) JS.ScriptEval.scriptReportingLevel = ival;
+if (ival >= -1) JS.ScriptEval.scriptReportingLevel = ival;
 return JS.ScriptEval.scriptReportingLevel;
 }
 return 0;
@@ -2828,7 +2835,7 @@ this.resumeViewer ("resumeEval");
 return;
 }if (!this.executionPaused) sc.pc++;
 this.thisContext = sc;
-if (sc.scriptLevel > 0) this.scriptLevel = sc.scriptLevel - 1;
+if (sc.scriptLevel > 0 && sc.why !== "getEvalContextAndHoldQueue") this.scriptLevel = sc.scriptLevel - 1;
 this.restoreScriptContext (sc, true, false, false);
 this.pcResume = sc.pc;
 this.executeCommands (sc.isTryCatch, this.scriptLevel <= 0);
@@ -3456,6 +3463,7 @@ Clazz_overrideMethod (c$, "getScriptContext",
 function (why) {
 var context =  new JS.ScriptContext ();
 if (this.debugHigh) JU.Logger.info ("creating context " + context.id + " for " + why + " path=" + this.contextPath);
+context.why = why;
 context.scriptLevel = this.scriptLevel;
 context.parentContext = this.thisContext;
 context.contextPath = this.contextPath;
@@ -3554,7 +3562,7 @@ sx.message += s;
 sx.untranslated += s;
 }this.resumeViewer (isThrown ? "throw context" : "scriptException");
 if (isThrown || this.thisContext != null || this.chk || msg.indexOf ("NOTE: file recognized as a script file: ") >= 0) return;
-JU.Logger.error ("eval ERROR: " + s + this.toString ());
+JU.Logger.error ("eval ERROR: " + s + "\n" + this.toString ());
 if (this.vwr.autoExit) this.vwr.exitJmol ();
 }, "JS.ScriptException,~S,~S");
 c$.statementAsString = Clazz_defineMethod (c$, "statementAsString", 
@@ -3837,8 +3845,10 @@ this.loadFileAsync (null, fileName, -Math.abs (fileName.hashCode ()), false);
 }, "~S");
 Clazz_defineMethod (c$, "loadFileAsync", 
 function (prefix, filename, i, doClear) {
-if (this.vwr.fm.cacheGet (filename, false) != null) return filename;
-if (prefix != null) prefix = "cache://local" + prefix;
+if (this.vwr.fm.cacheGet (filename, false) != null) {
+this.cancelFileThread ();
+return filename;
+}if (prefix != null) prefix = "cache://local" + prefix;
 var key = this.pc + "_" + i + "_" + filename;
 var cacheName;
 if (this.thisContext == null) {
@@ -3847,7 +3857,7 @@ this.pushContext (null, "loadFileAsync");
 this.thisContext.htFileCache =  new java.util.Hashtable ();
 }cacheName = this.thisContext.htFileCache.get (key);
 if (cacheName != null && cacheName.length > 0) {
-this.fileLoadThread = null;
+this.cancelFileThread ();
 this.vwr.queueOnHold = false;
 if ("#CANCELED#".equals (cacheName) || "#CANCELED#".equals (this.vwr.fm.cacheGet (cacheName, false))) this.evalError ("#CANCELED#", null);
 return cacheName;
@@ -3859,6 +3869,12 @@ if (this.vwr.testAsync) this.fileLoadThread.start ();
 if (i < 0) this.fileLoadThread = null;
 throw  new JS.ScriptInterruption (this, "load", 1);
 }, "~S,~S,~N,~B");
+Clazz_defineMethod (c$, "cancelFileThread", 
+ function () {
+this.fileLoadThread = null;
+if (this.thisContext != null && this.thisContext.why === "loadFileAsync") {
+this.popContext (false, false);
+}});
 Clazz_defineMethod (c$, "logLoadInfo", 
  function (msg) {
 if (msg.length > 0) JU.Logger.info (msg);
@@ -3893,8 +3909,7 @@ this.scriptDelayThread = null;
 }if (this.fileLoadThread != null) {
 this.fileLoadThread.interrupt ();
 this.fileLoadThread.resumeEval ();
-if (this.thisContext != null) this.popContext (false, false);
-this.fileLoadThread = null;
+this.cancelFileThread ();
 }});
 Clazz_defineMethod (c$, "getErrorLineMessage2", 
 function () {
@@ -4113,8 +4128,23 @@ break;
 case 544771:
 this.cmdHover ();
 break;
-case 266265:
+case 4121:
+switch (this.slen) {
+case 1:
 if (!this.chk) this.vwr.initialize (!this.$isStateScript, false);
+break;
+case 2:
+if (this.tokAt (1) == 1275068433) {
+this.vwr.getInchi (null, null, null);
+if (this.chk) {
+} else {
+if (JV.Viewer.isJS) {
+this.vwr.showString ("InChI module initialized", false);
+this.doDelay (1);
+}}break;
+}default:
+this.bad ();
+}
 break;
 case 134238732:
 this.cmdScript (134238732, null, null);
@@ -4532,7 +4562,7 @@ this.frameControl (1);
 });
 Clazz_defineMethod (c$, "setFrameSet", 
  function (i) {
-var frames = this.expandFloatArray (this.floatParameterSet (i, 0, 2147483647), 1);
+var frames = this.expandFloatArray (this.floatParameterSet (i, 0, 2147483647), 1, false);
 this.checkLength (this.iToken + 1);
 if (this.chk) return;
 var movie =  new java.util.Hashtable ();
@@ -4926,10 +4956,11 @@ this.setShapeProperty (iShape, "init", null);
 var value = NaN;
 var type = J.atomdata.RadiusData.EnumType.ABSOLUTE;
 var ipt = 1;
+var isOnly = false;
 while (true) {
 switch (this.getToken (ipt).tok) {
 case 1073742072:
-this.restrictSelected (false, false);
+isOnly = true;
 case 1073742335:
 value = 1;
 type = J.atomdata.RadiusData.EnumType.FACTOR;
@@ -4941,6 +4972,9 @@ case 1073741976:
 this.setShapeProperty (iShape, "ignore", this.atomExpressionAt (ipt + 1));
 ipt = this.iToken + 1;
 continue;
+case 3:
+isOnly = (this.tokAt (ipt + 1) == 1073742072 || this.floatParameter (ipt) < 0);
+break;
 case 2:
 var dotsParam = this.intParameter (ipt);
 if (this.tokAt (ipt + 1) == 1665140738) {
@@ -4957,10 +4991,12 @@ return;
 }
 break;
 }
-var rd = (Float.isNaN (value) ? this.encodeRadiusParameter (ipt, false, true) :  new J.atomdata.RadiusData (null, value, type, J.c.VDW.AUTO));
+var rd = (Float.isNaN (value) ? this.encodeRadiusParameter (ipt, isOnly, true) :  new J.atomdata.RadiusData (null, value, type, J.c.VDW.AUTO));
 if (rd == null) return;
 if (Float.isNaN (rd.value)) this.invArg ();
-this.setShapeSize (iShape, rd);
+if (isOnly) {
+this.restrictSelected (false, false);
+}this.setShapeSize (iShape, rd);
 }, "~N");
 Clazz_defineMethod (c$, "cmdEcho", 
  function (index) {
@@ -6376,7 +6412,8 @@ var cameraX = NaN;
 var cameraY = NaN;
 var pymolView = null;
 var q = null;
-switch (this.getToken (i).tok) {
+var tok = this.getToken (i).tok;
+switch (tok) {
 case 1073742110:
 pymolView = this.floatParameterSet (++i, 18, 21);
 i = this.iToken + 1;
@@ -6472,7 +6509,7 @@ axis.set (aa.x, aa.y, aa.z);
 degrees = (isMolecular ? -1 : 1) * (aa.angle * 180.0 / 3.141592653589793);
 }if (Float.isNaN (axis.x) || Float.isNaN (axis.y) || Float.isNaN (axis.z)) axis.set (0, 0, 0);
  else if (axis.length () == 0 && degrees == 0) degrees = NaN;
-isChange = !this.vwr.tm.isInPosition (axis, degrees);
+isChange = (tok == 134221850 || !this.vwr.tm.isInPosition (axis, degrees));
 if (this.isFloatParameter (i)) zoom = this.floatParameter (i++);
 if (this.isFloatParameter (i) && !this.isCenterParameter (i)) {
 xTrans = this.floatParameter (i++);
@@ -7109,8 +7146,9 @@ if (filename.equalsIgnoreCase ("localPath")) localPath = this.paramAsStr (++i);
  else remotePath = this.paramAsStr (++i);
 filename = this.paramAsStr (++i);
 }
+if (filename.startsWith ("spt::")) filename = filename.substring (5);
 filename = this.checkFileExists ("SCRIPT_", isAsync, filename, i, true);
-}if ((tok = this.tokAt (++i)) == 1073741878) {
+}if ((tok = this.tokAt (++i)) == 1073741877) {
 isCheck = true;
 tok = this.tokAt (++i);
 }if (tok == 1073742050) {
@@ -7199,7 +7237,7 @@ bs = this.getToken (3).value;
 this.iToken++;
 } else if (this.isArrayParameter (4)) {
 bs =  new JU.BS ();
-var a = this.expandFloatArray (this.floatParameterSet (4, 0, 2147483647), 0);
+var a = this.expandFloatArray (this.floatParameterSet (4, 0, 2147483647), 0, false);
 for (var ii = a.length; --ii >= 0; ) if (a[ii] >= 0) bs.set (a[ii]);
 
 }this.checkLast (this.iToken);
@@ -8157,8 +8195,10 @@ if (amount == 0 && type != '\0') return;
 this.iToken = i0 + (type == '\0' ? 2 : 3);
 bs = (isSelected ? this.vwr.bsA () : this.iToken + 1 < this.slen ? this.atomExpressionAt (++this.iToken) : null);
 this.checkLast (this.iToken);
-if (!this.chk) this.vwr.translate (xyz, amount, type, bs);
-}, "~B");
+if (!this.chk) {
+this.vwr.translate (xyz, amount, type, bs);
+this.refresh (false);
+}}, "~B");
 Clazz_defineMethod (c$, "cmdUnbind", 
  function () {
 if (this.slen != 1) this.checkLength23 ();
@@ -8682,29 +8722,36 @@ vdwType = J.c.VDW.AUTO;
 }}return  new J.atomdata.RadiusData (null, value, factorType, vdwType);
 }, "~N,~B,~B");
 Clazz_defineMethod (c$, "expandFloatArray", 
-function (a, min) {
+function (a, min, asBS) {
 var n = a.length;
 var haveNeg = false;
+var bs = (asBS ?  new JU.BS () : null);
 try {
 for (var i = 0; i < a.length; i++) if (a[i] < 0) {
 n += Math.abs (a[i - 1] + a[i]) - 1;
 haveNeg = true;
 }
 if (haveNeg) {
-var b =  Clazz_newFloatArray (n, 0);
+var b = (asBS ? null :  Clazz_newFloatArray (n, 0));
 for (var pt = 0, i = 0; i < a.length; i++) {
 n = Clazz_floatToInt (a[i]);
 if (n >= 0) {
 if (n < min) this.invArg ();
-b[pt++] = n;
+if (asBS) bs.set (n - 1);
+ else b[pt++] = n;
 } else {
-var dif = Clazz_floatToInt (a[i - 1] + n);
-var dir = (dif < 0 ? 1 : -1);
-for (var j = Clazz_floatToInt (a[i - 1]); j != -a[i]; j += dir, pt++) b[pt] = b[pt - 1] + dir;
+var j = Clazz_floatToInt (a[i - 1]);
+var dir = (j <= -n ? 1 : -1);
+for (var j2 = -n; j != j2; j += dir, pt++) if (!asBS) b[pt] = j + dir;
+ else bs.set (j);
 
 }}
 a = b;
-n = a.length;
+if (!asBS) n = a.length;
+}if (asBS) {
+for (var i = n; --i >= 0; ) bs.set (Clazz_floatToInt (a[i]) - 1);
+
+return bs;
 }var ia =  Clazz_newIntArray (n, 0);
 for (var i = n; --i >= 0; ) ia[i] = Clazz_floatToInt (a[i]);
 
@@ -8717,7 +8764,7 @@ return null;
 throw e;
 }
 }
-}, "~A,~N");
+}, "~A,~N,~B");
 Clazz_defineMethod (c$, "frameControl", 
  function (i) {
 switch (this.getToken (this.checkLast (i)).tok) {
@@ -9093,7 +9140,7 @@ if (!this.chk) this.sm.setShapeSizeBs (shapeType, size, null, bs);
 }, "~N,~N,JU.BS");
 Clazz_defineMethod (c$, "setShapeTranslucency", 
 function (shapeType, prefix, translucency, translucentLevel, bs) {
-if (translucentLevel == 3.4028235E38) translucentLevel = this.vwr.getFloat (570425354);
+if (translucentLevel == 3.4028235E38) translucentLevel = this.vwr.getFloat (570425353);
 this.setShapeProperty (shapeType, "translucentLevel", Float.$valueOf (translucentLevel));
 if (prefix == null) return;
 if (bs == null) this.setShapeProperty (shapeType, prefix + "translucency", translucency);
@@ -9193,6 +9240,7 @@ return str.toString ();
 });
 Clazz_defineStatics (c$,
 "saveList", "bonds? context? coordinates? orientation? rotation? selection? state? structure?",
+"CONTEXT_HOLD_QUEUE", "getEvalContextAndHoldQueue",
 "iProcess", 0,
 "commandHistoryLevelMax", 0,
 "contextDepthMax", 100,
@@ -9581,7 +9629,7 @@ if (!haveParens) if (this.chk) {
 v = name;
 } else if (localVars == null || (v = JU.PT.getMapValueNoCase (localVars, name)) == null && allContext) {
 if (name.startsWith ("_")) {
-v = (name.equals ("_") ? this.vwr.ms.getAuxiliaryInfo (null) : name.equals ("_m") ? this.vwr.getCurrentModelAuxInfo () : null);
+v = (name.equals ("_") ? this.vwr.getModelSetAuxiliaryInfo () : name.equals ("_m") ? this.vwr.getCurrentModelAuxInfo () : null);
 }if (v == null) v = this.getContextVariableAsVariable (name, false);
  else if (ptEq == 0) this.invArg ();
 }if (v == null) {
@@ -10288,7 +10336,7 @@ return JS.SV.newSV (268435665, tok, this.paramAsStr (i));
 Clazz_defineMethod (c$, "getBitsetProperty", 
 function (bs, pts, tok, ptRef, planeRef, tokenValue, opValue, useAtomMap, index, asVectorIfAll) {
 var haveIndex = (index != 2147483647);
-var isAtoms = haveIndex || !(Clazz_instanceOf (tokenValue, JM.BondSet));
+var isAtoms = haveIndex || !(Clazz_instanceOf (tokenValue, JM.BondSet)) && !(Clazz_instanceOf (bs, JM.BondSet));
 var minmaxtype = tok & 480;
 var selectedFloat = (minmaxtype == 224);
 var ac = this.vwr.ms.ac;
@@ -10335,6 +10383,7 @@ var bsAtom = null;
 var tokenAtom = null;
 var ptT = null;
 var data = null;
+var ffdata = null;
 switch (tok) {
 case 1140850689:
 case 1677721602:
@@ -10386,7 +10435,11 @@ ptT =  new JU.P3 ();
 break;
 case 1715472409:
 data = this.vwr.getDataObj (opValue, null, 1);
-break;
+if (data == null) ffdata = this.vwr.getDataObj (opValue, null, 2);
+if (ffdata != null) {
+minmaxtype = 1073742327;
+vout =  new JU.Lst ();
+}break;
 }
 var n = 0;
 var ivMinMax = 0;
@@ -10404,7 +10457,7 @@ fvMinMax = -3.4028235E38;
 break;
 }
 var modelSet = this.vwr.ms;
-var mode = (isHash ? 4 : isPt ? 3 : isString ? 2 : isInt ? 1 : 0);
+var mode = (ffdata != null ? 5 : isHash ? 4 : isPt ? 3 : isString ? 2 : isInt ? 1 : 0);
 if (isAtoms) {
 var haveBitSet = (bs != null);
 var i0;
@@ -10535,6 +10588,10 @@ if (vout == null) return info[1];
 vout.addLast (info[1]);
 }break;
 }
+break;
+case 5:
+vout.addLast (ffdata[i]);
+break;
 }
 if (haveIndex) break;
 }
@@ -10792,8 +10849,13 @@ var tok = JS.T.getTokFromName (propertyName);
 switch (tok) {
 case 0:
 if (propertyName.startsWith ("property_")) {
-var obj = (tv.tok == 7 ? JS.SV.flistValue (tv, tv.getList ().size () == nbs ? nbs : nAtoms) : tv.asString ());
-this.vwr.setData (propertyName,  Clazz_newArray (-1, [propertyName, obj, JU.BSUtil.copy (bs), Integer.$valueOf (-1)]), nAtoms, 0, 0, tv.tok == 7 ? 2147483647 : -2147483648, 0);
+var obj;
+if (tv.tok == 7) {
+var nmin = (tv.getList ().size () == nbs ? nbs : nAtoms);
+obj = (JS.SV.getArrayDepth (tv) > 1 ? JS.SV.fflistValue (tv, nmin) : JS.SV.flistValue (tv, nmin));
+} else {
+obj = tv.asString ();
+}this.vwr.setData (propertyName,  Clazz_newArray (-1, [propertyName, obj, JU.BSUtil.copy (bs), Integer.$valueOf (-1)]), nAtoms, 0, 0, tv.tok == 7 ? 2147483647 : -2147483648, 0);
 break;
 }this.iToken = pt;
 this.error (56);
@@ -11286,7 +11348,7 @@ if (why.equals ("delay")) eval.delayScript (millis);
 }, "JS.ScriptEval,~S,~N");
 });
 Clazz_declarePackage ("JS");
-Clazz_load (["J.api.JmolScriptManager", "JU.Lst"], "JS.ScriptManager", ["java.io.BufferedInputStream", "$.BufferedReader", "java.lang.Boolean", "$.Thread", "javajs.api.ZInputStream", "JU.AU", "$.BS", "$.PT", "$.Rdr", "$.SB", "J.api.Interface", "JS.ScriptQueueThread", "JU.Elements", "$.Logger", "JV.FileManager"], function () {
+Clazz_load (["J.api.JmolScriptManager", "JU.Lst"], "JS.ScriptManager", ["java.io.BufferedInputStream", "$.BufferedReader", "java.lang.Boolean", "$.Thread", "javajs.api.ZInputStream", "JU.AU", "$.BS", "$.PT", "$.Rdr", "$.SB", "J.api.Interface", "J.i18n.GT", "JS.ScriptQueueThread", "JU.Elements", "$.Logger", "JV.FileManager", "$.Viewer"], function () {
 c$ = Clazz_decorateAsClass (function () {
 this.vwr = null;
 this.eval = null;
@@ -11374,10 +11436,9 @@ var n = 0;
 while (this.isQueueProcessing ()) {
 try {
 Thread.sleep (100);
-if (((n++) % 10) == 0) {
-if (JU.Logger.debugging) {
+if (((n++) % 10) == 0) if (JU.Logger.debugging) {
 JU.Logger.debug ("...scriptManager waiting for queue: " + this.scriptQueue.size () + " thread=" + Thread.currentThread ().getName ());
-}}} catch (e) {
+}} catch (e) {
 if (Clazz_exceptionOf (e, InterruptedException)) {
 } else {
 throw e;
@@ -11509,6 +11570,7 @@ if (str.indexOf ("\1##") >= 0) str = str.substring (0, str.indexOf ("\1##"));
 if (this.checkResume (str)) return "script processing resumed";
 if (this.checkStepping (str)) return "script processing stepped";
 if (this.checkHalt (str, isInsert)) return "script execution halted";
+this.wasmHack (strScript);
 return null;
 }, "~S,~B");
 Clazz_defineMethod (c$, "checkResume", 
@@ -11549,7 +11611,7 @@ Clazz_overrideMethod (c$, "checkHalt",
 function (str, isInsert) {
 if (str.equalsIgnoreCase ("pause")) {
 this.vwr.pauseScriptExecution ();
-if (this.vwr.scriptEditorVisible) this.vwr.scriptStatusMsg ("", "paused -- type RESUME to continue");
+if (this.vwr.scriptEditorVisible) this.vwr.setScriptStatus ("", "paused -- type RESUME to continue", 0, null);
 return true;
 }if (str.equalsIgnoreCase ("menu")) {
 this.vwr.getProperty ("DATA_API", "getPopupMenu", "\0");
@@ -11585,34 +11647,55 @@ if (eval == null) eval = this.evalTemp = this.newScriptEvaluator ();
 Clazz_overrideMethod (c$, "scriptCheckRet", 
 function (strScript, returnContext) {
 if (strScript.indexOf (")") == 0 || strScript.indexOf ("!") == 0) strScript = strScript.substring (1);
+strScript = this.wasmHack (strScript);
 var sc = this.newScriptEvaluator ().checkScriptSilent (strScript);
 return (returnContext || sc.errorMessage == null ? sc : sc.errorMessage);
 }, "~S,~B");
+Clazz_defineMethod (c$, "wasmHack", 
+function (cmd) {
+if (JV.Viewer.isJS && (cmd.indexOf ("find('inchi')") >= 0 || cmd.indexOf ("find(\"inchi\")") >= 0) || cmd.indexOf (".inchi(") >= 0) {
+this.vwr.getInchi (null, null, null);
+}return cmd;
+}, "~S");
 Clazz_overrideMethod (c$, "openFileAsync", 
-function (fileName, flags) {
-var noScript = ((flags & 2) == 2);
-var isAppend = ((flags & 4) == 4);
-var pdbCartoons = ((flags & 1) == 1 && !isAppend);
-var noAutoPlay = ((flags & 8) == 8);
+function (fname, flags, checkDims) {
+if (checkDims && JV.FileManager.isEmbeddable (fname)) this.checkResize (fname);
+var noScript = ((flags & 2) != 0);
+var noAutoPlay = ((flags & 8) != 0);
 var cmd = null;
-fileName = fileName.trim ();
-if (fileName.startsWith ("\t")) {
+fname = fname.trim ();
+if (fname.startsWith ("\t")) {
 noScript = true;
-fileName = fileName.substring (1);
-}fileName = fileName.$replace ('\\', '/');
-var isCached = fileName.startsWith ("cache://");
-if (this.vwr.isApplet && fileName.indexOf ("://") < 0) fileName = "file://" + (fileName.startsWith ("/") ? "" : "/") + fileName;
+fname = fname.substring (1);
+}fname = fname.$replace ('\\', '/');
+var isCached = fname.startsWith ("cache://");
+if (this.vwr.isApplet && fname.indexOf ("://") < 0) fname = "file://" + (fname.startsWith ("/") ? "" : "/") + fname;
 try {
-if (fileName.endsWith (".pse")) {
-cmd = (isCached ? "" : "zap;") + "load SYNC " + JU.PT.esc (fileName) + (this.vwr.isApplet ? "" : " filter 'DORESIZE'");
+if (fname.endsWith (".pse")) {
+cmd = (isCached ? "" : "zap;") + "load SYNC " + JU.PT.esc (fname) + (this.vwr.isApplet ? "" : " filter 'DORESIZE'");
 return;
-}if (fileName.endsWith ("jvxl")) {
+}if (fname.endsWith ("jvxl")) {
 cmd = "isosurface ";
-} else if (!fileName.toLowerCase ().endsWith (".spt")) {
-var type = this.getDragDropFileTypeName (fileName);
+} else if (!fname.toLowerCase ().endsWith (".spt")) {
+var type = this.getDragDropFileTypeName (fname);
 if (type == null) {
-type = JV.FileManager.determineSurfaceTypeIs (this.vwr.getBufferedInputStream (fileName));
-if (type != null) cmd = "if (_filetype == 'Pdb') { isosurface sigma 1.0 within 2.0 {*} " + JU.PT.esc (fileName) + " mesh nofill }; else; { isosurface " + JU.PT.esc (fileName) + "}";
+try {
+var bis = this.vwr.getBufferedInputStream (fname);
+type = JV.FileManager.determineSurfaceFileType (JU.Rdr.getBufferedReader (bis, "ISO-8859-1"));
+if (type == null) {
+cmd = "script " + JU.PT.esc (fname);
+return;
+}} catch (e) {
+if (Clazz_exceptionOf (e, java.io.IOException)) {
+return;
+} else {
+throw e;
+}
+}
+cmd = "if (_filetype == 'Pdb') { isosurface sigma 1.0 within 2.0 {*} " + JU.PT.esc (fname) + " mesh nofill }; else; { isosurface " + JU.PT.esc (fname) + "}";
+return;
+}if (type.equals ("spt::")) {
+cmd = "script " + JU.PT.esc (fname.substring (5));
 return;
 }if (type.equals ("dssr")) {
 cmd = "model {visible} property dssr ";
@@ -11621,39 +11704,64 @@ cmd = "script ";
 } else if (type.equals ("Cube")) {
 cmd = "isosurface sign red blue ";
 } else if (!type.equals ("spt")) {
-cmd = this.vwr.g.defaultDropScript;
-cmd = JU.PT.rep (cmd, "%FILE", fileName);
+if (flags == 16) {
+flags = 1;
+switch (this.vwr.ms.ac == 0 ? 0 : this.vwr.confirm (J.i18n.GT.$ ("Would you like to replace the current model with the selected model?"), J.i18n.GT.$ ("Would you like to append?"))) {
+case 2:
+return;
+case 0:
+break;
+default:
+flags |= 4;
+break;
+}
+}var isAppend = ((flags & 4) != 0);
+var pdbCartoons = ((flags & 1) != 0 && !isAppend);
+if (type.endsWith ("::")) {
+var pt = type.indexOf ("|");
+if (pt >= 0) {
+fname += type.substring (pt, type.length - 2);
+type = "";
+}fname = type + fname;
+}cmd = this.vwr.g.defaultDropScript;
+cmd = JU.PT.rep (cmd, "%FILE", fname);
 cmd = JU.PT.rep (cmd, "%ALLOWCARTOONS", "" + pdbCartoons);
 if (cmd.toLowerCase ().startsWith ("zap") && (isCached || isAppend)) cmd = cmd.substring (3);
 if (isAppend) {
 cmd = JU.PT.rep (cmd, "load SYNC", "load append");
 }return;
-}}if (cmd == null && !noScript && this.vwr.scriptEditorVisible) this.vwr.showEditor ( Clazz_newArray (-1, [fileName, this.vwr.getFileAsString3 (fileName, true, null)]));
- else cmd = (cmd == null ? "script " : cmd) + JU.PT.esc (fileName);
+}}if (cmd == null && !noScript && this.vwr.scriptEditorVisible) this.vwr.showEditor ( Clazz_newArray (-1, [fname, this.vwr.getFileAsString3 (fname, true, null)]));
+ else cmd = (cmd == null ? "script " : cmd) + JU.PT.esc (fname);
 } finally {
 if (cmd != null) this.vwr.evalString (cmd + (noAutoPlay ? "#!NOAUTOPLAY" : ""));
 }
-}, "~S,~N");
+}, "~S,~N,~B");
+Clazz_defineMethod (c$, "checkResize", 
+ function (fname) {
+try {
+var data = this.vwr.fm.getEmbeddedFileState (fname, false, "state.spt");
+if (data.indexOf ("preferredWidthHeight") >= 0) this.vwr.sm.resizeInnerPanelString (data);
+} catch (e) {
+}
+}, "~S");
 Clazz_defineMethod (c$, "getDragDropFileTypeName", 
  function (fileName) {
 var pt = fileName.indexOf ("::");
-if (pt >= 0) return fileName.substring (0, pt);
+if (pt >= 0) return fileName.substring (0, pt + 2);
 if (fileName.startsWith ("=")) return "pdb";
 if (fileName.endsWith (".dssr")) return "dssr";
 var br = this.vwr.fm.getUnzippedReaderOrStreamFromName (fileName, null, true, false, true, true, null);
+var modelType = null;
 if (Clazz_instanceOf (br, javajs.api.ZInputStream)) {
-var zipDirectory = this.getZipDirectoryAsString (fileName);
+var zipDirectory = this.vwr.getZipDirectoryAsString (fileName);
 if (zipDirectory.indexOf ("JmolManifest") >= 0) return "Jmol";
-return this.vwr.getModelAdapter ().getFileTypeName (JU.Rdr.getBR (zipDirectory));
-}if (Clazz_instanceOf (br, java.io.BufferedReader) || Clazz_instanceOf (br, java.io.BufferedInputStream)) return this.vwr.getModelAdapter ().getFileTypeName (br);
+modelType = this.vwr.getModelAdapter ().getFileTypeName (JU.Rdr.getBR (zipDirectory));
+} else if (Clazz_instanceOf (br, java.io.BufferedReader) || Clazz_instanceOf (br, java.io.BufferedInputStream)) {
+modelType = this.vwr.getModelAdapter ().getFileTypeName (br);
+}if (modelType != null) return modelType + "::";
 if (JU.AU.isAS (br)) {
 return (br)[0];
 }return null;
-}, "~S");
-Clazz_defineMethod (c$, "getZipDirectoryAsString", 
- function (fileName) {
-var t = this.vwr.fm.getBufferedInputStreamOrErrorMessageFromName (fileName, fileName, false, false, null, false, true);
-return this.vwr.getJzt ().getZipDirectoryAsStringAndClose (t);
 }, "~S");
 c$.setStateScriptVersion = Clazz_defineMethod (c$, "setStateScriptVersion", 
 function (vwr, version) {
@@ -12495,13 +12603,13 @@ case 268435538:
 if (x1.tok != 10 || x2.tok != 10) return false;
 return this.addXBs (JU.BSUtil.toggleInPlace (JU.BSUtil.copy (x1.value), x2.value));
 case 268435858:
-return this.addXBool (x1.asFloat () <= x2.asFloat ());
+return this.addXBool (x1.tok == 2 && x2.tok == 2 ? x1.intValue <= x2.intValue : x1.asFloat () <= x2.asFloat ());
 case 268435857:
-return this.addXBool (x1.asFloat () >= x2.asFloat ());
+return this.addXBool (x1.tok == 2 && x2.tok == 2 ? x1.intValue >= x2.intValue : x1.asFloat () >= x2.asFloat ());
 case 268435856:
-return this.addXBool (x1.asFloat () > x2.asFloat ());
+return this.addXBool (x1.tok == 2 && x2.tok == 2 ? x1.intValue > x2.intValue : x1.asFloat () > x2.asFloat ());
 case 268435859:
-return this.addXBool (x1.asFloat () < x2.asFloat ());
+return this.addXBool (x1.tok == 2 && x2.tok == 2 ? x1.intValue < x2.intValue : x1.asFloat () < x2.asFloat ());
 case 268435860:
 return this.addXBool (JS.SV.areEqual (x1, x2));
 case 268435861:
@@ -12613,7 +12721,7 @@ case 4:
 return (this.isDecimal (x2) || this.isDecimal (x1) ? this.addXFloat (x1.asFloat () * x2.asFloat ()) : this.addXInt (x1.asInt () * x2.asInt ()));
 }
 pt = (x1.tok == 11 || x1.tok == 12 ? this.ptValue (x2, null) : x2.tok == 11 ? this.ptValue (x1, null) : null);
-pt4 = (x1.tok == 12 ? this.planeValue (x2) : x2.tok == 12 ? this.planeValue (x1) : null);
+pt4 = (x1.tok == 12 ? JS.ScriptMathProcessor.planeValue (x2) : x2.tok == 12 ? JS.ScriptMathProcessor.planeValue (x1) : null);
 switch (x2.tok) {
 case 11:
 if (pt != null) {
@@ -12834,19 +12942,44 @@ break;
 }
 return null;
 }, "JS.SV,JU.BS");
-Clazz_defineMethod (c$, "planeValue", 
+c$.planeValue = Clazz_defineMethod (c$, "planeValue", 
 function (x) {
+var pt;
 switch (x.tok) {
 case 9:
 return x.value;
 case 7:
+break;
 case 4:
-var pt = JU.Escape.uP (JS.SV.sValue (x));
-return (Clazz_instanceOf (pt, JU.P4) ? pt : null);
-case 10:
+var s = x.value;
+var isMinus = s.startsWith ("-");
+var f = (isMinus ? -1 : 1);
+if (isMinus) s = s.substring (1);
+var p4 = null;
+switch (s.length < 2 ? -1 : "xy yz xz x= y= z=".indexOf (s.substring (0, 2))) {
+case 0:
+return JU.P4.new4 (1, 1, 0, f);
+case 3:
+return JU.P4.new4 (0, 1, 1, f);
+case 6:
+return JU.P4.new4 (1, 0, 1, f);
+case 9:
+p4 = JU.P4.new4 (1, 0, 0, -f * JU.PT.parseFloat (s.substring (2)));
+break;
+case 12:
+p4 = JU.P4.new4 (0, 1, 0, -f * JU.PT.parseFloat (s.substring (2)));
+break;
+case 15:
+p4 = JU.P4.new4 (0, 0, 1, -f * JU.PT.parseFloat (s.substring (2)));
 break;
 }
+if (p4 != null && !Float.isNaN (p4.w)) return p4;
+break;
+default:
 return null;
+}
+pt = JU.Escape.uP (JS.SV.sValue (x));
+return (Clazz_instanceOf (pt, JU.P4) ? pt : null);
 }, "JS.T");
 c$.typeOf = Clazz_defineMethod (c$, "typeOf", 
  function (x) {
@@ -12961,7 +13094,7 @@ case 1111492616:
 case 1111492617:
 case 1145047053:
 var ptfu = JU.P3.newP (x2.value);
-this.vwr.toFractional (ptfu, false);
+this.vwr.toFractional (ptfu, true);
 return (op.intValue == 1145047053 ? this.addXPt (ptfu) : this.addXFloat (op.intValue == 1111492615 ? ptfu.x : op.intValue == 1111492616 ? ptfu.y : ptfu.z));
 case 1111490577:
 case 1111490578:
@@ -12993,7 +13126,7 @@ var isAtoms = (op.intValue != 1677721602);
 if (!isAtoms && Clazz_instanceOf (x2.value, JM.BondSet)) return this.addX (x2);
 var bs = x2.value;
 if (isAtoms && bs.cardinality () == 1 && (op.intValue & 480) == 0) op.intValue |= 32;
-var val = this.eval.getBitsetProperty (bs, null, op.intValue, null, null, x2.value, op.value, false, x2.index, true);
+var val = this.eval.getBitsetProperty (bs, null, op.intValue, null, null, null, op.value, false, x2.index, true);
 return (isAtoms ? this.addXObj (val) : this.addX (JS.SV.newV (10, JM.BondSet.newBS (val, this.vwr.ms.getAtomIndices (bs)))));
 }
 return false;
@@ -13002,7 +13135,7 @@ Clazz_defineStatics (c$,
 "qMods", " w:0 x:1 y:2 z:3 normal:4 eulerzxz:5 eulerzyz:6 vector:-1 theta:-2 axisx:-3 axisy:-4 axisz:-5 axisangle:-6 matrix:-9");
 });
 Clazz_declarePackage ("JS");
-Clazz_load (["JS.ScriptError"], "JS.ScriptParam", ["java.lang.Float", "java.util.Hashtable", "JU.BS", "$.CU", "$.Lst", "$.Measure", "$.P3", "$.P4", "$.PT", "$.Quat", "$.SB", "$.V3", "JM.TickInfo", "JS.SV", "$.T", "JU.BSUtil", "$.Edge", "$.Logger"], function () {
+Clazz_load (["JS.ScriptError"], "JS.ScriptParam", ["java.lang.Float", "java.util.Hashtable", "JU.BS", "$.CU", "$.Lst", "$.Measure", "$.P3", "$.P4", "$.PT", "$.Quat", "$.SB", "$.V3", "JM.TickInfo", "JS.SV", "$.ScriptMathProcessor", "$.T", "JU.BSUtil", "$.Edge", "$.Logger"], function () {
 c$ = Clazz_decorateAsClass (function () {
 this.contextVariables = null;
 this.thisContext = null;
@@ -13202,9 +13335,6 @@ var isNegated = (this.tokAt (i) == 268435616);
 if (isNegated) i++;
 if (i < this.slen) {
 switch (this.getToken (i).tok) {
-case 9:
-plane = JU.P4.newPt (this.theToken.value);
-break;
 case 1073742330:
 var id = this.objectNameParameter (++i);
 if (this.chk) return  new JU.P4 ();
@@ -13224,10 +13354,8 @@ plane = JU.P4.new4 (0, 0, 1, -this.floatParameter (i));
 break;
 case 1073741824:
 case 4:
-var str = this.paramAsStr (i);
-if (str.equalsIgnoreCase ("xy")) plane = JU.P4.new4 (0, 0, isNegated ? -1 : 1, 0);
- else if (str.equalsIgnoreCase ("xz")) plane = JU.P4.new4 (0, isNegated ? -1 : 1, 0, 0);
- else if (str.equalsIgnoreCase ("yz")) plane = JU.P4.new4 (isNegated ? -1 : 1, 0, 0, 0);
+case 9:
+plane = JS.ScriptMathProcessor.planeValue (this.theToken);
 break;
 case 1073742332:
 case 8:
@@ -13816,7 +13944,7 @@ throw e;
 }
 }
 i = i * 1000000 + j;
-return (i < 0 ? 2147483647 : i);
+return (i < 0 || i > 2147483647 ? 2147483647 : i);
 }, "~S");
 c$.getPartialBondOrderFromFloatEncodedInt = Clazz_defineMethod (c$, "getPartialBondOrderFromFloatEncodedInt", 
 function (bondOrderInteger) {

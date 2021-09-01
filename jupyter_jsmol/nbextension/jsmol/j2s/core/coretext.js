@@ -873,6 +873,7 @@ return;
 }if ("offset" === propertyName) {
 if (!(Clazz_instanceOf (value, Integer))) {
 if (!this.setDefaults) {
+this.checkColixLength (-1, this.ac);
 for (var i = bsSelected.nextSetBit (0); i >= 0 && i < this.ac; i = bsSelected.nextSetBit (i + 1)) this.setPymolOffset (i, value);
 
 }return;
@@ -1346,7 +1347,10 @@ m.mad = md.mad;
 if (md.colix != 0) m.colix = md.colix;
 m.strFormat = md.strFormat;
 m.text = md.text;
-}switch (md.tokAction) {
+}m.units = md.units;
+m.property = md.property;
+m.fixedValue = md.fixedValue;
+switch (md.tokAction) {
 case 266284:
 this.doAction (md, md.thisID, 266284);
 break;
@@ -1553,7 +1557,7 @@ for (var i = 1; i <= nPoints; i++) {
 var atomIndex = m.getAtomIndex (i);
 points.addLast (atomIndex >= 0 ? this.vwr.ms.getAtoms (1094715393, Integer.$valueOf (this.atoms[atomIndex].getAtomNumber ())) : m.getAtom (i));
 }
-this.define (( new JM.MeasurementData ().init (null, this.vwr, points)).set (this.tokAction, this.htMin, this.radiusData, this.strFormat, null, this.tickInfo, this.mustBeConnected, this.mustNotBeConnected, this.intramolecular, true, 0, 0, null), (isDelete ? 12291 : 12290));
+this.define (( new JM.MeasurementData ().init (null, this.vwr, points)).set (this.tokAction, this.htMin, this.radiusData, m.property, this.strFormat, null, this.tickInfo, this.mustBeConnected, this.mustNotBeConnected, this.intramolecular, true, 0, 0, null, NaN), (isDelete ? 12291 : 12290));
 }, "~N,JM.Measurement,~B,~B,~B");
 Clazz_defineMethod (c$, "find", 
  function (m) {
@@ -1605,6 +1609,8 @@ for (var i = 1; i <= m.count; i++) {
 if (i > 1) sb.append (", ");
 sb.append (m.getLabel (i, asBitSet, false));
 }
+sb.append (", ");
+sb.append (m.getString ());
 sb.append ("]");
 return sb.toString ();
 }, "JM.Measurement,~B");

@@ -75,14 +75,6 @@ this.setDefaultState (this.hasUnitCell ? 1 : 0);
 Clazz.overrideMethod (c$, "jpiUpdateComputedMenus", 
 function () {
 this.hasUnitCell = (this.vwr.getCurrentUnitCell () != null);
-if (!this.checkUpdateSymmetryInfo ()) this.updateAllXtalMenus ();
-});
-Clazz.overrideMethod (c$, "appUpdateForShow", 
-function () {
-this.updateAllXtalMenuOptions ();
-});
-Clazz.defineMethod (c$, "checkUpdateSymmetryInfo", 
- function () {
 this.htMenus.get ("xtalMenu").setEnabled (this.hasUnitCell);
 var isOK = true;
 if (this.vwr.ms !== this.lastModelSet) {
@@ -94,19 +86,20 @@ isOK = false;
 this.iatom0 = this.vwr.ms.am[this.currentModelIndex].firstAtomIndex;
 if (!isOK) {
 this.allOperators = null;
-}return isOK;
-});
-Clazz.defineMethod (c$, "updateAllXtalMenus", 
- function () {
 this.updateOperatorMenu ();
-this.updateAllXtalMenuOptions ();
+}this.updateAllXtalMenuOptions ();
+});
+Clazz.overrideMethod (c$, "appUpdateForShow", 
+function () {
+this.jpiUpdateComputedMenus ();
 });
 Clazz.defineMethod (c$, "updateOperatorMenu", 
- function () {
+function () {
 if (this.allOperators != null) return;
 var data = this.runScriptBuffered ("show symop");
 this.allOperators = JU.PT.split (data.trim ().$replace ('\t', ' '), "\n");
-this.addAllCheckboxItems (this.htMenus.get ("xtalOp!PersistMenu"), this.allOperators);
+var menu = this.htMenus.get ("xtalOp!PersistMenu");
+if (menu != null) this.addAllCheckboxItems (menu, this.allOperators);
 });
 Clazz.defineMethod (c$, "addAllCheckboxItems", 
  function (menu, labels) {
@@ -126,7 +119,7 @@ this.menuEnable (this.menuCreateItem (subMenu, sym, sym, subMenu.getName () + ".
 }
 }, "J.api.SC,~A");
 Clazz.defineMethod (c$, "updateAllXtalMenuOptions", 
- function () {
+function () {
 var text = "";
 switch (this.getMKState ()) {
 case 0:
@@ -245,7 +238,7 @@ return this.setProperty (key, value);
 Clazz.defineMethod (c$, "setProperty", 
 function (name, value) {
 name = name.toLowerCase ().intern ();
-if (name === "isMolecular") {
+if (name === "ismolecular") {
 return Boolean.$valueOf (this.getMKState () == 0);
 }if (name === "hoverlabel") {
 return this.getHoverLabel ((value).intValue ());
@@ -312,7 +305,7 @@ this.appRunScript ("assign bond [{" + value + "}] \"" + this.pickBondAssignType 
 return null;
 }if (name === "assignbond") {
 var data = value;
-return this.assignBond (data[0], data[1]);
+return this.assignBond (data[0], String.fromCharCode (data[1]));
 }if (name === "atomtype") {
 if (value != null) {
 this.pickAtomAssignType = value;
@@ -533,11 +526,12 @@ var wasH = (atom.getElementNumber () == 1);
 var atomicNumber = (JU.PT.isUpperCase (type.charAt (0)) ? JU.Elements.elementNumberFromSymbol (type, true) : -1);
 var isDelete = false;
 if (atomicNumber > 0) {
-this.vwr.ms.setElement (atom, atomicNumber, !addHsAndBond);
+var doTaint = (atomicNumber > 1 || !addHsAndBond);
+this.vwr.ms.setElement (atom, atomicNumber, doTaint);
 this.vwr.shm.setShapeSizeBs (0, 0, this.vwr.rd, JU.BSUtil.newAndSetBit (atomIndex));
-this.vwr.ms.setAtomName (atomIndex, type + atom.getAtomNumber (), !addHsAndBond);
+this.vwr.ms.setAtomName (atomIndex, type + atom.getAtomNumber (), doTaint);
 if (this.vwr.getBoolean (603983903)) this.vwr.ms.am[atom.mi].isModelKit = true;
-if (!this.vwr.ms.am[atom.mi].isModelKit) this.vwr.ms.taintAtom (atomIndex, 0);
+if (!this.vwr.ms.am[atom.mi].isModelKit || atomicNumber > 1) this.vwr.ms.taintAtom (atomIndex, 0);
 } else if (type.toLowerCase ().equals ("pl")) {
 atom.setFormalCharge (atom.getFormalCharge () + 1);
 } else if (type.toLowerCase ().equals ("mi")) {
@@ -570,11 +564,11 @@ if (bs.nextSetBit (0) >= 0) this.vwr.deleteAtoms (bs, false);
 bs = this.vwr.getModelUndeletedAtomsBitSet (atom.mi);
 bs.andNot (this.vwr.ms.getAtomBitsMDa (1612709900, null,  new JU.BS ()));
 this.vwr.ms.makeConnections2 (0.1, 1.8, 1, 1073741904, bsA, bs, null, false, false, 0);
-}if (this.addXtalHydrogens) this.vwr.addHydrogens (bsA, false, true);
+}if (this.addXtalHydrogens) this.vwr.addHydrogens (bsA, 1);
 }, "~N,~S,~B,~B");
 Clazz.defineMethod (c$, "assignBond", 
  function (bondIndex, type) {
-var bondOrder = type - 48;
+var bondOrder = type.charCodeAt (0) - 48;
 var bond = this.vwr.ms.bo[bondIndex];
 this.vwr.ms.clearDB (bond.atom1.i);
 switch (type) {
@@ -587,7 +581,7 @@ case '5':
 break;
 case 'p':
 case 'm':
-bondOrder = JU.Edge.getBondOrderNumberFromOrder (bond.getCovalentOrder ()).charCodeAt (0) - 48 + (type == 112 ? 1 : -1);
+bondOrder = JU.Edge.getBondOrderNumberFromOrder (bond.getCovalentOrder ()).charCodeAt (0) - 48 + (type == 'p' ? 1 : -1);
 if (bondOrder > 3) bondOrder = 1;
  else if (bondOrder < 0) bondOrder = 3;
 break;
@@ -616,9 +610,9 @@ JU.Logger.error ("Exception in seBondOrder: " + e.toString ());
 throw e;
 }
 }
-if (type != 48 && this.addXtalHydrogens) this.vwr.addHydrogens (bsAtoms, false, true);
+if (type != '0' && this.addXtalHydrogens) this.vwr.addHydrogens (bsAtoms, 1);
 return bsAtoms;
-}, "~N,~N");
+}, "~N,~S");
 Clazz.defineMethod (c$, "isVwrRotateBond", 
  function () {
 return (this.vwr.acm.getBondPickingMode () == 34);
@@ -850,7 +844,6 @@ Clazz.defineMethod (c$, "runScriptBuffered",
  function (script) {
 var sb =  new JU.SB ();
 try {
-System.out.println ("MKP\n" + script);
 (this.vwr.eval).runBufferedSafely (script, sb);
 } catch (e) {
 if (Clazz.exceptionOf (e, Exception)) {

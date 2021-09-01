@@ -29,12 +29,12 @@ var cr = this.cr;
 var key = cr.key;
 if (key.equals ("_cell_subsystem_code")) return this.processSubsystemLoopBlock ();
 if (!key.startsWith ("_cell_wave") && !key.contains ("fourier") && !key.contains ("legendre") && !key.contains ("_special_func")) {
-if (key.contains ("crenel_ortho")) cr.appendLoadNote ("WARNING: Orthogonalized non-Legendre functions not supported.\nThe following block has been ignored. Use Legendre functions instead.\n\n" + cr.parser.skipLoop (true) + "=================================\n");
+if (key.contains ("crenel_ortho")) cr.appendLoadNote ("WARNING: Orthogonalized non-Legendre functions not supported.\nThe following block has been ignored. Use Legendre functions instead.\n\n" + cr.cifParser.skipLoop (true) + "=================================\n");
 return 0;
 }if (cr.asc.iSet < 0) cr.asc.newAtomSet ();
 cr.parseLoopParametersFor ("_atom_site", J.adapter.readers.cif.MSCifParser.modulationFields);
 var tok;
-while (cr.parser.getData ()) {
+while (cr.cifParser.getData ()) {
 var ignore = false;
 var type_id = null;
 var atomLabel = null;
@@ -44,12 +44,16 @@ var q = null;
 var c = NaN;
 var w = NaN;
 var fid = null;
-var n = cr.parser.getColumnCount ();
+var n = cr.cifParser.getColumnCount ();
 for (var i = 0; i < n; ++i) {
 switch (tok = this.fieldProperty (cr, i)) {
+case 0:
+pt[0] = pt[1] = pt[2] = 0;
+type_id = "F_";
+fid = this.field;
+break;
 case 1:
 cr.haveCellWaveVector = true;
-case 0:
 case 41:
 case 42:
 case 43:
@@ -64,10 +68,6 @@ case 46:
 switch (tok) {
 case 1:
 type_id = "W_";
-break;
-case 0:
-type_id = "F_";
-fid = this.field;
 break;
 case 41:
 case 42:
@@ -271,7 +271,7 @@ Clazz.defineMethod (c$, "processSubsystemLoopBlock",
  function () {
 var cr = this.cr;
 cr.parseLoopParameters (null);
-while (cr.parser.getData ()) {
+while (cr.cifParser.getData ()) {
 this.fieldProperty (cr, 0);
 var id = this.field;
 this.addSubsystem (id, this.getSparseMatrix (cr, "_w_", 1, 3 + this.modDim));
@@ -284,9 +284,9 @@ var m =  new JU.Matrix (null, dim, dim);
 var a = m.getArray ();
 var key;
 var p;
-var n = cr.parser.getColumnCount ();
+var n = cr.cifParser.getColumnCount ();
 for (; i < n; ++i) {
-if ((p = this.fieldProperty (cr, i)) < 0 || !(key = cr.parser.getColumnName (p)).contains (term)) continue;
+if ((p = this.fieldProperty (cr, i)) < 0 || !(key = cr.cifParser.getColumnName (p)).contains (term)) continue;
 var tokens = JU.PT.split (key, "_");
 var r = cr.parseIntStr (tokens[tokens.length - 2]);
 var c = cr.parseIntStr (tokens[tokens.length - 1]);
@@ -296,7 +296,7 @@ return m;
 }, "J.adapter.readers.cif.CifReader,~S,~N,~N");
 Clazz.defineMethod (c$, "fieldProperty", 
  function (cr, i) {
-return ((this.field = cr.parser.getColumnData (i)).length > 0 && this.field.charAt (0) != '\0' ? cr.col2key[i] : -1);
+return ((this.field = cr.cifParser.getColumnData (i)).length > 0 && this.field.charAt (0) != '\0' ? cr.col2key[i] : -1);
 }, "J.adapter.readers.cif.CifReader,~N");
 Clazz.defineStatics (c$,
 "FWV_ID", 0,

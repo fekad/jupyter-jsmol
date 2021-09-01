@@ -1,5 +1,5 @@
 Clazz.declarePackage ("JS");
-Clazz.load (["JS.ScriptError"], "JS.ScriptParam", ["java.lang.Float", "java.util.Hashtable", "JU.BS", "$.CU", "$.Lst", "$.Measure", "$.P3", "$.P4", "$.PT", "$.Quat", "$.SB", "$.V3", "JM.TickInfo", "JS.SV", "$.T", "JU.BSUtil", "$.Edge", "$.Logger"], function () {
+Clazz.load (["JS.ScriptError"], "JS.ScriptParam", ["java.lang.Float", "java.util.Hashtable", "JU.BS", "$.CU", "$.Lst", "$.Measure", "$.P3", "$.P4", "$.PT", "$.Quat", "$.SB", "$.V3", "JM.TickInfo", "JS.SV", "$.ScriptMathProcessor", "$.T", "JU.BSUtil", "$.Edge", "$.Logger"], function () {
 c$ = Clazz.decorateAsClass (function () {
 this.contextVariables = null;
 this.thisContext = null;
@@ -199,9 +199,6 @@ var isNegated = (this.tokAt (i) == 268435616);
 if (isNegated) i++;
 if (i < this.slen) {
 switch (this.getToken (i).tok) {
-case 9:
-plane = JU.P4.newPt (this.theToken.value);
-break;
 case 1073742330:
 var id = this.objectNameParameter (++i);
 if (this.chk) return  new JU.P4 ();
@@ -221,10 +218,8 @@ plane = JU.P4.new4 (0, 0, 1, -this.floatParameter (i));
 break;
 case 1073741824:
 case 4:
-var str = this.paramAsStr (i);
-if (str.equalsIgnoreCase ("xy")) plane = JU.P4.new4 (0, 0, isNegated ? -1 : 1, 0);
- else if (str.equalsIgnoreCase ("xz")) plane = JU.P4.new4 (0, isNegated ? -1 : 1, 0, 0);
- else if (str.equalsIgnoreCase ("yz")) plane = JU.P4.new4 (isNegated ? -1 : 1, 0, 0, 0);
+case 9:
+plane = JS.ScriptMathProcessor.planeValue (this.theToken);
 break;
 case 1073742332:
 case 8:
@@ -813,7 +808,7 @@ throw e;
 }
 }
 i = i * 1000000 + j;
-return (i < 0 ? 2147483647 : i);
+return (i < 0 || i > 2147483647 ? 2147483647 : i);
 }, "~S");
 c$.getPartialBondOrderFromFloatEncodedInt = Clazz.defineMethod (c$, "getPartialBondOrderFromFloatEncodedInt", 
 function (bondOrderInteger) {

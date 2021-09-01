@@ -87,6 +87,10 @@ Clazz.overrideMethod (c$, "getSpaceGroupOperation",
 function (i) {
 return (this.spaceGroup == null || this.spaceGroup.operations == null || i >= this.spaceGroup.operations.length ? null : this.spaceGroup.finalOperations == null ? this.spaceGroup.operations[i] : this.spaceGroup.finalOperations[i]);
 }, "~N");
+Clazz.overrideMethod (c$, "getSpaceGroupOperationRaw", 
+function (i) {
+return this.spaceGroup.getRawOperation (i);
+}, "~N");
 Clazz.overrideMethod (c$, "getSpaceGroupXyz", 
 function (i, doNormalize) {
 return this.spaceGroup.getXyz (i, doNormalize);

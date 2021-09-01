@@ -10829,7 +10829,7 @@ Jmol = (function(document) {
 		}
 	};
 	var j = {
-		_version: "$Date: 2019-06-08 00:17:46 -0500 (Sat, 08 Jun 2019) $", // svn.keywords:lastUpdated
+		_version: "$Date: 2021-05-26 21:16:02 -0500 (Wed, 26 May 2021) $", // svn.keywords:lastUpdated
 		_alertNoBinary: true,
 		// this url is used to Google Analytics tracking of Jmol use. You may remove it or modify it if you wish. 
 		_allowedJmolSize: [25, 2048, 300],   // min, max, default (pixels)
@@ -10908,7 +10908,7 @@ Jmol = (function(document) {
 	j._isSafari = (!j._isChrome && navigator.userAgent.toLowerCase().indexOf("safari") >= 0);
 	j._isMsie = (window.ActiveXObject !== undefined);
   j._isEdge = (navigator.userAgent.indexOf("Edge/") >= 0);
-	j._useDataURI = !j._isSafari && !j._isMsie && !j._isEdge; // safari may be OK here -- untested
+	j._useDataURI = /*!j._isSafari && */ !j._isMsie && !j._isEdge; // safari may be OK here -- untested
 
   window.requestAnimationFrame || (window.requestAnimationFrame = window.setTimeout);
 	for(var i in Jmol) j[i] = Jmol[i]; // allows pre-definition
@@ -11901,7 +11901,7 @@ Jmol = (function(document) {
 	}
 
 	Jmol._registerApplet = function(id, applet) {
-		return window[id] = Jmol._applets[id] = Jmol._applets[id + "__" + Jmol._syncId + "__"] = applet;
+		return window[id] = Jmol._applets[id] = Jmol._applets.master = Jmol._applets[id + "__" + Jmol._syncId + "__"] = applet;
 	} 
 
 	Jmol._readyCallback = function (appId,fullId,isReady,javaApplet,javaAppletPanel) {
@@ -13098,6 +13098,7 @@ Jmol._debugCode = false;
 // author: Bob Hanson, hansonr@stolaf.edu	4/16/2012
 // author: Takanori Nakane biochem_fan 6/12/2012
 
+// BH 2021.04.09 fix _cover(false) script in getAppletHtml() to be img onerror
 // BH 12/17/2015 4:43:05 PM adding Jmol._requestRepaint to allow for MSIE9 not having 3imationFrame
 // BH 12/13/2015 11:44:39 AM using requestAnimationFrame instead of setTimeout (fixes Chrome slowness)
 // BH 10/12/2015 1:15:39 PM fix for set echo image in JavaScript
@@ -13298,7 +13299,7 @@ Jmol._debugCode = false;
 				t = "";
 			} else {
 				this._deferApplet = true;
-				t += '<script type="text/javascript">' + id + '._cover(false)</script>';
+				t += '<img width=0 height=0 src=. onerror=' + id + '._cover(false) >';
 			}
 			t += Jmol._getWrapper(this, false);
 			if (Info.addSelectionOptions)
@@ -13446,6 +13447,7 @@ Jmol._debugCode = false;
 					base[base.length - 1] = codePath;
 				codePath = base.join("/");
 			}
+			applet._j2sFullPath = codePath.substring(0, codePath.length-1);
 			viewerOptions.put("codePath", codePath);
 			Jmol._registerApplet(applet._id, applet);
 			try {
@@ -18432,6 +18434,7 @@ System.out.print = function () {};
 System.out.printf = function () {};
 System.out.println = function () {};
 System.out.write = function () {};
+System.out.flush = function() {};
 
 System.err = new Clazz._O ();
 System.err.__CLASS_NAME__ = "java.io.PrintStream";
@@ -18439,6 +18442,7 @@ System.err.print = function () {};
 System.err.printf = function () {};
 System.err.println = function () {};
 System.err.write = function () {};
+System.err.flush = function() {};
 
 Clazz.popup = Clazz.assert = Clazz.log = Clazz.error = window.alert;
 
@@ -20959,6 +20963,6 @@ Sys.err.write = function (buf, offset, len) {
 })(Clazz, Jmol); // requires JSmolCore.js
 
 }; // called by external application 
-Jmol.___JmolDate="$Date: 2019-11-26 10:18:56 -0600 (Tue, 26 Nov 2019) $"
+Jmol.___JmolDate="$Date: 2021-08-17 21:17:38 -0500 (Tue, 17 Aug 2021) $"
 Jmol.___fullJmolProperties="src/org/jmol/viewer/Jmol.properties"
-Jmol.___JmolVersion="14.30.2"
+Jmol.___JmolVersion="14.31.52"

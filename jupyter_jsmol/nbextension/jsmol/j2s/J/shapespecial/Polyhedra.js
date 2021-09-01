@@ -360,7 +360,7 @@ if (smiles == null) {
 bs.set (iatom);
 continue;
 }p.getSymmetry (this.vwr, false);
-var smiles0 = p.polySmiles;
+var smiles0 = sm.cleanSmiles (p.polySmiles);
 try {
 if (sm.areEqual (smiles, smiles0) > 0) bs.set (iatom);
 } catch (e) {

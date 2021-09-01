@@ -526,7 +526,7 @@ Clazz.defineStatics (c$,
 c$.htCorrelationCache = c$.prototype.htCorrelationCache =  new java.util.Hashtable ();
 Clazz.defineStatics (c$,
 "nciResolver", "https://cactus.nci.nih.gov/chemical/structure/%FILE/file?format=sdf&get3d=True",
-"nmrdbServerH1", "http://www.nmrdb.org/tools/jmol/predict.php?POST?molfile=",
-"nmrdbServerC13", "http://www.nmrdb.org/service/jsmol13c?POST?molfile=",
+"nmrdbServerH1", "https://www.nmrdb.org/tools/jmol/predict.php?POST?molfile=",
+"nmrdbServerC13", "https://www.nmrdb.org/service/jsmol13c?POST?molfile=",
 "stringCount", 0);
 });

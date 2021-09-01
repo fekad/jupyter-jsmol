@@ -1,5 +1,5 @@
 Clazz.declarePackage ("JS");
-Clazz.load (["JU.JmolMolecule", "JU.BS", "$.Lst"], "JS.SmilesSearch", ["java.lang.Float", "java.util.Hashtable", "JU.AU", "$.SB", "JS.InvalidSmilesException", "$.SmilesAromatic", "$.SmilesAtom", "$.SmilesBond", "$.SmilesMeasure", "$.SmilesParser", "$.VTemp", "JU.BSUtil", "$.Edge", "$.Logger"], function () {
+Clazz.load (["JU.JmolMolecule", "JU.BS", "$.Lst"], "JS.SmilesSearch", ["java.lang.Float", "java.util.Hashtable", "JU.AU", "$.SB", "JS.InvalidSmilesException", "$.SmilesAromatic", "$.SmilesAtom", "$.SmilesBond", "$.SmilesMeasure", "$.SmilesParser", "$.SmilesStereo", "$.VTemp", "JU.BSUtil", "$.Logger"], function () {
 c$ = Clazz.decorateAsClass (function () {
 this.isSmarts = false;
 this.top = null;
@@ -65,6 +65,7 @@ this.bsReturn = null;
 this.bsCheck = null;
 this.mapUnique = false;
 this.bsAromaticRings = null;
+this.polyhedronStereo = null;
 Clazz.instantialize (this, arguments);
 }, JS, "SmilesSearch", JU.JmolMolecule);
 Clazz.prepareFields (c$, function () {
@@ -92,7 +93,8 @@ c$.addFlags = Clazz.defineMethod (c$, "addFlags",
 function (flags, strFlags) {
 if (strFlags.indexOf ("OPEN") >= 0) flags |= 5;
 if (strFlags.indexOf ("BIO") >= 0) flags |= 1048576;
-if (strFlags.indexOf ("HYDROGEN") >= 0) flags |= 4096;
+if (strFlags.indexOf ("HYDROGEN2") >= 0) flags |= 8192;
+ else if (strFlags.indexOf ("HYDROGEN") >= 0) flags |= 4096;
 if (strFlags.indexOf ("FIRSTMATCHONLY") >= 0) flags |= 8;
 if (strFlags.indexOf ("STRICT") >= 0) flags |= 256;
 if (strFlags.indexOf ("PLANAR") >= 0) flags |= 1024;
@@ -100,7 +102,7 @@ if (strFlags.indexOf ("NOAROMATIC") >= 0 || strFlags.indexOf ("NONAROMATIC") >= 
 if (strFlags.indexOf ("AROMATICDOUBLE") >= 0) flags |= 512;
 if (strFlags.indexOf ("AROMATICDEFINED") >= 0) flags |= 128;
 if (strFlags.indexOf ("MMFF94") >= 0) flags |= 768;
-if (strFlags.indexOf ("TOPOLOGY") >= 0) flags |= 8192;
+if (strFlags.indexOf ("TOPOLOGY") >= 0) flags |= 16384;
 if (strFlags.indexOf ("NOATOMCLASS") >= 0) flags |= 2048;
 if (strFlags.indexOf ("NOSTEREO") >= 0) {
 flags |= 32;
@@ -349,7 +351,7 @@ return this.search2 (false);
 Clazz.defineMethod (c$, "search2", 
  function (firstAtomOnly) {
 this.setFlags (this.flags);
-if (!this.isRingCheck && JU.Logger.debugging && !this.isSilent) JU.Logger.debug ("SmilesSearch processing " + this.pattern);
+if (!this.isRingCheck && JU.Logger.debuggingHigh && !this.isSilent) JU.Logger.debug ("SmilesSearch processing " + this.pattern);
 if (this.vReturn == null && (this.asVector || this.getMaps)) this.vReturn =  new JU.Lst ();
 if (this.bsSelected == null) {
 this.bsSelected = JU.BS.newN (this.targetAtomCount);
@@ -858,7 +860,7 @@ if (dbAtom1a == null || dbAtom2a == null) return false;
 if (this.haveTopo) this.setTopoCoordinates (dbAtom1, dbAtom2, dbAtom1a, dbAtom2a, bondType);
 var d = JS.SmilesMeasure.setTorsionData (dbAtom1a, dbAtom1, dbAtom2, dbAtom2a, this.v, isAtropisomer);
 if (isAtropisomer) {
-d *= dir1 * (bondType == 65537 ? 1 : -1) * (indexOrder ? 1 : -1);
+d *= dir1 * (bondType == 65537 ? 1 : -1) * (indexOrder ? 1 : -1) * 1 * -1;
 if (JU.Logger.debugging) JU.Logger.info ("atrop dihedral " + d + " " + sAtom1 + " " + sAtom2 + " " + b);
 if (d < 1.0) return false;
 } else {
@@ -866,29 +868,46 @@ if (this.v.vTemp1.dot (this.v.vTemp2) * dir1 * dir2 < 0) return false;
 }}
 if (this.setAtropicity) {
 this.atropKeys = "";
-for (var i = 0; i < lstAtrop.size (); i++) this.atropKeys += "," + this.getAtropIndex ((b = lstAtrop.get (i)), true) + this.getAtropIndex (b, false);
+for (var i = 0; i < lstAtrop.size (); i++) this.atropKeys += "," + this.getAtropIndex (lstAtrop.get (i));
 
 }return true;
 });
 Clazz.defineMethod (c$, "getAtropIndex", 
- function (b, isFirst) {
-var s1 = (isFirst ? b.atom1 : b.atom2);
-var a1 = s1.getMatchingAtom ();
-var a11 = JU.Edge.getAtropismNode (b.matchingBond.order, a1, isFirst);
-var b1 = s1.bonds;
-for (var i = s1.getBondCount (); --i >= 0; ) if ((b1[i].getOtherNode (s1)).getMatchingAtom () === a11) return i + 1;
-
-return 0;
-}, "JS.SmilesBond,~B");
+ function (b) {
+var nodes =  new Array (4);
+var s = "";
+nodes[1] = b.atom1.getMatchingAtom ();
+nodes[2] = b.atom2.getMatchingAtom ();
+var b1 = b.atom1.bonds;
+var a;
+for (var i = b.atom1.getBondCount (); --i >= 0; ) {
+if ((a = b1[i].getOtherNode (b.atom1)) !== b.atom2) {
+s += (i + 1);
+nodes[0] = a.getMatchingAtom ();
+break;
+}}
+b1 = b.atom2.bonds;
+for (var i = 0; i <= b.atom2.getBondCount (); i++) {
+if ((a = b1[i].getOtherNode (b.atom2)) !== b.atom1) {
+s += (i + 1);
+nodes[3] = a.getMatchingAtom ();
+break;
+}}
+if (s.equals ("22")) s = "";
+s = (JS.SmilesStereo.getAtropicStereoFlag (nodes) == 1 ? "" : "^") + s;
+return (s + "   ").substring (0, 3);
+}, "JS.SmilesBond");
 Clazz.defineMethod (c$, "setTopoCoordinates", 
  function (dbAtom1, dbAtom2, dbAtom1a, dbAtom2a, bondType) {
 dbAtom1.set (-1, 0, 0);
 dbAtom2.set (1, 0, 0);
 if (bondType != 2) {
 var bond = dbAtom1.getBondTo (dbAtom2);
-var dir = (bond.order == 65537 ? 1 : -1);
+var ok1 = dbAtom1.getBondedAtomIndex (bond.atropType[0]) == dbAtom1a.index;
+var ok2 = dbAtom2.getBondedAtomIndex (bond.atropType[1]) == dbAtom2a.index;
+var dir = (bond.order == 65537 ? 1 : -1) * (ok1 == ok2 ? 1 : -1);
 dbAtom1a.set (-1, 1, 0);
-dbAtom2a.set (1, 1, dir / 2.0);
+dbAtom2a.set (1, 1, dir / 2.0 * 1 * -1);
 return;
 }var nBonds = 0;
 var dir1 = 0;
@@ -1002,6 +1021,8 @@ break;
 var atom2 = atoms[sBond.atom2.getMatchingAtomIndex ()];
 var b =  new JS.SmilesBond (atom1, atom2, order, false);
 b.isConnection = sBond.isConnection;
+b.atropType = sBond.atropType;
+b.isNot = sBond.isNot;
 atom2.bondCount--;
 if (JU.Logger.debugging) JU.Logger.info ("" + b);
 } else {
@@ -1079,5 +1100,6 @@ return sb.toString ();
 Clazz.defineStatics (c$,
 "SUBMODE_NESTED", 1,
 "SUBMODE_RINGCHECK", 2,
-"SUBMODE_OR", 3);
+"SUBMODE_OR", 3,
+"ATROPIC_SWITCH", 1);
 });

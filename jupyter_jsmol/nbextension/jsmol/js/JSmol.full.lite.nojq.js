@@ -471,7 +471,7 @@ Jmol = (function(document) {
 		}
 	};
 	var j = {
-		_version: "$Date: 2019-06-08 00:17:46 -0500 (Sat, 08 Jun 2019) $", // svn.keywords:lastUpdated
+		_version: "$Date: 2021-05-26 21:16:02 -0500 (Wed, 26 May 2021) $", // svn.keywords:lastUpdated
 		_alertNoBinary: true,
 		// this url is used to Google Analytics tracking of Jmol use. You may remove it or modify it if you wish. 
 		_allowedJmolSize: [25, 2048, 300],   // min, max, default (pixels)
@@ -550,7 +550,7 @@ Jmol = (function(document) {
 	j._isSafari = (!j._isChrome && navigator.userAgent.toLowerCase().indexOf("safari") >= 0);
 	j._isMsie = (window.ActiveXObject !== undefined);
   j._isEdge = (navigator.userAgent.indexOf("Edge/") >= 0);
-	j._useDataURI = !j._isSafari && !j._isMsie && !j._isEdge; // safari may be OK here -- untested
+	j._useDataURI = /*!j._isSafari && */ !j._isMsie && !j._isEdge; // safari may be OK here -- untested
 
   window.requestAnimationFrame || (window.requestAnimationFrame = window.setTimeout);
 	for(var i in Jmol) j[i] = Jmol[i]; // allows pre-definition
@@ -1543,7 +1543,7 @@ Jmol = (function(document) {
 	}
 
 	Jmol._registerApplet = function(id, applet) {
-		return window[id] = Jmol._applets[id] = Jmol._applets[id + "__" + Jmol._syncId + "__"] = applet;
+		return window[id] = Jmol._applets[id] = Jmol._applets.master = Jmol._applets[id + "__" + Jmol._syncId + "__"] = applet;
 	} 
 
 	Jmol._readyCallback = function (appId,fullId,isReady,javaApplet,javaAppletPanel) {

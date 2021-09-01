@@ -70,6 +70,10 @@ return m.getMolecularFormula (false, wts, isEmpirical);
 }, "~A,JU.BS,~A,~B");
 Clazz.defineMethod (c$, "getMolecularFormula", 
 function (includeMissingHydrogens, wts, isEmpirical) {
+return this.getMolecularFormulaImpl (includeMissingHydrogens, wts, isEmpirical, true);
+}, "~B,~A,~B");
+Clazz.defineMethod (c$, "getMolecularFormulaImpl", 
+function (includeMissingHydrogens, wts, isEmpirical, includeH) {
 if (this.mf != null) return this.mf;
 if (this.atomList == null) {
 this.atomList =  new JU.BS ();
@@ -139,7 +143,7 @@ mf += sep + JU.Elements.elementSymbolFromNumber (JU.Elements.altElementNumberFro
 sep = " ";
 }}
 return mf;
-}, "~B,~A,~B");
+}, "~B,~A,~B,~B");
 c$.initialize = Clazz.defineMethod (c$, "initialize", 
  function (nodes, moleculeIndex, firstAtomIndex, atomList, modelIndex, indexInModel) {
 var jm =  new JU.JmolMolecule ();

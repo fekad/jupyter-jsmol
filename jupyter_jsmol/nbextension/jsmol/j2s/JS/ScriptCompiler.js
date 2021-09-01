@@ -120,6 +120,7 @@ return (this.thisFunction != null ? this.thisFunction.isVariable (ident) : this.
 }, "~S");
 Clazz.defineMethod (c$, "cleanScriptComments", 
  function (script) {
+if (script.indexOf ('\u00A0') >= 0) script = script.$replace ('\u00A0', ' ');
 if (script.indexOf ('\u201C') >= 0) script = script.$replace ('\u201C', '"');
 if (script.indexOf ('\u201D') >= 0) script = script.$replace ('\u201D', '"');
 if (script.indexOf ('\uFEFF') >= 0) script = script.$replace ('\uFEFF', ' ');

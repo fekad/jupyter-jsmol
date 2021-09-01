@@ -1,5 +1,5 @@
 Clazz.declarePackage ("JS");
-Clazz.load (null, "JS.MathExt", ["java.lang.Float", "$.Number", "java.util.Date", "$.Hashtable", "$.Random", "JU.AU", "$.BS", "$.CU", "$.Lst", "$.M4", "$.Measure", "$.OC", "$.P3", "$.P4", "$.PT", "$.Quat", "$.Rdr", "$.SB", "$.V3", "J.api.Interface", "J.atomdata.RadiusData", "J.bspt.PointIterator", "J.c.VDW", "J.i18n.GT", "JM.BondSet", "JS.SV", "$.ScriptParam", "$.T", "JU.BSUtil", "$.Escape", "$.JmolMolecule", "$.Logger", "$.Parser", "$.Point3fi", "$.SimpleUnitCell", "JV.FileManager", "$.JC", "$.Viewer"], function () {
+Clazz.load (null, "JS.MathExt", ["java.lang.Float", "$.Number", "java.util.Date", "$.HashMap", "$.Hashtable", "$.Random", "JU.AU", "$.BS", "$.CU", "$.Lst", "$.M4", "$.Measure", "$.OC", "$.P3", "$.P4", "$.PT", "$.Quat", "$.Rdr", "$.SB", "$.V3", "J.api.Interface", "J.atomdata.RadiusData", "J.bspt.PointIterator", "J.c.VDW", "J.i18n.GT", "JM.BondSet", "$.Measurement", "JS.SV", "$.ScriptMathProcessor", "$.ScriptParam", "$.T", "JU.BSUtil", "$.Escape", "$.JmolMolecule", "$.Logger", "$.Parser", "$.Point3fi", "$.SimpleUnitCell", "JV.FileManager", "$.JC", "$.Viewer"], function () {
 c$ = Clazz.decorateAsClass (function () {
 this.vwr = null;
 this.e = null;
@@ -19,13 +19,15 @@ return this;
 Clazz.defineMethod (c$, "evaluate", 
 function (mp, op, args, tok) {
 switch (tok) {
+case 134218760:
+return (args.length >= 1 && args[0].tok == 4 ? mp.addXStr ((args.length == 1 ?  new java.util.Date ().toString () : this.vwr.apiPlatform.getDateFormat (JS.SV.sValue (args[1]))) + "\t" + JS.SV.sValue (args[0]).trim ()) : mp.addXInt (((System.currentTimeMillis () - JS.MathExt.t0)) - (args.length == 0 ? 0 : args[0].asInt ())));
 case 134218250:
+return (args.length == 1 && args[0].tok == 2 ? mp.addXInt (args[0].intValue) : mp.addXFloat (Math.abs (args[0].asFloat ())));
 case 134218242:
 case 134218245:
-case 134217749:
 case 134218244:
 case 134218246:
-return this.evaluateMath (mp, args, tok);
+return (args.length == 1 && this.evaluateMath (mp, args, tok));
 case 1275069441:
 case 1275068928:
 case 1275068929:
@@ -75,6 +77,8 @@ case 134222849:
 return this.evaluateLoad (mp, args, tok == 1228935687);
 case 1275068427:
 return this.evaluateFind (mp, args);
+case 1275068433:
+return this.evaluateInChI (mp, args);
 case 1287653388:
 case 1825200146:
 return this.evaluateFormat (mp, op.intValue, args, tok == 1825200146);
@@ -757,7 +761,7 @@ var a = JU.P3.newP (mp.ptValue (x1, null));
 a.cross (a, mp.ptValue (x2, null));
 return mp.addXPt (a);
 }var pt2 = (x2.tok == 7 ? null : mp.ptValue (x2, null));
-var plane2 = mp.planeValue (x2);
+var plane2 = JS.ScriptMathProcessor.planeValue (x2);
 var f = NaN;
 try {
 if (isDist) {
@@ -823,7 +827,7 @@ return mp.addXAF (data);
 }
 }
 }var pt1 = mp.ptValue (x1, null);
-var plane1 = mp.planeValue (x1);
+var plane1 = JS.ScriptMathProcessor.planeValue (x1);
 if (isDist) {
 if (plane2 != null && x3 != null) f = JU.Measure.directedDistanceToPlane (pt1, plane2, JS.SV.ptValue (x3));
  else f = (plane1 == null ? (plane2 == null ? pt2.distance (pt1) : JU.Measure.distanceToPlane (plane2, pt1)) : JU.Measure.distanceToPlane (plane1, pt2));
@@ -878,15 +882,31 @@ Clazz.defineMethod (c$, "getHelixData",
 var iAtom = bs.nextSetBit (0);
 return (iAtom < 0 ? "null" : this.vwr.ms.at[iAtom].group.getHelixData (tokType, this.vwr.getQuaternionFrame (), this.vwr.getInt (553648144)));
 }, "JU.BS,~N");
+Clazz.defineMethod (c$, "evaluateInChI", 
+ function (mp, args) {
+var x1 = mp.getX ();
+var flags = (args.length > 0 ? JS.SV.sValue (args[0]) : "");
+var atoms = JS.SV.getBitSet (x1, true);
+var molData = null;
+if (atoms == null) {
+molData = JS.SV.sValue (x1);
+}return mp.addXStr (this.vwr.getInchi (atoms, molData, flags));
+}, "JS.ScriptMathProcessor,~A");
 Clazz.defineMethod (c$, "evaluateFind", 
  function (mp, args) {
 var x1 = mp.getX ();
 var isList = (x1.tok == 7);
+var isAtoms = (x1.tok == 10);
 var isEmpty = (args.length == 0);
-var sFind = (isEmpty ? "" : JS.SV.sValue (args[0]));
+var tok0 = (args.length == 0 ? 0 : args[0].tok);
+var sFind = (isEmpty || tok0 != 4 ? "" : JS.SV.sValue (args[0]));
+var isOff = (args.length > 1 && args[1].tok == 1073742334);
+var tokLast = (tok0 == 0 ? 0 : args[args.length - 1].tok);
+var argLast = (tokLast == 0 ? JS.SV.vF : args[args.length - 1]);
+var isON = !isList && (tokLast == 1073742335);
 var flags = (args.length > 1 && args[1].tok != 1073742335 && args[1].tok != 1073742334 && args[1].tok != 10 ? JS.SV.sValue (args[1]) : "");
-var isSequence = !isList && sFind.equalsIgnoreCase ("SEQUENCE");
-var isSeq = !isList && sFind.equalsIgnoreCase ("SEQ");
+var isSequence = !isList && !isOff && sFind.equalsIgnoreCase ("SEQUENCE");
+var isSeq = !isList && !isOff && sFind.equalsIgnoreCase ("SEQ");
 if (sFind.toUpperCase ().startsWith ("SMILES/")) {
 if (!sFind.endsWith ("/")) sFind += "/";
 var s = sFind.substring (6) + "//";
@@ -905,19 +925,23 @@ var isSMARTS = !isList && sFind.equalsIgnoreCase ("SMARTS");
 var isChemical = !isList && sFind.equalsIgnoreCase ("CHEMICAL");
 var isMF = !isList && sFind.equalsIgnoreCase ("MF");
 var isCF = !isList && sFind.equalsIgnoreCase ("CELLFORMULA");
-var argLast = (args.length > 0 ? args[args.length - 1] : JS.SV.vF);
-var isON = !isList && (argLast.tok == 1073742335);
+var isInchi = isAtoms && !isList && sFind.equalsIgnoreCase ("INCHI");
+var isInchiKey = isAtoms && !isList && sFind.equalsIgnoreCase ("INCHIKEY");
+var isStructureMap = (!isSmiles && !isSMARTS && tok0 == 10 && flags.toLowerCase ().indexOf ("map") >= 0);
 try {
-if (isChemical) {
-var bsAtoms = (x1.tok == 10 ? x1.value : null);
+if (isInchi || isInchiKey) {
+if (isInchiKey) flags += " key";
+return mp.addXStr (this.vwr.getInchi (JS.SV.getBitSet (x1, true), null, flags));
+}if (isChemical) {
+var bsAtoms = (isAtoms ? x1.value : null);
 var data = (bsAtoms == null ? JS.SV.sValue (x1) : this.vwr.getOpenSmiles (bsAtoms));
 data = (data.length == 0 ? "" : this.vwr.getChemicalInfo (data, flags.toLowerCase (), bsAtoms)).trim ();
 if (data.startsWith ("InChI")) data = JU.PT.rep (JU.PT.rep (data, "InChI=", ""), "InChIKey=", "");
 return mp.addXStr (data);
-}if (isSmiles || isSMARTS || x1.tok == 10) {
-var iPt = (isSmiles || isSMARTS ? 2 : 1);
+}if (isSmiles || isSMARTS || isAtoms) {
+var iPt = (isStructureMap ? 0 : isSmiles || isSMARTS ? 2 : 1);
 var bs2 = (iPt < args.length && args[iPt].tok == 10 ? args[iPt++].value : null);
-var asBonds = ("bonds".equalsIgnoreCase (JS.SV.sValue (args[args.length - 1])));
+var asBonds = ("bonds".equalsIgnoreCase (JS.SV.sValue (argLast)));
 var isAll = (asBonds || isON);
 var ret = null;
 switch (x1.tok) {
@@ -937,7 +961,8 @@ case 3:
 asMap = JS.SV.bValue (args[2]);
 break;
 }
-var justOne = (!asMap && (!allMappings || !isSMARTS && !pattern.equals ("chirality")));
+var isChirality = pattern.equals ("chirality");
+var justOne = (!asMap && (!allMappings || !isSMARTS && !isChirality));
 try {
 ret = this.e.getSmilesExt ().getSmilesMatches (pattern, smiles, null, null, isSMARTS ? 2 : 1, !asMap, !allMappings);
 } catch (ex) {
@@ -948,29 +973,111 @@ return mp.addXInt (-1);
 throw ex;
 }
 }
-if (justOne) {
-var len = (ret).length;
+var len = (isChirality ? 1 : JU.AU.isAI (ret) ? (ret).length : (ret).length);
+if (len == 0 && this.vwr.getSmilesMatcher ().getLastException () !== "MF_FAILED" && smiles.toLowerCase ().indexOf ("noaromatic") < 0 && smiles.toLowerCase ().indexOf ("strict") < 0) {
+ret = this.e.getSmilesExt ().getSmilesMatches (pattern, smiles, null, null, 16 | (isSMARTS ? 2 : 1), !asMap, !allMappings);
+}if (justOne) {
 return mp.addXInt (!allMappings && len > 0 ? 1 : len);
 }}break;
 case 10:
 var bs = x1.value;
-if (isMF && flags.length != 0) return mp.addXBs (JU.JmolMolecule.getBitSetForMF (this.vwr.ms.at, bs, flags));
-if (isMF || isCF) return mp.addXStr (JU.JmolMolecule.getMolecularFormulaAtoms (this.vwr.ms.at, bs, (isMF ? null : this.vwr.ms.getCellWeights (bs)), isON));
-if (isSequence || isSeq) {
+if (sFind.equalsIgnoreCase ("crystalClass")) {
+var n = bs.nextSetBit (0);
+var bsNew = null;
+if (args.length != 2) {
+bsNew =  new JU.BS ();
+bsNew.set (n);
+}return mp.addXList (this.vwr.ms.generateCrystalClass (n, (bsNew != null ? this.vwr.ms.getAtomSetCenter (bsNew) : argLast.tok == 10 ? this.vwr.ms.getAtomSetCenter (argLast.value) : JS.SV.ptValue (argLast))));
+}if (isMF && flags.length != 0) {
+return mp.addXBs (JU.JmolMolecule.getBitSetForMF (this.vwr.ms.at, bs, flags));
+}if (isMF || isCF) {
+return mp.addXStr (JU.JmolMolecule.getMolecularFormulaAtoms (this.vwr.ms.at, bs, (isMF ? null : this.vwr.ms.getCellWeights (bs)), isON));
+}if (isSequence || isSeq) {
 var isHH = (argLast.asString ().equalsIgnoreCase ("H"));
 isAll = new Boolean (isAll | isHH).valueOf ();
 return mp.addXStr (this.vwr.getSmilesOpt (bs, -1, -1, (isAll ? 3145728 | 5242880 | (isHH ? 9437184 : 0) : 0) | (isSeq ? 34603008 : 1048576), null));
-}if (isSmiles || isSMARTS) sFind = (args.length > 1 && args[1].tok == 10 ? this.vwr.getSmilesOpt (args[1].value, 0, 0, 0, flags) : flags);
-flags = flags.toUpperCase ();
+}if (isStructureMap) {
+var map = null;
+var map1 = null;
+var map2 = null;
+var mapNames = null;
+var key = (args.length == 3 ? JS.SV.sValue (argLast) : null);
+var itype = (key == null || key.equals ("%i") || key.equals ("number") ? 'i' : key.equals ("%a") || key.equals ("name") ? 'a' : key.equals ("%D") || key.equals ("index") ? 'D' : '?');
+if (key == null) key = "number";
+var err = null;
+flags = flags.$replace ("map", "").trim ();
+sFind = this.vwr.getSmilesOpt (bs, 0, 0, 0, flags);
+if (bs.cardinality () != bs2.cardinality ()) {
+err = "atom sets are not the same size";
+} else {
+try {
+var iflags = (137);
+if (flags.length > 0) sFind = "/" + flags + "/" + sFind;
+map1 = this.vwr.getSmilesMatcher ().getCorrelationMaps (sFind, this.vwr.ms.at, this.vwr.ms.ac, bs, iflags)[0];
+var m2 = this.vwr.getSmilesMatcher ().getCorrelationMaps (sFind, this.vwr.ms.at, this.vwr.ms.ac, bs2, iflags);
+if (m2.length > 0) {
+map =  Clazz.newIntArray (bs.length (), 0);
+for (var i = map.length; --i >= 0; ) map[i] = -1;
+
+map2 = m2[0];
+for (var i = map1.length; --i >= 0; ) map[map1[i]] = map2[i];
+
+mapNames =  Clazz.newArray (map1.length, 2, null);
+var bsAll = JU.BS.copy (bs);
+bsAll.or (bs2);
+var names = (itype == '?' ?  new Array (bsAll.length ()) : null);
+if (names != null) names = this.e.getCmdExt ().getBitsetIdentFull (bsAll, key, null, false, 2147483647, false, names);
+var at = this.vwr.ms.at;
+for (var pt = 0, i = bs.nextSetBit (0); i >= 0; i = bs.nextSetBit (i + 1)) {
+var j = map[i];
+if (j == -1) continue;
+var a;
+switch (itype) {
+case 'a':
+a =  Clazz.newArray (-1, [at[i].getAtomName (), at[j].getAtomName ()]);
+break;
+case 'i':
+a =  Clazz.newArray (-1, [Integer.$valueOf (at[i].getAtomNumber ()), Integer.$valueOf (at[j].getAtomNumber ())]);
+break;
+case 'D':
+a =  Clazz.newArray (-1, [Integer.$valueOf (i), Integer.$valueOf (j)]);
+break;
+default:
+a =  Clazz.newArray (-1, [names[i], names[j]]);
+break;
+}
+mapNames[pt++] = a;
+}
+}} catch (ee) {
+if (Clazz.exceptionOf (ee, Exception)) {
+err = ee.getMessage ();
+} else {
+throw ee;
+}
+}
+}var m =  new java.util.HashMap ();
+m.put ("BS1", bs);
+m.put ("BS2", bs2);
+m.put ("SMILES", sFind);
+if (err == null) {
+m.put ("SMILEStoBS1", map1);
+m.put ("SMILEStoBS2", map2);
+m.put ("BS1toBS2", map);
+m.put ("MAP1to2", mapNames);
+m.put ("key", key);
+} else {
+m.put ("error", err);
+}return mp.addXMap (m);
+}if (isSmiles || isSMARTS) {
+sFind = (args.length > 1 && args[1].tok == 10 ? this.vwr.getSmilesOpt (args[1].value, 0, 0, 0, flags) : flags);
+}flags = flags.toUpperCase ();
 var bsMatch3D = bs2;
 if (asBonds) {
 var map = this.vwr.getSmilesMatcher ().getCorrelationMaps (sFind, this.vwr.ms.at, this.vwr.ms.ac, bs, (isSmiles ? 1 : 2) | 8);
 ret = (map.length > 0 ? this.vwr.ms.getDihedralMap (map[0]) :  Clazz.newIntArray (0, 0));
 } else if (flags.equalsIgnoreCase ("map")) {
-var map = this.vwr.getSmilesMatcher ().getCorrelationMaps (sFind, this.vwr.ms.at, this.vwr.ms.ac, bs, (isSmiles ? 1 : 2) | 128);
+var map = this.vwr.getSmilesMatcher ().getCorrelationMaps (sFind, this.vwr.ms.at, this.vwr.ms.ac, bs, (isSmiles ? 1 : 2) | 128 | 16);
 ret = map;
-} else if (sFind.equalsIgnoreCase ("crystalClass")) {
-ret = this.vwr.ms.generateCrystalClass (bs.nextSetBit (0), (args.length != 2 ? null : argLast.tok == 10 ? this.vwr.ms.getAtomSetCenter (argLast.value) : JS.SV.ptValue (argLast)));
 } else {
 var smilesFlags = (isSmiles ? (flags.indexOf ("OPEN") >= 0 ? 5 : 1) : 2) | (isON && sFind.length == 0 ? 22020096 : 0);
 if (flags.indexOf ("/MOLECULE/") >= 0) {
@@ -995,15 +1102,25 @@ this.e.evalError (ex.getMessage (), null);
 throw ex;
 }
 }
-var isReverse = (flags.indexOf ("v") >= 0);
-var isCaseInsensitive = (flags.indexOf ("i") >= 0);
+var bs =  new JU.BS ();
+var svlist = (isList ? x1.getList () : null);
+if (isList && tok0 != 4 && tok0 != 0) {
+var v = args[0];
+for (var i = 0, n = svlist.size (); i < n; i++) {
+if (JS.SV.areEqual (svlist.get (i), v)) bs.set (i);
+}
+var ret =  Clazz.newIntArray (bs.cardinality (), 0);
+for (var pt = 0, i = bs.nextSetBit (0); i >= 0; i = bs.nextSetBit (i + 1)) ret[pt++] = i + 1;
+
+return mp.addXAI (ret);
+}var isReverse = (flags.indexOf ("v") >= 0);
+var isCaseInsensitive = (flags.indexOf ("i") >= 0) || isOff;
 var asMatch = (flags.indexOf ("m") >= 0);
 var checkEmpty = (sFind.length == 0);
 var isPattern = (!checkEmpty && args.length == 2);
 if (isList || isPattern) {
 var pm = (isPattern ? this.getPatternMatcher () : null);
 var pattern = null;
-var svlist = (isList ? x1.getList () : null);
 if (isPattern) {
 try {
 pattern = pm.compile (sFind, isCaseInsensitive);
@@ -1017,7 +1134,6 @@ throw ex;
 }var list = (checkEmpty ? null : JS.SV.strListValue (x1));
 var nlist = (checkEmpty ? svlist.size () : list.length);
 if (JU.Logger.debugging) JU.Logger.debug ("finding " + sFind);
-var bs =  new JU.BS ();
 var n = 0;
 var matcher = null;
 var v = (asMatch ?  new JU.Lst () : null);
@@ -1446,31 +1562,29 @@ throw e;
 }, "JS.ScriptMathProcessor,~A,~B");
 Clazz.defineMethod (c$, "evaluateMath", 
  function (mp, args, tok) {
-if (tok == 134217749) {
-if (args.length == 1 && args[0].tok == 4) return mp.addXStr (( new java.util.Date ()) + "\t" + JS.SV.sValue (args[0]));
-return mp.addXInt ((System.currentTimeMillis () & 0x7FFFFFFF) - (args.length == 0 ? 0 : args[0].asInt ()));
-}if (args.length != 1) return false;
-if (tok == 134218250) {
-if (args[0].tok == 2) return mp.addXInt (Math.abs (args[0].asInt ()));
-return mp.addXFloat (Math.abs (args[0].asFloat ()));
-}var x = JS.SV.fValue (args[0]);
+var x = JS.SV.fValue (args[0]);
 switch (tok) {
-case 134218242:
-return mp.addXFloat ((Math.acos (x) * 180 / 3.141592653589793));
-case 134218245:
-return mp.addXFloat (Math.cos (x * 3.141592653589793 / 180));
-case 134218244:
-return mp.addXFloat (Math.sin (x * 3.141592653589793 / 180));
 case 134218246:
-return mp.addXFloat (Math.sqrt (x));
+x = Math.sqrt (x);
+break;
+case 134218244:
+x = Math.sin (x * 3.141592653589793 / 180);
+break;
+case 134218245:
+x = Math.cos (x * 3.141592653589793 / 180);
+break;
+case 134218242:
+x = Math.acos (x) * 180 / 3.141592653589793;
+break;
 }
-return false;
+return mp.addXFloat (x);
 }, "JS.ScriptMathProcessor,~A,~N");
 Clazz.defineMethod (c$, "evaluateMeasure", 
  function (mp, args, tok) {
 var nPoints = 0;
 switch (tok) {
 case 1745489939:
+var property = null;
 var points =  new JU.Lst ();
 var rangeMinMax =  Clazz.newFloatArray (-1, [3.4028235E38, 3.4028235E38]);
 var strFormat = null;
@@ -1483,7 +1597,7 @@ var rd = null;
 var nBitSets = 0;
 var vdw = 3.4028235E38;
 var asMinArray = false;
-var asArray = false;
+var asFloatArray = false;
 for (var i = 0; i < args.length; i++) {
 switch (args[i].tok) {
 case 10:
@@ -1505,12 +1619,15 @@ rangeMinMax[rPt++ % 2] = JS.SV.fValue (args[i]);
 break;
 case 4:
 var s = JS.SV.sValue (args[i]);
-if (s.equalsIgnoreCase ("vdw") || s.equalsIgnoreCase ("vanderwaals")) vdw = (i + 1 < args.length && args[i + 1].tok == 2 ? args[++i].asInt () : 100) / 100;
+if (s.startsWith ("property_")) {
+property = s;
+break;
+}if (s.equalsIgnoreCase ("vdw") || s.equalsIgnoreCase ("vanderwaals")) vdw = (i + 1 < args.length && args[i + 1].tok == 2 ? args[++i].asInt () : 100) / 100;
  else if (s.equalsIgnoreCase ("notConnected")) isNotConnected = true;
  else if (s.equalsIgnoreCase ("connected")) isAllConnected = true;
  else if (s.equalsIgnoreCase ("minArray")) asMinArray = (nBitSets >= 1);
- else if (s.equalsIgnoreCase ("asArray")) asArray = (nBitSets >= 1);
- else if (JU.PT.isOneOf (s.toLowerCase (), ";nm;nanometers;pm;picometers;angstroms;ang;au;") || s.endsWith ("hz")) units = s.toLowerCase ();
+ else if (s.equalsIgnoreCase ("asArray") || s.length == 0) asFloatArray = (nBitSets >= 1);
+ else if (JM.Measurement.isUnits (s)) units = s.toLowerCase ();
  else strFormat = nPoints + ":" + s;
 break;
 default:
@@ -1521,7 +1638,8 @@ if (nPoints < 2 || nPoints > 4 || rPt > 2 || isNotConnected && isAllConnected) r
 if (isNull) return mp.addXStr ("");
 if (vdw != 3.4028235E38 && (nBitSets != 2 || nPoints != 2)) return mp.addXStr ("");
 rd = (vdw == 3.4028235E38 ?  new J.atomdata.RadiusData (rangeMinMax, 0, null, null) :  new J.atomdata.RadiusData (null, vdw, J.atomdata.RadiusData.EnumType.FACTOR, J.c.VDW.AUTO));
-return mp.addXObj ((this.vwr.newMeasurementData (null, points)).set (0, null, rd, strFormat, units, null, isAllConnected, isNotConnected, null, true, 0, 0, null).getMeasurements (asArray, asMinArray));
+var obj = (this.vwr.newMeasurementData (null, points)).set (0, null, rd, property, strFormat, units, null, isAllConnected, isNotConnected, null, true, 0, 0, null, NaN).getMeasurements (asFloatArray, asMinArray);
+return mp.addXObj (obj);
 case 134217729:
 if ((nPoints = args.length) != 3 && nPoints != 4) return false;
 break;
@@ -1580,7 +1698,7 @@ if (tok == 134219265 && args.length != 3 || tok == 134217763 && args.length != 2
 var pt1;
 var pt2;
 var pt3;
-var plane;
+var plane = JS.ScriptMathProcessor.planeValue (args[0]);
 var norm;
 var vTemp;
 switch (args.length) {
@@ -1590,23 +1708,21 @@ var bs = args[0].value;
 if (bs.cardinality () == 3) {
 var pts = this.vwr.ms.getAtomPointVector (bs);
 return mp.addXPt4 (JU.Measure.getPlaneThroughPoints (pts.get (0), pts.get (1), pts.get (2),  new JU.V3 (),  new JU.V3 (),  new JU.P4 ()));
-}}var pt = JU.Escape.uP (JS.SV.sValue (args[0]));
-if (Clazz.instanceOf (pt, JU.P4)) return mp.addXPt4 (pt);
-return mp.addXStr ("" + pt);
+}}return (plane != null && mp.addXPt4 (plane));
 case 2:
 if (tok == 134217763) {
-if (args[1].tok != 9) return false;
+var plane1 = JS.ScriptMathProcessor.planeValue (args[1]);
+if (plane1 == null) return false;
 pt3 =  new JU.P3 ();
 norm =  new JU.V3 ();
 vTemp =  new JU.V3 ();
-plane = args[1].value;
-if (args[0].tok == 9) {
-var list = JU.Measure.getIntersectionPP (args[0].value, plane);
+if (plane != null) {
+var list = JU.Measure.getIntersectionPP (plane, plane1);
 if (list == null) return mp.addXStr ("");
 return mp.addXList (list);
 }pt2 = mp.ptValue (args[0], null);
 if (pt2 == null) return mp.addXStr ("");
-return mp.addXPt (JU.Measure.getIntersection (pt2, null, plane, pt3, norm, vTemp));
+return mp.addXPt (JU.Measure.getIntersection (pt2, null, plane1, pt3, norm, vTemp));
 }case 3:
 case 4:
 switch (tok) {
@@ -1618,11 +1734,12 @@ pt2 = mp.ptValue (args[1], null);
 if (pt1 == null || pt2 == null) return mp.addXStr ("");
 var vLine = JU.V3.newV (pt2);
 vLine.normalize ();
-if (args[2].tok == 9) {
+var plane2 = JS.ScriptMathProcessor.planeValue (args[2]);
+if (plane2 != null) {
 pt3 =  new JU.P3 ();
 norm =  new JU.V3 ();
 vTemp =  new JU.V3 ();
-pt1 = JU.Measure.getIntersection (pt1, vLine, args[2].value, pt3, norm, vTemp);
+pt1 = JU.Measure.getIntersection (pt1, vLine, plane2, pt3, norm, vTemp);
 if (pt1 == null) return mp.addXStr ("");
 return mp.addXPt (pt1);
 }pt3 = mp.ptValue (args[2], null);
@@ -1710,8 +1827,29 @@ default:
 return false;
 case 1:
 if (args[0].tok == 3 || args[0].tok == 2) return mp.addXInt (args[0].asInt ());
-var s = JS.SV.sValue (args[0]);
-if (args[0].tok == 7) s = "{" + s + "}";
+var s = null;
+if (args[0].tok == 7) {
+var list = args[0].getList ();
+var len = list.size ();
+if (len == 0) {
+return false;
+}switch (list.get (0).tok) {
+case 2:
+case 3:
+break;
+case 4:
+s = list.get (0).value;
+if (!s.startsWith ("{") || Clazz.instanceOf (JU.Escape.uP (s), String)) {
+s = null;
+break;
+}var a =  new JU.Lst ();
+for (var i = 0; i < len; i++) {
+a.addLast (JS.SV.getVariable (JU.Escape.uP (JS.SV.sValue (list.get (i)))));
+}
+return mp.addXList (a);
+}
+s = "{" + JS.SV.sValue (args[0]) + "}";
+}if (s == null) s = JS.SV.sValue (args[0]);
 var pt = JU.Escape.uP (s);
 return (Clazz.instanceOf (pt, JU.P3) ? mp.addXPt (pt) : mp.addXStr ("" + pt));
 case 2:
@@ -1847,7 +1985,7 @@ var data2 = this.vwr.getAtomGroupQuaternions (args[1].value, 2147483647);
 qs = JU.Quat.div (data2, data1, nMax, isRelative);
 break;
 }}var pt1 = mp.ptValue (args[1], null);
-p4 = mp.planeValue (args[0]);
+p4 = JS.ScriptMathProcessor.planeValue (args[0]);
 if (pt1 != null) q = JU.Quat.getQuaternionFrame (JU.P3.new3 (0, 0, 0), pt0, pt1);
  else q = JU.Quat.newVA (pt0, JS.SV.fValue (args[1]));
 break;
@@ -1993,7 +2131,7 @@ var s = JS.SV.sValue (args[0]);
 var sb =  new JU.SB ();
 switch (tok) {
 case 134218759:
-return (args.length == 2 ? s.equalsIgnoreCase ("JSON") && mp.addXObj (this.vwr.parseJSONMap (JS.SV.sValue (args[1]))) : mp.addXObj (this.vwr.evaluateExpressionAsVariable (s)));
+return (args.length == 2 ? s.equalsIgnoreCase ("JSON") && mp.addXObj (this.vwr.parseJSON (JS.SV.sValue (args[1]))) : mp.addXObj (this.vwr.evaluateExpressionAsVariable (s)));
 case 134222850:
 var appID = (args.length == 2 ? JS.SV.sValue (args[1]) : ".");
 if (!appID.equals (".")) sb.append (this.vwr.jsEval (appID + "\1" + s));
@@ -2165,7 +2303,6 @@ return (bsAtoms != null && !bsAtoms.isEmpty () && apt == args.length && mp.addXO
 }, "JS.ScriptMathProcessor,~A,~B");
 Clazz.defineMethod (c$, "evaluateTensor", 
  function (mp, args) {
-System.out.println (args[1].tok + " " + 1275068445);
 var isTensor = (args.length == 2 && args[1].tok == 1275068445);
 var x = (isTensor ? null : mp.getX ());
 if (args.length > 2 || !isTensor && x.tok != 10) return false;
@@ -2409,7 +2546,7 @@ params.put ("outputChannel", oc);
 this.vwr.createZip (null, type, params);
 var bis = JU.Rdr.getBIS (oc.toByteArray ());
 params =  new java.util.Hashtable ();
-this.vwr.getJzt ().readFileAsMap (bis, params, null);
+this.vwr.readFileAsMap (bis, params, null);
 return mp.addXMap (params);
 }break;
 }
@@ -2459,6 +2596,7 @@ ndata = sv.size ();
 if (ndata == 0) {
 if (tok != 1275068437) break;
 } else {
+if (tok != 1275068437) {
 var sv0 = sv.get (0);
 if (sv0.tok == 8) return this.getMinMaxPoint (sv, tok);
 if (sv0.tok == 4 && (sv0.value).startsWith ("{")) {
@@ -2466,7 +2604,7 @@ var pt = JS.SV.ptValue (sv0);
 if (Clazz.instanceOf (pt, JU.P3)) return this.getMinMaxPoint (sv, tok);
 if (Clazz.instanceOf (pt, JU.P4)) return this.getMinMaxQuaternion (sv, tok);
 break;
-}}} else {
+}}}} else {
 break;
 }var sum;
 var minMax;
@@ -2670,4 +2808,5 @@ if (bs.equals (bsA)) bsB.andNot (bsA);
  else if (bs.equals (bsB)) bsA.andNot (bsB);
 }}return bsB;
 }, "JU.BS,JU.BS,~B,~N,J.atomdata.RadiusData,~B");
+c$.t0 = c$.prototype.t0 = System.currentTimeMillis ();
 });

@@ -1018,6 +1018,10 @@ function (x1, x2) {
 if (x1 == null || x2 == null) return false;
 if (x1.tok == x2.tok) {
 switch (x1.tok) {
+case 2:
+if (x2.tok == 2) {
+return x1.intValue == x2.intValue;
+}break;
 case 4:
 return (x1.value).equalsIgnoreCase (x2.value);
 case 10:
@@ -1112,9 +1116,32 @@ for (var i = sv.size (); --i >= 0; ) list[i] = JS.SV.sValue (sv.get (i));
 
 return list;
 }, "JS.T");
+c$.getArrayDepth = Clazz.defineMethod (c$, "getArrayDepth", 
+function (x) {
+var n = 0;
+var sv;
+while (x.tok == 7 && (sv = (x).getList ()).size () > 0) {
+n++;
+x = sv.get (0);
+}
+return n;
+}, "JS.T");
+c$.fflistValue = Clazz.defineMethod (c$, "fflistValue", 
+function (x, nMin) {
+if (x.tok != 7) {
+return  Clazz.newArray (-1, [ Clazz.newFloatArray (-1, [JS.SV.fValue (x)])]);
+}var sv = (x).getList ();
+var svlen = sv.size ();
+var list;
+list = JU.AU.newFloat2 (svlen);
+if (nMin == 0) nMin = list.length;
+for (var i = list.length; --i >= 0; ) list[i] = JS.SV.flistValue (i >= svlen ? null : sv.get (i), 0);
+
+return list;
+}, "JS.T,~N");
 c$.flistValue = Clazz.defineMethod (c$, "flistValue", 
 function (x, nMin) {
-if (x.tok != 7) return  Clazz.newFloatArray (-1, [JS.SV.fValue (x)]);
+if (x == null || x.tok != 7) return  Clazz.newFloatArray (-1, [JS.SV.fValue (x)]);
 var sv = (x).getList ();
 var list;
 list =  Clazz.newFloatArray (Math.max (nMin, sv.size ()), 0);
@@ -1337,6 +1364,8 @@ var d = JS.SV.fValue (b);
 return (c < d ? -1 : c > d ? 1 : 0);
 }if (a.tok == 4 || b.tok == 4) return JS.SV.sValue (a).compareTo (JS.SV.sValue (b));
 }switch (a.tok) {
+case 2:
+return (a.intValue < b.intValue ? -1 : a.intValue > b.intValue ? 1 : 0);
 case 4:
 return JS.SV.sValue (a).compareTo (JS.SV.sValue (b));
 case 7:

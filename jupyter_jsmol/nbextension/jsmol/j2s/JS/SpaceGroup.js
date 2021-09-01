@@ -164,6 +164,7 @@ return sg.dumpInfoObj ();
 }var sb =  new JU.SB ();
 while (sg != null) {
 sb.append (sg.dumpInfo ());
+if (sg.index >= JS.SpaceGroup.SG.length) break;
 sg = JS.SpaceGroup.determineSpaceGroupNS (spaceGroup, sg);
 }
 return sb.toString ();
@@ -637,6 +638,13 @@ this.name = name;
 if (name != null && name.startsWith ("HM:")) {
 this.setHMSymbol (name.substring (3));
 }}, "~S");
+Clazz.defineMethod (c$, "getRawOperation", 
+function (i) {
+var op =  new JS.SymmetryOperation (null, null, 0, 0, false);
+op.setMatrixFromXYZ (this.operations[i].xyzOriginal, 0, false);
+op.doFinalize ();
+return op;
+}, "~N");
 Clazz.defineStatics (c$,
 "canonicalSeitzList", null,
 "NAME_UNK", 0,

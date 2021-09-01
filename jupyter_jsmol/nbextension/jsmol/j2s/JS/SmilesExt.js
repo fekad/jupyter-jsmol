@@ -78,9 +78,9 @@ return 0;
 }, "JU.BS,JU.BS,~S,JU.Lst,JU.Lst,JU.M4,JU.Lst,~B,~A,JU.P3,~B,~N");
 Clazz.defineMethod (c$, "getSmilesMatches", 
 function (pattern, smiles, bsSelected, bsMatch3D, flags, asOneBitset, firstMatchOnly) {
-if (pattern.length == 0 || pattern.endsWith ("///") || pattern.equals ("H") || pattern.equals ("top") || pattern.equalsIgnoreCase ("NOAROMATIC")) {
+if (pattern.length == 0 || pattern.endsWith ("///") || pattern.equals ("H") || pattern.equals ("H2") || pattern.equals ("top") || pattern.equalsIgnoreCase ("NOAROMATIC")) {
 try {
-return this.e.vwr.getSmilesOpt (bsSelected, 0, 0, flags | (pattern.equals ("H") ? 4096 : 0) | (pattern.equals ("top") ? 8192 : 0) | (pattern.equalsIgnoreCase ("NOAROMATIC") ? 16 : 0), (pattern.endsWith ("///") ? pattern : null));
+return this.e.vwr.getSmilesOpt (bsSelected, 0, 0, flags | (pattern.equals ("H2") ? 8192 : 0) | (pattern.equals ("H") ? 4096 : 0) | (pattern.equals ("top") ? 16384 : 0) | (pattern.equalsIgnoreCase ("NOAROMATIC") ? 16 : 0), (pattern.endsWith ("///") ? pattern : null));
 } catch (ex) {
 if (Clazz.exceptionOf (ex, Exception)) {
 this.e.evalError (ex.getMessage (), null);

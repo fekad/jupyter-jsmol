@@ -1014,6 +1014,10 @@ Clazz_overrideMethod (c$, "getSpaceGroupOperation",
 function (i) {
 return (this.spaceGroup == null || this.spaceGroup.operations == null || i >= this.spaceGroup.operations.length ? null : this.spaceGroup.finalOperations == null ? this.spaceGroup.operations[i] : this.spaceGroup.finalOperations[i]);
 }, "~N");
+Clazz_overrideMethod (c$, "getSpaceGroupOperationRaw", 
+function (i) {
+return this.spaceGroup.getRawOperation (i);
+}, "~N");
 Clazz_overrideMethod (c$, "getSpaceGroupXyz", 
 function (i, doNormalize) {
 return this.spaceGroup.getXyz (i, doNormalize);
@@ -2389,6 +2393,7 @@ return sg.dumpInfoObj ();
 }var sb =  new JU.SB ();
 while (sg != null) {
 sb.append (sg.dumpInfo ());
+if (sg.index >= JS.SpaceGroup.SG.length) break;
 sg = JS.SpaceGroup.determineSpaceGroupNS (spaceGroup, sg);
 }
 return sb.toString ();
@@ -2862,6 +2867,13 @@ this.name = name;
 if (name != null && name.startsWith ("HM:")) {
 this.setHMSymbol (name.substring (3));
 }}, "~S");
+Clazz_defineMethod (c$, "getRawOperation", 
+function (i) {
+var op =  new JS.SymmetryOperation (null, null, 0, 0, false);
+op.setMatrixFromXYZ (this.operations[i].xyzOriginal, 0, false);
+op.doFinalize ();
+return op;
+}, "~N");
 Clazz_defineStatics (c$,
 "canonicalSeitzList", null,
 "NAME_UNK", 0,

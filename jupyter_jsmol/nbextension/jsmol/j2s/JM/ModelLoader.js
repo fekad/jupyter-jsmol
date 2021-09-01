@@ -13,6 +13,7 @@ this.specialAtomIndexes = null;
 this.someModelsHaveUnitcells = false;
 this.someModelsAreModulated = false;
 this.is2D = false;
+this.isMOL2D = false;
 this.isMutate = false;
 this.isTrajectory = false;
 this.isPyMOLsession = false;
@@ -114,6 +115,7 @@ this.modulationOn = true;
 this.modulationTUV = (mod === Boolean.TRUE ? null : mod);
 }this.noAutoBond = this.ms.getMSInfoB ("noAutoBond");
 this.is2D = this.ms.getMSInfoB ("is2D");
+this.isMOL2D = (info != null && "2D".equals (info.get ("dimension")));
 this.doMinimize = this.is2D && this.ms.getMSInfoB ("doMinimize");
 this.adapterTrajectoryCount = (this.isTrajectory ? this.ms.trajectory.steps.size () : 0);
 this.ms.someModelsHaveSymmetry = this.ms.getMSInfoB ("someModelsHaveSymmetry");
@@ -622,7 +624,7 @@ var isNear = (order == 1025);
 var isFar = (order == 1041);
 var bond;
 if (isNear || isFar) {
-bond = this.ms.bondMutually (atom1, atom2, (this.is2D ? order : 1), this.ms.getDefaultMadFromOrder (1), 0);
+bond = this.ms.bondMutually (atom1, atom2, (this.isMOL2D ? order : 1), this.ms.getDefaultMadFromOrder (1), 0);
 if (this.vStereo == null) {
 this.vStereo =  new JU.Lst ();
 }this.vStereo.addLast (bond);
@@ -804,6 +806,7 @@ this.ms.elementsPresent[this.ms.at[i].mi].set (n);
 });
 Clazz.defineMethod (c$, "applyStereochemistry", 
  function () {
+this.set2DLengths (this.baseAtomIndex, this.ms.ac);
 this.set2dZ (this.baseAtomIndex, this.ms.ac);
 if (this.vStereo != null) {
 var bsToTest =  new JU.BS ();
@@ -823,6 +826,28 @@ b.atom2.y = (b.atom1.y + b.atom2.y) / 2;
 this.vStereo = null;
 }this.is2D = false;
 });
+Clazz.defineMethod (c$, "set2DLengths", 
+ function (iatom1, iatom2) {
+var scaling = 0;
+var n = 0;
+for (var i = iatom1; i < iatom2; i++) {
+var a = this.ms.at[i];
+var bonds = a.bonds;
+if (bonds == null) continue;
+for (var j = bonds.length; --j >= 0; ) {
+if (bonds[j] == null) continue;
+var b = bonds[j].getOtherAtom (a);
+if (b.getAtomNumber () != 1 && b.getIndex () > i) {
+scaling += b.distance (a);
+n++;
+}}
+}
+if (n == 0) return;
+scaling = 1.45 / (scaling / n);
+for (var i = iatom1; i < iatom2; i++) {
+this.ms.at[i].scale (scaling);
+}
+}, "~N,~N");
 Clazz.defineMethod (c$, "set2dZ", 
  function (iatom1, iatom2) {
 var atomlist = JU.BS.newN (iatom2);
@@ -869,7 +894,7 @@ v.z = 0;
 v.normalize ();
 v1.cross (v0, v);
 var theta = Math.acos (v.dot (v0));
-atom2.z = atomRef.z + (0.8 * Math.sin (4 * theta));
+atom2.z = atomRef.z + (0.4 * Math.sin (4 * theta));
 }, "JM.Atom,JM.Atom,JU.V3,JU.V3,JU.V3");
 Clazz.defineMethod (c$, "finalizeShapes", 
  function () {

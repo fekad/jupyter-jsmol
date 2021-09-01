@@ -293,7 +293,9 @@ if (this.qlist100 == null) {
 this.qlist100 =  Clazz.newDoubleArray (this.modDim, 0);
 this.qlist100[0] = 1;
 }return this.qlist100;
-}return this.getMod ("F_coefs_" + fn);
+}var p = this.getMod ("F_coefs_" + fn);
+if (p == null) p = this.getMod ("F_" + fn + "_coefs_");
+return p;
 }, "~S");
 Clazz.overrideMethod (c$, "getModType", 
 function (key) {

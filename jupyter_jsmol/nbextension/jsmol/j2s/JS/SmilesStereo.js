@@ -145,9 +145,9 @@ throw e;
 return true;
 }, "JS.SmilesAtom");
 Clazz.defineMethod (c$, "setTopoCoordinates", 
-function (atom, sAtom, sAtom2, cAtoms) {
-var chClass = atom.stereo.chiralClass;
-var chiralOrder = atom.stereo.chiralOrder;
+function (atom, sAtom, sAtom2, cAtoms, isNot) {
+var chiralOrder = (atom.stereo == null ? 0 : atom.stereo.chiralOrder);
+var chClass = (atom.stereo == null ? 1 : atom.stereo.chiralClass);
 atom.set (0, 0, 0);
 var map;
 if (this.jmolAtoms == null) {
@@ -156,10 +156,14 @@ map =  Clazz.newIntArray (-1, [0, 1, 2, 3]);
 atom = this.jmolAtoms[sAtom.getMatchingAtomIndex ()];
 atom.set (0, 0, 0);
 var a2 = (chClass == 2 ? this.jmolAtoms[sAtom2.getMatchingAtomIndex ()] : null);
-map = this.getMappedTopoAtoms (atom, a2, cAtoms);
+map = this.getMappedTopoAtoms (atom, a2, cAtoms, chiralOrder == 0 ?  Clazz.newIntArray (cAtoms.length, 0) : null);
 }var pt;
 switch (chClass) {
 case 1:
+var a = 6.283185307179586 / cAtoms.length;
+for (var i = cAtoms.length; --i >= 0; ) {
+cAtoms[map[i]].set ((Math.cos (i * a)), Math.sin (i * a), isNot ? 1 : -1);
+}
 break;
 case 2:
 case 4:
@@ -241,10 +245,10 @@ default:
 return false;
 }
 return true;
-}, "JS.SmilesAtom,JS.SmilesAtom,JS.SmilesAtom,~A");
+}, "JS.SmilesAtom,JS.SmilesAtom,JS.SmilesAtom,~A,~B");
 Clazz.defineMethod (c$, "getMappedTopoAtoms", 
- function (atom, a2, cAtoms) {
-var map =  Clazz.newIntArray (cAtoms[4] == null ? 4 : cAtoms[5] == null ? 5 : 6, 0);
+ function (atom, a2, cAtoms, map) {
+if (map == null) map =  Clazz.newIntArray (cAtoms[4] == null ? 4 : cAtoms[5] == null ? 5 : 6, 0);
 for (var i = 0; i < map.length; i++) {
 map[i] = (cAtoms[i] == null ? 10004 + i * 10000 : cAtoms[i].getIndex ());
 }
@@ -259,7 +263,7 @@ for (var i = 0; i < map.length; i++) {
 map[i] = map[i] % 10;
 }
 return map;
-}, "JS.SmilesAtom,JS.SmilesAtom,~A");
+}, "JS.SmilesAtom,JS.SmilesAtom,~A,~A");
 c$.getTopoMapPt = Clazz.defineMethod (c$, "getTopoMapPt", 
  function (map, i, atom, cAtom, bonds, n000) {
 if (cAtom.index == -2147483648) {
@@ -307,7 +311,7 @@ var invertStereochemistry = search.invertStereochemistry;
 if (JU.Logger.debugging) JU.Logger.debug ("checking stereochemistry...");
 for (var i = 0; i < search.ac; i++) {
 var pAtom = search.patternAtoms[i];
-if (pAtom.stereo == null) continue;
+if (pAtom.stereo == null && search.polyhedronStereo == null) continue;
 var isNot = (pAtom.not != invertStereochemistry);
 var atom0 = pAtom.getMatchingAtom ();
 switch (this.checkStereoForAtom (pAtom, atom0, isNot, haveTopo)) {
@@ -334,14 +338,22 @@ var sAtom0 = null;
 var jn;
 if (haveTopo) sAtom0 = atom0;
 var nH = Math.max (pAtom.explicitHydrogenCount, 0);
-var order = pAtom.stereo.chiralOrder;
-var chiralClass = pAtom.stereo.chiralClass;
-if (haveTopo && sAtom0.getChiralClass () != chiralClass) return -1;
+var order = (pAtom.stereo == null ? 0 : pAtom.stereo.chiralOrder);
+var chiralClass = (pAtom.stereo == null ? 1 : pAtom.stereo.chiralClass);
+if (haveTopo && this.chiralOrder != 0 && sAtom0.getChiralClass () != chiralClass) return -1;
 if (JU.Logger.debugging) JU.Logger.debug ("...type " + chiralClass + " for pattern atom \n " + pAtom + "\n " + atom0);
 switch (chiralClass) {
 case 1:
+if (pAtom.bondCount == 0) {
+this.search.polyhedronStereo = pAtom.stereo;
+return 0;
+}if (this.chiralOrder == 0) {
+var atoms12N =  new Array (pAtom.bondCount);
+for (var i = 0; i < atoms12N.length; i++) atoms12N[i] = this.getJmolAtom (pAtom.getMatchingBondedAtom (i));
+
+return (haveTopo && !this.setTopoCoordinates (sAtom0, pAtom, null, atoms12N, this.search.polyhedronStereo.isNot ? !isNot : isNot) || !this.checkPolyHedralWinding (pAtom, atoms12N) ? -1 : 0);
+}if (nH > 1) return 0;
 if (pAtom.stereo.isNot) isNot = !isNot;
-if (nH > 1 || pAtom.bondCount == 0) return 0;
 if (haveTopo) {
 return 0;
 }var bonds = pAtom.bonds;
@@ -387,7 +399,7 @@ return 0;
 case 2:
 jn = this.getAlleneAtoms (pAtom, null);
 if (jn == null) return 0;
-if (haveTopo && !this.setTopoCoordinates (sAtom0, pAtom, pAtom2, jn)) return -1;
+if (haveTopo && !this.setTopoCoordinates (sAtom0, pAtom, pAtom2, jn, false)) return -1;
 if (!JS.SmilesStereo.checkStereochemistryAll (isNot, atom0, chiralClass, order, jn[0], jn[1], jn[2], jn[3], null, null, this.v)) return -1;
 return 0;
 case 8:
@@ -416,12 +428,18 @@ atom3 = this.getJmolAtom (pAtom.getMatchingBondedAtom (2 - nH));
 atom4 = this.getJmolAtom (pAtom.getMatchingBondedAtom (3 - nH));
 atom5 = this.getJmolAtom (pAtom.getMatchingBondedAtom (4 - nH));
 atom6 = this.getJmolAtom (pAtom.getMatchingBondedAtom (5 - nH));
-if (haveTopo && !this.setTopoCoordinates (sAtom0, pAtom, null,  Clazz.newArray (-1, [atom1, atom2, atom3, atom4, atom5, atom6]))) return -1;
+if (haveTopo && !this.setTopoCoordinates (sAtom0, pAtom, null,  Clazz.newArray (-1, [atom1, atom2, atom3, atom4, atom5, atom6]), false)) return -1;
 if (!JS.SmilesStereo.checkStereochemistryAll (isNot, atom0, chiralClass, order, atom1, atom2, atom3, atom4, atom5, atom6, this.v)) return -1;
 return 0;
 }
 return 0;
 }, "JS.SmilesAtom,JU.Node,~B,~B");
+Clazz.defineMethod (c$, "checkPolyHedralWinding", 
+ function (a0, a) {
+for (var i = 0; i < a.length - 2; i++) if (JS.SmilesStereo.getHandedness (a[i], a[i + 1], a[i + 2], a0, this.v) != 1) return false;
+
+return true;
+}, "JU.Node,~A");
 Clazz.defineMethod (c$, "getAlleneAtoms", 
 function (pAtom, pAtom1) {
 if (pAtom1 == null) pAtom1 = pAtom.getBond (0).getOtherAtom (pAtom);
@@ -493,7 +511,7 @@ v.scaleAdd2 (2, pAtom.getMatchingAtom (), v);
 (jn[k]).setT (v);
 }, "JS.SmilesAtom,~A,~N");
 c$.getStereoFlag = Clazz.defineMethod (c$, "getStereoFlag", 
-function (atom0, atoms, nAtoms, v) {
+function (atom0, atoms, nAtoms, v, is2D) {
 var atom1 = atoms[0];
 var atom2 = atoms[1];
 var atom3 = atoms[2];
@@ -511,6 +529,7 @@ case 4:
 if (atom3 == null || atom4 == null) return "";
 var d = JU.Measure.getNormalThroughPoints (atom1, atom2, atom3, v.vTemp, v.vA);
 if (Math.abs (JU.Measure.distanceToPlaneV (v.vTemp, d, atom4)) < 0.2) {
+if (is2D) return "";
 chiralClass = 7;
 if (JS.SmilesStereo.checkStereochemistryAll (false, atom0, chiralClass, 1, atom1, atom2, atom3, atom4, atom5, atom6, v)) return "@SP1";
 if (JS.SmilesStereo.checkStereochemistryAll (false, atom0, chiralClass, 2, atom1, atom2, atom3, atom4, atom5, atom6, v)) return "@SP2";
@@ -519,7 +538,7 @@ if (JS.SmilesStereo.checkStereochemistryAll (false, atom0, chiralClass, 3, atom1
 return (JS.SmilesStereo.checkStereochemistryAll (false, atom0, chiralClass, 1, atom1, atom2, atom3, atom4, atom5, atom6, v) ? "@" : "@@");
 }}
 return "";
-}, "JU.SimpleNode,~A,~N,JS.VTemp");
+}, "JU.SimpleNode,~A,~N,JS.VTemp,~B");
 c$.checkStereochemistryAll = Clazz.defineMethod (c$, "checkStereochemistryAll", 
  function (isNot, atom0, chiralClass, order, atom1, atom2, atom3, atom4, atom5, atom6, v) {
 switch (chiralClass) {
@@ -627,6 +646,9 @@ atomCount = n;
 if (pt < len && pattern.charAt (pt) == '(') {
 details = JS.SmilesParser.getSubPattern (pattern, pt, '(');
 pt += details.length + 2;
+} else if (pt < len && pattern.charAt (pt) == '@') {
+details = "@";
+pt++;
 }if (pt < len && pattern.charAt (pt) == '/') {
 directives = JS.SmilesParser.getSubPattern (pattern, pt, '/');
 pt += directives.length + 2;
@@ -652,7 +674,11 @@ Clazz.defineMethod (c$, "getPolyhedralOrders",
  function () {
 var po = this.polyhedralOrders = JU.AU.newInt2 (this.atomCount);
 if (this.details == null) return;
-var temp =  Clazz.newIntArray (this.details.length, 0);
+if (this.details.length > 0 && this.details.charAt (0) == '@') this.details = "!" + this.details.substring (1);
+if (this.details.length == 0 || this.details.equals ("!")) {
+for (var i = 2; i <= this.atomCount; i++) this.details += (i < 10 ? i : "%" + i);
+
+}var temp =  Clazz.newIntArray (this.details.length, 0);
 var ret =  Clazz.newIntArray (1, 0);
 var msg = null;
 var pt = 0;
@@ -693,7 +719,12 @@ if (msg != null) {
 msg += ": " + s.substring (0, index) + "<<";
 throw  new JS.InvalidSmilesException (msg);
 }} while (index < len);
+return;
 });
+c$.getAtropicStereoFlag = Clazz.defineMethod (c$, "getAtropicStereoFlag", 
+function (nodes) {
+return (JU.Measure.computeTorsion (nodes[0], nodes[1], nodes[2], nodes[3], true) < 0 ? 1 : -1);
+}, "~A");
 Clazz.defineStatics (c$,
 "DEFAULT", 0,
 "POLYHEDRAL", 1,

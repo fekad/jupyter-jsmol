@@ -43,7 +43,9 @@ Clazz.defineMethod (c$, "getShapeIdFromObjectName",
 function (objectName) {
 if (this.shapes != null) for (var i = 16; i < 30; ++i) if (this.shapes[i] != null && this.shapes[i].getIndexFromName (objectName) >= 0) return i;
 
-return -1;
+if (this.shapes[6] != null && this.shapes[6].getIndexFromName (objectName) >= 0) {
+return 6;
+}return -1;
 }, "~S");
 Clazz.defineMethod (c$, "loadDefaultShapes", 
 function (newModelSet) {

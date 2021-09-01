@@ -1847,7 +1847,7 @@ this.type = type;
 this.vectorProjection =  new JU.V3 ();
 this.monomerIndexFirst = monomerIndex;
 this.addMonomer (monomerIndex + monomerCount - 1);
-if (JU.Logger.debugging) JU.Logger.info ("Creating ProteinStructure " + this.strucNo + " " + type.getBioStructureTypeName (false) + " from " + this.monomerIndexFirst + " through " + this.monomerIndexLast + " in polymer " + apolymer);
+if (JU.Logger.debugging) JU.Logger.info ("Creating ProteinStructure " + this.strucNo + " " + type.getBioStructureTypeName (false) + " from " + apolymer.monomers[this.monomerIndexFirst] + " through " + apolymer.monomers[this.monomerIndexLast] + " in polymer " + apolymer);
 }, "JM.AlphaPolymer,J.c.STR,~N,~N");
 Clazz_defineMethod (c$, "addMonomer", 
 function (index) {
@@ -2267,10 +2267,13 @@ var previousVectorC = null;
 for (var i = 1; i < this.monomerCount; ++i) {
 vectorA.sub2 (this.leadMidpoints[i], this.leadPoints[i]);
 vectorB.sub2 (this.leadPoints[i], this.leadMidpoints[i + 1]);
+if (vectorB.length () == 0) {
+vectorC = previousVectorC;
+} else {
 vectorC.cross (vectorA, vectorB);
 vectorC.normalize ();
 if (previousVectorC != null && previousVectorC.angle (vectorC) > 1.5707963267948966) vectorC.scale (-1);
-previousVectorC = this.wingVectors[i] = JU.V3.newV (vectorC);
+}previousVectorC = this.wingVectors[i] = JU.V3.newV (vectorC);
 }
 }}this.wingVectors[0] = this.wingVectors[1];
 this.wingVectors[this.monomerCount] = this.wingVectors[this.monomerCount - 1];
@@ -2376,6 +2379,10 @@ return this.type;
 Clazz_defineMethod (c$, "isCyclic", 
 function () {
 return ((this.cyclicFlag == 0 ? (this.cyclicFlag = (this.monomerCount >= 4 && this.monomers[0].isConnectedAfter (this.monomers[this.monomerCount - 1])) ? 1 : -1) : this.cyclicFlag) == 1);
+});
+Clazz_overrideMethod (c$, "toString", 
+function () {
+return "[Polymer type " + this.type + " n=" + this.monomerCount + " " + (this.monomerCount > 0 ? this.monomers[0] + " " + this.monomers[this.monomerCount - 1] : "") + "]";
 });
 Clazz_defineStatics (c$,
 "TYPE_NOBONDING", 0,
@@ -3985,6 +3992,7 @@ this.htBondMap = null;
 this.htGroupBonds = null;
 this.hNames = null;
 this.baseBondIndex = 0;
+this.hasCONECT = false;
 this.bsAssigned = null;
 Clazz_instantialize (this, arguments);
 }, JM, "BioResolver", null, java.util.Comparator);
@@ -4009,6 +4017,7 @@ JM.Group.specialAtomNames = JM.BioResolver.specialAtomNames;
 this.ms = modelLoader.ms;
 this.vwr = modelLoader.ms.vwr;
 modelLoader.specialAtomIndexes =  Clazz_newIntArray (JM.BioResolver.ATOMID_MAX, 0);
+this.hasCONECT = (this.ms.getInfoM ("someModelsHaveCONECT") === Boolean.TRUE);
 }return this;
 }, "JM.ModelLoader");
 Clazz_defineMethod (c$, "setViewer", 
@@ -4069,7 +4078,7 @@ Clazz_defineMethod (c$, "addImplicitHydrogenAtoms",
 function (adapter, iGroup, nH) {
 var group3 = this.ml.getGroup3 (iGroup);
 var nH1;
-if (this.haveHsAlready || group3 == null || (nH1 = JM.BioResolver.getStandardPdbHydrogenCount (group3)) == 0) return;
+if (this.haveHsAlready && this.hasCONECT || group3 == null || (nH1 = JM.BioResolver.getStandardPdbHydrogenCount (group3)) == 0) return;
 nH = (nH1 < 0 ? -1 : nH1 + nH);
 var model = null;
 var iFirst = this.ml.getFirstAtomIndex (iGroup);
@@ -4082,6 +4091,7 @@ nH = adapter.getHydrogenAtomCount (model);
 if (nH < 1) return;
 }this.getBondInfo (adapter, group3, model);
 this.ms.am[this.ms.at[iFirst].mi].isPdbWithMultipleBonds = true;
+if (this.haveHsAlready) return;
 this.bsAtomsForHs.setBits (iFirst, ac);
 this.bsAddedHydrogens.setBits (ac, ac + nH);
 var isHetero = this.ms.at[iFirst].isHetero ();
@@ -4175,7 +4185,7 @@ if (this.bsAddedHydrogens.nextSetBit (0) < 0) return;
 this.bsAddedMask = JU.BSUtil.copy (this.bsAddedHydrogens);
 this.finalizePdbCharges ();
 var nTotal =  Clazz_newIntArray (1, 0);
-var pts = this.ms.calculateHydrogens (this.bsAtomsForHs, nTotal, true, false, null);
+var pts = this.ms.calculateHydrogens (this.bsAtomsForHs, nTotal, null, 256);
 var groupLast = null;
 var ipt = 0;
 for (var i = 0; i < pts.length; i++) {
@@ -6495,7 +6505,7 @@ this.wireframeOnly = TF;
 TF = (this.isExport || !this.wireframeOnly && this.vwr.getBoolean (603979864));
 if (TF != this.isHighRes) this.invalidateMesh = true;
 this.isHighRes = TF;
-TF = !this.wireframeOnly && (this.vwr.getBoolean (603979817) || this.isExport);
+TF = !this.wireframeOnly && (this.vwr.getBoolean (603979816) || this.isExport);
 if (this.cartoonsFancy != TF) {
 this.invalidateMesh = true;
 this.cartoonsFancy = TF;
@@ -6665,7 +6675,7 @@ if (!thisTypeOnly || this.structureTypes[i] === this.structureTypes[this.iNext])
 this.diameterMid = Clazz_floatToInt (this.vwr.tm.scaleToScreen (this.monomers[i].getLeadAtom ().sZ, this.madMid));
 this.diameterEnd = Clazz_floatToInt (this.vwr.tm.scaleToScreen (Clazz_floatToInt (this.controlPointScreens[this.iNext].z), this.madEnd));
 var doCap0 = (i == this.iPrev || !this.bsVisible.get (this.iPrev) || thisTypeOnly && this.structureTypes[i] !== this.structureTypes[this.iPrev]);
-var doCap1 = (this.iNext == this.iNext2 || !this.bsVisible.get (this.iNext) || thisTypeOnly && this.structureTypes[i] !== this.structureTypes[this.iNext]);
+var doCap1 = (this.iNext == this.iNext2 || this.iNext2 == this.iNext3 || !this.bsVisible.get (this.iNext) || thisTypeOnly && this.structureTypes[i] !== this.structureTypes[this.iNext]);
 return (this.aspectRatio > 0 && this.meshRenderer != null && this.meshRenderer.check (doCap0, doCap1));
 }, "~N,~B");
 Clazz_defineMethod (c$, "renderHermiteCylinder", 
@@ -6909,7 +6919,7 @@ if (this.nucleicRenderer == null) this.nucleicRenderer = J.api.Interface.getInte
 this.calcScreenControlPoints ();
 this.nucleicRenderer.renderNucleic (this);
 return;
-}var val = this.vwr.getBoolean (603979820);
+}var val = this.vwr.getBoolean (603979819);
 if (this.helixRockets != val) {
 bioShape.falsifyMesh ();
 this.helixRockets = val;

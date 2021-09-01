@@ -193,7 +193,7 @@ function jmolInitialize(codebaseDirectory, fileNameOrUseSignedApplet) {
 }
 
 function jmolSetDocument(doc) {
-	_jmol.currentDocument = doc;
+	_jmol.currentDocument = Jmol._document = doc;
 }
 
 function jmolSetAppletColor(boxbgcolor, boxfgcolor, progresscolor) {

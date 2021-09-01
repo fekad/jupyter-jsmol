@@ -1,5 +1,5 @@
 Clazz.declarePackage ("JM");
-Clazz.load (["JU.V3"], "JM.AtomCollection", ["java.lang.Float", "java.util.Arrays", "$.Hashtable", "JU.A4", "$.AU", "$.BS", "$.Lst", "$.M3", "$.Measure", "$.P3", "$.PT", "J.api.Interface", "$.JmolModulationSet", "J.atomdata.RadiusData", "J.c.PAL", "$.VDW", "JM.Group", "JS.T", "JU.BSUtil", "$.Elements", "$.Escape", "$.Logger", "$.Parser", "$.Vibration"], function () {
+Clazz.load (["JU.V3"], "JM.AtomCollection", ["java.lang.Float", "java.util.Arrays", "$.Hashtable", "JU.A4", "$.AU", "$.BS", "$.Lst", "$.M3", "$.Measure", "$.P3", "$.PT", "J.api.Interface", "$.JmolModulationSet", "J.atomdata.RadiusData", "J.c.PAL", "$.VDW", "JM.Group", "JS.T", "JU.BSUtil", "$.Elements", "$.Logger", "$.Parser", "$.Vibration"], function () {
 c$ = Clazz.decorateAsClass (function () {
 this.vwr = null;
 this.g3d = null;
@@ -284,9 +284,7 @@ this.surfaceDistance100s[i] = 0;
 var dMin = 3.4028235E38;
 var atom = this.at[i];
 for (var j = points.length; --j >= 0; ) {
-var d = Math.abs (points[j].distance (atom) - radiusAdjust);
-if (d < 0 && JU.Logger.debugging) JU.Logger.debug ("draw d" + j + " " + JU.Escape.eP (points[j]) + " \"" + d + " ? " + atom.getInfo () + "\"");
-dMin = Math.min (d, dMin);
+dMin = Math.min (Math.abs (points[j].distance (atom) - radiusAdjust), dMin);
 }
 var d = this.surfaceDistance100s[i] = Clazz.doubleToInt (Math.floor (dMin * 100));
 this.surfaceDistanceMax = Math.max (this.surfaceDistanceMax, d);
@@ -388,6 +386,7 @@ iValue = Clazz.floatToInt (fValue);
 if (n >= list.length) return;
 sValue = list[n++];
 }var atom = this.at[i];
+var f;
 switch (tok) {
 case 1086326786:
 this.setAtomName (i, sValue, true);
@@ -446,8 +445,8 @@ case 1113589786:
 this.setHydrophobicity (i, fValue);
 break;
 case 1128269825:
-if (fValue < 2 && fValue > 0.01) fValue = 100 * fValue;
-this.setOccupancy (i, fValue, true);
+f = (fValue < 2 && fValue >= 0.01 ? 100 * fValue : fValue);
+this.setOccupancy (i, f, true);
 break;
 case 1111492619:
 this.setPartialCharge (i, fValue, true);
@@ -467,9 +466,10 @@ this.vwr.shm.setAtomLabel (sValue, i);
 break;
 case 1665140738:
 case 1112152075:
-if (fValue < 0) fValue = 0;
- else if (fValue > 16) fValue = 16.1;
-atom.madAtom = (Clazz.floatToShort (fValue * 2000));
+f = fValue;
+if (f < 0) f = 0;
+ else if (f > 16) f = 16.1;
+atom.madAtom = (Clazz.floatToShort (f * 2000));
 break;
 case 1113589787:
 this.vwr.slm.setSelectedAtom (atom.i, (fValue != 0));
@@ -935,7 +935,11 @@ if (rd.factorType === J.atomdata.RadiusData.EnumType.FACTOR) r *= rd.value;
 return r + rd.valueExtended;
 }, "JM.Atom,J.atomdata.AtomData");
 Clazz.defineMethod (c$, "calculateHydrogens", 
-function (bs, nTotal, doAll, justCarbon, vConnect) {
+function (bs, nTotal, vConnect, flags) {
+var doAll = ((flags & 256) == 256);
+var justCarbon = ((flags & 512) == 512);
+var isQuick = ((flags & 4) == 4);
+var ignoreH = ((flags & 2048) == 2048);
 var z =  new JU.V3 ();
 var x =  new JU.V3 ();
 var hAtoms =  new Array (this.ac);
@@ -955,12 +959,14 @@ dHX = 1.0;
 break;
 case 6:
 }
-if (doAll && atom.getCovalentHydrogenCount () > 0) continue;
-var n = this.getMissingHydrogenCount (atom, false);
-if (n == 0) continue;
+var n = (doAll || ignoreH ? atom.getCovalentHydrogenCount () : 0);
+if (doAll && n > 0 || ignoreH && n == 0) continue;
+var nMissing = this.getMissingHydrogenCount (atom, false);
+if (doAll && nMissing == 0) continue;
+if (!ignoreH) n = nMissing;
 var targetValence = this.aaRet[0];
 var hybridization = this.aaRet[2];
-var nBonds = this.aaRet[3];
+var nBonds = this.aaRet[3] - (ignoreH ? n : 0);
 if (nBonds == 0 && atom.isHetero ()) continue;
 hAtoms[i] =  new Array (n);
 var hPt = 0;
@@ -996,17 +1002,17 @@ switch (n) {
 default:
 break;
 case 3:
-this.getHybridizationAndAxes (i, atomicNumber, z, x, "sp3b", false, true);
+this.getHybridizationAndAxes (i, atomicNumber, z, x, "sp3b", false, true, isQuick);
 pt =  new JU.P3 ();
 pt.scaleAdd2 (dHX, z, atom);
 hAtoms[i][hPt++] = pt;
 if (vConnect != null) vConnect.addLast (atom);
-this.getHybridizationAndAxes (i, atomicNumber, z, x, "sp3c", false, true);
+this.getHybridizationAndAxes (i, atomicNumber, z, x, "sp3c", false, true, isQuick);
 pt =  new JU.P3 ();
 pt.scaleAdd2 (dHX, z, atom);
 hAtoms[i][hPt++] = pt;
 if (vConnect != null) vConnect.addLast (atom);
-this.getHybridizationAndAxes (i, atomicNumber, z, x, "sp3d", false, true);
+this.getHybridizationAndAxes (i, atomicNumber, z, x, "sp3d", false, true, isQuick);
 pt =  new JU.P3 ();
 pt.scaleAdd2 (dHX, z, atom);
 hAtoms[i][hPt++] = pt;
@@ -1014,12 +1020,12 @@ if (vConnect != null) vConnect.addLast (atom);
 break;
 case 2:
 var isEne = (hybridization == 2 || atomicNumber == 5 || nBonds == 1 && targetValence == 4 || atomicNumber == 7 && this.isAdjacentSp2 (atom));
-this.getHybridizationAndAxes (i, atomicNumber, z, x, (isEne ? "sp2b" : targetValence == 3 ? "sp3c" : "lpa"), false, true);
+this.getHybridizationAndAxes (i, atomicNumber, z, x, (isEne ? "sp2b" : targetValence == 3 ? "sp3c" : "lpa"), false, true, isQuick);
 pt = JU.P3.newP (z);
 pt.scaleAdd2 (dHX, z, atom);
 hAtoms[i][hPt++] = pt;
 if (vConnect != null) vConnect.addLast (atom);
-this.getHybridizationAndAxes (i, atomicNumber, z, x, (isEne ? "sp2c" : targetValence == 3 ? "sp3d" : "lpb"), false, true);
+this.getHybridizationAndAxes (i, atomicNumber, z, x, (isEne ? "sp2c" : targetValence == 3 ? "sp3d" : "lpb"), false, true, isQuick);
 pt = JU.P3.newP (z);
 pt.scaleAdd2 (dHX, z, atom);
 hAtoms[i][hPt++] = pt;
@@ -1031,7 +1037,7 @@ case 1:
 if (atomicNumber == 8 && atom === atom.group.getCarbonylOxygenAtom ()) {
 hAtoms[i] = null;
 continue;
-}if (this.getHybridizationAndAxes (i, atomicNumber, z, x, (hybridization == 2 || atomicNumber == 5 || atomicNumber == 7 && (atom.group.getNitrogenAtom () === atom || this.isAdjacentSp2 (atom)) ? "sp2c" : "sp3d"), true, false) != null) {
+}if (this.getHybridizationAndAxes (i, atomicNumber, z, x, (hybridization == 2 || atomicNumber == 5 || atomicNumber == 7 && (atom.group.getNitrogenAtom () === atom || this.isAdjacentSp2 (atom)) ? "sp2c" : "sp3d"), true, false, isQuick) != null) {
 pt = JU.P3.newP (z);
 pt.scaleAdd2 (dHX, z, atom);
 hAtoms[i][hPt++] = pt;
@@ -1040,14 +1046,14 @@ if (vConnect != null) vConnect.addLast (atom);
 hAtoms[i] =  new Array (0);
 }break;
 case 2:
-this.getHybridizationAndAxes (i, atomicNumber, z, x, (targetValence == 4 ? "sp2c" : "sp2b"), false, false);
+this.getHybridizationAndAxes (i, atomicNumber, z, x, (targetValence == 4 ? "sp2c" : "sp2b"), false, false, isQuick);
 pt = JU.P3.newP (z);
 pt.scaleAdd2 (dHX, z, atom);
 hAtoms[i][hPt++] = pt;
 if (vConnect != null) vConnect.addLast (atom);
 break;
 case 3:
-this.getHybridizationAndAxes (i, atomicNumber, z, x, "spb", false, true);
+this.getHybridizationAndAxes (i, atomicNumber, z, x, "spb", false, true, isQuick);
 pt = JU.P3.newP (z);
 pt.scaleAdd2 (dHX, z, atom);
 hAtoms[i][hPt++] = pt;
@@ -1059,7 +1065,7 @@ break;
 }
 nTotal[0] = nH;
 return hAtoms;
-}, "JU.BS,~A,~B,~B,JU.Lst");
+}, "JU.BS,~A,JU.Lst,~N");
 Clazz.defineMethod (c$, "isAdjacentSp2", 
  function (atom) {
 var bonds = atom.bonds;
@@ -1117,12 +1123,12 @@ n++;
 return n;
 }, "JU.BS");
 Clazz.defineMethod (c$, "getHybridizationAndAxes", 
-function (atomIndex, atomicNumber, z, x, lcaoTypeRaw, hybridizationCompatible, doAlignZ) {
+function (atomIndex, atomicNumber, z, x, lcaoTypeRaw, hybridizationCompatible, doAlignZ, isQuick) {
 var lcaoType = (lcaoTypeRaw.length > 0 && lcaoTypeRaw.charAt (0) == '-' ? lcaoTypeRaw.substring (1) : lcaoTypeRaw);
 if (lcaoTypeRaw.indexOf ("d") >= 0 && !lcaoTypeRaw.endsWith ("sp3d")) return this.getHybridizationAndAxesD (atomIndex, z, x, lcaoType);
 var atom = this.at[atomIndex];
 if (atomicNumber == 0) atomicNumber = atom.getElementNumber ();
-var attached = this.getAttached (atom, 4, hybridizationCompatible);
+var attached = this.getAttached (atom, 4, hybridizationCompatible, isQuick);
 var nAttached = attached.length;
 var pt = lcaoType.charCodeAt (lcaoType.length - 1) - 97;
 if (pt < 0 || pt > 6) pt = 0;
@@ -1130,7 +1136,11 @@ z.set (0, 0, 0);
 x.set (0, 0, 0);
 var v =  new Array (4);
 for (var i = 0; i < nAttached; i++) {
-v[i] = JU.V3.newVsub (atom, attached[i]);
+var a = attached[i];
+if (a == null) {
+nAttached = i;
+break;
+}v[i] = JU.V3.newVsub (atom, a);
 v[i].normalize ();
 z.add (v[i]);
 }
@@ -1194,9 +1204,10 @@ break;
 }hybridization = lcaoType;
 break;
 default:
-if (isPlanar) {
+if (isPlanar && !isQuick) {
 hybridization = "sp2";
 } else {
+if (isPlanar) z.setT (vTemp);
 if (isLp && nAttached == 3) {
 hybridization = "lp";
 break;
@@ -1293,7 +1304,7 @@ z.setT (x);
 x.cross (JM.AtomCollection.vRef, x);
 }break;
 case 3:
-this.getHybridizationAndAxes (attached[0].i, 0, x, vTemp, "pz", false, doAlignZ);
+this.getHybridizationAndAxes (attached[0].i, 0, x, vTemp, "pz", false, doAlignZ, isQuick);
 vTemp.setT (x);
 if (isSp2) {
 x.cross (x, z);
@@ -1314,7 +1325,7 @@ var a = attached[0];
 var ok = (a.getCovalentBondCount () == 3);
 if (!ok) ok = ((a = attached[1]).getCovalentBondCount () == 3);
 if (ok) {
-this.getHybridizationAndAxes (a.i, 0, x, z, "pz", false, doAlignZ);
+this.getHybridizationAndAxes (a.i, 0, x, z, "pz", false, doAlignZ, isQuick);
 if (lcaoType.equals ("px")) x.scale (-1);
 z.setT (v[0]);
 break;
@@ -1355,7 +1366,7 @@ x.scale (-1);
 x.normalize ();
 z.normalize ();
 return hybridization;
-}, "~N,~N,JU.V3,JU.V3,~S,~B,~B");
+}, "~N,~N,JU.V3,JU.V3,~S,~B,~B,~B");
 Clazz.defineMethod (c$, "getHybridizationAndAxesD", 
  function (atomIndex, z, x, lcaoType) {
 if (lcaoType.startsWith ("sp3d2")) lcaoType = "d2sp3" + (lcaoType.length == 5 ? "a" : lcaoType.substring (5));
@@ -1365,7 +1376,7 @@ var isTrigonal = lcaoType.startsWith ("dsp3");
 var pt = lcaoType.charCodeAt (lcaoType.length - 1) - 97;
 if (z != null && (!isTrigonal && (pt > 5 || !lcaoType.startsWith ("d2sp3")) || isTrigonal && pt > 4)) return null;
 var atom = this.at[atomIndex];
-var attached = this.getAttached (atom, 6, true);
+var attached = this.getAttached (atom, 6, true, false);
 if (attached == null) return (z == null ? null : "?");
 var nAttached = attached.length;
 if (nAttached < 3 && z != null) return null;
@@ -1511,18 +1522,20 @@ z.normalize ();
 return (isTrigonal ? "dsp3" : "d2sp3");
 }, "~N,JU.V3,JU.V3,~S");
 Clazz.defineMethod (c$, "getAttached", 
- function (atom, nMax, doSort) {
+ function (atom, nMax, doSort, isQuick) {
 var nAttached = atom.getCovalentBondCount ();
 if (nAttached > nMax) return null;
 var attached =  new Array (nAttached);
 if (nAttached > 0) {
 var bonds = atom.bonds;
 var n = 0;
-for (var i = 0; i < bonds.length; i++) if (bonds[i].isCovalent ()) attached[n++] = bonds[i].getOtherAtom (atom);
-
-if (doSort) java.util.Arrays.sort (attached, Clazz.innerTypeInstance (JM.AtomCollection.AtomSorter, this, null));
+for (var i = 0; i < bonds.length; i++) if (bonds[i].isCovalent ()) {
+var a = bonds[i].getOtherAtom (atom);
+if (!isQuick || a.getAtomicAndIsotopeNumber () != 1) attached[n++] = a;
+}
+if (doSort && !isQuick) java.util.Arrays.sort (attached, Clazz.innerTypeInstance (JM.AtomCollection.AtomSorter, this, null));
 }return attached;
-}, "JM.Atom,~N,~B");
+}, "JM.Atom,~N,~B,~B");
 Clazz.defineMethod (c$, "findNotAttached", 
  function (nAttached, angles, ptrs, nPtrs) {
 var bs = JU.BS.newN (nAttached);
@@ -2040,5 +2053,10 @@ Clazz.defineStatics (c$,
 "TAINT_SEQID", 14,
 "TAINT_RESNO", 15,
 "TAINT_CHAIN", 16,
-"TAINT_MAX", 17);
+"TAINT_MAX", 17,
+"CALC_H_DOALL", 0x100,
+"CALC_H_JUSTC", 0x200,
+"CALC_H_HAVEH", 0x400,
+"CALC_H_QUICK", 4,
+"CALC_H_IGNORE_H", 0x800);
 });

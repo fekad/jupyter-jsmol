@@ -143,6 +143,7 @@ return;
 }if ("offset" === propertyName) {
 if (!(Clazz.instanceOf (value, Integer))) {
 if (!this.setDefaults) {
+this.checkColixLength (-1, this.ac);
 for (var i = bsSelected.nextSetBit (0); i >= 0 && i < this.ac; i = bsSelected.nextSetBit (i + 1)) this.setPymolOffset (i, value);
 
 }return;

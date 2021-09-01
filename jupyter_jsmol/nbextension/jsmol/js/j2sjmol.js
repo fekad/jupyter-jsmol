@@ -2917,6 +2917,7 @@ System.out.print = function () {};
 System.out.printf = function () {};
 System.out.println = function () {};
 System.out.write = function () {};
+System.out.flush = function() {};
 
 System.err = new Clazz._O ();
 System.err.__CLASS_NAME__ = "java.io.PrintStream";
@@ -2924,6 +2925,7 @@ System.err.print = function () {};
 System.err.printf = function () {};
 System.err.println = function () {};
 System.err.write = function () {};
+System.err.flush = function() {};
 
 Clazz.popup = Clazz.assert = Clazz.log = Clazz.error = window.alert;
 

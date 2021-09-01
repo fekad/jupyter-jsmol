@@ -17,6 +17,7 @@ this.htBondMap = null;
 this.htGroupBonds = null;
 this.hNames = null;
 this.baseBondIndex = 0;
+this.hasCONECT = false;
 this.bsAssigned = null;
 Clazz.instantialize (this, arguments);
 }, JM, "BioResolver", null, java.util.Comparator);
@@ -41,6 +42,7 @@ JM.Group.specialAtomNames = JM.BioResolver.specialAtomNames;
 this.ms = modelLoader.ms;
 this.vwr = modelLoader.ms.vwr;
 modelLoader.specialAtomIndexes =  Clazz.newIntArray (JM.BioResolver.ATOMID_MAX, 0);
+this.hasCONECT = (this.ms.getInfoM ("someModelsHaveCONECT") === Boolean.TRUE);
 }return this;
 }, "JM.ModelLoader");
 Clazz.defineMethod (c$, "setViewer", 
@@ -101,7 +103,7 @@ Clazz.defineMethod (c$, "addImplicitHydrogenAtoms",
 function (adapter, iGroup, nH) {
 var group3 = this.ml.getGroup3 (iGroup);
 var nH1;
-if (this.haveHsAlready || group3 == null || (nH1 = JM.BioResolver.getStandardPdbHydrogenCount (group3)) == 0) return;
+if (this.haveHsAlready && this.hasCONECT || group3 == null || (nH1 = JM.BioResolver.getStandardPdbHydrogenCount (group3)) == 0) return;
 nH = (nH1 < 0 ? -1 : nH1 + nH);
 var model = null;
 var iFirst = this.ml.getFirstAtomIndex (iGroup);
@@ -114,6 +116,7 @@ nH = adapter.getHydrogenAtomCount (model);
 if (nH < 1) return;
 }this.getBondInfo (adapter, group3, model);
 this.ms.am[this.ms.at[iFirst].mi].isPdbWithMultipleBonds = true;
+if (this.haveHsAlready) return;
 this.bsAtomsForHs.setBits (iFirst, ac);
 this.bsAddedHydrogens.setBits (ac, ac + nH);
 var isHetero = this.ms.at[iFirst].isHetero ();
@@ -207,7 +210,7 @@ if (this.bsAddedHydrogens.nextSetBit (0) < 0) return;
 this.bsAddedMask = JU.BSUtil.copy (this.bsAddedHydrogens);
 this.finalizePdbCharges ();
 var nTotal =  Clazz.newIntArray (1, 0);
-var pts = this.ms.calculateHydrogens (this.bsAtomsForHs, nTotal, true, false, null);
+var pts = this.ms.calculateHydrogens (this.bsAtomsForHs, nTotal, null, 256);
 var groupLast = null;
 var ipt = 0;
 for (var i = 0; i < pts.length; i++) {

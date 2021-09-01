@@ -2,6 +2,7 @@
 // author: Bob Hanson, hansonr@stolaf.edu	4/16/2012
 // author: Takanori Nakane biochem_fan 6/12/2012
 
+// BH 2021.04.09 fix _cover(false) script in getAppletHtml() to be img onerror
 // BH 12/17/2015 4:43:05 PM adding Jmol._requestRepaint to allow for MSIE9 not having 3imationFrame
 // BH 12/13/2015 11:44:39 AM using requestAnimationFrame instead of setTimeout (fixes Chrome slowness)
 // BH 10/12/2015 1:15:39 PM fix for set echo image in JavaScript
@@ -202,7 +203,7 @@
 				t = "";
 			} else {
 				this._deferApplet = true;
-				t += '<script type="text/javascript">' + id + '._cover(false)</script>';
+				t += '<img width=0 height=0 src=. onerror=' + id + '._cover(false) >';
 			}
 			t += Jmol._getWrapper(this, false);
 			if (Info.addSelectionOptions)
@@ -350,6 +351,7 @@
 					base[base.length - 1] = codePath;
 				codePath = base.join("/");
 			}
+			applet._j2sFullPath = codePath.substring(0, codePath.length-1);
 			viewerOptions.put("codePath", codePath);
 			Jmol._registerApplet(applet._id, applet);
 			try {

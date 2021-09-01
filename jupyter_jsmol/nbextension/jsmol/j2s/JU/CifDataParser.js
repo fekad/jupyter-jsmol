@@ -375,14 +375,31 @@ Clazz.defineMethod (c$, "isQuote",
 function (ch) {
 switch (ch) {
 case '\'':
-case '\"':
+case '"':
 case '\1':
+case '[':
+case ']':
 return true;
 }
 return false;
 }, "~S");
 Clazz.defineMethod (c$, "getQuotedStringOrObject", 
 function (ch) {
+switch (ch) {
+case '[':
+try {
+return this.readList ();
+} catch (e) {
+if (Clazz.exceptionOf (e, Exception)) {
+System.out.println ("exception in CifDataParser ; " + e);
+} else {
+throw e;
+}
+}
+case ']':
+this.ich++;
+return "]";
+}
 var ichStart = this.ich;
 var chClosingQuote = ch;
 var wasQuote = false;
@@ -400,6 +417,29 @@ pt2++;
 ++this.ich;
 }return this.str.substring (pt1, pt2);
 }, "~S");
+Clazz.defineMethod (c$, "readList", 
+function () {
+this.ich++;
+var cterm0 = this.cterm;
+this.cterm = ']';
+var ns = this.nullString;
+this.nullString = null;
+var lst = (this.asObject ?  new JU.Lst () : null);
+var n = 0;
+var str = "";
+while (true) {
+var value = (this.asObject ? this.getNextTokenObject () : this.getNextToken ());
+if (value == null || value.equals ("]")) break;
+if (this.asObject) {
+lst.addLast (value);
+} else {
+if (n++ > 0) str += ",";
+str += value;
+}}
+this.cterm = cterm0;
+this.nullString = ns;
+return (this.asObject ? lst : "[" + str + "]");
+});
 Clazz.defineStatics (c$,
 "KEY_MAX", 100);
 c$.htFields = c$.prototype.htFields =  new java.util.Hashtable ();

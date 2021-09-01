@@ -243,8 +243,7 @@ break;
 var scale = 1;
 var index = 0;
 if (type.length > 0) {
-++i;
-if (this.isFloatParameter (i + 1)) index = this.intParameter (i++);
+if (this.isFloatParameter (++i)) index = this.intParameter (i++);
 }if (this.tokAt (i) == 1073742138) scale = this.floatParameter (++i);
 if (!this.chk) eval.runScript (this.vwr.ms.getPointGroupAsString (this.vwr.bsA (), type, index, scale, pts, center, thisId == null ? "" : thisId));
 return;
@@ -341,8 +340,8 @@ if (tok == 1275203608) {
 faces = this.getIntArray2 (i);
 } else {
 faces = JU.AU.newInt2 (1);
-faces[0] = eval.expandFloatArray (eval.floatParameterSet (i, -1, 2147483647), -1);
-}points = this.getAllPoints (this.e.iToken + 1);
+faces[0] = eval.expandFloatArray (eval.floatParameterSet (i, -1, 2147483647), -1, false);
+}points = this.getAllPoints (this.e.iToken + 1, 3);
 try {
 polygons = (J.api.Interface.getInterface ("JU.MeshCapper", this.vwr, "script")).set (null).triangulateFaces (faces, points, null);
 } catch (e) {
@@ -721,13 +720,16 @@ if (moNumber == 0) moNumber = 2147483647;
 var propertyName = null;
 var propertyValue = null;
 var ignoreSquared = false;
+var nboName = null;
 switch (this.getToken (i).tok) {
 case 1140850696:
 if (iShape == 1073877010) {
 this.mo (isInitOnly, 28);
 return;
 }nboType = this.paramAsStr (++i).toUpperCase ();
-break;
+if (eval.tokAt (i + 1) == 4) {
+nboName = this.paramAsStr (++eval.iToken);
+}break;
 case 1073741875:
 case 554176565:
 propertyName = eval.theToken.value;
@@ -824,8 +826,14 @@ propertyValue = this.paramAsStr (i + 1);
 case 1073741824:
 this.invArg ();
 break;
-default:
-if (eval.isArrayParameter (i)) {
+case 4:
+if (isNBO && i == 1) {
+nboName = eval.stringParameter (i);
+break;
+}default:
+if (isNBO && eval.tokAt (i) == 4) {
+nboName = this.paramAsStr (i++);
+}if (eval.isArrayParameter (i)) {
 linearCombination = eval.floatParameterSet (i, 1, 2147483647);
 if (this.tokAt (eval.iToken + 1) == 1073742156) {
 ignoreSquared = false;
@@ -841,9 +849,11 @@ return;
 if (propertyName != null) this.addShapeProperty (propertyList, propertyName, propertyValue);
 var haveMO = (moNumber != 2147483647 || linearCombination != null);
 if (this.chk) return;
-if (nboType != null || haveMO) {
-if (haveMO && this.tokAt (eval.iToken + 1) == 4) title = this.paramAsStr (++eval.iToken);
-eval.setCursorWait (true);
+if (nboType != null || nboName != null || haveMO) {
+if (haveMO && this.tokAt (eval.iToken + 1) == 4) {
+title = this.paramAsStr (++eval.iToken);
+}eval.setCursorWait (true);
+if (nboType != null || nboName != null) nboType = nboType + ":" + nboName;
 this.setMoData (propertyList, moNumber, linearCombination, offset, isNegOffset, iModel, title, nboType, isBeta);
 if (haveMO) {
 this.addShapeProperty (propertyList, "finalize", null);
@@ -864,11 +874,39 @@ moLabel = "" + moNumber;
 }, "~B,~N");
 Clazz.defineMethod (c$, "setNBOType", 
  function (moData, type) {
-var ext = JV.JC.getNBOTypeFromName (type);
-if (ext < 0) this.invArg ();
+var nboNumber = -1;
+var name = null;
+var pt = type.indexOf (":");
+if (pt > 0) {
+name = type.substring (pt + 1);
+type = type.substring (0, pt);
+if (type.equals ("null")) type = null;
+if (name.equals ("null")) name = null;
+}if ((type == null ? 0 : JV.JC.getNBOTypeFromName (type)) < 0) this.invArg ();
 if (!moData.containsKey ("nboLabels")) this.error (27);
-if (this.chk) return;
-if (!(J.api.Interface.getInterface ("J.adapter.readers.quantum.GenNBOReader", this.vwr, "script")).readNBOCoefficients (moData, type, this.vwr)) this.error (27);
+if (this.chk) return -1;
+if (type != null && !(J.api.Interface.getInterface ("J.adapter.readers.quantum.GenNBOReader", this.vwr, "script")).readNBOCoefficients (moData, type, this.vwr)) this.error (27);
+var auxFiles = moData.get ("auxFiles");
+var auxFiles0 = this.vwr.getCurrentModelAuxInfo ().get ("auxFiles");
+if (auxFiles0 == null) {
+this.vwr.getCurrentModelAuxInfo ().put ("auxFiles", auxFiles);
+} else {
+auxFiles0.addAll (auxFiles);
+}if (name != null) {
+pt = name.indexOf (".");
+if (pt > 0) {
+var ipt = JU.PT.parseInt (name.substring (pt + 1));
+name = name.substring (0, pt);
+pt = ipt;
+}var labels = moData.get ("nboLabels");
+for (var i = 0, n = labels.length; i < n; i++) {
+if (name.equals (labels[i])) {
+if (pt < 0 || --pt == 0) {
+nboNumber = i + 1;
+break;
+}}}
+if (nboNumber < 0) this.error (27);
+}return nboNumber;
 }, "java.util.Map,~S");
 Clazz.defineMethod (c$, "moCombo", 
  function (propertyList) {
@@ -897,7 +935,10 @@ if (modelIndex < 0) eval.errorStr (30, "MO isosurfaces");
 if (moData == null) this.error (27);
 this.vwr.checkMenuUpdate ();
 if (nboType != null) {
-this.setNBOType (moData, nboType);
+var nboNumber = this.setNBOType (moData, nboType);
+var nOrbitals = (moData.get ("nboLabels")).length;
+eval.showString (nOrbitals + " orbitals of type " + nboType.substring (0, nboType.indexOf (":") + 1) + " modelIndex=" + this.vwr.getModelNumberDotted (modelIndex));
+if (nboNumber > 0) moNumber = nboNumber;
 if (lc == null && moNumber == 2147483647) return;
 }var mos = null;
 var mo;
@@ -1002,7 +1043,7 @@ var isFrontOnly = false;
 var nbotype = null;
 var data = null;
 var cmd = null;
-var thisSetNumber = -2147483648;
+var thisSet = null;
 var nFiles = 0;
 var nX;
 var nY;
@@ -1045,9 +1086,11 @@ if (isPmesh || isPlot3d) this.addShapeProperty (propertyList, "fileType", "Pmesh
 for (var i = eval.iToken; i < this.slen; ++i) {
 var propertyName = null;
 var propertyValue = null;
-this.getToken (i);
-if (eval.theTok == 1073741824) str = this.paramAsStr (i);
-switch (eval.theTok) {
+var tok = this.getToken (i).tok;
+if (tok == 1073741824) {
+str = this.paramAsStr (i);
+if (str.equalsIgnoreCase ("map")) tok = 4125;
+}switch (tok) {
 case 1073742148:
 isSilent = true;
 sbCommand.append (" silent");
@@ -1160,11 +1203,11 @@ propertyValue =  Clazz.newArray (-1, [bsSelect, bs]);
 break;
 case 1610625028:
 case 134217759:
-isDisplay = (eval.theTok == 1610625028);
+isDisplay = (tok == 1610625028);
 if (isDisplay) {
 sbCommand.append (" display");
 iptDisplayProperty = i;
-var tok = this.tokAt (i + 1);
+tok = this.tokAt (i + 1);
 if (tok == 0) continue;
 i++;
 this.addShapeProperty (propertyList, "token", Integer.$valueOf (1073742335));
@@ -1221,7 +1264,7 @@ break;
 case 1715472409:
 case 1073742190:
 onlyOneModel = eval.theToken.value;
-var isVariable = (eval.theTok == 1073742190);
+var isVariable = (tok == 1073742190);
 var tokProperty = this.tokAt (i + 1);
 if (mepOrMlp == null) {
 if (!surfaceObjectSeen && !isMapped && !planeSeen) {
@@ -1280,7 +1323,7 @@ break;
 case 1094713359:
 case 1094717454:
 if (surfaceObjectSeen) this.invArg ();
-modelIndex = (eval.theTok == 1094713359 ? this.intParameter (++i) : eval.modelNumberParameter (++i));
+modelIndex = (tok == 1094713359 ? this.intParameter (++i) : eval.modelNumberParameter (++i));
 sbCommand.append (" modelIndex " + modelIndex);
 if (modelIndex < 0) {
 propertyName = "fixed";
@@ -1308,8 +1351,17 @@ sbCommand.append (" select " + JU.Escape.eBS (bs1));
 bsSelect = propertyValue;
 if (modelIndex < 0 && bsSelect.nextSetBit (0) >= 0) modelIndex = this.vwr.ms.at[bsSelect.nextSetBit (0)].mi;
 }break;
+case 2109448:
+if (eval.getToken (++i).tok == 10) {
+thisSet = eval.theToken.value;
+} else {
+thisSet = eval.expandFloatArray (eval.floatParameterSet (i, 1, 2147483647), 1, true);
+}i = eval.iToken;
+break;
 case 36867:
-thisSetNumber = this.intParameter (++i);
+var ns = this.intParameter (++i);
+if (ns > 0) thisSet = JU.BSUtil.newAndSetBit (ns - 1);
+ else thisSet =  new JU.BS ();
 break;
 case 12289:
 propertyName = "center";
@@ -1320,7 +1372,7 @@ break;
 case 1073742147:
 case 1765808134:
 idSeen = true;
-if (eval.theTok == 1073742147) {
+if (tok == 1073742147) {
 isSign = true;
 sbCommand.append (" sign");
 this.addShapeProperty (propertyList, "sign", Boolean.TRUE);
@@ -1530,14 +1582,14 @@ continue;
 case 1073742036:
 propertyName = "nci";
 sbCommand.append (" " + propertyName);
-var tok = this.tokAt (i + 1);
+tok = this.tokAt (i + 1);
 var isPromolecular = (tok != 1228935687 && tok != 4 && tok != 1073742032);
 propertyValue = Boolean.$valueOf (isPromolecular);
 if (isPromolecular) surfaceObjectSeen = true;
 break;
 case 1073742016:
 case 1073742022:
-var isMep = (eval.theTok == 1073742016);
+var isMep = (tok == 1073742016);
 propertyName = (isMep ? "mep" : "mlp");
 sbCommand.append (" " + propertyName);
 var fname = null;
@@ -1646,8 +1698,8 @@ isCavity = true;
 var cavityRadius = (this.isFloatParameter (i + 1) ? this.floatParameter (++i) : 1.2);
 var envelopeRadius = (this.isFloatParameter (i + 1) ? this.floatParameter (++i) : 10);
 if (this.chk) continue;
-if (envelopeRadius > 10) {
-eval.integerOutOfRange (0, 10);
+if (envelopeRadius > 50) {
+eval.integerOutOfRange (0, 50);
 return;
 }sbCommand.append (" cavity ").appendF (cavityRadius).append (" ").appendF (envelopeRadius);
 this.addShapeProperty (propertyList, "envelopeRadius", Float.$valueOf (envelopeRadius));
@@ -1718,7 +1770,7 @@ case 536870916:
 case 1073742041:
 sbCommand.append (" ").appendO (eval.theToken.value);
 propertyName = "debug";
-propertyValue = (eval.theTok == 536870916 ? Boolean.TRUE : Boolean.FALSE);
+propertyValue = (tok == 536870916 ? Boolean.TRUE : Boolean.FALSE);
 break;
 case 12293:
 sbCommand.append (" fixed");
@@ -1732,7 +1784,7 @@ propertyValue = Boolean.TRUE;
 break;
 case 1073741966:
 case 1073741968:
-var isFxyz = (eval.theTok == 1073741968);
+var isFxyz = (tok == 1073741968);
 propertyName = "" + eval.theToken.value;
 var vxy =  new JU.Lst ();
 propertyValue = vxy;
@@ -1825,6 +1877,14 @@ vxy.addLast (fdata);
 sbCommand.append (" ").append (JU.Escape.e (fdata));
 }}i = eval.iToken;
 break;
+case 1073742188:
+var isBS = this.e.isAtomExpression (++i);
+var probes = this.getAllPoints (i, 1);
+sbCommand.append (" value " + (isBS ? this.e.atomExpressionAt (i).toString () : JU.Escape.eAP (probes)));
+propertyName = "probes";
+propertyValue = probes;
+i = this.e.iToken;
+break;
 case 1073741970:
 propertyName = "gridPoints";
 sbCommand.append (" gridPoints");
@@ -1844,7 +1904,7 @@ case 1073741986:
 case 1073742100:
 sbCommand.append (" ").appendO (eval.theToken.value);
 propertyName = "pocket";
-propertyValue = (eval.theTok == 1073742100 ? Boolean.TRUE : Boolean.FALSE);
+propertyValue = (tok == 1073742100 ? Boolean.TRUE : Boolean.FALSE);
 break;
 case 1073742002:
 propertyName = "lobe";
@@ -1910,13 +1970,13 @@ case 1073742135:
 case 1612709912:
 onlyOneModel = eval.theToken.value;
 var radius;
-if (eval.theTok == 1073742028) {
+if (tok == 1073742028) {
 propertyName = "molecular";
 sbCommand.append (" molecular");
 radius = (this.isFloatParameter (i + 1) ? this.floatParameter (++i) : 1.4);
 } else {
 this.addShapeProperty (propertyList, "bsSolvent", eval.lookupIdentifierValue ("solvent"));
-propertyName = (eval.theTok == 1073742135 ? "sasurface" : "solvent");
+propertyName = (tok == 1073742135 ? "sasurface" : "solvent");
 sbCommand.append (" ").appendO (eval.theToken.value);
 radius = (this.isFloatParameter (i + 1) ? this.floatParameter (++i) : this.vwr.getFloat (570425394));
 }sbCommand.append (" ").appendF (radius);
@@ -1930,6 +1990,11 @@ break;
 case 1073742032:
 this.addShapeProperty (propertyList, "fileType", "Mrc");
 sbCommand.append (" mrc");
+continue;
+case 1140850696:
+var s = eval.stringParameter (++i);
+this.addShapeProperty (propertyList, "fileType", s);
+sbCommand.append (" type \"" + s + "\"");
 continue;
 case 1073742064:
 case 1073742062:
@@ -2026,32 +2091,36 @@ this.addShapeProperty (propertyList, "filesData", filesData);
 break;
 case 545259556:
 case 545259557:
+case 1073741914:
 case 4:
 var firstPass = (!surfaceObjectSeen && !planeSeen);
-var filename;
+var filename = null;
 propertyName = (firstPass && !isMapped ? "readFile" : "mapColor");
-if (eval.theTok == 4) {
+if (tok == 4) {
 filename = this.paramAsStr (i);
-} else {
+} else if (tok == 1073741914) {
+filename = "=density/";
+}if (filename == null || filename.length == 0 || filename.equals ("*") || filename.equals ("=")) {
 var pdbID = this.vwr.getPdbID ();
 if (pdbID == null) eval.errorStr (22, "no PDBID available");
-filename = "*" + (eval.theTok == 545259557 ? "*" : "") + pdbID;
+filename = "*" + (tok == 545259557 ? "*" : "") + pdbID;
 }var checkWithin = false;
-var isUppsala = false;
 if (filename.startsWith ("http://eds.bmc.uu.se/eds/dfs/cb/") && filename.endsWith (".omap")) {
 filename = (filename.indexOf ("_diff") >= 0 ? "*" : "") + "*" + filename.substring (32, 36);
-}if (filename.startsWith ("*") || (isUppsala = filename.startsWith ("=")) && filename.length > 1) {
-if (isUppsala) filename = filename.$replace ('=', '*');
+}if (filename.startsWith ("*") || filename.startsWith ("=")) {
+var haveCutoff = (!Float.isNaN (cutoff) || !Float.isNaN (sigma));
 var isFull = (filename.indexOf ("/full") >= 0);
+if (isFull) filename = JU.PT.rep (filename, "/full", "");
 if (filename.indexOf ("/diff") >= 0) filename = "*" + filename.substring (0, filename.indexOf ("/diff"));
 if (filename.startsWith ("**")) {
-if (Float.isNaN (sigma)) this.addShapeProperty (propertyList, "sigma", Float.$valueOf (sigma = 3));
+if (!haveCutoff) this.addShapeProperty (propertyList, "sigma", Float.$valueOf (sigma = 3));
 if (!isSign) {
 isSign = true;
 sbCommand.append (" sign");
 this.addShapeProperty (propertyList, "sign", Boolean.TRUE);
-}}if (!Float.isNaN (sigma)) this.showString ("using cutoff = " + sigma + " sigma");
-filename = this.vwr.setLoadFormat (filename, (isFull || pts == null ? '_' : '-'), false);
+}}var fn = filename;
+filename = this.vwr.setLoadFormat (filename, (this.chk ? '?' : isFull ? '_' : '-'), false);
+if (filename == null) eval.errorStr (22, "error parsing filename: " + fn);
 checkWithin = !isFull;
 }if (checkWithin) {
 if (pts == null && ptWithin == 0) {
@@ -2064,7 +2133,17 @@ sbCommand.append (" within 2.0 ").append (JU.Escape.eBS (bs));
 }}if (pts != null && filename.indexOf ("/0,0,0/0,0,0?") >= 0) {
 filename = filename.$replace ("0,0,0/0,0,0", pts[0].x + "," + pts[0].y + "," + pts[0].z + "/" + pts[pts.length - 1].x + "," + pts[pts.length - 1].y + "," + pts[pts.length - 1].z);
 }if (firstPass) defaultMesh = true;
-}if (firstPass && this.vwr.getP ("_fileType").equals ("Pdb") && Float.isNaN (sigma) && Float.isNaN (cutoff)) {
+}var p = (filename == null ? -1 : filename.indexOf ("#-"));
+if (Float.isNaN (sigma) && Float.isNaN (cutoff)) {
+if ((p = filename.indexOf ("#-cutoff=")) >= 0) {
+this.addShapeProperty (propertyList, "cutoff", Float.$valueOf (cutoff = Float.parseFloat (filename.substring (p + 9))));
+sbCommand.append (" cutoff " + cutoff);
+} else if ((p = filename.indexOf ("#-sigma=")) >= 0) {
+this.addShapeProperty (propertyList, "sigma", Float.$valueOf (sigma = Float.parseFloat (filename.substring (p + 8))));
+sbCommand.append (" sigma " + sigma);
+}}if (!Float.isNaN (sigma)) this.showString ("using sigma = " + sigma);
+ else if (!Float.isNaN (cutoff)) this.showString ("using cutoff = " + cutoff);
+if (firstPass && this.vwr.getP ("_fileType").equals ("Pdb") && Float.isNaN (sigma) && Float.isNaN (cutoff)) {
 this.addShapeProperty (propertyList, "sigma", Float.$valueOf (-1));
 sbCommand.append (" sigma -1.0");
 }if (filename.length == 0) {
@@ -2154,11 +2233,11 @@ fixLattice = true;
 i++;
 }}break;
 default:
-if (eval.theTok == 1073741824) {
+if (tok == 1073741824) {
 propertyName = "thisID";
 propertyValue = str;
-}if (!eval.setMeshDisplayProperty (iShape, 0, eval.theTok)) {
-if (JS.T.tokAttr (eval.theTok, 1073741824) && !idSeen) {
+}if (!eval.setMeshDisplayProperty (iShape, 0, tok)) {
+if (JS.T.tokAttr (tok, 1073741824) && !idSeen) {
 this.setShapeId (iShape, i, idSeen);
 i = eval.iToken;
 break;
@@ -2167,7 +2246,7 @@ break;
 i = this.slen - 1;
 break;
 }
-idSeen = (eval.theTok != 12291);
+idSeen = (tok != 12291);
 if (isWild && surfaceObjectSeen) this.invArg ();
 if (propertyName != null) this.addShapeProperty (propertyList, propertyName, propertyValue);
 }
@@ -2179,7 +2258,7 @@ this.addShapeProperty (propertyList, "sasurface", Float.$valueOf (0));
 }if (planeSeen && !surfaceObjectSeen && !isMapped) {
 this.addShapeProperty (propertyList, "nomap", Float.$valueOf (0));
 surfaceObjectSeen = true;
-}if (thisSetNumber >= -1) this.addShapeProperty (propertyList, "getSurfaceSets", Integer.$valueOf (thisSetNumber - 1));
+}if (thisSet != null) this.addShapeProperty (propertyList, "getSurfaceSets", thisSet);
 if (discreteColixes != null) {
 this.addShapeProperty (propertyList, "colorDiscrete", discreteColixes);
 } else if ("sets".equals (colorScheme)) {
@@ -2261,7 +2340,10 @@ if (doCalcVolume) this.showString (svol);
 if (doCalcArea) s += "\n" + sarea;
 if (doCalcVolume) s += "\n" + svol;
 }}if (s != null && !isSilent) this.showString (s);
-}if (translucency != null) this.setShapeProperty (iShape, "translucency", translucency);
+if (surfaceObjectSeen) {
+s = this.getShapeProperty (iShape, "output");
+if (s != null && !isSilent) this.showString (s);
+}}if (translucency != null) this.setShapeProperty (iShape, "translucency", translucency);
 this.setShapeProperty (iShape, "clear", null);
 if (toCache) this.setShapeProperty (iShape, "cache", null);
 if (!isSilent && !isDisplay && !haveSlab && eval.theTok != 12291) this.listIsosurface (iShape);

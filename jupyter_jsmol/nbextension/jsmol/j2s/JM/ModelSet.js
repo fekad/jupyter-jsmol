@@ -433,6 +433,7 @@ return bsDeleted;
 }, "JU.BS");
 Clazz.defineMethod (c$, "resetMolecules", 
 function () {
+this.bsAll = null;
 this.molecules = null;
 this.moleculeCount = 0;
 this.resetChirality ();
@@ -444,7 +445,7 @@ var modelIndex = -1;
 for (var i = this.ac; --i >= 0; ) {
 var a = this.at[i];
 a.setCIPChirality (0);
-if (a.mi != modelIndex) this.am[modelIndex = a.mi].hasChirality = false;
+if (a.mi != modelIndex && a.mi < this.am.length) this.am[modelIndex = a.mi].hasChirality = false;
 }
 }});
 Clazz.defineMethod (c$, "deleteModel", 
@@ -841,7 +842,7 @@ return ptCenter;
 }, "JU.BS");
 Clazz.defineMethod (c$, "getAverageAtomPoint", 
 function () {
-return (this.getAtomSetCenter (this.vwr.bsA ()));
+return this.getAtomSetCenter (this.vwr.bsA ());
 });
 Clazz.defineMethod (c$, "setAPm", 
 function (bs, tok, iValue, fValue, sValue, values, list) {
@@ -935,7 +936,7 @@ for (var iAtom = bs.nextSetBit (0); iAtom >= 0; iAtom = bs.nextSetBit (iAtom + 1
 }if ((mode & 8) != 0) {
 var nH =  Clazz.newIntArray (1, 0);
 atomData.hAtomRadius = this.vwr.getVanderwaalsMar (1) / 1000;
-atomData.hAtoms = this.calculateHydrogens (atomData.bsSelected, nH, false, true, null);
+atomData.hAtoms = this.calculateHydrogens (atomData.bsSelected, nH, null, 512);
 atomData.hydrogenAtomCount = nH[0];
 return;
 }if (atomData.modelIndex < 0) atomData.firstAtomIndex = (atomData.bsSelected == null ? 0 : Math.max (0, atomData.bsSelected.nextSetBit (0)));
@@ -1665,8 +1666,10 @@ nNew++;
 } else {
 if (notAnyAndNoId) {
 bondAB.setOrder (order);
-if (isAtrop) bondAB.setAtropisomerOptions (bsA, bsB);
-this.bsAromatic.clear (bondAB.index);
+if (isAtrop) {
+this.haveAtropicBonds = true;
+bondAB.setAtropisomerOptions (bsA, bsB);
+}this.bsAromatic.clear (bondAB.index);
 }if (anyOrNoId || order == bondAB.order || newOrder == bondAB.order || matchHbond && bondAB.isHydrogen ()) {
 bsBonds.set (bondAB.index);
 nModified++;
@@ -1844,15 +1847,16 @@ bsCO.set (i);
 break;
 }
 }
-}var dmax = this.vwr.getFloat (570425361);
+}var dmax;
 var min2;
 if (haveHAtoms) {
-if (dmax > JM.ModelSet.hbondMaxReal) dmax = JM.ModelSet.hbondMaxReal;
+dmax = this.vwr.getFloat (570425361);
 min2 = 1;
 } else {
+dmax = this.vwr.getFloat (570425360);
 min2 = JM.ModelSet.hbondMinRasmol * JM.ModelSet.hbondMinRasmol;
 }var max2 = dmax * dmax;
-var minAttachedAngle = (this.vwr.getFloat (570425360) * 3.141592653589793 / 180);
+var minAttachedAngle = (this.vwr.getFloat (570425359) * 3.141592653589793 / 180);
 var nNew = 0;
 var d2 = 0;
 var v1 =  new JU.V3 ();
@@ -2006,53 +2010,6 @@ newModels[i].loadState = " model create #" + i + ";";
 this.am = newModels;
 this.mc = newModelCount;
 }, "~N");
-Clazz.defineMethod (c$, "assignAtom", 
-function (atomIndex, type, autoBond, addHsAndBond) {
-this.clearDB (atomIndex);
-if (type == null) type = "C";
-var atom = this.at[atomIndex];
-var bs =  new JU.BS ();
-var wasH = (atom.getElementNumber () == 1);
-var atomicNumber = JU.Elements.elementNumberFromSymbol (type, true);
-var isDelete = false;
-if (atomicNumber > 0) {
-this.setElement (atom, atomicNumber, !addHsAndBond);
-this.vwr.shm.setShapeSizeBs (0, 0, this.vwr.rd, JU.BSUtil.newAndSetBit (atomIndex));
-this.setAtomName (atomIndex, type + atom.getAtomNumber (), !addHsAndBond);
-if (this.vwr.getBoolean (603983903)) this.am[atom.mi].isModelKit = true;
-if (!this.am[atom.mi].isModelKit) this.taintAtom (atomIndex, 0);
-} else if (type.equals ("Pl")) {
-atom.setFormalCharge (atom.getFormalCharge () + 1);
-} else if (type.equals ("Mi")) {
-atom.setFormalCharge (atom.getFormalCharge () - 1);
-} else if (type.equals ("X")) {
-isDelete = true;
-} else if (!type.equals (".")) {
-return;
-}if (!addHsAndBond) return;
-this.removeUnnecessaryBonds (atom, isDelete);
-var dx = 0;
-if (atom.getCovalentBondCount () == 1) if (wasH) {
-dx = 1.50;
-} else if (!wasH && atomicNumber == 1) {
-dx = 1.0;
-}if (dx != 0) {
-var v = JU.V3.newVsub (atom, this.at[atom.getBondedAtomIndex (0)]);
-var d = v.length ();
-v.normalize ();
-v.scale (dx - d);
-this.setAtomCoordRelative (atomIndex, v.x, v.y, v.z);
-}var bsA = JU.BSUtil.newAndSetBit (atomIndex);
-if (atomicNumber != 1 && autoBond) {
-this.validateBspf (false);
-bs = this.getAtomsWithinRadius (1.0, bsA, false, null);
-bs.andNot (bsA);
-if (bs.nextSetBit (0) >= 0) this.vwr.deleteAtoms (bs, false);
-bs = this.vwr.getModelUndeletedAtomsBitSet (atom.mi);
-bs.andNot (this.getAtomBitsMDa (1612709900, null,  new JU.BS ()));
-this.makeConnections2 (0.1, 1.8, 1, 1073741904, bsA, bs, null, false, false, 0);
-}if (true) this.vwr.addHydrogens (bsA, false, true);
-}, "~N,~S,~B,~B");
 Clazz.defineMethod (c$, "deleteAtoms", 
 function (bs) {
 if (bs == null) return;
@@ -2833,7 +2790,5 @@ for (var i = bsAtoms.nextSetBit (0); i >= 0; i = bsAtoms.nextSetBit (i + 1)) s +
 return s;
 }, "JU.BS,~B");
 Clazz.defineStatics (c$,
-"hbondMinRasmol", 2.5,
-"hbondMaxReal", 3.5,
-"hbondHCMaxReal", 3.2);
+"hbondMinRasmol", 2.5);
 });

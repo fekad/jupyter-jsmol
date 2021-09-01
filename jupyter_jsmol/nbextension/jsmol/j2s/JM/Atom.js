@@ -388,7 +388,7 @@ this.group.setAtomBits (bs);
 }, "JU.BS");
 Clazz.overrideMethod (c$, "getAtomName", 
 function () {
-return (this.atomID > 0 ? JM.Group.specialAtomNames[this.atomID] : this.group.chain.model.ms.atomNames[this.i]);
+return (this.atomID > 0 ? JM.Group.specialAtomNames[this.atomID] : this.group.chain.model.ms.atomNames == null ? "" : this.group.chain.model.ms.atomNames[this.i]);
 });
 Clazz.overrideMethod (c$, "getAtomType", 
 function () {
