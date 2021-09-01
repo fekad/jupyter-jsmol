@@ -1,4 +1,4 @@
-name: jupyter_jsmol-dev
+name: jupyter_jsmol-demo
 channels:
   - conda-forge
   - defaults
@@ -10,6 +10,8 @@ dependencies:
   - jupyterlab
   - ipywidgets
   - jupyter-packaging
-  - black
-  - mkdocs
-  - mkdocs-material
+  - ase
+  - pymatgen
+  - pip
+  - pip:
+    - jupyter_jsmol

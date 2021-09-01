@@ -3,6 +3,9 @@
 # NPM
 # ----
 
+package-lock.json
+yarn.lock
+
 js/lib/
 js/dist/
 
@@ -27,6 +30,7 @@ MANIFEST
 __pycache__/
 *.py[cod]
 *$py.class
+
 
 # C extensions
 *.so
