@@ -1,0 +1,17 @@
+name: jupyter-jsmol-binder
+
+channels:
+  - conda-forge
+  - nodefaults
+
+dependencies:
+  - python
+  - pip
+  - nodejs
+  - yarn
+  - jupyter
+  - jupyterlab
+  - ipywidgets
+  - jupyter-packaging==0.7.9
+  - ase
+  - pymatgen
