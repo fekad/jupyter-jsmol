@@ -33,8 +33,8 @@ jupyter nbextension enable --py [--sys-prefix|--user|--system] jupyter_jsmol
 
 Create a dev environment:
 ```bash
-conda create -n jupyter_jsmol-dev -c conda-forge nodejs yarn python jupyter jupyterlab ipywidgets jupyter-packaging black mkdocs mkdocs-material
-conda activate jupyter_jsmol-dev
+conda create -n jupyter-jsmol-dev -c conda-forge python pip nodejs yarn jupyter jupyterlab ipywidgets jupyter-packaging==0.7.9 ase pymatgen
+conda activate jupyter-jsmol-dev
 ```
 
 Install the python. This will also build the TS package.
@@ -90,3 +90,39 @@ After a change wait for the build to finish and then refresh your browser and th
 #### Python:
 If you make a change to the python code then you will need to restart the notebook kernel to have it take effect.
 
+
+
+
+
+
+- Package Install
+---------------
+
+```bash
+npm install --save jupyter-jsmol
+```
+
+
+
+- To release a new version of jupyter_jsmol on PyPI:
+
+Update _version.py (set release version, remove 'dev')
+git add the _version.py file and git commit
+`python setup.py sdist upload`
+`python setup.py bdist_wheel upload`
+`git tag -a X.X.X -m 'comment'`
+Update _version.py (add 'dev' and increment minor)
+git add and git commit
+git push
+git push --tags
+
+- To release a new version of jupyter-jsmol on NPM:
+
+Update `js/package.json` with new npm package version
+
+```
+# clean out the `dist` and `node_modules` directories
+git clean -fdx
+npm install
+npm publish
+```
