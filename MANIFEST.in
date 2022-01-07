@@ -1,15 +1,10 @@
 include README.md
+include LICENSE
 
-# Javascript files
-include js/tsconfig.json
-include js/package.json
-include js/webpack.config.js
-include jupyter_jsmol/labextension/*.tgz
-
-# Documentation
-graft docs
-exclude docs/\#*
-prune site
+include setup.py
+include jupyter-jsmol.json
+include pyproject.toml
+include install.json
 
 # Examples
 prune examples
@@ -19,12 +14,11 @@ graft tests
 prune tests/build
 
 # Javascript files
-graft jupyter_jsmol/nbextension
-graft js/src
-graft js/css
+graft js
 prune **/node_modules
-prune js/coverage
-prune js/lib
+
+graft jupyter_jsmol/nbextension
+graft jupyter_jsmol/labextension
 
 # Patterns to exclude from any directory
 global-exclude *~
@@ -32,3 +26,4 @@ global-exclude *.pyc
 global-exclude *.pyo
 global-exclude .git
 global-exclude .ipynb_checkpoints
+global-exclude *.map
