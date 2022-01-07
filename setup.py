@@ -1,85 +1,93 @@
-#!/usr/bin/env python
-# coding: utf-8
+from __future__ import print_function
+from setuptools import setup, find_packages
 
 import os
 from os.path import join as pjoin
-from setuptools import setup, find_packages
+from distutils import log
 
 from jupyter_packaging import (
-    wrap_installers,
-    npm_builder,
+    create_cmdclass,
+    install_npm,
+    ensure_targets,
+    combine_commands,
     get_version,
-    get_data_files,
 )
 
 
-# The name of the project
-name = "jupyter_jsmol"
+here = os.path.dirname(os.path.abspath(__file__))
 
-# Get the version
-version = get_version(pjoin(name, "_version.py"))
+log.set_verbosity(log.DEBUG)
+log.info('setup.py entered')
+log.info('$PATH=%s' % os.environ['PATH'])
 
-HERE = os.path.abspath(os.path.dirname(__file__))
-
-builder = npm_builder(path="js")
-
-# Representative files that should exist after a successful build
-jstargets = [
-    pjoin(HERE, name, "nbextension", "index.js"),
-    pjoin(HERE, "js", "lib", "plugin.js"),
-]
-
-cmdclass = wrap_installers(
-    pre_develop=builder, pre_dist=builder, ensured_targets=jstargets
-)
-
-# package_data_spec = {name: ["nbextension/**js*", "labextension/**"]}
-# data_files_spec = [
-#     ("share/jupyter/nbextensions/jupyter_jsmol", "jupyter_jsmol/nbextension", "**"),
-#     ("share/jupyter/labextensions/jupyter_jsmol", "jupyter_jsmol/labextension", "**"),
-#     ("etc/jupyter/nbconfig/notebook.d", ".", "jupyter_jsmol.json"),
-# ]
-# get_data_files(data_files_spec)
-
+name = 'jupyter_jsmol'
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
+
+# Get jupyter_jsmol version
+version = get_version(pjoin(name, '_version.py'))
+
+js_dir = pjoin(here, 'js')
+
+# Representative files that should exist after a successful build
+jstargets = [
+    pjoin(js_dir, 'dist', 'index.js'),
+]
+
+data_files_spec = [
+    ('share/jupyter/nbextensions/jupyter-jsmol', 'jupyter_jsmol/nbextension', '**'),
+    ('share/jupyter/labextensions/jupyter-jsmol', 'jupyter_jsmol/labextension', '**'),
+    ('share/jupyter/labextensions/jupyter-jsmol', '.', 'install.json'),
+    ('etc/jupyter/nbconfig/notebook.d', '.', 'jupyter-jsmol.json'),
+]
+
+cmdclass = create_cmdclass('jsdeps', data_files_spec=data_files_spec)
+cmdclass['jsdeps'] = combine_commands(
+    install_npm(js_dir, npm=['yarn'], build_cmd='build:prod'), ensure_targets(jstargets),
+)
+
 setup_args = dict(
     name=name,
-    description="JSmol viewer widget for Jupyter",
+    version=version,
+    description='JSmol viewer widget for Jupyter',
     long_description=long_description,
     long_description_content_type="text/markdown",
-    version=version,
-    author="Adam Fekete",
-    author_email="adam@fekete.co.uk",
-    url="https://github.com/fekad/jupyter-jsmol",
-    license="BSD",
-    platforms="Linux, Mac OS X, Windows",
-    keywords=["Jupyter", "Widgets", "IPython"],
-    classifiers=[
-        "Intended Audience :: Developers",
-        "Intended Audience :: Science/Research",
-        "Programming Language :: Python",
-        "Programming Language :: Python :: 3",
-        "Framework :: Jupyter",
+    author='Adam Fekete',
+    author_email='adam.fekete@unamur.be',
+    url='https://github.com/fekad/jupyter-jsmol',
+    keywords=[
+        'ipython',
+        'jupyter',
+        'widgets',
     ],
-    cmdclass=cmdclass,
-    packages=find_packages(),
-    include_package_data=True,
+    classifiers=[
+        'Framework :: Jupyter',
+        'Intended Audience :: Developers',
+        'Intended Audience :: Science/Research',
+        'Topic :: Scientific/Engineering :: Physics',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
+    ],
     python_requires=">=3.6",
     install_requires=[
-        "ipywidgets>=7.0.0",
+        'ipywidgets>=7.6.0',
     ],
     extras_require={
         "test": [
             "pytest>=4.6",
             "pytest-cov",
         ],
-        "docs": ["mkdocs", "mkdocs-material"],
-        "examples": ["ase", "matplotlib", "plotly"],
+        "examples": ["ase", "pymatgen"],
     },
+    packages=find_packages(),
+    cmdclass=cmdclass,
+    include_package_data=True,
+    zip_safe=False,
 )
 
-if __name__ == "__main__":
-    setup(**setup_args)
+setup(**setup_args)
