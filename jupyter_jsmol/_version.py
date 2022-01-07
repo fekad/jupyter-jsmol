@@ -1,7 +1,5 @@
-#!/usr/bin/env python
-# coding: utf-8
+# Module version
+version_info = (2022, 1, 0)
 
-# Copyright (c) Adam Fekete.
-# Distributed under the terms of the Modified BSD License.
-
-__version__ = 'v2021.9.0'
+# Module version accessible using jupyter_jsmol.__version__
+__version__ = '.'.join(map(str, version_info))
