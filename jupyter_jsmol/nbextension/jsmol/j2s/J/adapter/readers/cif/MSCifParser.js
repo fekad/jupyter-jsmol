@@ -45,19 +45,23 @@ var c = NaN;
 var w = NaN;
 var fid = null;
 var n = cr.cifParser.getColumnCount ();
+var sep = "_";
 for (var i = 0; i < n; ++i) {
 switch (tok = this.fieldProperty (cr, i)) {
 case 0:
 pt[0] = pt[1] = pt[2] = 0;
 type_id = "F_";
 fid = this.field;
+sep = "";
 break;
 case 1:
 cr.haveCellWaveVector = true;
+sep = "";
 case 41:
 case 42:
 case 43:
 pt[0] = pt[1] = pt[2] = 0;
+sep = "";
 case 14:
 case 26:
 case 51:
@@ -68,6 +72,7 @@ case 46:
 switch (tok) {
 case 1:
 type_id = "W_";
+sep = "";
 break;
 case 41:
 case 42:
@@ -86,7 +91,7 @@ case 36:
 type_id = Character.toUpperCase (J.adapter.readers.cif.MSCifParser.modulationFields[tok].charAt (11)) + "_";
 break;
 }
-type_id += this.field;
+type_id += sep + this.field;
 break;
 case 47:
 type_id = "J_O";
@@ -379,5 +384,6 @@ Clazz.defineStatics (c$,
 "DEPR_FU_COS", 77,
 "DEPR_FU_SIN", 78,
 "modulationFields",  Clazz.newArray (-1, ["*_fourier_wave_vector_seq_id", "_cell_wave_vector_seq_id", "_cell_wave_vector_x", "_cell_wave_vector_y", "_cell_wave_vector_z", "*_fourier_wave_vector_x", "*_fourier_wave_vector_y", "*_fourier_wave_vector_z", "*_fourier_wave_vector_q_coeff", "*_fourier_wave_vector_q1_coeff", "*_fourier_wave_vector_q2_coeff", "*_fourier_wave_vector_q3_coeff", "*_displace_fourier_atom_site_label", "*_displace_fourier_axis", "*_displace_fourier_wave_vector_seq_id", "*_displace_fourier_param_cos", "*_displace_fourier_param_sin", "*_displace_fourier_param_modulus", "*_displace_fourier_param_phase", "*_displace_special_func_atom_site_label", "*_displace_special_func_sawtooth_ax", "*_displace_special_func_sawtooth_ay", "*_displace_special_func_sawtooth_az", "*_displace_special_func_sawtooth_c", "*_displace_special_func_sawtooth_w", "*_occ_fourier_atom_site_label", "*_occ_fourier_wave_vector_seq_id", "*_occ_fourier_param_cos", "*_occ_fourier_param_sin", "*_occ_fourier_param_modulus", "*_occ_fourier_param_phase", "*_occ_special_func_atom_site_label", "*_occ_special_func_crenel_c", "*_occ_special_func_crenel_w", "*_u_fourier_atom_site_label", "*_u_fourier_tens_elem", "*_u_fourier_wave_vector_seq_id", "*_u_fourier_param_cos", "*_u_fourier_param_sin", "*_u_fourier_param_modulus", "*_u_fourier_param_phase", "*_displace_fourier_id", "*_occ_fourier_id", "*_u_fourier_id", "*_displace_fourier_param_id", "*_occ_fourier_param_id", "*_u_fourier_param_id", "*_occ_fourier_absolute_site_label", "*_occ_fourier_absolute", "*_moment_fourier_atom_site_label", "*_moment_fourier_axis", "*_moment_fourier_wave_vector_seq_id", "*_moment_fourier_param_cos", "*_moment_fourier_param_sin", "*_moment_fourier_param_modulus", "*_moment_fourier_param_phase", "*_moment_special_func_atom_site_label", "*_moment_special_func_sawtooth_ax", "*_moment_special_func_sawtooth_ay", "*_moment_special_func_sawtooth_az", "*_moment_special_func_sawtooth_c", "*_moment_special_func_sawtooth_w", "*_displace_legendre_atom_site_label", "*_displace_legendre_axis", "*_displace_legendre_param_order", "*_displace_legendre_param_coeff", "*_u_legendre_atom_site_label", "*_u_legendre_tens_elem", "*_u_legendre_param_order", "*_u_legendre_param_coeff", "*_occ_legendre_atom_site_label", "*_occ_legendre_param_order", "*_occ_legendre_param_coeff", "*_displace_fourier_cos", "*_displace_fourier_sin", "*_occ_fourier_cos", "*_occ_fourier_sin", "*_u_fourier_cos", "*_u_fourier_sin"]),
-"NONE", -1);
+"NONE", -1,
+"SEP", "_");
 });

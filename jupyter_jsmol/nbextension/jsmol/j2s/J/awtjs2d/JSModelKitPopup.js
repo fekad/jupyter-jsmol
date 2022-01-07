@@ -18,14 +18,21 @@ throw e;
 }
 this.isTainted = false;
 }, "J.api.SC,~N,~N");
+Clazz.overrideMethod (c$, "menuHidePopup", 
+function (popup) {
+try {
+(popup).setVisible (false);
+} catch (e) {
+if (Clazz.exceptionOf (e, Exception)) {
+} else {
+throw e;
+}
+}
+}, "J.api.SC");
 Clazz.overrideMethod (c$, "getImageIcon", 
 function (fileName) {
 return "J/modelkit/images/" + fileName;
 }, "~S");
-Clazz.overrideMethod (c$, "menuClickCallback", 
-function (source, script) {
-this.doMenuClickCallbackMK (source, script);
-}, "J.api.SC,~S");
 Clazz.overrideMethod (c$, "menuCheckBoxCallback", 
 function (source) {
 this.doMenuCheckBoxCallback (source);

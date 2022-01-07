@@ -1,5 +1,5 @@
 Clazz.declarePackage ("J.popup");
-Clazz.load (["J.popup.JmolGenericPopup", "JU.Lst"], "J.popup.JmolPopup", ["java.lang.Boolean", "java.util.Arrays", "$.Hashtable", "JU.PT", "J.i18n.GT", "JM.Group", "J.popup.MainPopupResourceBundle", "JU.Elements", "JV.Viewer"], function () {
+Clazz.load (["J.popup.JmolGenericPopup", "JU.Lst"], "J.popup.JmolPopup", ["java.lang.Boolean", "java.util.Arrays", "$.Hashtable", "JU.PT", "J.i18n.GT", "JM.Group", "J.popup.MainPopupResourceBundle", "JU.Elements"], function () {
 c$ = Clazz.decorateAsClass (function () {
 this.updateMode = 0;
 this.titleWidthMax = 20;
@@ -102,7 +102,7 @@ this.updateElementsComputedMenu (this.vwr.getElementsPresentBitSet (this.modelIn
 this.updateHeteroComputedMenu (this.vwr.ms.getHeteroList (this.modelIndex));
 this.updateSurfMoComputedMenu (this.modelInfo.get ("moData"));
 this.updateFileTypeDependentMenus ();
-this.updatePDBComputedMenus ();
+this.updatePDBResidueComputedMenus ();
 this.updateMode = 1;
 this.updateConfigurationComputedMenu ();
 this.updateSYMMETRYComputedMenus ();
@@ -169,7 +169,7 @@ script = JU.PT.rep (script, "PdbId?", "=xxxx");
 Clazz.overrideMethod (c$, "appRestorePopupMenu", 
 function () {
 this.thisPopup = this.popupMenu;
-if (JV.Viewer.isJSNoAWT || this.nFrankList < 2) return;
+if (this.vwr.isJSNoAWT || this.nFrankList < 2) return;
 for (var i = this.nFrankList; --i > 0; ) {
 var f = this.frankList[i];
 this.helper.menuInsertSubMenu (f[0], f[1], (f[2]).intValue ());
@@ -197,7 +197,7 @@ if (id != null) for (var i = id.indexOf (".", 2) + 1; ; ) {
 var iNew = id.indexOf (".", i);
 if (iNew < 0) break;
 var menu = this.htMenus.get (id.substring (i, iNew));
-this.frankList[this.nFrankList++] =  Clazz.newArray (-1, [menu.getParent (), menu, Integer.$valueOf (JV.Viewer.isJSNoAWT ? 0 : this.menuGetListPosition (menu))]);
+this.frankList[this.nFrankList++] =  Clazz.newArray (-1, [menu.getParent (), menu, Integer.$valueOf (this.vwr.isJSNoAWT ? 0 : this.menuGetListPosition (menu))]);
 this.menuAddSubMenu (this.frankPopup, menu);
 i = iNew + 1;
 }
@@ -419,21 +419,25 @@ for (var i = 0; i < scenes.length; i++) this.menuCreateItem (menu, scenes[i], "r
 
 this.menuEnable (menu, true);
 });
-Clazz.defineMethod (c$, "updatePDBComputedMenus", 
+Clazz.defineMethod (c$, "updatePDBResidueComputedMenus", 
 function () {
+var haveMenu = false;
 var menu3 = this.htMenus.get ("PDBaaResiduesComputedMenu");
 if (menu3 != null) {
 this.menuRemoveAll (menu3, 0);
 this.menuEnable (menu3, false);
+haveMenu = true;
 }var menu1 = this.htMenus.get ("PDBnucleicResiduesComputedMenu");
 if (menu1 != null) {
 this.menuRemoveAll (menu1, 0);
 this.menuEnable (menu1, false);
+haveMenu = true;
 }var menu2 = this.htMenus.get ("PDBcarboResiduesComputedMenu");
 if (menu2 != null) {
 this.menuRemoveAll (menu2, 0);
 this.menuEnable (menu2, false);
-}if (this.modelSetInfo == null) return;
+haveMenu = true;
+}if (this.modelSetInfo == null || !haveMenu) return;
 var n = (this.modelIndex < 0 ? 0 : this.modelIndex + 1);
 var lists = (this.modelSetInfo.get ("group3Lists"));
 this.group3List = (lists == null ? null : lists[n]);

@@ -64,9 +64,9 @@
 ){
 var $t$;
 //var c$;
-Jmol.___JmolDate="$Date: 2021-08-17 21:17:38 -0500 (Tue, 17 Aug 2021) $"
+Jmol.___JmolDate="$Date: 2022-01-05 06:57:40 -0600 (Wed, 05 Jan 2022) $"
 Jmol.___fullJmolProperties="src/org/jmol/viewer/Jmol.properties"
-Jmol.___JmolVersion="14.31.52"
+Jmol.___JmolVersion="14.32.9"
 // JSmolJavaExt.js
 
 
@@ -11761,7 +11761,7 @@ pt = s1.indexOf (".");
 }var len = s1.length;
 var pt2 = decimalDigits + pt + 1;
 if (pt2 < len && s1.charAt (pt2) >= '5') {
-return JU.DF.formatDecimal (value + (isNeg ? -1 : 1) * JU.DF.formatAdds[decimalDigits], decimalDigits);
+return JU.DF.formatDecimal ((isNeg ? -1 : 1) * (value + JU.DF.formatAdds[decimalDigits]), decimalDigits);
 }var s0 = s1.substring (0, (decimalDigits == 0 ? pt : ++pt));
 var sb = JU.SB.newS (s0);
 if (isNeg && s0.equals ("0.") && decimalDigits + 2 <= len && s1.substring (2, 2 + decimalDigits).equals ("0000000000000000000000000000000000000000".substring (0, decimalDigits))) isNeg = false;
@@ -12792,6 +12792,12 @@ this.m31 -= m1.m31;
 this.m32 -= m1.m32;
 this.m33 -= m1.m33;
 }, "JU.M4");
+Clazz_defineMethod (c$, "add",
+function (pt) {
+this.m03 += pt.x;
+this.m13 += pt.y;
+this.m23 += pt.z;
+}, "JU.T3");
 Clazz_defineMethod (c$, "transpose",
 function () {
 this.transpose33 ();
@@ -12964,6 +12970,29 @@ this.bytes = null;
 this.bigEndian = true;
 Clazz_instantialize (this, arguments);
 }, JU, "OC", java.io.OutputStream, javajs.api.GenericOutputChannel);
+Clazz_makeConstructor (c$,
+function () {
+Clazz_superConstructor (this, JU.OC, []);
+});
+Clazz_makeConstructor (c$,
+function (fileName) {
+Clazz_superConstructor (this, JU.OC, []);
+this.setParams (null, fileName, false, null);
+}, "~S");
+Clazz_defineMethod (c$, "setParams",
+function (bytePoster, fileName, asWriter, os) {
+this.bytePoster = bytePoster;
+this.$isBase64 = ";base64,".equals (fileName);
+if (this.$isBase64) {
+fileName = null;
+this.os0 = os;
+os = null;
+}this.fileName = fileName;
+this.os = os;
+this.isLocalFile = (fileName != null && !JU.OC.isRemote (fileName));
+if (asWriter && !this.$isBase64 && os != null) this.bw =  new java.io.BufferedWriter ( new java.io.OutputStreamWriter (os));
+return this;
+}, "javajs.api.BytePoster,~S,~B,java.io.OutputStream");
 Clazz_overrideMethod (c$, "isBigEndian",
 function () {
 return this.bigEndian;
@@ -12972,20 +13001,6 @@ Clazz_defineMethod (c$, "setBigEndian",
 function (TF) {
 this.bigEndian = TF;
 }, "~B");
-Clazz_defineMethod (c$, "setParams",
-function (bytePoster, fileName, asWriter, os) {
-this.bytePoster = bytePoster;
-this.fileName = fileName;
-this.$isBase64 = ";base64,".equals (fileName);
-if (this.$isBase64) {
-fileName = null;
-this.os0 = os;
-os = null;
-}this.os = os;
-this.isLocalFile = (fileName != null && !JU.OC.isRemote (fileName));
-if (asWriter && !this.$isBase64 && os != null) this.bw =  new java.io.BufferedWriter ( new java.io.OutputStreamWriter (os));
-return this;
-}, "javajs.api.BytePoster,~S,~B,java.io.OutputStream");
 Clazz_defineMethod (c$, "setBytes",
 function (b) {
 this.bytes = b;
@@ -13152,8 +13167,8 @@ return ret;
 }var jmol = null;
 var _function = null;
 {
-jmol = self.J2S || Jmol; _function = (typeof this.fileName == "function" ?
-this.fileName : null);
+jmol = self.J2S || Jmol; _function = (typeof this.fileName ==
+"function" ? this.fileName : null);
 }if (jmol != null) {
 var data = (this.sb == null ? this.toByteArray () : this.sb.toString ());
 if (_function == null) jmol.doAjax (this.fileName, null, data, this.sb == null);
@@ -13258,6 +13273,10 @@ p.y = y;
 p.z = z;
 return p;
 }, "~N,~N,~N");
+c$.newA = Clazz_defineMethod (c$, "newA",
+function (a) {
+return JU.P3.new3 (a[0], a[1], a[2]);
+}, "~A");
 Clazz_defineStatics (c$,
 "unlikely", null);
 });
@@ -13764,13 +13783,12 @@ return (value != null && value.length > 1 && value.startsWith ("\"") && value.en
 }, "~S");
 c$.isNonStringPrimitive = Clazz_defineMethod (c$, "isNonStringPrimitive",
 function (info) {
-return Clazz_instanceOf (info, Number) || Clazz_instanceOf (info, Boolean);
-}, "~O");
-c$.arrayGet = Clazz_defineMethod (c$, "arrayGet",
- function (info, i) {
 {
-return info[i];
-}}, "~O,~N");
+if(typeof info == "number" || typeof info == "boolean") {
+return true;
+}
+}return Clazz_instanceOf (info, Number) || Clazz_instanceOf (info, Boolean);
+}, "~O");
 c$.toJSON = Clazz_defineMethod (c$, "toJSON",
 function (infoType, info) {
 if (info == null) return JU.PT.packageJSON (infoType, null);
@@ -13793,6 +13811,7 @@ if (Clazz_instanceOf (info, java.util.Map)) {
 sb.append ("{ ");
 var sep = "";
 for (var key, $key = (info).keySet ().iterator (); $key.hasNext () && ((key = $key.next ()) || true);) {
+if (key == null) key = "null";
 sb.append (sep).append (JU.PT.packageJSON (key, JU.PT.toJSON (null, (info).get (key))));
 sep = ",";
 }
@@ -13823,11 +13842,18 @@ break;
 if (s == null) {
 sb.append ("[");
 var n = JU.AU.getLength (info);
+var o = null;
+{
+o = info[0];
+typeof o != "number" && typeof 0 != "boolean" && (o = null);
+}if (o != null) {
+sb.appendO (info);
+} else {
 for (var i = 0; i < n; i++) {
 if (i > 0) sb.appendC (',');
-sb.append (JU.PT.toJSON (null, JU.PT.arrayGet (info, i)));
+sb.append (JU.PT.toJSON (null, java.lang.reflect.Array.get (info, i)));
 }
-sb.append ("]");
+}sb.append ("]");
 break;
 }info = info.toString ();
 }
@@ -17719,6 +17745,7 @@ if (this.pd.getBoolean (JSV.common.ScriptToken.YSCALEON)) this.drawYScale (gMain
 if (subIndex >= 0) this.draw2DUnits (gMain);
 }this.drawWidgets (gFront, g2, subIndex, needNewPins, doDraw1DObjects, true, false);
 this.drawWidgets (gFront, g2, subIndex, needNewPins, doDraw1DObjects, true, true);
+this.widgetsAreSet = true;
 }if (this.annotations != null) this.drawAnnotations (gFront, this.annotations, null);
 }, "~O,~O,~O,~N,~B,~B,~B");
 Clazz_defineMethod (c$, "drawSpectrumSource",
@@ -20308,6 +20335,7 @@ this.userYFactor = 1;
 this.currentSubSpectrumIndex = 0;
 this.$isForcedSubset = false;
 this.exportXAxisLeftToRight = false;
+this.titleLabel = null;
 Clazz_instantialize (this, arguments);
 }, JSV.common, "Spectrum", JSV.source.JDXDataObject);
 Clazz_prepareFields (c$, function () {
@@ -20424,13 +20452,14 @@ return (this.selectedPeak != null ? this.selectedPeak.getTitle () : this.highlig
 });
 Clazz_defineMethod (c$, "getTitleLabel",
 function () {
+if (this.titleLabel != null) return this.titleLabel;
 var type = (this.peakList == null || this.peakList.size () == 0 ? this.getQualifiedDataType () : this.peakList.get (0).getType ());
 if (type != null && type.startsWith ("NMR")) {
 if (this.nucleusY != null && !this.nucleusY.equals ("?")) {
 type = "2D" + type;
 } else {
-type = this.nucleusX + type;
-}}return (type != null && type.length > 0 ? type + " " : "") + this.getTitle ();
+type = JSV.source.JDXDataObject.getNominalSpecFreq (this.nucleusX, this.getObservedFreq ()) + " MHz " + this.nucleusX + " " + type;
+}}return this.titleLabel = (type != null && type.length > 0 ? type + " " : "") + this.getTitle ();
 });
 Clazz_defineMethod (c$, "setNextPeak",
 function (coord, istep) {
@@ -20928,7 +20957,6 @@ if (Clazz_instanceOf (ret, JU.SB) || Clazz_instanceOf (ret, String)) return  new
 if (JSV.common.JSVFileManager.isAB (ret)) return  new java.io.BufferedReader ( new java.io.StringReader ( String.instantialize (ret)));
 var bis =  new java.io.BufferedInputStream (ret);
 var $in = bis;
-if (JSV.common.JSVFileManager.isZipFile (bis)) return (JSV.common.JSViewer.getInterface ("JSV.common.JSVZipUtil")).newJSVZipFileSequentialReader ($in, subFileList, startCode);
 if (JSV.common.JSVFileManager.isGzip (bis)) $in = (JSV.common.JSViewer.getInterface ("JSV.common.JSVZipUtil")).newGZIPInputStream ($in);
 return  new java.io.BufferedReader ( new java.io.InputStreamReader ($in, "UTF-8"));
 } catch (e) {
@@ -20978,9 +21006,8 @@ return JSV.common.JSVFileManager.getBufferedReaderForStringOrBytes (data);
 }, "~S");
 c$.isAB = Clazz_defineMethod (c$, "isAB",
 function (x) {
-{
-return Clazz_isAB(x);
-}}, "~O");
+return JU.AU.isAB (x);
+}, "~O");
 c$.isZipFile = Clazz_defineMethod (c$, "isZipFile",
 function (is) {
 try {
@@ -22316,7 +22343,8 @@ var isView = false;
 if (strUrl != null && strUrl.startsWith ("cache://")) {
 {
 data = Jmol.Cache.get(name = strUrl);
-}}if (data != null) {
+}}var file = null;
+if (data != null) {
 try {
 fileName = name;
 newPath = filePath = JSV.common.JSVFileManager.getFullPathName (name);
@@ -22331,13 +22359,13 @@ isView = true;
 newPath = fileName = filePath = "View" + (++this.nViews);
 } else if (strUrl != null) {
 try {
+file = this.apiPlatform.newFile (strUrl);
 var u =  new java.net.URL (JSV.common.JSVFileManager.appletDocumentBase, strUrl, null);
 filePath = u.toString ();
 this.recentURL = filePath;
 fileName = JSV.common.JSVFileManager.getTagName (filePath);
 } catch (e) {
 if (Clazz_exceptionOf (e, java.net.MalformedURLException)) {
-var file = this.apiPlatform.newFile (strUrl);
 fileName = file.getName ();
 newPath = filePath = file.getFullPath ();
 this.recentURL = null;
@@ -22356,7 +22384,7 @@ this.si.writeStatus (filePath + " is already open");
 }if (!isAppend && !isView) this.close ("all");
 this.si.setCursor (3);
 try {
-this.si.siSetCurrentSource (isView ? JSV.source.JDXSource.createView (specs) : JSV.source.JDXReader.createJDXSource (data, filePath, this.obscureTitleFromUser === Boolean.TRUE, this.loadImaginary, firstSpec, lastSpec, this.nmrMaxY));
+this.si.siSetCurrentSource (isView ? JSV.source.JDXSource.createView (specs) : JSV.source.JDXReader.createJDXSource (file, data, filePath, this.obscureTitleFromUser === Boolean.TRUE, this.loadImaginary, firstSpec, lastSpec, this.nmrMaxY));
 } catch (e) {
 if (Clazz_exceptionOf (e, Exception)) {
 {
@@ -28070,7 +28098,7 @@ function () {
 return (this.fileShiftRefType != -1);
 });
 Clazz_defineMethod (c$, "applyShiftReference",
-function (referenceFreq, shift) {
+ function (referenceFreq, shift) {
 if (this.fileShiftRefDataPt > this.xyCoords.length || this.fileShiftRefDataPt < 0) return;
 var coord;
 switch (this.fileShiftRefType) {
@@ -28574,7 +28602,7 @@ Clazz_defineStatics (c$,
 "typeNames",  Clazz_newArray (-1, ["ND NMR SPECTRUM   NMR", "NMR SPECTRUM      NMR", "INFRARED SPECTRUM IR", "MASS SPECTRUM     MS", "RAMAN SPECTRUM    RAMAN", "GAS CHROMATOGRAM  GC", "UV/VIS SPECTRUM   UV/VIS"]));
 });
 Clazz_declarePackage ("JSV.source");
-Clazz_load (["J.api.JmolJDXMOLReader"], "JSV.source.JDXReader", ["java.io.BufferedReader", "$.InputStream", "$.StringReader", "java.lang.Double", "$.Float", "java.util.Hashtable", "$.LinkedHashMap", "$.StringTokenizer", "JU.AU", "$.Lst", "$.PT", "$.SB", "JSV.api.JSVZipReader", "JSV.common.Coordinate", "$.JSVFileManager", "$.JSViewer", "$.PeakInfo", "$.Spectrum", "JSV.exception.JSVException", "JSV.source.JDXDecompressor", "$.JDXSource", "$.JDXSourceStreamTokenizer", "JU.Logger", "JV.Viewer"], function () {
+Clazz_load (["J.api.JmolJDXMOLReader"], "JSV.source.JDXReader", ["java.io.BufferedReader", "$.InputStream", "$.StringReader", "java.lang.Double", "$.Float", "java.util.Hashtable", "$.LinkedHashMap", "$.StringTokenizer", "javajs.api.Interface", "JU.AU", "$.Lst", "$.PT", "$.Rdr", "$.SB", "JSV.api.JSVZipReader", "JSV.common.Coordinate", "$.JSVFileManager", "$.JSViewer", "$.PeakInfo", "$.Spectrum", "JSV.exception.JSVException", "JSV.source.JDXDecompressor", "$.JDXSource", "$.JDXSourceStreamTokenizer", "JU.Logger"], function () {
 c$ = Clazz_decorateAsClass (function () {
 this.nmrMaxY = NaN;
 this.source = null;
@@ -28621,24 +28649,33 @@ this.loadImaginary = loadImaginary;
 }, "~S,~B,~B,~N,~N,~N");
 c$.createJDXSourceFromStream = Clazz_defineMethod (c$, "createJDXSourceFromStream",
 function ($in, obscure, loadImaginary, nmrMaxY) {
-return JSV.source.JDXReader.createJDXSource ($in, "stream", obscure, loadImaginary, -1, -1, nmrMaxY);
+return JSV.source.JDXReader.createJDXSource (null, $in, "stream", obscure, loadImaginary, -1, -1, nmrMaxY);
 }, "java.io.InputStream,~B,~B,~N");
 c$.getHeaderMap = Clazz_defineMethod (c$, "getHeaderMap",
 function ($in, map) {
+return JSV.source.JDXReader.getHeaderMapS ($in, map, null);
+}, "java.io.InputStream,java.util.Map");
+c$.getHeaderMapS = Clazz_defineMethod (c$, "getHeaderMapS",
+function ($in, map, suffix) {
 if (map == null) map =  new java.util.LinkedHashMap ();
-var hlist = JSV.source.JDXReader.createJDXSource ($in, null, false, false, 0, -1, 0).getJDXSpectrum (0).headerTable;
+var hlist = JSV.source.JDXReader.createJDXSource (null, $in, null, false, false, 0, -1, 0).getJDXSpectrum (0).headerTable;
 for (var i = 0, n = hlist.size (); i < n; i++) {
 var h = hlist.get (i);
-map.put (h[2], h[1]);
+map.put ((suffix == null ? h[2] : h[2] + suffix), h[1]);
 }
 return map;
-}, "java.io.InputStream,java.util.Map");
+}, "java.io.InputStream,java.util.Map,~S");
 c$.createJDXSource = Clazz_defineMethod (c$, "createJDXSource",
-function ($in, filePath, obscure, loadImaginary, iSpecFirst, iSpecLast, nmrMaxY) {
+function (file, $in, filePath, obscure, loadImaginary, iSpecFirst, iSpecLast, nmrMaxY) {
 var isHeaderOnly = (iSpecLast < iSpecFirst);
 var data = null;
 var br;
-if (Clazz_instanceOf ($in, String) || JU.AU.isAB ($in)) {
+var bytes = null;
+if (JU.AU.isAB ($in)) {
+bytes = $in;
+if (JU.Rdr.isZipB (bytes)) {
+return JSV.source.JDXReader.readBrukerFileZip (bytes, file == null ? filePath : file.getFullPath ());
+}}if (Clazz_instanceOf ($in, String) || bytes != null) {
 if (Clazz_instanceOf ($in, String)) data = $in;
 br = JSV.common.JSVFileManager.getBufferedReaderForStringOrBytes ($in);
 } else if (Clazz_instanceOf ($in, java.io.InputStream)) {
@@ -28648,19 +28685,28 @@ br = $in;
 }var header = null;
 var source = null;
 try {
-if (br == null) br = JSV.common.JSVFileManager.getBufferedReaderFromName (filePath, "##TITLE");
-if (!isHeaderOnly) {
+if (br == null) {
+if (file != null && file.isDirectory ()) return JSV.source.JDXReader.readBrukerFileDir (file.getFullPath ());
+br = JSV.common.JSVFileManager.getBufferedReaderFromName (filePath, "##TITLE");
+}if (!isHeaderOnly) {
 br.mark (400);
 var chs =  Clazz_newCharArray (400, '\0');
 br.read (chs, 0, 400);
 br.reset ();
 header =  String.instantialize (chs);
-var pt1 = header.indexOf ('#');
+if (header.startsWith ("PK")) {
+br.close ();
+return JSV.source.JDXReader.readBrukerFileZip (null, file.getFullPath ());
+}if (header.indexOf ('\0') >= 0 || header.indexOf ('\uFFFD') >= 0 || header.indexOf ("##TITLE= Parameter file") == 0 || header.indexOf ("##TITLE= Audit trail") == 0) {
+br.close ();
+return JSV.source.JDXReader.readBrukerFileDir (file.getParentAsFile ().getFullPath ());
+}var pt1 = header.indexOf ('#');
 var pt2 = header.indexOf ('<');
 if (pt1 < 0 || pt2 >= 0 && pt2 < pt1) {
 var xmlType = header.toLowerCase ();
 xmlType = (xmlType.contains ("<animl") || xmlType.contains ("<!doctype technique") ? "AnIML" : xmlType.contains ("xml-cml") ? "CML" : null);
-if (xmlType != null) source = (JSV.common.JSViewer.getInterface ("JSV.source." + xmlType + "Reader")).getSource (filePath, br);
+if (xmlType == null) return JSV.source.JDXReader.readBrukerFileDir (file.getFullPath ());
+source = (JSV.common.JSViewer.getInterface ("JSV.source." + xmlType + "Reader")).getSource (filePath, br);
 br.close ();
 if (source == null) {
 JU.Logger.error (header + "...");
@@ -28671,7 +28717,7 @@ source = ( new JSV.source.JDXReader (filePath, obscure, loadImaginary, iSpecFirs
 return source;
 } catch (e) {
 if (Clazz_exceptionOf (e, Exception)) {
-if (!JV.Viewer.isJS) e.printStackTrace ();
+if (!JSV.common.JSViewer.isJS) e.printStackTrace ();
 if (br != null) br.close ();
 if (header != null) JU.Logger.error (header + "...");
 var s = e.getMessage ();
@@ -28681,7 +28727,15 @@ var s = e.getMessage ();
 throw e;
 }
 }
-}, "~O,~S,~B,~B,~N,~N,~N");
+}, "J.api.GenericFileInterface,~O,~S,~B,~B,~N,~N,~N");
+c$.readBrukerFileDir = Clazz_defineMethod (c$, "readBrukerFileDir",
+ function (filePath) {
+return (javajs.api.Interface.getInterface ("JSV.source.BrukerReader")).readBrukerDir (filePath);
+}, "~S");
+c$.readBrukerFileZip = Clazz_defineMethod (c$, "readBrukerFileZip",
+ function (bytes, filePath) {
+return (javajs.api.Interface.getInterface ("JSV.source.BrukerReader")).readBrukerZip (bytes, filePath);
+}, "~A,~S");
 Clazz_defineMethod (c$, "getJDXSource",
  function (reader, isHeaderOnly) {
 this.source =  new JSV.source.JDXSource (0, this.filePath);
@@ -28817,6 +28871,7 @@ break;
 }label = tmp;
 if (this.isTabularData) {
 this.processTabularData (spectrum, dataLDRTable, label, false);
+continue;
 }if (label.equals ("##DATATYPE")) {
 if (value.toUpperCase ().equals ("LINK")) {
 this.getBlockSpectra (dataLDRTable);
@@ -28847,7 +28902,7 @@ continue;
 }
 } catch (e) {
 if (Clazz_exceptionOf (e, Exception)) {
-if (!JV.Viewer.isJS) e.printStackTrace ();
+if (!JSV.common.JSViewer.isJS) e.printStackTrace ();
 throw  new JSV.exception.JSVException (e.getMessage ());
 } else {
 throw e;
@@ -29190,7 +29245,7 @@ Zystem.err.println (this.errorLog.toString ());
 }}, "JSV.source.JDXDataObject,~A");
 c$.addHeader = Clazz_defineMethod (c$, "addHeader",
 function (table, label, value) {
-var entry;
+var entry = null;
 for (var i = 0; i < table.size (); i++) if ((entry = table.get (i))[0].equals (label)) {
 entry[1] = value;
 return;

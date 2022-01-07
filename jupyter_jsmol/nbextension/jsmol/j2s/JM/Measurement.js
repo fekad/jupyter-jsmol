@@ -31,6 +31,7 @@ this.renderArc = null;
 this.newUnits = null;
 this.fixedValue = NaN;
 this.isPending = false;
+this.inFront = false;
 Clazz.instantialize (this, arguments);
 }, JM, "Measurement");
 Clazz.prepareFields (c$, function () {

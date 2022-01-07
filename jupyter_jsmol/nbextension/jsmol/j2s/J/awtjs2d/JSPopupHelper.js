@@ -85,4 +85,9 @@ function (e) {
 var jmi = e.getSource ();
 this.popup.menuFocusCallback (jmi.getName (), jmi.getActionCommand (), false);
 }, "java.awt.event.MouseEvent");
+Clazz.overrideMethod (c$, "dispose", 
+function (popupMenu) {
+this.menuClearListeners (popupMenu);
+this.popup = null;
+}, "J.api.SC");
 });

@@ -31,7 +31,6 @@ this.isBio = false;
 this.isBilbao = false;
 this.latticeType = "P";
 this.nHallOperators = null;
-this.info = null;
 Clazz.instantialize (this, arguments);
 }, JS, "SpaceGroup");
 c$.getNull = Clazz.defineMethod (c$, "getNull",
@@ -349,7 +348,7 @@ this.xyzList.put (xxx + "!", Integer.$valueOf (this.operationCount));
 if (this.operations == null) this.operations =  new Array (4);
 if (this.operationCount == this.operations.length) this.operations = JU.AU.arrayCopyObject (this.operations, this.operationCount * 2);
 this.operations[this.operationCount++] = op;
-op.index = this.operationCount;
+op.number = this.operationCount;
 if (op.timeReversal != 0) this.operations[0].timeReversal = 1;
 if (JU.Logger.debugging) JU.Logger.debug ("\naddOperation " + this.operationCount + op.dumpInfo ());
 return this.operationCount - 1;
@@ -605,6 +604,7 @@ for (var i = 0; i < nOps; i++) {
 var newOp =  new JS.SymmetryOperation (null, null, 0, 0, true);
 newOp.modDim = this.modDim;
 var op = this.operations[i];
+newOp.divisor = op.divisor;
 newOp.linearRotTrans = JU.AU.arrayCopyF (op.linearRotTrans, -1);
 newOp.setFromMatrix (data, false);
 if (magRev != -2) newOp.setTimeReversal (op.timeReversal * magRev);

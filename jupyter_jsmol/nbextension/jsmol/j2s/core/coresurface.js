@@ -482,7 +482,7 @@ default:
 type = eval.optParameterAsString (i);
 break;
 }
-var scale = 1;
+var scale = (intScale == 0 ? 1 : intScale / 100);
 var index = 0;
 if (type.length > 0) {
 if (this.isFloatParameter (++i)) index = this.intParameter (i++);
@@ -638,6 +638,7 @@ plane = null;
 var target = null;
 var bsAtoms = null;
 var options = 0;
+var trans = null;
 if (tok == 1296041986) {
 iSym = 0;
 switch (this.tokAt (++i)) {
@@ -649,8 +650,12 @@ xyz = JS.SV.sValue (this.getToken (i));
 break;
 case 2:
 default:
-if (!eval.isCenterParameter (i)) iSym = this.intParameter (i++);
-var ret =  Clazz_newArray (-1, [null, this.vwr.getFrameAtoms ()]);
+if (!eval.isCenterParameter (i)) {
+iSym = this.intParameter (i++);
+if (eval.isArrayParameter (i)) {
+trans = JU.P3.newA (eval.floatParameterSet (i, 3, 3));
+i = ++eval.iToken;
+}}var ret =  Clazz_newArray (-1, [null, this.vwr.getFrameAtoms ()]);
 if (eval.isCenterParameter (i)) center = eval.centerParameter (i, ret);
 if (eval.isCenterParameter (eval.iToken + 1)) target = eval.centerParameter (++eval.iToken, ret);
 if (this.chk) return;
@@ -679,11 +684,11 @@ if (bsAtoms != null) {
 s = null;
 var iatom = bsAtoms.nextSetBit (0);
 if (options != 0) {
-var o = this.vwr.getSymmetryInfo (iatom, xyz, iSym, center, target, 134217751, null, intScale / 100, nth, options);
+var o = this.vwr.getSymmetryInfo (iatom, xyz, iSym, trans, center, target, 134217751, null, intScale / 100, nth, options);
 if (Clazz_instanceOf (o, JU.P3)) target = o;
  else s = "";
 }if (thisId == null) thisId = "sym";
-if (s == null) s = this.vwr.getSymmetryInfo (iatom, xyz, iSym, center, target, 135176, thisId, intScale / 100, nth, options);
+if (s == null) s = this.vwr.getSymmetryInfo (iatom, xyz, iSym, trans, center, target, 135176, thisId, intScale / 100, nth, options);
 }eval.runBufferedSafely (s.length > 0 ? s : "draw ID \"" + thisId + "_*\" delete", eval.outputBuffer);
 }return;
 case 4115:
@@ -711,7 +716,7 @@ if (!havePoints && !isIntersect && tokIntersect == 0) {
 if (eval.theTok == 134219265) {
 havePoints = true;
 this.setShapeProperty (22, "plane", null);
-plane = eval.hklParameter (++i);
+plane = eval.hklParameter (++i, true);
 i = eval.iToken;
 propertyName = "coords";
 var list =  new JU.Lst ();
@@ -726,7 +731,7 @@ iArray = i + 1;
 }if (eval.theTok == 134217750) {
 plane = eval.planeParameter (i);
 } else {
-plane = eval.hklParameter (++i);
+plane = eval.hklParameter (++i, false);
 }i = eval.iToken;
 if (tokIntersect != 0) {
 if (this.chk) break;
@@ -1734,7 +1739,7 @@ break;
 case 134219265:
 planeSeen = true;
 propertyName = "plane";
-propertyValue = eval.hklParameter (++i);
+propertyValue = eval.hklParameter (++i, false);
 i = eval.iToken;
 sbCommand.append (" plane ").append (JU.Escape.eP4 (propertyValue));
 break;

@@ -188,6 +188,13 @@ var name = this.vwr.getP ("_smilesString");
 if (name.length != 0) fileName = name;
 this.cbl.notifyCallback (J.c.CBK.LOADSTRUCT,  Clazz.newArray (-1, [sJmol, fullPathName, fileName, modelName, errorMsg, Integer.$valueOf (ptLoad), this.vwr.getP ("_modelNumber"), this.vwr.getModelNumberDotted (this.vwr.ms.mc - 1), isAsync]));
 }}, "~S,~S,~S,~S,~N,~B,Boolean");
+Clazz.defineMethod (c$, "setStatusModelKit",
+function (istate) {
+var state = (istate == 1 ? "ON" : "OFF");
+this.setStatusChanged ("modelkit", istate, state, false);
+var sJmol = this.jmolScriptCallback (J.c.CBK.MODELKIT);
+if (this.notifyEnabled (J.c.CBK.MODELKIT)) this.cbl.notifyCallback (J.c.CBK.MODELKIT,  Clazz.newArray (-1, [sJmol, state]));
+}, "~N");
 Clazz.defineMethod (c$, "setStatusFrameChanged",
 function (fileNo, modelNo, firstNo, lastNo, currentFrame, currentMorphModel, entryName) {
 if (this.vwr.ms == null) return;
@@ -196,7 +203,7 @@ var frameNo = (animating ? -2 - currentFrame : currentFrame);
 this.setStatusChanged ("frameChanged", frameNo, (currentFrame >= 0 ? this.vwr.getModelNumberDotted (currentFrame) : ""), false);
 var sJmol = this.jmolScriptCallback (J.c.CBK.ANIMFRAME);
 if (this.notifyEnabled (J.c.CBK.ANIMFRAME)) this.cbl.notifyCallback (J.c.CBK.ANIMFRAME,  Clazz.newArray (-1, [sJmol,  Clazz.newIntArray (-1, [frameNo, fileNo, modelNo, firstNo, lastNo, currentFrame]), entryName, Float.$valueOf (currentMorphModel)]));
-if (!animating) this.vwr.checkMenuUpdate ();
+if (!animating && !this.vwr.isJSNoAWT) this.vwr.checkMenuUpdate ();
 }, "~N,~N,~N,~N,~N,~N,~S");
 Clazz.defineMethod (c$, "setStatusDragDropped",
 function (mode, x, y, fileName) {

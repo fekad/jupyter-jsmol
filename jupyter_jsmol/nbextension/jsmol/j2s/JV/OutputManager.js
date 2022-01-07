@@ -682,18 +682,17 @@ bos = out;
 var zos = this.vwr.getJzt ().getZipOutputStream (bos);
 for (var i = 0; i < fileNamesAndByteArrays.size (); i += 3) {
 var fname = fileNamesAndByteArrays.get (i);
-var bytes = null;
-var data = fm.cacheGet (fname, false);
+var fnameShort = fileNamesAndByteArrays.get (i + 1);
+var bytes = fileNamesAndByteArrays.get (i + 2);
+var data = (bytes == null ? fm.cacheGet (fname, false) : null);
 if (Clazz.instanceOf (data, java.util.Map)) continue;
 if (fname.indexOf ("file:/") == 0) {
 fname = fname.substring (5);
 if (fname.length > 2 && fname.charAt (2) == ':') fname = fname.substring (1);
 } else if (fname.indexOf ("cache://") == 0) {
 fname = fname.substring (8);
-}var fnameShort = fileNamesAndByteArrays.get (i + 1);
-if (fnameShort == null) fnameShort = fname;
+}if (fnameShort == null) fnameShort = fname;
 if (data != null) bytes = (JU.AU.isAB (data) ? data : (data).getBytes ());
-if (bytes == null) bytes = fileNamesAndByteArrays.get (i + 2);
 var key = ";" + fnameShort + ";";
 if (fileList.indexOf (key) >= 0) {
 JU.Logger.info ("duplicate entry");

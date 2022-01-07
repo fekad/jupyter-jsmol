@@ -1,5 +1,5 @@
 Clazz.declarePackage ("JU");
-Clazz.load (["javajs.api.GenericZipTools"], "JU.ZipTools", ["java.io.BufferedInputStream", "$.IOException", "java.lang.Boolean", "java.util.zip.CRC32", "$.GZIPInputStream", "$.ZipEntry", "$.ZipInputStream", "javajs.api.GenericZipInputStream", "$.Interface", "$.ZInputStream", "JU.BArray", "$.Lst", "$.Rdr", "$.SB"], function () {
+Clazz.load (["javajs.api.GenericZipTools"], "JU.ZipTools", ["java.io.BufferedInputStream", "$.IOException", "java.lang.Boolean", "java.util.zip.CRC32", "$.GZIPInputStream", "$.ZipEntry", "$.ZipInputStream", "javajs.api.GenericZipInputStream", "$.Interface", "JU.BArray", "$.Lst", "$.Rdr", "$.SB"], function () {
 c$ = Clazz.declareType (JU, "ZipTools", null, javajs.api.GenericZipTools);
 Clazz.makeConstructor (c$,
 function () {
@@ -10,7 +10,7 @@ return JU.ZipTools.newZIS (is);
 }, "java.io.InputStream");
 c$.newZIS = Clazz.defineMethod (c$, "newZIS",
  function (is) {
-return (Clazz.instanceOf (is, javajs.api.ZInputStream) ? is : Clazz.instanceOf (is, java.io.BufferedInputStream) ?  new javajs.api.GenericZipInputStream (is) :  new javajs.api.GenericZipInputStream ( new java.io.BufferedInputStream (is)));
+return (Clazz.instanceOf (is, java.util.zip.ZipInputStream) ? is : Clazz.instanceOf (is, java.io.BufferedInputStream) ?  new javajs.api.GenericZipInputStream (is) :  new javajs.api.GenericZipInputStream ( new java.io.BufferedInputStream (is)));
 }, "java.io.InputStream");
 Clazz.overrideMethod (c$, "getAllZipData",
 function (is, subfileList, name0, binaryFileList, exclude, fileData) {
@@ -23,7 +23,7 @@ var fileName = (justDir ? "." : list[listPtr]);
 if (JU.Rdr.isTar (bis)) return JU.ZipTools.getTarFileDirectory (bis, fileName, asBufferedInputStream);
 if (justDir) return this.getZipDirectoryAsStringAndClose (bis);
 bis = JU.Rdr.getPngZipStream (bis, true);
-var zis =  new java.util.zip.ZipInputStream (bis);
+var zis = JU.ZipTools.newZIS (bis);
 var ze;
 try {
 var isAll = (fileName.equals ("."));
@@ -92,7 +92,7 @@ if (fileName.lastIndexOf ("/") == fileName.length - 1) return ret;
 try {
 if (JU.Rdr.isTar (bis)) return JU.ZipTools.getTarContents (bis, fileName, null);
 bis = JU.Rdr.getPngZipStream (bis, true);
-var zis =  new java.util.zip.ZipInputStream (bis);
+var zis = JU.ZipTools.newZIS (bis);
 var ze;
 while ((ze = zis.getNextEntry ()) != null) {
 if (!fileName.equals (ze.getName ())) continue;
@@ -186,7 +186,7 @@ Clazz.defineMethod (c$, "getZipDirectoryOrErrorAndClose",
  function (bis, manifestID) {
 bis = JU.Rdr.getPngZipStream (bis, true);
 var v =  new JU.Lst ();
-var zis =  new java.util.zip.ZipInputStream (bis);
+var zis = JU.ZipTools.newZIS (bis);
 var ze;
 var manifest = null;
 while ((ze = zis.getNextEntry ()) != null) {

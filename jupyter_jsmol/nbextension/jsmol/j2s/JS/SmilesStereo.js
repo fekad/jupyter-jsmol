@@ -145,21 +145,22 @@ throw e;
 return true;
 }, "JS.SmilesAtom");
 Clazz.defineMethod (c$, "setTopoCoordinates", 
-function (atom, sAtom, sAtom2, cAtoms, isNot) {
-var chiralOrder = (atom.stereo == null ? 0 : atom.stereo.chiralOrder);
-var chClass = (atom.stereo == null ? 1 : atom.stereo.chiralClass);
-atom.set (0, 0, 0);
+function (sAtom0, pAtom, sAtom2, cAtoms, isNot) {
+var chiralOrder = (sAtom0.stereo == null ? 0 : sAtom0.stereo.chiralOrder);
+var chClass = (sAtom0.stereo == null ? 1 : sAtom0.stereo.chiralClass);
+sAtom0.set (0, 0, 0);
 var map;
 if (this.jmolAtoms == null) {
 map =  Clazz.newIntArray (-1, [0, 1, 2, 3]);
 } else {
-atom = this.jmolAtoms[sAtom.getMatchingAtomIndex ()];
-atom.set (0, 0, 0);
+sAtom0 = this.jmolAtoms[pAtom.getMatchingAtomIndex ()];
+sAtom0.set (0, 0, 0);
 var a2 = (chClass == 2 ? this.jmolAtoms[sAtom2.getMatchingAtomIndex ()] : null);
-map = this.getMappedTopoAtoms (atom, a2, cAtoms, chiralOrder == 0 ?  Clazz.newIntArray (cAtoms.length, 0) : null);
+map = this.getMappedTopoAtoms (sAtom0, a2, cAtoms, chiralOrder == 0 ?  Clazz.newIntArray (cAtoms.length, 0) : null);
 }var pt;
 switch (chClass) {
 case 1:
+sAtom0.set (0, 0, 0.2);
 var a = 6.283185307179586 / cAtoms.length;
 for (var i = cAtoms.length; --i >= 0; ) {
 cAtoms[map[i]].set ((Math.cos (i * a)), Math.sin (i * a), isNot ? 1 : -1);
@@ -282,18 +283,20 @@ Clazz.defineMethod (c$, "getJmolAtom",
  function (i) {
 return (i < 0 || i >= this.jmolAtoms.length ? null : this.jmolAtoms[i]);
 }, "~N");
-Clazz.defineMethod (c$, "sortBondsByStereo", 
-function (atom, atomPrev, ref, bonds, vTemp) {
+Clazz.defineMethod (c$, "sortPolyBondsByStereo", 
+function (atom, ref, center, bonds, vTemp) {
 if (bonds.length < 2 || !(Clazz.instanceOf (atom, JU.T3))) return;
-if (atomPrev == null) atomPrev = bonds[0].getOtherNode (atom);
+var checkAlign = (ref != null);
+ref = bonds[0].getOtherNode (atom);
 var aTemp =  Clazz.newArray (bonds.length, 0, null);
 if (this.sorter == null) this.sorter =  new JS.PolyhedronStereoSorter ();
-vTemp.sub2 (atomPrev, ref);
+vTemp.sub2 (ref, center);
 this.sorter.setRef (vTemp);
-for (var i = bonds.length; --i >= 0; ) {
+var nb = bonds.length;
+var f0 = 0;
+for (var i = nb; --i >= 0; ) {
 var a = bonds[i].getOtherNode (atom);
-var f = (a === atomPrev ? 0 : this.sorter.isAligned (a, ref, atomPrev) ? -999 : JU.Measure.computeTorsion (atom, atomPrev, ref, a, true));
-if (bonds.length > 2) f += 360;
+var f = f0 + (a === ref ? 0 : checkAlign && this.sorter.isAligned (a, center, ref) ? -999 : JU.Measure.computeTorsion (ref, atom, center, a, true));
 aTemp[i] =  Clazz.newArray (-1, [bonds[i], Float.$valueOf (f), a]);
 }
 java.util.Arrays.sort (aTemp, this.sorter);
@@ -313,8 +316,7 @@ for (var i = 0; i < search.ac; i++) {
 var pAtom = search.patternAtoms[i];
 if (pAtom.stereo == null && search.polyhedronStereo == null) continue;
 var isNot = (pAtom.not != invertStereochemistry);
-var atom0 = pAtom.getMatchingAtom ();
-switch (this.checkStereoForAtom (pAtom, atom0, isNot, haveTopo)) {
+switch (this.checkStereoForAtom (pAtom, isNot, haveTopo)) {
 case 0:
 continue;
 case 1:
@@ -326,7 +328,7 @@ return false;
 return true;
 }, "JS.SmilesSearch,JS.VTemp");
 Clazz.defineMethod (c$, "checkStereoForAtom", 
-function (pAtom, atom0, isNot, haveTopo) {
+function (pAtom, isNot, haveTopo) {
 var atom1 = null;
 var atom2 = null;
 var atom3 = null;
@@ -336,6 +338,7 @@ var atom6 = null;
 var pAtom2 = null;
 var sAtom0 = null;
 var jn;
+var atom0 = pAtom.getMatchingAtom ();
 if (haveTopo) sAtom0 = atom0;
 var nH = Math.max (pAtom.explicitHydrogenCount, 0);
 var order = (pAtom.stereo == null ? 0 : pAtom.stereo.chiralOrder);
@@ -351,7 +354,7 @@ return 0;
 var atoms12N =  new Array (pAtom.bondCount);
 for (var i = 0; i < atoms12N.length; i++) atoms12N[i] = this.getJmolAtom (pAtom.getMatchingBondedAtom (i));
 
-return (haveTopo && !this.setTopoCoordinates (sAtom0, pAtom, null, atoms12N, this.search.polyhedronStereo.isNot ? !isNot : isNot) || !this.checkPolyHedralWinding (pAtom, atoms12N) ? -1 : 0);
+return (haveTopo && !this.setTopoCoordinates (sAtom0, pAtom, null, atoms12N, this.search.polyhedronStereo.isNot ? !isNot : isNot) || !this.checkPolyHedralWinding (pAtom.getMatchingAtom (), atoms12N) ? -1 : 0);
 }if (nH > 1) return 0;
 if (pAtom.stereo.isNot) isNot = !isNot;
 if (haveTopo) {
@@ -433,7 +436,7 @@ if (!JS.SmilesStereo.checkStereochemistryAll (isNot, atom0, chiralClass, order, 
 return 0;
 }
 return 0;
-}, "JS.SmilesAtom,JU.Node,~B,~B");
+}, "JS.SmilesAtom,~B,~B");
 Clazz.defineMethod (c$, "checkPolyHedralWinding", 
  function (a0, a) {
 for (var i = 0; i < a.length - 2; i++) if (JS.SmilesStereo.getHandedness (a[i], a[i + 1], a[i + 2], a0, this.v) != 1) return false;
@@ -664,7 +667,10 @@ throw e;
 index = pt;
 }}if (order < 1 || stereoClass < 0) throw  new JS.InvalidSmilesException ("Invalid stereochemistry descriptor");
 }newAtom.stereo =  new JS.SmilesStereo (stereoClass, order, atomCount, details, directives);
-newAtom.stereo.search = search;
+if (stereoClass == 1) {
+search.polyAtom = newAtom;
+search.noAromatic = true;
+}newAtom.stereo.search = search;
 if (JS.SmilesParser.getChar (pattern, index) == '?') {
 JU.Logger.info ("Ignoring '?' in stereochemistry");
 index++;

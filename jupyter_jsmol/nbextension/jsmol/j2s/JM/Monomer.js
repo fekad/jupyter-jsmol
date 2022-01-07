@@ -64,7 +64,7 @@ var m = groups[ipt];
 if (offset == 1 && !m.isConnectedPrevious ()) return -1;
 if ("\0".equals (name)) return m.leadAtomIndex;
 var atoms = this.chain.model.ms.at;
-for (var i = m.firstAtomIndex; i <= m.lastAtomIndex; i++) if (name == null || name.equalsIgnoreCase (atoms[i].getAtomName ())) return i;
+for (var i = m.firstAtomIndex; i <= m.lastAtomIndex; i++) if (atoms[i] != null && (name == null || name.equalsIgnoreCase (atoms[i].getAtomName ()))) return i;
 
 }}return -1;
 }, "~S,~N");
@@ -238,7 +238,7 @@ var iPrev = this.monomerIndex - mStep;
 var prev = (mStep < 1 || this.monomerIndex <= 0 ? null : this.bioPolymer.monomers[iPrev]);
 var q2 = this.getQuaternion (qType);
 var q1 = (mStep < 1 ? JU.Quat.getQuaternionFrameV (JV.JC.axisX, JV.JC.axisY, JV.JC.axisZ, false) : prev == null ? null : prev.getQuaternion (qType));
-if (q1 == null || q2 == null) return this.getHelixData (tokType, qType, mStep);
+if (q1 == null || q2 == null) return Clazz.superCall (this, JM.Monomer, "getHelixData", [tokType, qType, mStep]);
 var a = (mStep < 1 ? JU.P3.new3 (0, 0, 0) : prev.getQuaternionFrameCenter (qType));
 var b = this.getQuaternionFrameCenter (qType);
 return (a == null || b == null ? this.getHelixData (tokType, qType, mStep) : JU.Escape.escapeHelical ((tokType == 135176 ? "helixaxis" + this.getUniqueID () : null), tokType, a, b, JU.Measure.computeHelicalAxis (a, b, q2.div (q1))));
@@ -353,4 +353,8 @@ Clazz.overrideMethod (c$, "setGroupID",
 function (group3) {
 this.groupID = JM.BioResolver.getGroupIdFor (group3);
 }, "~S");
+Clazz.overrideMethod (c$, "toString", 
+function () {
+return "[" + this.getGroup3 () + "-" + this.getSeqcodeString () + " " + this.getStructure () + "]";
+});
 });

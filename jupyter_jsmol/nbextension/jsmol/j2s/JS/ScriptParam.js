@@ -2,6 +2,7 @@ Clazz.declarePackage ("JS");
 Clazz.load (["JS.ScriptError"], "JS.ScriptParam", ["java.lang.Float", "java.util.Hashtable", "JU.BS", "$.CU", "$.Lst", "$.Measure", "$.P3", "$.P4", "$.PT", "$.Quat", "$.SB", "$.V3", "JM.TickInfo", "JS.SV", "$.ScriptMathProcessor", "$.T", "JU.BSUtil", "$.Edge", "$.Logger"], function () {
 c$ = Clazz.decorateAsClass (function () {
 this.contextVariables = null;
+this.contextFunctions = null;
 this.thisContext = null;
 this.iToken = 0;
 this.theTok = 0;
@@ -280,16 +281,20 @@ this.invArg ();
 return data;
 }, "JS.T");
 Clazz.defineMethod (c$, "hklParameter", 
-function (i) {
+function (i, getPts) {
 if (!this.chk && this.vwr.getCurrentUnitCell () == null) this.error (33);
 var pt = this.getPointOrPlane (i, false, true, false, true, 3, 3, true);
-var p = this.getHklPlane (pt);
+var offset = NaN;
+if (this.tokAt (this.iToken + 1) == 1073742066) {
+this.iToken++;
+offset = this.floatParameter (++this.iToken);
+}var p = this.getHklPlane (pt, offset, getPts);
 if (p == null) this.error (3);
 if (!this.chk && JU.Logger.debugging) JU.Logger.debug ("defined plane: " + p);
 return p;
-}, "~N");
+}, "~N,~B");
 Clazz.defineMethod (c$, "getHklPlane", 
-function (pt) {
+function (pt, offset, getPts) {
 this.pt1 = JU.P3.new3 (pt.x == 0 ? 1 : 1 / pt.x, 0, 0);
 this.pt2 = JU.P3.new3 (0, pt.y == 0 ? 1 : 1 / pt.y, 0);
 this.pt3 = JU.P3.new3 (0, 0, pt.z == 0 ? 1 : 1 / pt.z);
@@ -313,8 +318,16 @@ this.pt3.set (this.pt1.x, 0, 1);
 }this.vwr.toCartesian (this.pt1, false);
 this.vwr.toCartesian (this.pt2, false);
 this.vwr.toCartesian (this.pt3, false);
-return JU.Measure.getPlaneThroughPoints (this.pt1, this.pt2, this.pt3,  new JU.V3 (),  new JU.V3 (),  new JU.P4 ());
-}, "JU.P3");
+var v3 =  new JU.V3 ();
+var plane = JU.Measure.getPlaneThroughPoints (this.pt1, this.pt2, this.pt3,  new JU.V3 (), v3,  new JU.P4 ());
+if (!Float.isNaN (offset)) {
+plane.w = offset;
+if (getPts) {
+JU.Measure.getPlaneProjection (this.pt1, plane, this.pt1, v3);
+JU.Measure.getPlaneProjection (this.pt2, plane, this.pt2, v3);
+JU.Measure.getPlaneProjection (this.pt3, plane, this.pt3, v3);
+}}return plane;
+}, "JU.P3,~N,~B");
 Clazz.defineMethod (c$, "getPointOrPlane", 
 function (index, integerOnly, allowFractional, doConvert, implicitFractional, minDim, maxDim, throwE) {
 var coord =  Clazz.newFloatArray (6, 0);

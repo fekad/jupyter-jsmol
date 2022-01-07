@@ -7,6 +7,7 @@ this.structureID = null;
 this.strucNo = 0;
 this.serialID = 0;
 this.strandCount = 1;
+this.id = 0;
 this.nRes = 0;
 this.apolymer = null;
 this.monomerIndexFirst = 0;
@@ -19,6 +20,10 @@ this.segments = null;
 this.resMap = null;
 Clazz.instantialize (this, arguments);
 }, JM, "ProteinStructure", null, JM.Structure);
+Clazz.makeConstructor (c$, 
+function () {
+this.id = ++JM.ProteinStructure.ids;
+});
 Clazz.defineMethod (c$, "setupPS", 
 function (apolymer, type, monomerIndex, monomerCount) {
 this.strucNo = ++JM.ProteinStructure.globalStrucNo;
@@ -130,6 +135,7 @@ for (var i = this.monomerIndexFirst; i <= this.monomerIndexLast; i++) ms[i].setA
 Clazz.defineMethod (c$, "findMonomer", 
 function (bsAtoms, isFirst) {
 var ms = this.apolymer.monomers;
+if (this.monomerIndexFirst < 0) return null;
 if (isFirst) {
 for (var i = this.monomerIndexFirst; i <= this.monomerIndexLast; i++) if (bsAtoms == null || bsAtoms.get (ms[i].leadAtomIndex)) return ms[i];
 
@@ -138,6 +144,11 @@ for (var i = this.monomerIndexLast; i >= this.monomerIndexFirst; --i) if (bsAtom
 
 }return null;
 }, "JU.BS,~B");
+Clazz.overrideMethod (c$, "toString", 
+function () {
+return "[" + this.id + " " + this.type + (this.subtype == null ? "" : " " + this.subtype) + " (" + this.monomerIndexFirst + "-" + this.monomerIndexLast + ")]";
+});
 Clazz.defineStatics (c$,
+"ids", 0,
 "globalStrucNo", 1000);
 });

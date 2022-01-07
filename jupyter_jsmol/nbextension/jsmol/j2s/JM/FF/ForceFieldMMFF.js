@@ -419,20 +419,23 @@ var type1 = (it < 0 ? -it : at1.mmType);
 it = aTypes[a2.i];
 var at2 = JM.FF.ForceFieldMMFF.atomTypes.get (Math.max (0, it));
 var type2 = (it < 0 ? -it : at2.mmType);
-var dq;
+var dq = NaN;
 try {
 var bondType = bTypes[i];
 var bFactor = (type1 < type2 ? -1 : 1);
 var key = JM.MinObject.getKey (bondType, bFactor == 1 ? type2 : type1, bFactor == 1 ? type1 : type2, 127, 124);
 var bciValue = this.ffParams.get (key);
-var bci;
+var bci = NaN;
 var msg = (JU.Logger.debugging ? a1 + "/" + a2 + " mmTypes=" + type1 + "/" + type2 + " formalCharges=" + at1.formalCharge + "/" + at2.formalCharge + " bci = " : null);
 if (bciValue == null) {
-var pa = (this.ffParams.get (JM.MinObject.getKey (0, type1, 127, 127, 127))).floatValue ();
-var pb = (this.ffParams.get (JM.MinObject.getKey (0, type2, 127, 127, 127))).floatValue ();
+var a;
+var b;
+if ((a = this.ffParams.get (JM.MinObject.getKey (0, type1, 127, 127, 127))) != null && (b = this.ffParams.get (JM.MinObject.getKey (0, type2, 127, 127, 127))) != null) {
+var pa = a.floatValue ();
+var pb = b.floatValue ();
 bci = pa - pb;
 if (JU.Logger.debugging) msg += pa + " - " + pb + " = ";
-} else {
+}} else {
 bci = bFactor * bciValue.floatValue ();
 }if (JU.Logger.debugging) {
 msg += bci;

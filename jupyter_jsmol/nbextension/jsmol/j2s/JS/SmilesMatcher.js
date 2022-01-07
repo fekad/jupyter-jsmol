@@ -1,5 +1,5 @@
 Clazz.declarePackage ("JS");
-Clazz.load (["J.api.SmilesMatcherInterface"], "JS.SmilesMatcher", ["JU.AU", "$.BS", "$.Lst", "$.PT", "JS.InvalidSmilesException", "$.SmilesAtom", "$.SmilesBond", "$.SmilesGenerator", "$.SmilesParser", "$.SmilesSearch", "JU.BSUtil", "$.Elements", "$.Logger", "$.Node", "$.Point3fi"], function () {
+Clazz.load (["J.api.SmilesMatcherInterface"], "JS.SmilesMatcher", ["JU.AU", "$.BS", "$.PT", "JS.InvalidSmilesException", "$.SmilesAtom", "$.SmilesBond", "$.SmilesGenerator", "$.SmilesParser", "$.SmilesSearch", "JU.BSUtil", "$.Elements", "$.Logger", "$.Node", "$.Point3fi"], function () {
 c$ = Clazz.decorateAsClass (function () {
 this.okMF = true;
 Clazz.instantialize (this, arguments);
@@ -144,6 +144,7 @@ atoms[i].atomNumber = (pt).getAtomNumber ();
 atoms[i].setT (pt);
 } else {
 atoms[i].elementNumber = (Clazz.instanceOf (pt, JU.Point3fi) ? (pt).sD : -2);
+if (pt != null) atoms[i].setT (pt);
 }atoms[i].index = i;
 }
 var nBonds = 0;
@@ -182,6 +183,7 @@ this.clearExceptions ();
 try {
 var isSmarts = ((flags & 2) == 2);
 var search = JS.SmilesParser.newSearch (pattern, isSmarts, false);
+var isTopo = ((flags & 16384) == 16384);
 if (searchTarget != null) {
 search.haveTopo = true;
 bsAromatic =  new JU.BS ();
@@ -189,8 +191,6 @@ searchTarget.setFlags (searchTarget.flags | JS.SmilesParser.getFlags (pattern));
 searchTarget.createTopoMap (bsAromatic);
 atoms = searchTarget.targetAtoms;
 ac = searchTarget.targetAtoms.length;
-var mfTarget = searchTarget.getMolecularFormulaImpl (true, null, false, false);
-var mf = search.getMolecularFormulaImpl (true, null, false, false);
 if (isSmarts) {
 var a1 = searchTarget.elementCounts;
 var a2 = search.elementCounts;
@@ -200,18 +200,19 @@ this.okMF = false;
 break;
 }}
 } else {
-this.okMF = mf.equals (mfTarget);
+var mf = (isTopo ? null : search.getMolecularFormulaImpl (true, null, false));
+this.okMF = (mf == null || mf.equals (searchTarget.getMolecularFormulaImpl (true, null, false)));
 }searchTarget.mf = search.mf = null;
 }if (this.okMF) {
 if (!isSmarts && !search.patternAromatic) {
 if (bsAromatic == null) bsAromatic =  new JU.BS ();
-JS.SmilesSearch.normalizeAromaticity (search.patternAtoms, bsAromatic, search.flags);
+search.normalizeAromaticity (bsAromatic);
 search.isNormalized = true;
 }search.targetAtoms = atoms;
 search.targetAtomCount = ac;
+search.setSelected (bsSelected);
 if (ac != 0 && (bsSelected == null || !bsSelected.isEmpty ())) {
 var is3D = !(Clazz.instanceOf (atoms[0], JS.SmilesAtom));
-search.setSelected (bsSelected);
 search.getSelections ();
 if (!doTestAromatic) search.bsAromatic = bsAromatic;
 search.setRingData (null, null, is3D || doTestAromatic);
@@ -222,7 +223,7 @@ case 1:
 search.asVector = false;
 return (this.okMF ? search.search () :  new JU.BS ());
 case 2:
-if (!this.okMF) return  new JU.Lst ();
+if (!this.okMF) return  new Array (0);
 search.asVector = true;
 var vb = search.search ();
 return vb.toArray ( new Array (vb.size ()));

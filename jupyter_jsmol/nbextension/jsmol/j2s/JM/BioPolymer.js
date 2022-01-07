@@ -180,7 +180,10 @@ this.leadPoints[0] = leadPoint = this.getLeadPoint (0);
 var previousVectorD = null;
 for (var i = 1; i < this.monomerCount; ++i) {
 leadPointPrev = leadPoint;
-this.leadPoints[i] = leadPoint = this.getLeadPoint (i);
+leadPoint = this.getLeadPoint (i);
+if (leadPoint == null) {
+return;
+}this.leadPoints[i] = leadPoint;
 var midpoint =  new JU.P3 ();
 midpoint.ave (leadPoint, leadPointPrev);
 this.leadMidpoints[i] = midpoint;

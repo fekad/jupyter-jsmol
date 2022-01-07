@@ -362,4 +362,10 @@ function (num) {
 if (num <= 9223372036854251519) num += 524288;
 return (Clazz.doubleToInt (num / (1048576)));
 }, "~N");
+Clazz.overrideMethod (c$, "jpiDispose", 
+function () {
+this.popupMenu = this.thisPopup = null;
+this.helper.dispose (this.popupMenu);
+this.helper = null;
+});
 });

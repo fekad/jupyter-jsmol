@@ -642,9 +642,15 @@ function (num) {
 if (num <= 9223372036854251519) num += 524288;
 return (Clazz_doubleToInt (num / (1048576)));
 }, "~N");
+Clazz_overrideMethod (c$, "jpiDispose",
+function () {
+this.popupMenu = this.thisPopup = null;
+this.helper.dispose (this.popupMenu);
+this.helper = null;
+});
 });
 Clazz_declarePackage ("J.popup");
-Clazz_load (["J.popup.GenericPopup", "java.util.Properties"], "J.popup.JmolGenericPopup", ["J.i18n.GT", "JV.Viewer"], function () {
+Clazz_load (["J.popup.GenericPopup", "java.util.Properties"], "J.popup.JmolGenericPopup", ["J.i18n.GT"], function () {
 c$ = Clazz_decorateAsClass (function () {
 this.frankPopup = null;
 this.nFrankList = 0;
@@ -665,7 +671,7 @@ J.i18n.GT.setDoTranslate (doTranslate);
 Clazz_defineMethod (c$, "initialize",
 function (vwr, bundle, title) {
 this.vwr = vwr;
-this.initSwing (title, bundle, vwr.html5Applet, JV.Viewer.isJSNoAWT, vwr.getBooleanProperty ("_signedApplet"), JV.Viewer.isWebGL);
+this.initSwing (title, bundle, vwr.isJSNoAWT ? vwr.html5Applet : null, vwr.isJSNoAWT, vwr.getBooleanProperty ("_signedApplet"), vwr.isWebGL);
 }, "JV.Viewer,J.popup.PopupResource,~S");
 Clazz_overrideMethod (c$, "jpiShow",
 function (x, y) {
@@ -681,10 +687,10 @@ Clazz_defineMethod (c$, "showFrankMenu",
 function () {
 return true;
 });
-Clazz_overrideMethod (c$, "jpiDispose",
+Clazz_defineMethod (c$, "jpiDispose",
 function () {
-this.helper.menuClearListeners (this.popupMenu);
-this.popupMenu = this.thisPopup = null;
+this.vwr = null;
+Clazz_superCall (this, J.popup.JmolGenericPopup, "jpiDispose", []);
 });
 Clazz_overrideMethod (c$, "jpiGetMenuAsObject",
 function () {
@@ -720,7 +726,7 @@ this.vwr.evalStringQuiet (script);
 }, "~S");
 });
 Clazz_declarePackage ("J.popup");
-Clazz_load (["J.popup.JmolGenericPopup", "JU.Lst"], "J.popup.JmolPopup", ["java.lang.Boolean", "java.util.Arrays", "$.Hashtable", "JU.PT", "J.i18n.GT", "JM.Group", "J.popup.MainPopupResourceBundle", "JU.Elements", "JV.Viewer"], function () {
+Clazz_load (["J.popup.JmolGenericPopup", "JU.Lst"], "J.popup.JmolPopup", ["java.lang.Boolean", "java.util.Arrays", "$.Hashtable", "JU.PT", "J.i18n.GT", "JM.Group", "J.popup.MainPopupResourceBundle", "JU.Elements"], function () {
 c$ = Clazz_decorateAsClass (function () {
 this.updateMode = 0;
 this.titleWidthMax = 20;
@@ -823,7 +829,7 @@ this.updateElementsComputedMenu (this.vwr.getElementsPresentBitSet (this.modelIn
 this.updateHeteroComputedMenu (this.vwr.ms.getHeteroList (this.modelIndex));
 this.updateSurfMoComputedMenu (this.modelInfo.get ("moData"));
 this.updateFileTypeDependentMenus ();
-this.updatePDBComputedMenus ();
+this.updatePDBResidueComputedMenus ();
 this.updateMode = 1;
 this.updateConfigurationComputedMenu ();
 this.updateSYMMETRYComputedMenus ();
@@ -890,7 +896,7 @@ script = JU.PT.rep (script, "PdbId?", "=xxxx");
 Clazz_overrideMethod (c$, "appRestorePopupMenu",
 function () {
 this.thisPopup = this.popupMenu;
-if (JV.Viewer.isJSNoAWT || this.nFrankList < 2) return;
+if (this.vwr.isJSNoAWT || this.nFrankList < 2) return;
 for (var i = this.nFrankList; --i > 0; ) {
 var f = this.frankList[i];
 this.helper.menuInsertSubMenu (f[0], f[1], (f[2]).intValue ());
@@ -918,7 +924,7 @@ if (id != null) for (var i = id.indexOf (".", 2) + 1; ; ) {
 var iNew = id.indexOf (".", i);
 if (iNew < 0) break;
 var menu = this.htMenus.get (id.substring (i, iNew));
-this.frankList[this.nFrankList++] =  Clazz_newArray (-1, [menu.getParent (), menu, Integer.$valueOf (JV.Viewer.isJSNoAWT ? 0 : this.menuGetListPosition (menu))]);
+this.frankList[this.nFrankList++] =  Clazz_newArray (-1, [menu.getParent (), menu, Integer.$valueOf (this.vwr.isJSNoAWT ? 0 : this.menuGetListPosition (menu))]);
 this.menuAddSubMenu (this.frankPopup, menu);
 i = iNew + 1;
 }
@@ -1140,21 +1146,25 @@ for (var i = 0; i < scenes.length; i++) this.menuCreateItem (menu, scenes[i], "r
 
 this.menuEnable (menu, true);
 });
-Clazz_defineMethod (c$, "updatePDBComputedMenus",
+Clazz_defineMethod (c$, "updatePDBResidueComputedMenus",
 function () {
+var haveMenu = false;
 var menu3 = this.htMenus.get ("PDBaaResiduesComputedMenu");
 if (menu3 != null) {
 this.menuRemoveAll (menu3, 0);
 this.menuEnable (menu3, false);
+haveMenu = true;
 }var menu1 = this.htMenus.get ("PDBnucleicResiduesComputedMenu");
 if (menu1 != null) {
 this.menuRemoveAll (menu1, 0);
 this.menuEnable (menu1, false);
+haveMenu = true;
 }var menu2 = this.htMenus.get ("PDBcarboResiduesComputedMenu");
 if (menu2 != null) {
 this.menuRemoveAll (menu2, 0);
 this.menuEnable (menu2, false);
-}if (this.modelSetInfo == null) return;
+haveMenu = true;
+}if (this.modelSetInfo == null || !haveMenu) return;
 var n = (this.modelIndex < 0 ? 0 : this.modelIndex + 1);
 var lists = (this.modelSetInfo.get ("group3Lists"));
 this.group3List = (lists == null ? null : lists[n]);
@@ -1707,6 +1717,11 @@ function (e) {
 var jmi = e.getSource ();
 this.popup.menuFocusCallback (jmi.getName (), jmi.getActionCommand (), false);
 }, "java.awt.event.MouseEvent");
+Clazz_overrideMethod (c$, "dispose",
+function (popupMenu) {
+this.menuClearListeners (popupMenu);
+this.popup = null;
+}, "J.api.SC");
 });
 })(Clazz
 ,Clazz.getClassName

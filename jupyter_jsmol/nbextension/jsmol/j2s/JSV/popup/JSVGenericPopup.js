@@ -21,10 +21,10 @@ function (viewer, bundle, title) {
 this.vwr = viewer;
 this.initSwing (title, bundle, viewer.getApplet (), JSV.common.JSViewer.isJS, viewer.isSigned, false);
 }, "JSV.common.JSViewer,J.popup.PopupResource,~S");
-Clazz.overrideMethod (c$, "jpiDispose", 
+Clazz.defineMethod (c$, "jpiDispose", 
 function () {
-this.helper.menuClearListeners (this.popupMenu);
-this.popupMenu = this.thisPopup = null;
+this.vwr = null;
+Clazz.superCall (this, JSV.popup.JSVGenericPopup, "jpiDispose", []);
 });
 Clazz.overrideMethod (c$, "jpiGetMenuAsObject", 
 function () {

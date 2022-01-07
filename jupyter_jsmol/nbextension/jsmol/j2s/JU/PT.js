@@ -465,13 +465,12 @@ return (value != null && value.length > 1 && value.startsWith ("\"") && value.en
 }, "~S");
 c$.isNonStringPrimitive = Clazz.defineMethod (c$, "isNonStringPrimitive",
 function (info) {
-return Clazz.instanceOf (info, Number) || Clazz.instanceOf (info, Boolean);
-}, "~O");
-c$.arrayGet = Clazz.defineMethod (c$, "arrayGet",
- function (info, i) {
 {
-return info[i];
-}}, "~O,~N");
+if(typeof info == "number" || typeof info == "boolean") {
+return true;
+}
+}return Clazz.instanceOf (info, Number) || Clazz.instanceOf (info, Boolean);
+}, "~O");
 c$.toJSON = Clazz.defineMethod (c$, "toJSON",
 function (infoType, info) {
 if (info == null) return JU.PT.packageJSON (infoType, null);
@@ -494,6 +493,7 @@ if (Clazz.instanceOf (info, java.util.Map)) {
 sb.append ("{ ");
 var sep = "";
 for (var key, $key = (info).keySet ().iterator (); $key.hasNext () && ((key = $key.next ()) || true);) {
+if (key == null) key = "null";
 sb.append (sep).append (JU.PT.packageJSON (key, JU.PT.toJSON (null, (info).get (key))));
 sep = ",";
 }
@@ -524,11 +524,18 @@ break;
 if (s == null) {
 sb.append ("[");
 var n = JU.AU.getLength (info);
+var o = null;
+{
+o = info[0];
+typeof o != "number" && typeof 0 != "boolean" && (o = null);
+}if (o != null) {
+sb.appendO (info);
+} else {
 for (var i = 0; i < n; i++) {
 if (i > 0) sb.appendC (',');
-sb.append (JU.PT.toJSON (null, JU.PT.arrayGet (info, i)));
+sb.append (JU.PT.toJSON (null, java.lang.reflect.Array.get (info, i)));
 }
-sb.append ("]");
+}sb.append ("]");
 break;
 }info = info.toString ();
 }

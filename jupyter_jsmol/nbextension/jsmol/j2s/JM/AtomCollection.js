@@ -168,7 +168,7 @@ Clazz.defineMethod (c$, "getFirstAtomIndexFromAtomNumber",
 function (atomNumber, bsVisibleFrames) {
 for (var i = 0; i < this.ac; i++) {
 var atom = this.at[i];
-if (atom.getAtomNumber () == atomNumber && bsVisibleFrames.get (atom.mi)) return i;
+if (atom != null && atom.getAtomNumber () == atomNumber && bsVisibleFrames.get (atom.mi)) return i;
 }
 return -1;
 }, "~N,JU.BS");
@@ -184,7 +184,7 @@ this.taintAtom (i, 4);
 Clazz.defineMethod (c$, "getAtomicCharges", 
 function () {
 var charges =  Clazz.newFloatArray (this.ac, 0);
-for (var i = this.ac; --i >= 0; ) charges[i] = this.at[i].getElementNumber ();
+for (var i = this.ac; --i >= 0; ) charges[i] = (this.at[i] == null ? 0 : this.at[i].getElementNumber ());
 
 return charges;
 });
@@ -202,6 +202,7 @@ function () {
 var r;
 for (var i = this.ac; --i >= 0; ) {
 var atom = this.at[i];
+if (atom == null) continue;
 if ((r = atom.getBondingRadius ()) > this.maxBondingRadius) this.maxBondingRadius = r;
 if ((r = atom.getVanderwaalsRadiusFloat (this.vwr, J.c.VDW.AUTO)) > this.maxVanderwaalsRadius) this.maxVanderwaalsRadius = r;
 }
@@ -225,6 +226,7 @@ for (var i = bs.nextSetBit (0); i >= 0; i = bs.nextSetBit (i + 1)) this.setBf (i
 }, "JU.BS");
 Clazz.defineMethod (c$, "setBf", 
  function (i) {
+if (this.at[i] == null) return;
 var bf = this.at[i].getBfactor100 ();
 if (bf < this.bfactor100Lo) this.bfactor100Lo = bf;
  else if (bf > this.bfactor100Hi) this.bfactor100Hi = bf;
@@ -278,7 +280,7 @@ this.nSurfaceAtoms = JU.BSUtil.cardinalityOf (this.bsSurface);
 if (this.nSurfaceAtoms == 0 || points == null || points.length == 0) return points;
 var radiusAdjust = (envelopeRadius == 3.4028235E38 ? 0 : envelopeRadius);
 for (var i = 0; i < this.ac; i++) {
-if (this.bsSurface.get (i)) {
+if (this.bsSurface.get (i) || this.at[i] == null) {
 this.surfaceDistance100s[i] = 0;
 } else {
 var dMin = 3.4028235E38;
@@ -659,10 +661,13 @@ this.partialCharges[atomIndex] = partialCharge;
 if (doTaint) this.taintAtom (atomIndex, 8);
 }, "~N,~N,~B");
 Clazz.defineMethod (c$, "setBondingRadius", 
- function (atomIndex, radius) {
+function (atomIndex, radius) {
 if (Float.isNaN (radius) || radius == this.at[atomIndex].getBondingRadius ()) return;
-if (this.bondingRadii == null) this.bondingRadii =  Clazz.newFloatArray (this.at.length, 0);
-this.bondingRadii[atomIndex] = radius;
+if (this.bondingRadii == null) {
+this.bondingRadii =  Clazz.newFloatArray (this.at.length, 0);
+} else if (this.bondingRadii.length < this.at.length) {
+this.bondingRadii = JU.AU.ensureLength (this.bondingRadii, this.at.length);
+}this.bondingRadii[atomIndex] = radius;
 this.taintAtom (atomIndex, 6);
 }, "~N,~N");
 Clazz.defineMethod (c$, "setBFactor", 
@@ -876,9 +881,9 @@ if (this.tainted[type].nextSetBit (0) < 0) this.tainted[type] = null;
 Clazz.defineMethod (c$, "findNearest2", 
 function (x, y, closest, bsNot, min) {
 var champion = null;
+var contender;
 for (var i = this.ac; --i >= 0; ) {
-if (bsNot != null && bsNot.get (i)) continue;
-var contender = this.at[i];
+if (bsNot != null && bsNot.get (i) || (contender = this.at[i]) == null) continue;
 if (contender.isClickable () && this.isCursorOnTopOf (contender, x, y, min, champion)) champion = contender;
 }
 closest[0] = champion;
@@ -897,7 +902,7 @@ if (includeRadii) atomData.atomRadius =  Clazz.newFloatArray (this.ac, 0);
 var isMultiModel = ((mode & 16) != 0);
 for (var i = 0; i < this.ac; i++) {
 var atom = this.at[i];
-if (atom.isDeleted () || !isMultiModel && atomData.modelIndex >= 0 && atom.mi != atomData.firstModelIndex) {
+if (atom == null || atom.isDeleted () || !isMultiModel && atomData.modelIndex >= 0 && atom.mi != atomData.firstModelIndex) {
 if (atomData.bsIgnored == null) atomData.bsIgnored =  new JU.BS ();
 atomData.bsIgnored.set (i);
 continue;
@@ -940,6 +945,7 @@ var doAll = ((flags & 256) == 256);
 var justCarbon = ((flags & 512) == 512);
 var isQuick = ((flags & 4) == 4);
 var ignoreH = ((flags & 2048) == 2048);
+var allowH = ((flags & 4096) == 4096);
 var z =  new JU.V3 ();
 var x =  new JU.V3 ();
 var hAtoms =  new Array (this.ac);
@@ -959,7 +965,7 @@ dHX = 1.0;
 break;
 case 6:
 }
-var n = (doAll || ignoreH ? atom.getCovalentHydrogenCount () : 0);
+var n = (doAll || ignoreH || allowH ? atom.getCovalentHydrogenCount () : 0);
 if (doAll && n > 0 || ignoreH && n == 0) continue;
 var nMissing = this.getMissingHydrogenCount (atom, false);
 if (doAll && nMissing == 0) continue;
@@ -1037,7 +1043,7 @@ case 1:
 if (atomicNumber == 8 && atom === atom.group.getCarbonylOxygenAtom ()) {
 hAtoms[i] = null;
 continue;
-}if (this.getHybridizationAndAxes (i, atomicNumber, z, x, (hybridization == 2 || atomicNumber == 5 || atomicNumber == 7 && (atom.group.getNitrogenAtom () === atom || this.isAdjacentSp2 (atom)) ? "sp2c" : "sp3d"), true, false, isQuick) != null) {
+}if (this.getHybridizationAndAxes (i, atomicNumber, z, x, (hybridization == 2 || atomicNumber == 5 || atomicNumber == 6 && this.aaRet[1] == 1 || atomicNumber == 7 && ( new Boolean ( new Boolean (atom.group.getNitrogenAtom () === atom & atom.getFormalCharge () == 0).valueOf () || this.isAdjacentSp2 (atom)).valueOf ()) ? "sp2c" : "sp3d"), true, false, isQuick) != null) {
 pt = JU.P3.newP (z);
 pt.scaleAdd2 (dHX, z, atom);
 hAtoms[i][hPt++] = pt;
@@ -1071,9 +1077,7 @@ Clazz.defineMethod (c$, "isAdjacentSp2",
 var bonds = atom.bonds;
 for (var i = 0; i < bonds.length; i++) {
 var b2 = bonds[i].getOtherAtom (atom).bonds;
-for (var j = 0; j < b2.length; j++) switch (b2[j].order) {
-case 515:
-case 514:
+for (var j = 0; j < b2.length; j++) switch (b2[j].getCovalentOrder ()) {
 case 2:
 case 3:
 return true;
@@ -1288,7 +1292,8 @@ if (vTemp.length () > 0.1 || a.getCovalentBondCount () != 2) break;
 atom = a0;
 a0 = a;
 }
-if (vTemp.length () > 0.1) {
+if (isSp) {
+} else if (vTemp.length () > 0.1) {
 z.cross (vTemp, x);
 z.normalize ();
 if (pt == 1) z.scale (-1);
@@ -1311,6 +1316,7 @@ x.cross (x, z);
 if (pt == 1) x.scale (-1);
 x.scale (JM.AtomCollection.sqrt3_2);
 z.scaleAdd2 (0.5, z, x);
+} else if (isSp) {
 } else {
 vTemp.setT (z);
 z.setT (x);
@@ -1556,17 +1562,20 @@ case 1086326785:
 var isType = (tokType == 1086326785);
 var names = "," + specInfo + ",";
 for (var i = this.ac; --i >= 0; ) {
+if (this.at[i] == null) continue;
 var s = (isType ? this.at[i].getAtomType () : this.at[i].getAtomName ());
 if (names.indexOf ("," + s + ",") >= 0) bs.set (i);
 }
 return bs;
 case 1094715393:
-for (var i = this.ac; --i >= 0; ) if (this.at[i].getAtomNumber () == iSpec) bs.set (i);
-
+for (var i = this.ac; --i >= 0; ) {
+if (this.at[i] != null && this.at[i].getAtomNumber () == iSpec) bs.set (i);
+}
 return bs;
 case 2097155:
-for (var i = this.ac; --i >= 0; ) if (this.at[i].getCovalentBondCount () > 0) bs.set (i);
-
+for (var i = this.ac; --i >= 0; ) {
+if (this.at[i] != null && this.at[i].getCovalentBondCount () > 0) bs.set (i);
+}
 return bs;
 case 2097188:
 case 2097156:
@@ -1581,30 +1590,35 @@ return ((this).haveBioModels ? (this).bioModelset.getAtomBitsBS (tokType, null, 
 case 1612709900:
 iSpec = 1;
 case 1094715402:
-for (var i = this.ac; --i >= 0; ) if (this.at[i].getElementNumber () == iSpec) bs.set (i);
-
+for (var i = this.ac; --i >= 0; ) {
+if (this.at[i] != null && this.at[i].getElementNumber () == iSpec) bs.set (i);
+}
 return bs;
 case 1612709894:
-for (var i = this.ac; --i >= 0; ) if (this.at[i].isHetero ()) bs.set (i);
-
+for (var i = this.ac; --i >= 0; ) {
+if (this.at[i] != null && this.at[i].isHetero ()) bs.set (i);
+}
 return bs;
 case 1073741824:
 return this.getIdentifierOrNull (specInfo);
 case 2097165:
-for (var i = this.ac; --i >= 0; ) if (this.at[i].isLeadAtom ()) bs.set (i);
-
+for (var i = this.ac; --i >= 0; ) {
+if (this.at[i] != null && this.at[i].isLeadAtom ()) bs.set (i);
+}
 return bs;
 case 1094713362:
 case 1639976963:
 return ((this).haveBioModels ? (this).bioModelset.getAtomBitsBS (tokType, specInfo, bs) : bs);
 case 1094715412:
-for (var i = this.ac; --i >= 0; ) if (this.at[i].getResno () == iSpec) bs.set (i);
-
+for (var i = this.ac; --i >= 0; ) {
+if (this.at[i] != null && this.at[i].getResno () == iSpec) bs.set (i);
+}
 return bs;
 case 1612709912:
 var hs =  Clazz.newIntArray (2, 0);
 var a;
 for (var i = this.ac; --i >= 0; ) {
+if (this.at[i] == null) continue;
 var g = this.at[i].group.groupID;
 if (g >= 42 && g < 45) {
 bs.set (i);
@@ -1622,7 +1636,7 @@ bs.set (i);
 return bs;
 case 1073742355:
 var spec = specInfo;
-for (var i = this.ac; --i >= 0; ) if (this.isAltLoc (this.at[i].altloc, spec)) bs.set (i);
+for (var i = this.ac; --i >= 0; ) if (this.at[i] != null && this.isAltLoc (this.at[i].altloc, spec)) bs.set (i);
 
 return bs;
 case 1073742356:
@@ -1630,7 +1644,7 @@ var atomSpec = (specInfo).toUpperCase ();
 if (atomSpec.indexOf ("\\?") >= 0) atomSpec = JU.PT.rep (atomSpec, "\\?", "\1");
 var allowStar = atomSpec.startsWith ("?*");
 if (allowStar) atomSpec = atomSpec.substring (1);
-for (var i = this.ac; --i >= 0; ) if (this.isAtomNameMatch (this.at[i], atomSpec, allowStar, allowStar)) bs.set (i);
+for (var i = this.ac; --i >= 0; ) if (this.at[i] != null && this.isAtomNameMatch (this.at[i], atomSpec, allowStar, allowStar)) bs.set (i);
 
 return bs;
 case 1073742357:
@@ -1638,17 +1652,17 @@ return JU.BSUtil.copy (this.getChainBits (iSpec));
 case 1073742360:
 return this.getSpecName (specInfo);
 case 1073742361:
-for (var i = this.ac; --i >= 0; ) if (this.at[i].group.groupID == iSpec) bs.set (i);
+for (var i = this.ac; --i >= 0; ) if (this.at[i] != null && this.at[i].group.groupID == iSpec) bs.set (i);
 
 return bs;
 case 1073742362:
 return JU.BSUtil.copy (this.getSeqcodeBits (iSpec, true));
 case 5:
-for (var i = this.ac; --i >= 0; ) if (this.at[i].group.getInsCode () == iSpec) bs.set (i);
+for (var i = this.ac; --i >= 0; ) if (this.at[i] != null && this.at[i].group.getInsCode () == iSpec) bs.set (i);
 
 return bs;
 case 1296041986:
-for (var i = this.ac; --i >= 0; ) if (this.at[i].getSymOp () == iSpec) bs.set (i);
+for (var i = this.ac; --i >= 0; ) if (this.at[i] != null && this.at[i].getSymOp () == iSpec) bs.set (i);
 
 return bs;
 }
@@ -1675,7 +1689,7 @@ case 1086326789:
 bsTemp =  new JU.BS ();
 for (var i = i0; i >= 0; i = bsInfo.nextSetBit (i + 1)) bsTemp.set (this.at[i].getElementNumber ());
 
-for (var i = this.ac; --i >= 0; ) if (bsTemp.get (this.at[i].getElementNumber ())) bs.set (i);
+for (var i = this.ac; --i >= 0; ) if (this.at[i] != null && bsTemp.get (this.at[i].getElementNumber ())) bs.set (i);
 
 return bs;
 case 1086324742:
@@ -1689,7 +1703,7 @@ case 1094713366:
 bsTemp =  new JU.BS ();
 for (var i = i0; i >= 0; i = bsInfo.nextSetBit (i + 1)) bsTemp.set (this.at[i].atomSite);
 
-for (var i = this.ac; --i >= 0; ) if (bsTemp.get (this.at[i].atomSite)) bs.set (i);
+for (var i = this.ac; --i >= 0; ) if (this.at[i] != null && bsTemp.get (this.at[i].atomSite)) bs.set (i);
 
 return bs;
 }
@@ -1699,11 +1713,15 @@ return bs;
 Clazz.defineMethod (c$, "getChainBits", 
 function (chainID) {
 var caseSensitive = this.vwr.getBoolean (603979822);
-if (chainID >= 0 && chainID < 300 && !caseSensitive) chainID = this.chainToUpper (chainID);
-var bs =  new JU.BS ();
+if (caseSensitive) {
+if (chainID >= 97 && chainID <= 122) chainID += 159;
+} else {
+if (chainID >= 0 && chainID < 300) chainID = this.chainToUpper (chainID);
+}var bs =  new JU.BS ();
 var bsDone = JU.BS.newN (this.ac);
 var id;
 for (var i = bsDone.nextClearBit (0); i < this.ac; i = bsDone.nextClearBit (i + 1)) {
+if (this.at[i] == null) continue;
 var chain = this.at[i].group.chain;
 if (chainID == (id = chain.chainID) || !caseSensitive && id >= 0 && id < 300 && chainID == this.chainToUpper (id)) {
 chain.setAtomBits (bs);
@@ -1734,6 +1752,7 @@ var insCode = JM.Group.getInsertionCodeChar (seqcode);
 switch (insCode) {
 case '?':
 for (var i = this.ac; --i >= 0; ) {
+if (this.at[i] == null) continue;
 var atomSeqcode = this.at[i].group.seqcode;
 if ((!haveSeqNumber || seqNum == JM.Group.getSeqNumberFor (atomSeqcode)) && JM.Group.getInsertionCodeFor (atomSeqcode) != 0) {
 bs.set (i);
@@ -1742,6 +1761,7 @@ isEmpty = false;
 break;
 default:
 for (var i = this.ac; --i >= 0; ) {
+if (this.at[i] == null) continue;
 var atomSeqcode = this.at[i].group.seqcode;
 if (seqcode == atomSeqcode || !haveSeqNumber && seqcode == JM.Group.getInsertionCodeFor (atomSeqcode) || insCode == '*' && seqNum == JM.Group.getSeqNumberFor (atomSeqcode)) {
 bs.set (i);
@@ -1771,6 +1791,7 @@ if (name.indexOf ("\\?") >= 0) name = JU.PT.rep (name, "\\?", "\1");
 var allowInitialStar = name.startsWith ("?*");
 if (allowInitialStar) name = name.substring (1);
 for (var i = this.ac; --i >= 0; ) {
+if (this.at[i] == null) continue;
 var g3 = this.at[i].getGroup3 (true);
 if (g3 != null && g3.length > 0) {
 if (JU.PT.isMatch (g3, name, checkStar, true)) {
@@ -1802,6 +1823,7 @@ function (distance, plane) {
 var bsResult =  new JU.BS ();
 for (var i = this.ac; --i >= 0; ) {
 var atom = this.at[i];
+if (atom == null) continue;
 var d = JU.Measure.distanceToPlane (plane, atom);
 if (distance > 0 && d >= -0.1 && d <= distance || distance < 0 && d <= 0.1 && d >= distance || distance == 0 && Math.abs (d) < 0.01) bsResult.set (atom.i);
 }
@@ -1816,7 +1838,7 @@ Clazz.defineMethod (c$, "getAtomsInFrame",
 function (bsAtoms) {
 this.clearVisibleSets ();
 bsAtoms.clearAll ();
-for (var i = this.ac; --i >= 0; ) if (this.at[i].isVisible (1)) bsAtoms.set (i);
+for (var i = this.ac; --i >= 0; ) if (this.at[i] != null && this.at[i].isVisible (1)) bsAtoms.set (i);
 
 }, "JU.BS");
 Clazz.defineMethod (c$, "getVisibleSet", 
@@ -1827,7 +1849,7 @@ this.vwr.shm.finalizeAtoms (null, true);
 } else if (this.haveBSVisible) {
 return this.bsVisible;
 }this.bsVisible.clearAll ();
-for (var i = this.ac; --i >= 0; ) if (this.at[i].checkVisible ()) this.bsVisible.set (i);
+for (var i = this.ac; --i >= 0; ) if (this.at[i] != null && this.at[i].checkVisible ()) this.bsVisible.set (i);
 
 if (this.vwr.shm.bsSlabbedInternal != null) this.bsVisible.andNot (this.vwr.shm.bsSlabbedInternal);
 this.haveBSVisible = true;
@@ -1838,7 +1860,7 @@ function (forceNew) {
 if (forceNew) this.vwr.setModelVisibility ();
  else if (this.haveBSClickable) return this.bsClickable;
 this.bsClickable.clearAll ();
-for (var i = this.ac; --i >= 0; ) if (this.at[i].isClickable ()) this.bsClickable.set (i);
+for (var i = this.ac; --i >= 0; ) if (this.at[i] != null && this.at[i].isClickable ()) this.bsClickable.set (i);
 
 this.haveBSClickable = true;
 return this.bsClickable;
@@ -2058,5 +2080,6 @@ Clazz.defineStatics (c$,
 "CALC_H_JUSTC", 0x200,
 "CALC_H_HAVEH", 0x400,
 "CALC_H_QUICK", 4,
-"CALC_H_IGNORE_H", 0x800);
+"CALC_H_IGNORE_H", 0x800,
+"CALC_H_ALLOW_H", 0x1000);
 });

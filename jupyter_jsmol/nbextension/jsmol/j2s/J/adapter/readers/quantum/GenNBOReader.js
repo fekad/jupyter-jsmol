@@ -1,5 +1,5 @@
 Clazz.declarePackage ("J.adapter.readers.quantum");
-Clazz.load (["J.adapter.readers.quantum.MOReader"], "J.adapter.readers.quantum.GenNBOReader", ["java.lang.Boolean", "$.Exception", "$.Float", "java.util.Hashtable", "JU.AU", "$.Lst", "$.P3", "$.PT", "$.Rdr", "$.SB", "J.adapter.readers.quantum.NBOParser", "JU.Logger", "JV.JC"], function () {
+Clazz.load (["J.adapter.readers.quantum.MOReader"], "J.adapter.readers.quantum.GenNBOReader", ["java.lang.Boolean", "$.Exception", "$.Float", "java.util.Hashtable", "JU.AU", "$.Lst", "$.P3", "$.PT", "$.Rdr", "$.SB", "J.adapter.readers.quantum.NBOParser", "JU.Logger", "JV.FileManager", "$.JC"], function () {
 c$ = Clazz.decorateAsClass (function () {
 this.isOutputFile = false;
 this.nboType = "";
@@ -104,11 +104,10 @@ return structures;
 });
 Clazz.defineMethod (c$, "getFileData",
  function (ext) {
-var fileName = this.htParams.get ("fullPathName");
+var fileName = JV.FileManager.stripTypePrefix (this.htParams.get ("fullPathName"));
 var pt = fileName.lastIndexOf (".");
 if (pt < 0) pt = fileName.length;
 fileName = fileName.substring (0, pt);
-if (fileName.startsWith ("GenNBO::")) fileName = fileName.substring (8);
 this.moData.put ("nboRoot", fileName);
 if (ext.startsWith (".")) {
 fileName += ext;

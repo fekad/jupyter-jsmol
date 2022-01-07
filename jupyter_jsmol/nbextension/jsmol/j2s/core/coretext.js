@@ -1148,7 +1148,7 @@ function () {
 if (this.strings == null) return;
 for (var i = this.strings.length; --i >= 0; ) {
 var label = this.strings[i];
-if (label != null && this.ms.at.length > i && !this.ms.isAtomHidden (i)) this.ms.at[i].setClickable (this.vf);
+if (label != null && this.ms.at.length > i && this.ms.at[i] != null && !this.ms.isAtomHidden (i)) this.ms.at[i].setClickable (this.vf);
 }
 });
 Clazz_overrideMethod (c$, "checkObjectClicked",
@@ -1240,6 +1240,7 @@ this.mPending = null;
 this.colix = 0;
 this.tickInfo = null;
 this.defaultTickInfo = null;
+this.font3d = null;
 this.htMin = null;
 this.tokAction = 0;
 Clazz_instantialize (this, arguments);
@@ -1257,7 +1258,7 @@ this.atoms = this.ms.at;
 });
 Clazz_overrideMethod (c$, "initShape",
 function () {
-if (J.shape.Measures.font3d == null) J.shape.Measures.font3d = this.vwr.gdata.getFont3D (18);
+if (this.font3d == null) this.font3d = this.vwr.gdata.getFont3D (18);
 });
 Clazz_overrideMethod (c$, "setSize",
 function (size, bsSelected) {
@@ -1274,7 +1275,7 @@ return;
 this.setColor (JU.C.getColixO (value));
 return;
 }if ("font" === propertyName) {
-J.shape.Measures.font3d = value;
+this.font3d = value;
 return;
 }if ("hideAll" === propertyName) {
 this.showHide ((value).booleanValue ());
@@ -1743,8 +1744,6 @@ if (modelIndex >= 0 && !bsModels.get (modelIndex)) continue out;
 m.isVisible = true;
 }
 });
-Clazz_defineStatics (c$,
-"font3d", null);
 });
 Clazz_declarePackage ("J.shape");
 Clazz_load (["J.shape.TextShape"], "J.shape.Echo", ["java.util.Hashtable", "JU.Lst", "$.PT", "JM.Text", "JU.C"], function () {
@@ -2164,7 +2163,7 @@ return (newText ? text : null);
 }, "JM.Text,~S");
 });
 Clazz_declarePackage ("J.render");
-Clazz_load (["J.render.LabelsRenderer"], "J.render.MeasuresRenderer", ["java.util.Hashtable", "JU.A4", "$.M3", "$.Measure", "$.P3", "J.render.FontLineShapeRenderer", "J.shape.Measures", "JU.Point3fi"], function () {
+Clazz_load (["J.render.LabelsRenderer"], "J.render.MeasuresRenderer", ["java.util.Hashtable", "JU.A4", "$.M3", "$.Measure", "$.P3", "J.render.FontLineShapeRenderer", "JU.Point3fi"], function () {
 c$ = Clazz_decorateAsClass (function () {
 this.doJustify = false;
 this.modulating = false;
@@ -2195,7 +2194,7 @@ return false;
 this.modulating = this.ms.bsModulated != null;
 this.imageFontScaling = this.vwr.imageFontScaling;
 this.mad0 = measures.mad;
-this.font3d = this.vwr.gdata.getFont3DScaled (J.shape.Measures.font3d, this.imageFontScaling);
+this.font3d = this.vwr.gdata.getFont3DScaled (measures.font3d, this.imageFontScaling);
 this.m = measures.mPending;
 if (!this.isExport && this.m != null && (this.count = this.m.count) != 0) this.renderPendingMeasurement ();
 if (!this.vwr.getBoolean (603979926)) return false;
@@ -2297,13 +2296,13 @@ var zB = b.sZ - b.sD - 10;
 var radius = this.drawLine (a.sX, a.sY, zA, b.sX, b.sY, zB, this.mad);
 if (s == null) return;
 if (this.mad > 0) radius <<= 1;
-var z = Clazz_doubleToInt ((zA + zB) / 2);
-if (z < 1) z = 1;
+var zLabel = (this.m.inFront ? Math.min (zA, zB) - 10 : Clazz_doubleToInt ((zA + zB) / 2));
+if (zLabel < 1) zLabel = 1;
 var x = Clazz_doubleToInt ((a.sX + b.sX) / 2);
 var y = Clazz_doubleToInt ((a.sY + b.sY) / 2);
 if (this.m.text == null) {
 this.g3d.setC (this.labelColix);
-this.drawString (x, y, z, radius, this.doJustify && (x - a.sX) * (y - a.sY) > 0, false, true, (this.doJustify ? 0 : 2147483647), s);
+this.drawString (x, y, zLabel, radius, this.doJustify && (x - a.sX) * (y - a.sY) > 0, false, true, (this.doJustify ? 0 : 2147483647), s);
 } else {
 this.atomPt.ave (a, b);
 this.atomPt.sX = Clazz_doubleToInt ((a.sX + b.sX) / 2);
@@ -2358,7 +2357,8 @@ this.pointT.scale (1.1);
 this.matrixT.rotate (this.pointT);
 this.pointT.add (b);
 this.tm.transformPt (this.pointT);
-var zLabel = p3i.z - zOffset;
+var zLabel = (this.m.inFront ? Math.min (Math.min (zA, zB), zC) : p3i.z - zOffset);
+if (zLabel < 1) zLabel = 1;
 if (this.m.text == null) {
 this.g3d.setC (this.labelColix);
 this.drawString (p3i.x, p3i.y, zLabel, radius, p3i.x < b.sX, false, false, (this.doJustify ? b.sY : 2147483647), s);
@@ -2377,7 +2377,8 @@ var radius = this.drawLine (a.sX, a.sY, zA, b.sX, b.sY, zB, this.mad);
 radius += this.drawLine (b.sX, b.sY, zB, c.sX, c.sY, zC, this.mad);
 radius += this.drawLine (c.sX, c.sY, zC, d.sX, d.sY, zD, this.mad);
 if (s == null) return;
-var zLabel = Clazz_doubleToInt ((zA + zB + zC + zD) / 4);
+var zLabel = (this.m.inFront ? Math.min (Math.min (Math.min (zA, zB), zC), zD) : Clazz_doubleToInt ((zA + zB + zC + zD) / 4));
+if (zLabel < 1) zLabel = 1;
 radius /= 3;
 if (this.m.text == null) {
 this.g3d.setC (this.labelColix);

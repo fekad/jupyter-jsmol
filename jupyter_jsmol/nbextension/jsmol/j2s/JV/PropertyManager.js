@@ -415,7 +415,7 @@ var iHaveParameter = (myParam != null || paramInfo != null && paramInfo !== "");
 if (myParam == null) myParam = (iHaveParameter ? paramInfo : this.getDefaultPropertyParam (id));
 switch (id) {
 case 46:
-return this.vwr.getModelkitProperty (myParam);
+return this.vwr.getModelkitProperty (myParam.toString ());
 case 0:
 return this.getAppletInfo ();
 case 5:
@@ -1152,7 +1152,7 @@ info.put ("registry", this.vwr.sm.getRegistryInfo ());
 }info.put ("version", JV.JC.version);
 info.put ("date", JV.JC.date);
 info.put ("javaVendor", JV.Viewer.strJavaVendor);
-info.put ("javaVersion", JV.Viewer.strJavaVersion + (!JV.Viewer.isJS ? "" : JV.Viewer.isWebGL ? "(WebGL)" : "(HTML5)"));
+info.put ("javaVersion", JV.Viewer.strJavaVersion + (!JV.Viewer.isJS ? "" : this.vwr.isWebGL ? "(WebGL)" : "(HTML5)"));
 info.put ("operatingZystem", JV.Viewer.strOSName);
 return info;
 });

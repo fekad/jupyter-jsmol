@@ -335,10 +335,10 @@ function (viewer, bundle, title) {
 this.vwr = viewer;
 this.initSwing (title, bundle, viewer.getApplet (), JSV.common.JSViewer.isJS, viewer.isSigned, false);
 }, "JSV.common.JSViewer,J.popup.PopupResource,~S");
-Clazz_overrideMethod (c$, "jpiDispose",
+Clazz_defineMethod (c$, "jpiDispose",
 function () {
-this.helper.menuClearListeners (this.popupMenu);
-this.popupMenu = this.thisPopup = null;
+this.vwr = null;
+Clazz_superCall (this, JSV.popup.JSVGenericPopup, "jpiDispose", []);
 });
 Clazz_overrideMethod (c$, "jpiGetMenuAsObject",
 function () {

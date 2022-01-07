@@ -1,14 +1,14 @@
 # from pyMLP.py  http://code.google.com/p/pymlp/
 #
-# Broto P., Moreau G., Vandycke C. -
+# Broto P., Moreau G., Vandycke C. - 
 # Molecular structures: Perception, autocorrelation descriptor and sar studies.
-# Zystem of atomic contributions for the calculation of the n-octanol/water
+# System of atomic contributions for the calculation of the n-octanol/water 
 # partition coefficients, Eu. J. Med. Chem. 1984, 19.1, 71-78
 #
 # Laguerre M., Saux M., Dubost J.P., Carpy A. -
 # MLPP: A program for the calculation of molecular lipophilicity potential in
 # proteins, Pharm. Sci. 1997, 3.5-6, 217-222
-#
+# 
 # adapted by Bob Hanson hansonr@stolaf.edu 6/15/2010
 #
 # generic protein:

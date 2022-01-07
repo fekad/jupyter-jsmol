@@ -523,7 +523,7 @@ function () {
 return (this.fileShiftRefType != -1);
 });
 Clazz.defineMethod (c$, "applyShiftReference", 
-function (referenceFreq, shift) {
+ function (referenceFreq, shift) {
 if (this.fileShiftRefDataPt > this.xyCoords.length || this.fileShiftRefDataPt < 0) return;
 var coord;
 switch (this.fileShiftRefType) {

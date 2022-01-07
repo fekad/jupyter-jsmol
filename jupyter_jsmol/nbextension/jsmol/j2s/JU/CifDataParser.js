@@ -299,7 +299,8 @@ key = this.getTokenPeeked ();
 data = this.getNextToken ();
 }var iField = JU.CifDataParser.htFields.get (this.fixKey (key));
 i = (iField == null ? -1 : iField.intValue ());
-if ((col2key[pt] = i) != -1) this.columnData[key2col[i] = pt] = data;
+if ((col2key[pt] = i) == -1) this.columnData[pt] = "";
+ else this.columnData[key2col[i] = pt] = data;
 if ((o = this.peekToken ()) == null || !(Clazz.instanceOf (o, String)) || !(o).startsWith (str0)) break;
 key = null;
 }

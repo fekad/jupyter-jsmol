@@ -1200,6 +1200,8 @@ c$.isScalar = Clazz.defineMethod (c$, "isScalar",
 function (x) {
 switch (x.tok) {
 case 7:
+case 11:
+case 12:
 return false;
 case 4:
 return ((x.value).indexOf ("\n") < 0);

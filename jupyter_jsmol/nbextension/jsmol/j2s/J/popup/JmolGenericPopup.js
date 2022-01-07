@@ -1,5 +1,5 @@
 Clazz.declarePackage ("J.popup");
-Clazz.load (["J.popup.GenericPopup", "java.util.Properties"], "J.popup.JmolGenericPopup", ["J.i18n.GT", "JV.Viewer"], function () {
+Clazz.load (["J.popup.GenericPopup", "java.util.Properties"], "J.popup.JmolGenericPopup", ["J.i18n.GT"], function () {
 c$ = Clazz.decorateAsClass (function () {
 this.frankPopup = null;
 this.nFrankList = 0;
@@ -20,7 +20,7 @@ J.i18n.GT.setDoTranslate (doTranslate);
 Clazz.defineMethod (c$, "initialize", 
 function (vwr, bundle, title) {
 this.vwr = vwr;
-this.initSwing (title, bundle, vwr.html5Applet, JV.Viewer.isJSNoAWT, vwr.getBooleanProperty ("_signedApplet"), JV.Viewer.isWebGL);
+this.initSwing (title, bundle, vwr.isJSNoAWT ? vwr.html5Applet : null, vwr.isJSNoAWT, vwr.getBooleanProperty ("_signedApplet"), vwr.isWebGL);
 }, "JV.Viewer,J.popup.PopupResource,~S");
 Clazz.overrideMethod (c$, "jpiShow", 
 function (x, y) {
@@ -36,10 +36,10 @@ Clazz.defineMethod (c$, "showFrankMenu",
 function () {
 return true;
 });
-Clazz.overrideMethod (c$, "jpiDispose", 
+Clazz.defineMethod (c$, "jpiDispose", 
 function () {
-this.helper.menuClearListeners (this.popupMenu);
-this.popupMenu = this.thisPopup = null;
+this.vwr = null;
+Clazz.superCall (this, J.popup.JmolGenericPopup, "jpiDispose", []);
 });
 Clazz.overrideMethod (c$, "jpiGetMenuAsObject", 
 function () {

@@ -1,5 +1,5 @@
 Clazz.declarePackage ("JS");
-Clazz.load (["J.api.JmolScriptManager", "JU.Lst"], "JS.ScriptManager", ["java.io.BufferedInputStream", "$.BufferedReader", "java.lang.Boolean", "$.Thread", "javajs.api.ZInputStream", "JU.AU", "$.BS", "$.PT", "$.Rdr", "$.SB", "J.api.Interface", "J.i18n.GT", "JS.ScriptQueueThread", "JU.Elements", "$.Logger", "JV.FileManager", "$.Viewer"], function () {
+Clazz.load (["J.api.JmolScriptManager", "JU.Lst"], "JS.ScriptManager", ["java.io.BufferedInputStream", "$.BufferedReader", "java.lang.Boolean", "$.Thread", "java.util.Hashtable", "java.util.zip.ZipInputStream", "JU.AU", "$.PT", "$.Rdr", "$.SB", "J.api.Interface", "J.i18n.GT", "JS.ScriptQueueThread", "JU.Elements", "$.Logger", "JV.FileManager", "$.Viewer"], function () {
 c$ = Clazz.decorateAsClass (function () {
 this.vwr = null;
 this.eval = null;
@@ -346,7 +346,7 @@ throw e;
 cmd = "if (_filetype == 'Pdb') { isosurface sigma 1.0 within 2.0 {*} " + JU.PT.esc (fname) + " mesh nofill }; else; { isosurface " + JU.PT.esc (fname) + "}";
 return;
 }if (type.equals ("spt::")) {
-cmd = "script " + JU.PT.esc (fname.substring (5));
+cmd = "script " + JU.PT.esc ((fname.startsWith ("spt::") ? fname.substring (5) : fname));
 return;
 }if (type.equals ("dssr")) {
 cmd = "model {visible} property dssr ";
@@ -403,7 +403,7 @@ if (fileName.startsWith ("=")) return "pdb";
 if (fileName.endsWith (".dssr")) return "dssr";
 var br = this.vwr.fm.getUnzippedReaderOrStreamFromName (fileName, null, true, false, true, true, null);
 var modelType = null;
-if (Clazz.instanceOf (br, javajs.api.ZInputStream)) {
+if (Clazz.instanceOf (br, java.util.zip.ZipInputStream)) {
 var zipDirectory = this.vwr.getZipDirectoryAsString (fileName);
 if (zipDirectory.indexOf ("JmolManifest") >= 0) return "Jmol";
 modelType = this.vwr.getModelAdapter ().getFileTypeName (JU.Rdr.getBR (zipDirectory));
@@ -445,9 +445,10 @@ vwr.stateScriptVersionInt = 2147483647;
 Clazz.overrideMethod (c$, "addHydrogensInline", 
 function (bsAtoms, vConnections, pts) {
 var iatom = bsAtoms.nextSetBit (0);
-var modelIndex = (iatom < 0 ? this.vwr.ms.mc - 1 : this.vwr.ms.at[iatom].mi);
-if (modelIndex != this.vwr.ms.mc - 1) return  new JU.BS ();
+var modelIndex = (iatom < 0 ? this.vwr.am.cmi : this.vwr.ms.at[iatom].mi);
+if (modelIndex < 0) modelIndex = this.vwr.ms.mc - 1;
 var bsA = this.vwr.getModelUndeletedAtomsBitSet (modelIndex);
+var wasAppendNew = this.vwr.g.appendNew;
 this.vwr.g.appendNew = false;
 var atomIndex = this.vwr.ms.ac;
 var atomno = this.vwr.ms.getAtomCountInModel (modelIndex);
@@ -460,10 +461,13 @@ var sb =  new JU.SB ();
 sb.appendI (pts.length).append ("\n").append ("Viewer.AddHydrogens").append ("#noautobond").append ("\n");
 for (var i = 0; i < pts.length; i++) sb.append ("H ").appendF (pts[i].x).append (" ").appendF (pts[i].y).append (" ").appendF (pts[i].z).append (" - - - - ").appendI (++atomno).appendC ('\n');
 
-this.vwr.openStringInlineParamsAppend (sb.toString (), null, true);
+var htParams =  new java.util.Hashtable ();
+htParams.put ("appendToModelIndex", Integer.$valueOf (modelIndex));
+this.vwr.openStringInlineParamsAppend (sb.toString (), htParams, true);
 this.eval.runScriptBuffer (sbConnect.toString (), null, false);
 var bsB = this.vwr.getModelUndeletedAtomsBitSet (modelIndex);
 bsB.andNot (bsA);
+this.vwr.g.appendNew = wasAppendNew;
 return bsB;
 }, "JU.BS,JU.Lst,~A");
 Clazz.defineStatics (c$,
