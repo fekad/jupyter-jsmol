@@ -26,7 +26,7 @@ module.exports = {
     load_ipython_extension: function() {
         // Workaround for importing the JSmol
         const script = document.createElement('script');
-        script.src = __webpack_public_path__ + '/jsmol/JSmol.min.nojq.modified.js';
+        script.src = __webpack_public_path__ + '/jsmol/JSmol.min.nojq.js';
         script.async = false;
         document.querySelector('head').appendChild(script);
     }
