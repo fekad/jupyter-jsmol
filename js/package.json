@@ -34,13 +34,12 @@
   },
   "devDependencies": {
     "@jupyterlab/builder": "^3.0.0",
-    "webpack": "^5",
-    "rimraf": "^2.6.1"
+    "rimraf": "^2.6.1",
+    "webpack": "^5"
   },
   "dependencies": {
     "@jupyter-widgets/base": "^1.1 || ^2 || ^3 || ^4",
-    "lodash": "^4.17.4",
-    "screenfull": "^6.0.0"
+    "lodash": "^4.17.4"
   },
   "jupyterlab": {
     "extension": "lib/labplugin",

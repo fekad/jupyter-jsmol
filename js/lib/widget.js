@@ -1,10 +1,5 @@
 var widgets = require('@jupyter-widgets/base');
-var screenfull = require('screenfull');
 var _ = require('lodash');
-
-// const version = require("./version");
-
-// See example.py for the kernel counterpart to this file.
 
 
 // Custom Model. Custom widgets models must at least provide default values
@@ -23,36 +18,6 @@ var _ = require('lodash');
 // When serialiazing the entire widget state for embedding, only values that
 // differ from the defaults will be specified.
 
-// var JsmolModel = widgets.DOMWidgetModel.extend({
-//     defaults: _.extend(widgets.DOMWidgetModel.prototype.defaults(), {
-//         _model_name : 'JsmolModel',
-//         _view_name : 'JsmolView',
-//         _model_module : 'jupyter-jsmol',
-//         _view_module : 'jupyter-jsmol',
-//         _model_module_version : '2022.1.0',
-//         _view_module_version : '2022.1.0',
-//         _info: {},
-//         _loaded: false
-//     })
-// });
-
-// Custom View. Renders the widget model.
-// var JsmolView = widgets.DOMWidgetView.extend({
-//     // Defines how the widget gets rendered into the DOM
-//     render: function() {
-//         this.value_changed();
-//
-//         // Observe changes in the value traitlet in Python, and define
-//         // a custom callback.
-//         this.model.on('change:value', this.value_changed, this);
-//     },
-//
-//     value_changed: function() {
-//         this.el.textContent = this.model.get('value');
-//     }
-// });
-
-
 class JsmolModel extends widgets.DOMWidgetModel {
     defaults() {
         return {
@@ -68,7 +33,6 @@ class JsmolModel extends widgets.DOMWidgetModel {
         };
     }
 }
-
 
 
 /**
@@ -137,8 +101,6 @@ class JsmolView extends widgets.DOMWidgetView {
      * Using custom massage help to implement simple one-way communication
      */
     on_custom_message(msg) {
-        // console.log("DEBUG: on_custom_message");
-        // console.log(msg);
         if (msg.type == 'call') {
             switch (msg.func) {
                 case "fullscreen":
@@ -167,12 +129,14 @@ class JsmolView extends widgets.DOMWidgetView {
             }
         }
     }
+
     /**
      * Run the given `command` for this viewer.
      */
     script(command) {
         Jmol.script(this._applet, command);
     }
+
     /**
      * Evaluate the given commands using JSmol and return the corresponding
      * value. This calls `Jmol.evaluateVar` behind the scenes.
@@ -180,37 +144,26 @@ class JsmolView extends widgets.DOMWidgetView {
     evaluate(command) {
         return Jmol.evaluateVar(this._applet, command);
     }
+
     /**
      * Returning with th result of `getPropertyAsArray` for a given expression
      */
     property(command) {
         return Jmol.getPropertyAsArray(this._applet, command);
     }
-    /**
-     * Show this viewer in fullscreen.
-     */
-    fullscreen() {
-        if (screenfull.isEnabled) {
-            screenfull.request(this.el);
-        }
-    }
+
     /**
      * The main purpose of this callback to remove jsmol applet object from memory when it has been closed.
      * Important: this callback will be only called by the close() or close_all() python functions.
      */
     on_destroy() {
-        // console.log("DEBUG: on_destroy");
-        // console.log(this);
         // Removing jsmol applet
         delete window[this._applet._id];
         delete this._applet;
     }
 }
 
-
 module.exports = {
     JsmolModel: JsmolModel,
     JsmolView: JsmolView
 };
-
-

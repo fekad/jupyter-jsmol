@@ -85,13 +85,6 @@ class JsmolView(DOMWidget):
         }
         self.send(content=content, buffers=None)
 
-    def fullscreen(self):
-        content = {
-            'type': 'call',
-            'func': 'fullscreen'
-        }
-        self.send(content=content, buffers=None)
-
     def handle_response(self, widget, content, buffers):
         """Handle a msg from the front-end.
         Parameters
@@ -104,9 +97,6 @@ class JsmolView(DOMWidget):
         if method == 'response':
             self.response = content.get('data', '')
 
-    def load(self, filename: str, *args: str, inline: bool = True):
-        # Keeping it only for backwards compatibility.
-        return self.load_file(filename, *args, inline=inline)
 
     def load_file(self, filename: str, *args: str, inline: bool = False):
 
