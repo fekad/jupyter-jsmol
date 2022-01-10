@@ -37,8 +37,8 @@ jstargets = [
 ]
 
 data_files_spec = [
-    ('share/jupyter/nbextensions/jupyter-jsmol', 'jsmol', '**'),
     ('share/jupyter/nbextensions/jupyter-jsmol', 'jupyter_jsmol/nbextension', '**'),
+    ('share/jupyter/nbextensions/jupyter-jsmol/jsmol', 'jsmol', '**'),
     ('share/jupyter/labextensions/jupyter-jsmol', 'jupyter_jsmol/labextension', '**'),
     ('share/jupyter/labextensions/jupyter-jsmol', '.', 'install.json'),
     ('etc/jupyter/nbconfig/notebook.d', '.', 'jupyter-jsmol.json'),
