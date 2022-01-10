@@ -63,6 +63,7 @@ setup_args = dict(
         'jupyter',
         'widgets',
     ],
+    license='MIT',
     classifiers=[
         'Framework :: Jupyter',
         'Intended Audience :: Developers',
