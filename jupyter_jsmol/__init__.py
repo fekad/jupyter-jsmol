@@ -15,10 +15,12 @@ def _jupyter_labextension_paths():
         from `src` directory into <jupyter path>/labextensions/<dest> directory
         during widget installation
     """
-    return [{
-        'src': 'labextension',
-        'dest': 'jupyter-jsmol',
-    }]
+    return [
+        {
+            "src": "labextension",
+            "dest": "jupyter-jsmol",
+        }
+    ]
 
 
 def _jupyter_nbextension_paths():
@@ -38,9 +40,11 @@ def _jupyter_nbextension_paths():
     require: Path to importable AMD Javascript module inside the
         <jupyter path>/nbextensions/<dest> directory
     """
-    return [{
-        'section': 'notebook',
-        'src': 'nbextension',
-        'dest': 'jupyter-jsmol',
-        'require': 'jupyter-jsmol/extension'
-    }]
+    return [
+        {
+            "section": "notebook",
+            "src": "nbextension",
+            "dest": "jupyter-jsmol",
+            "require": "jupyter-jsmol/extension",
+        }
+    ]
