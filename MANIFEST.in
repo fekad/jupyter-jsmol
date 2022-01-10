@@ -17,6 +17,8 @@ prune tests/build
 graft js
 prune **/node_modules
 
+graft jsmol
+
 graft jupyter_jsmol/nbextension
 graft jupyter_jsmol/labextension
 
