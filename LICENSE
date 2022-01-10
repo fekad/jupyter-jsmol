@@ -23,7 +23,7 @@ SOFTWARE.
 
 This software uses external libraries and resources:
 
-JSmol
+JSmol (located in the jsmol folder)
   JSmol is a Java(Script) web-based molecular viewer.
   Distributed by Lesser GNU Public License by The Jmol Development Team.
   See http://jsmol.sourceforge.net.
