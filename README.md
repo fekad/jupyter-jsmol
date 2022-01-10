@@ -1,4 +1,3 @@
-
 # jupyter-jsmol
 
 [![Documetation](https://github.com/fekad/jupyter-jsmol/workflows/Documetation/badge.svg?branch=master)](https://fekad.github.io/jupyter-jsmol/)
@@ -43,13 +42,8 @@ Install the python. This will also build the TS package.
 # First install the python package. This will also build the JS packages.
 pip install -e ".[test, examples]"
 
-# Run the python tests. This should not give you a few sucessful example tests
+# Run the python tests. This should not give you a few successful example tests
 py.test
-
-# Run the JS tests. This should again, only give TODO errors (Expected 'Value' to equal 'Expected value'):
-cd js
-yarn test
-```
 
 When developing your extensions, you need to manually enable your extensions with the
 notebook / lab frontend. For lab, this is done by the command:
@@ -74,7 +68,7 @@ of those flags here.
 
 
 ### How to see your changes
-#### Typescript:
+#### JavaScript:
 If you use JupyterLab to develop then you can watch the source directory and run JupyterLab at the same time in different
 terminals to watch for changes in the extension's source and automatically rebuild the widget.
 
@@ -90,39 +84,3 @@ After a change wait for the build to finish and then refresh your browser and th
 #### Python:
 If you make a change to the python code then you will need to restart the notebook kernel to have it take effect.
 
-
-
-
-
-
-- Package Install
----------------
-
-```bash
-npm install --save jupyter-jsmol
-```
-
-
-
-- To release a new version of jupyter_jsmol on PyPI:
-
-Update _version.py (set release version, remove 'dev')
-git add the _version.py file and git commit
-`python setup.py sdist upload`
-`python setup.py bdist_wheel upload`
-`git tag -a X.X.X -m 'comment'`
-Update _version.py (add 'dev' and increment minor)
-git add and git commit
-git push
-git push --tags
-
-- To release a new version of jupyter-jsmol on NPM:
-
-Update `js/package.json` with new npm package version
-
-```
-# clean out the `dist` and `node_modules` directories
-git clean -fdx
-npm install
-npm publish
-```
