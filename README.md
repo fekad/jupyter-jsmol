@@ -44,6 +44,7 @@ pip install -e ".[test, examples]"
 
 # Run the python tests. This should not give you a few successful example tests
 py.test
+```
 
 When developing your extensions, you need to manually enable your extensions with the
 notebook / lab frontend. For lab, this is done by the command:
